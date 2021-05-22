@@ -1,0 +1,25 @@
+{
+  "name": "agenda",
+  "version": "1.0.0",
+  "description": "Agenda",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SocexSolutions/agenda.git"
+  },
+  "keywords": [
+    "keywords"
+  ],
+  "author": "anonymous",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SocexSolutions/agenda/issues"
+  },
+  "homepage": "https://github.com/SocexSolutions/agenda#readme"
+}
