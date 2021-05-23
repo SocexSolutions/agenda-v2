@@ -6,7 +6,7 @@
 
 ### Home Page
 
-Index page with a breif description of the app.
+Index page with a brief description of the app.
 
 ### Page Layout
 
