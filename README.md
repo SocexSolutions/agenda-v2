@@ -23,7 +23,7 @@ _In a seperate terminal_ run the container just built with
 docker container run -p 5000:8080 --name agendapi agenda/api:1.0
 ```
 
-In the terminal you should see `Agenda api listening on port 8080`. Logs from the api will appear there. This is the standard port for http. In the above command we mapped port 8080 on the container to the host system's port 5000. Thus, you can access the api though `http://localhost:5000` in the browser.
+In the terminal you should see `Agenda api listening on port 8080`. Logs from the api will appear there. This is the standard port for http. In the above command we mapped port 8080 on the container to the host system's port 5000. Thus, you can access the api through `http://localhost:5000` in the browser.
 
 ### MongoDb Container
 
