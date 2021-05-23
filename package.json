@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/SocexSolutions/agenda#readme",
   "dependencies": {
+    "mongoose": "^5.12.10"
     "express": "^4.17.1"
   }
 }
