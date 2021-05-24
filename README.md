@@ -33,6 +33,10 @@ Pull the mongodb image from dockerhub with (base image found [here](https://hub.
 docker image pull mongo
 ```
 
+# Service Architecture
+![image](https://user-images.githubusercontent.com/54583311/119286538-d8030d80-bc01-11eb-8ff5-352c680c0ac6.png)
+
+
 Run the run the prebuilt mongodb image with
 
 ```
