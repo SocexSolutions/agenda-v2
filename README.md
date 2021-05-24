@@ -33,10 +33,6 @@ Pull the mongodb image from dockerhub with (base image found [here](https://hub.
 docker image pull mongo
 ```
 
-# Service Architecture
-![image](https://user-images.githubusercontent.com/54583311/119286538-d8030d80-bc01-11eb-8ff5-352c680c0ac6.png)
-
-
 Run the run the prebuilt mongodb image with
 
 ```
@@ -44,3 +40,7 @@ docker container run -p 27017:27017 --name agendadb mongo
 ```
 
 Since mongodb listens by default on 27017 and that is the standard port for mongo we map it to our machines port 27017. You should get an error message `It looks like you are trying to access MongoDB over HTTP on the native driver port.` if you go to `http://localhost:27017` in the browser.
+
+# Service Architecture
+![image](https://user-images.githubusercontent.com/54583311/119286538-d8030d80-bc01-11eb-8ff5-352c680c0ac6.png)
+
