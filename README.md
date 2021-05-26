@@ -9,38 +9,37 @@ A meeting app for professionals.
 - [Getting started with docker](https://www.youtube.com/watch?v=gAkwW2tuIqE&t=121s)
 - [Express.js Apis](https://www.youtube.com/watch?v=-MTSQjw5DrM)
 
-### Api Server Container
+### Getting Started
 
-Build the docker image from the current directory (base image from [here](https://hub.docker.com/_/node))
+### Dockerized
 
-```bash
-docker build -t agenda/api:1.0 .
+With the use of docker compose, you can now use the following to setup agenda
+as a docker swarm.
+
+```shell
+docker-compose build
 ```
 
-_In a seperate terminal_ run the container just built with
+To build the mongo and api containers.
 
-```
-docker container run -p 5000:8080 --name agendapi agenda/api:1.0
-```
-
-In the terminal you should see `Agenda api listening on port 8080`. Logs from the api will appear there. This is the standard port for http. In the above command we mapped port 8080 on the container to the host system's port 5000. Thus, you can access the api through `http://localhost:5000` in the browser.
-
-### MongoDb Container
-
-Pull the mongodb image from dockerhub with (base image found [here](https://hub.docker.com/_/mongo))
-
-```
-docker image pull mongo
+```shell
+docker-compose up
 ```
 
-Run the run the prebuilt mongodb image with
+To run the two containers. The mongodb container will be available through
+`port 27017` and the api will be running on port 3000. (We will need to change
+this for production).
+
+If you want to run
+
+### Local API
+
+For quicker dev we can just `nodemon` to quick restart the api when changes
+are saved to `.js` files (after installing nodemon with `npm i -g nodemon`) with
+the following:
 
 ```
-docker container run -p 27017:27017 --name agendadb mongo
+LOCAL=true nodemon lib/index.js
 ```
 
-Since mongodb listens by default on 27017 and that is the standard port for mongo we map it to our machines port 27017. You should get an error message `It looks like you are trying to access MongoDB over HTTP on the native driver port.` if you go to `http://localhost:27017` in the browser.
-
-# Service Architecture
-![image](https://user-images.githubusercontent.com/54583311/119286538-d8030d80-bc01-11eb-8ff5-352c680c0ac6.png)
-
+Then start mongo in docker desktop (this will not need to be restarted).
