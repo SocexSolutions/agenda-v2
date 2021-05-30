@@ -10,9 +10,11 @@ services:
     ports:
       - 27017:27017
 
-  agendaapi:
+  api:
     build: ./
     container_name: agenda-api
+    volumes:
+      - ./:/app
     ports:
       - 5000:5000
     depends_on:
