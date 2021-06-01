@@ -8,8 +8,10 @@
   },
   "scripts": {
     "start": "node lib/index.js",
-    "dev": "nodemon -L lib/index.js",
-    "test": "test.js"
+    "dev": "nodemon lib/index.js",
+    "test": "test.js",
+    "lint": "eslint .",
+    "dev": "nodemon -L lib/index.js"
   },
   "repository": {
     "type": "git",
@@ -29,6 +31,7 @@
     "express": "4.17.1"
   },
   "devDependencies": {
+    "eslint": "^7.27.0",
     "nodemon": "2.0.7"
   }
 }
