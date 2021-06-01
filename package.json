@@ -10,7 +10,8 @@
     "start": "node lib/index.js",
     "dev": "nodemon lib/index.js",
     "test": "test.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "dev": "nodemon -L lib/index.js"
   },
   "repository": {
     "type": "git",
