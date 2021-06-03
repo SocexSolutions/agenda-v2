@@ -41,4 +41,5 @@ To run the two containers. The mongodb container will be available through
 this for production).
 
 # Service Architecture
-![image](https://user-images.githubusercontent.com/54583311/119286538-d8030d80-bc01-11eb-8ff5-352c680c0ac6.png)
+![image](https://user-images.githubusercontent.com/54583311/120655368-db876780-c43f-11eb-9ccc-5ea9deba79fe.png)
+
