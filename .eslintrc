@@ -17,12 +17,11 @@
     "space-in-parens": [ "error", "always" ],
     "object-curly-spacing": [ "error", "always" ],
     "array-bracket-spacing": [ "error", "always" ],
-    "no-delete-var": [ "error", "always" ],
     "block-spacing": [ "error", "always" ],
-    "comma-spacing": [ "error", "always" ],
-    "no-trailing-spaces": ["error", "always" ],
-    "semi-spacing": [ "error", { "before": false, "after": true }],
-    "no-spaced-func": [ "error", "always" ],
+    "comma-spacing": [ "error", { "before": false, "after": true } ],
+    "no-trailing-spaces": [ "error" ],
+    "semi-spacing": [ "error", { "before": false, "after": true } ],
+    "no-spaced-func": [ "error" ],
     "key-spacing": [ "error",
       { 
         "beforeColon" : false,
@@ -30,13 +29,7 @@
         "mode": "minimum" 
       } 
     ],
-    "max-len": [ "error", 
-      { 
-        "code": "80",
-        "ignoreUrls": true,
-        "ignoreTrailingComments": true
-      }
-    ],
+    "max-len": [ "error" ],
     "space-before-blocks": [ "error", "always" ],
     "space-before-function-paren": [ "error", "never" ]
   }
