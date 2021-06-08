@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node lib/index.js",
-    "test": "test.js",
+    "test": "mocha",
     "lint": "eslint .",
     "dev": "nodemon -L lib/index.js"
   },
@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "eslint": "^7.27.0",
+    "mocha": "^8.4.0",
     "nodemon": "2.0.7"
   }
 }
