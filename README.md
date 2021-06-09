@@ -2,8 +2,6 @@
 
 A meeting app for professionals.
 
-# Getting Started
-
 ### Reference
 
 - [Getting started with docker](https://www.youtube.com/watch?v=gAkwW2tuIqE&t=121s)
@@ -42,6 +40,6 @@ To run the two containers. The mongodb container will be available through
 `port 27017` and the api will be running on port 5000. (We will need to change
 this for production).
 
-If you want to run
-
+# Service Architecture
+![image](https://user-images.githubusercontent.com/54583311/120655368-db876780-c43f-11eb-9ccc-5ea9deba79fe.png)
 
