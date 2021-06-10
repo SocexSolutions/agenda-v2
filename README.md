@@ -1,6 +1,6 @@
 # Agenda
 
-A meeting app for professionals.
+Agenda will allow for more efficient meetings by estabilshing meeting topics in advance, establishing each topics value, and then deciding on the order and allocating time to the topics based on their value. In addition, agenda will simplify meeting notes avoiding TLDR through action items for each topic.
 
 ### Reference
 
@@ -40,6 +40,19 @@ To run the two containers. The mongodb container will be available through
 `port 27017` and the api will be running on port 5000. (We will need to change
 this for production).
 
-# Service Architecture
+# Technical Decisions
+
+## Service Architecture
 ![image](https://user-images.githubusercontent.com/54583311/120655368-db876780-c43f-11eb-9ccc-5ea9deba79fe.png)
+
+### React and Next.js
+
+- Component based architecture simplify development and allow for maximum code reusablity
+- Style modules allow for the use of css which is faster then JSS but maintens scope
+- Application state can be easily managed with hooks
+- Next.js will simplify routing and elimnate the need for a complex browser router
+- Next.js server side rendering will reduce the stress on clients, (this is required based on the computational requirements of virtual meetings)
+- Previous experience with react
+- Documentation and resources for react are unparalled
+- Material ui allows for quick generation of high quality UIs
 
