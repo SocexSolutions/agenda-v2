@@ -17,9 +17,8 @@
   width: 50%;
   height: 50%;
   padding-top: 60px;
-  overflow: auto;
-  display: inline-block;
-  justify-content: space-around;
+  display: flex;
+  flex-direction: column;
   text-align: center;
   margin: auto;
   position: absolute;
@@ -27,6 +26,7 @@
   box-shadow: 0 0 10px black;
   background-color: white;
   max-width: 380px;
+  min-height: 350px;
 }
 
 .aboutUsContainer{
@@ -57,7 +57,7 @@
   background-color: rgb(93, 253, 93);
   border: none;
   color: Black;
-  width: 265px;
+  width: 70%;
   height: 35px;
   text-align: center;
   text-decoration: none;
