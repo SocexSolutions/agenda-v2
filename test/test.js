@@ -1,28 +1,36 @@
 const assert  = require( "assert" );
+const http    = require( "http" );
 const dbUtils = require( "./utils/db" );
 const db      = require( "../lib/db" );
 
-/**
- * TODO modify the db con so that it can be awaited.
- * This will require a change to the app.js file as we will want to await the 
- * db connection instead of just starting the connection before the app is 
- * setup.
- */
-
 describe( "First Test", function() {
 
-	beforeEach( async () => {
-		await dbUtils.clean();
-
-		console.log( 'cleaned db' );
+	before( async( ) => {
+		await db.connect();
 	});
 
-  describe( "#indexof()", function() {
+	beforeEach( async( ) => {
+		await dbUtils.clean();
+	});
 
-    it( "should return -1 when the value is not present", function() {
+  describe( "#indexof()", function( ) {
 
-      assert.equal( [ 1, 2, 3 ].indexOf( 4 ), -1 );
+    it( "should return -1 when the value is not present", async( ) => {
 
+			const options = {
+				hostname: 'localhost',
+				port: '5000',
+				path: '/user/register',
+				method: 'POST',
+			}
+
+			const req = http.request( options, ( res ) => {
+				console.log( `STATUS: ${ res.statusCode }` );
+
+				throw new Error( res );
+			} );
+
+		
     });
 
   });
