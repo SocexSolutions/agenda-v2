@@ -15,7 +15,7 @@ describe("Auth Test", function() {
 
   describe("#indexof()", function() {
 
-    it("should auth succesfully when given valid creds", async() => {
+    it("should auth successfully when given valid creds", async() => {
       const path = "/user/register";
       const data = {
         username: "thudson",
@@ -26,6 +26,18 @@ describe("Auth Test", function() {
       const res = await http.post( data, path );
 
       assert( res.success );
+    });
+
+    it("should not auth with invalid creds", async() => {
+      const path = "/user/register";
+      const data = {
+        password: "thudson",
+        email: "email"
+      };
+
+      const res = await http.post( data, path );
+
+      assert( res.success !== true );
     });
 
   });
