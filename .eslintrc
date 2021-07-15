@@ -17,6 +17,7 @@
     "semi": [ "error", "always" ],
     "object-curly-spacing": [ "error", "always" ],
     "array-bracket-spacing": [ "error", "always" ],
+    "space-in-parens": [ "error", "always", { "exceptions": ["{}"] } ],
     "block-spacing": [ "error", "always" ],
     "comma-spacing": [ "error", { "before": false, "after": true } ],
     "no-trailing-spaces": [ "error" ],

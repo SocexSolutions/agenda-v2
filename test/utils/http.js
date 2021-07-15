@@ -1,4 +1,4 @@
-const http = require("http");
+const http = require( "http" );
 
 module.exports = {
   /**
@@ -7,9 +7,9 @@ module.exports = {
    * @param {String} path - url path in api
    * @returns {Promise} - requset response in json
    */
-  async post(data, path) {
+  async post( data, path ) {
     const base64Encoded = new TextEncoder().encode(
-      JSON.stringify(data)
+      JSON.stringify( data )
     );
 
     const options = {
@@ -23,9 +23,9 @@ module.exports = {
       }
     };
 
-    const res = await makeRequest(options, base64Encoded);
+    const res = await makeRequest( options, base64Encoded );
 
-    return JSON.parse(res);
+    return JSON.parse( res );
   }
 };
 
@@ -35,27 +35,27 @@ module.exports = {
  * @param {Buffer} data - base64 encoded data
  * @returns {Promise} promisified response
  */
-function makeRequest(options, data) {
+function makeRequest( options, data ) {
   const responsePromise = new Promise( ( resolve, reject ) => {
     let payload = "";
 
-    const req = http.request(options, (res) => {
-      res.setEncoding("utf8");
+    const req = http.request( options, ( res ) => {
+      res.setEncoding( "utf8" );
 
-      res.on("data", (chunk) => {
+      res.on( "data", ( chunk ) => {
         payload = payload + chunk;
       });
 
-      res.on("end", () => {
-        resolve(payload);
+      res.on( "end", () => {
+        resolve( payload );
       });
 
-      res.on("error", (error) => {
-        reject(error);
+      res.on( "error", ( error ) => {
+        reject( error );
       });
     });
 
-    req.write(data);
+    req.write( data );
 
     req.end();
   });

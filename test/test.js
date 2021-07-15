@@ -1,21 +1,21 @@
-const assert  = require("assert");
-const dbUtils = require("./utils/db");
-const db      = require("../lib/db");
-const http    = require("./utils/http");
+const assert  = require( "assert" );
+const dbUtils = require( "./utils/db" );
+const db      = require( "../lib/db" );
+const http    = require( "./utils/http" );
 
-describe("Auth Test", function() {
+describe( "Auth Test", function() {
 
-  before(async() => {
+  before( async() => {
     await db.connect();
   });
 
-  beforeEach(async() => {
+  beforeEach( async() => {
     await dbUtils.clean();
   });
 
-  describe("#indexof()", async() => {
+  describe( "#indexof()", async() => {
 
-    it("should auth successfully when given valid creds", async() => {
+    it( "should auth successfully when given valid creds", async() => {
       const path = "/user/register";
       const data = {
         username: "thudson",
@@ -28,7 +28,7 @@ describe("Auth Test", function() {
       assert( res.success );
     });
 
-    it("should not auth with invalid creds", async() => {
+    it( "should not auth with invalid creds", async() => {
       const path = "/user/register";
       const data = {
         password: "thudson",
