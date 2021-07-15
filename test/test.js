@@ -13,7 +13,7 @@ describe("Auth Test", function() {
     await dbUtils.clean();
   });
 
-  describe("#indexof()", function() {
+  describe("#indexof()", async() => {
 
     it("should auth successfully when given valid creds", async() => {
       const path = "/user/register";
