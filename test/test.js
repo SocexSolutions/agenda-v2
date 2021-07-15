@@ -1,35 +1,43 @@
-const assert  = require("assert");
-const http    = require("http");
-const dbUtils = require("./utils/db");
-const db      = require("../lib/db");
+const assert  = require( "assert" );
+const dbUtils = require( "./utils/db" );
+const db      = require( "../lib/db" );
+const http    = require( "./utils/http" );
 
-describe("First Test", function() {
+describe( "Auth Test", function() {
 
-  before(async() => {
+  before( async() => {
     await db.connect();
   });
 
-  beforeEach(async() => {
+  beforeEach( async() => {
     await dbUtils.clean();
   });
 
-  describe("#indexof()", function() {
+  describe( "#indexof()", async() => {
 
-    it("should return -1 when the value is not present", async() => {
-
-      const options = {
-        hostname: "localhost",
-        port: "5000",
-        path: "/user/register",
-        method: "POST",
+    it( "should auth successfully when given valid creds", async() => {
+      const path = "/user/register";
+      const data = {
+        username: "thudson",
+        password: "thudson",
+        email:    "email"
       };
 
-      const req = http.request(options, (res) => {
-        console.log(`STATUS: ${ res.statusCode }`);
+      const res = await http.post( data, path );
 
-        throw new Error(res);
-      });
+      assert( res.success );
+    });
 
+    it( "should not auth with invalid creds", async() => {
+      const path = "/user/register";
+      const data = {
+        password: "thudson",
+        email: "email"
+      };
+
+      const res = await http.post( data, path );
+
+      assert( res.success !== true );
     });
 
   });

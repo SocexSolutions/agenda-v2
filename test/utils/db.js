@@ -2,7 +2,7 @@
  * Utils for testing regarding the database like clearing all data.
  */
 
-const db = require("../../lib/db");
+const db = require( "../../lib/db" );
 
 const utils = {
 
@@ -12,7 +12,7 @@ const utils = {
 	 * @returns {Promise}
 	 */
   async clean() {
-    for (let collection in db.collections) {
+    for ( let collection in db.collections ) {
       await db.collections[ collection ].drop();
     }
   }
