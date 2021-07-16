@@ -53,20 +53,6 @@
   flex-grow: 1;
 }
 
-.btn{
-  background-color: rgb(93, 253, 93);
-  border: none;
-  color: Black;
-  width: 70%;
-  height: 35px;
-  text-align: center;
-  text-decoration: none;
-  display: block;
-  font-size: 16px;
-  margin: auto;
-  margin-top: 20px;
-}
-
 .title a {
   color: #0070f3;
   text-decoration: none;

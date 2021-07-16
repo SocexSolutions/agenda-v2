@@ -1,0 +1,75 @@
+
+.btn{
+  position: relative;
+  border: none;
+  padding: 0.5em 1.2em;
+  min-height: 32px;
+  min-width: 96px;
+  justify-content: center;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 16px;
+  margin: auto;
+  border-radius: 4px;
+  transition: background .5s ease;
+}
+/* sizes */
+.xl {
+  font-size: 24px;
+}
+
+.large{
+  font-size: 20px;
+}
+
+.medium {
+  font-size: 16px;
+}
+
+.small  {
+  font-size: 12px;
+}
+/* varients */
+
+.danger {
+  background-color: var(--red);
+  border: 1px solid var(--red);
+  color: white;
+}
+
+.danger:hover{
+  background-color: #df140598;
+}
+
+.primary {
+  background-color: var(--green);
+  border: 1px solid var(--green);
+  color: black;
+}
+
+.primary:hover{
+  background-color: #5dfd5d96;
+}
+
+.secondary {
+  background-color: var(--grey);
+  color: var(--darkgrey);
+  border: 1px solid var(--darkgrey);
+}
+
+.secondary:hover{
+  background-color: #dfe9df98;
+}
+
+.disabled {
+  background-color: white;
+  color: var(--grey);
+  border: 1px solid var(--grey);
+  cursor: default;
+}
+
+/* stretch */
+.stretch{
+  width: 70%;
+}
+
