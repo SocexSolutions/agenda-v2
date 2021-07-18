@@ -13,6 +13,10 @@ describe( "Auth Test", function() {
     await dbUtils.clean();
   });
 
+  after( async() => {
+    await db.disconnect();
+  });
+
   describe( "#indexof()", async() => {
 
     it( "should auth successfully when given valid creds", async() => {
