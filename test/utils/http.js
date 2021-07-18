@@ -1,11 +1,34 @@
 const http = require( "http" );
 
+const hostname = "localhost";
+const port     = 5000;
+
+
 module.exports = {
+  /**
+   * Makes a get request to the db with given path
+   * @param {String} path - url path
+   * @returns {Promise} - request response in json
+   */
+  async get( path ) {
+    const options = {
+      hostname,
+      port,
+      path,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    };
+
+    return await makeRequest( options );
+  },
+
   /**
    * Makes a post request to the db with te given data and url path
    * @param {Object} data - request body in json
    * @param {String} path - url path in api
-   * @returns {Promise} - requset response in json
+   * @returns {Promise} - request response in json
    */
   async post( data, path ) {
     const base64Encoded = new TextEncoder().encode(
@@ -13,8 +36,8 @@ module.exports = {
     );
 
     const options = {
-      hostname: "localhost",
-      port: 5000,
+      hostname,
+      port,
       path,
       method: "POST",
       headers: {
@@ -23,9 +46,7 @@ module.exports = {
       }
     };
 
-    const res = await makeRequest( options, base64Encoded );
-
-    return JSON.parse( res );
+    return await makeRequest( options, base64Encoded );
   }
 };
 
@@ -36,7 +57,7 @@ module.exports = {
  * @returns {Promise} promisified response
  */
 function makeRequest( options, data ) {
-  const responsePromise = new Promise( ( resolve, reject ) => {
+  return new Promise( ( resolve, reject ) => {
     let payload = "";
 
     const req = http.request( options, ( res ) => {
@@ -55,11 +76,11 @@ function makeRequest( options, data ) {
       });
     });
 
-    req.write( data );
+    if ( data ) {
+      req.write( data );
+    }
 
     req.end();
   });
-
-  return responsePromise;
 }
 

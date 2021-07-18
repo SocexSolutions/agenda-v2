@@ -24,8 +24,9 @@ describe( "Auth Test", function() {
       };
 
       const res = await http.post( data, path );
+      const parsed = JSON.parse( res );
 
-      assert( res.success );
+      assert( parsed.success );
     });
 
     it( "should not auth with invalid creds", async() => {
@@ -36,8 +37,17 @@ describe( "Auth Test", function() {
       };
 
       const res = await http.post( data, path );
+      const parsed = JSON.parse( res );
 
-      assert( res.success !== true );
+      assert( parsed.success !== true );
+    });
+
+    it( "should respond with ok", async() => {
+      const path = "/health";
+
+      const res = await http.get( path );
+
+      assert( res === "OK" );
     });
 
   });
