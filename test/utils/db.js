@@ -12,9 +12,13 @@ const utils = {
 	 * @returns {Promise}
 	 */
   async clean() {
+    let promises = [];
+
     for ( let collection in db.collections ) {
-      await db.collections[ collection ].drop();
+      promises.push( db.collections[ collection ].drop() );
     }
+
+    return Promise.all( promises );
   }
 };
 
