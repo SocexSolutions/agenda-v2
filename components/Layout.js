@@ -1,9 +1,14 @@
-const Layout = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+import Nav from "./Nav";
 
-export default Layout
+const Layout = ({ children }) => {
+  return (
+    <>
+      <Nav />
+      <div>
+        <main>{children}</main>
+      </div>
+    </>
+  );
+};
+
+export default Layout;

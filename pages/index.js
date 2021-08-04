@@ -1,18 +1,20 @@
-import Head from "next/head";
-import Link from 'next/link'
-import Header from "../components/Header";
-import LoginBox from "../components/LoginBox"
-import Button from "../components/Button";
-import LoginForm from "../components/LoginForm"
+import styles from "../styles/Home.module.css";
 
-const Home = () => {
+const home = () => {
   return (
     <>
-      <Header headerText='Welcome to Agenda' />
-      <title>Agenda</title>
-      <LoginBox />
+      <div className={styles.homeContainer}>
+        <h1>Meet with a purpose.</h1>
+        <p>
+          The Finder is the default file manager and graphical user interface
+          shell used on all Macintosh operating systems. Described in its
+          "About" window as "The Macintosh Desktop Experience", it is
+          responsible for the launching of other applications, and for the
+          overall user management of files, disks, and network volumes.
+        </p>
+      </div>
     </>
   );
 };
 
-export default Home;
+export default home;
