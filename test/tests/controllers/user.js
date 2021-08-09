@@ -3,7 +3,7 @@ const http    = require( "../../utils/http" );
 const dbUtils = require( "../../utils/db" );
 const db      = require( "../../../lib/db" );
 
-describe( "user.js", function() {
+describe( "controllers/user.js", function() {
 
   before( async() => {
     await db.connect();
