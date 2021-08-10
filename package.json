@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node lib/index.js",
-    "test": "mocha",
+    "test": "mocha --recursive",
     "lint": "eslint .",
     "dev": "nodemon -L lib/index.js"
   },
