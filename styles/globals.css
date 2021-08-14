@@ -1,9 +1,9 @@
 html,
 body {
   padding: 0;
+  background-color: var(--background);
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: Droid Sans;
 }
 
 a {
@@ -13,4 +13,17 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+:root {
+  --agendaPrimary: #244a93;
+  --background: #082050;
+  --agendaSecondary: #9dbeff;
+  --skyBlue: #5486e5;
+  --textBlue: #c6d7f6;
+  --danger: #df1405;
+  --menuColor: #0e2d68;
+  --menuColorOp: #244a93;
+  --agendaPurple: #5d5fef;
+  --agendaGreen: #41AE4C;
 }
