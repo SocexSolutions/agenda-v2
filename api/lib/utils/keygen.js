@@ -5,6 +5,7 @@ const fs     = require( "fs" );
  * Generates a public private key pair to be used by the app.
  */
 function generateKeyPair() {
+  console.log( "generating keys...\n" );
 
   const keyPair = crypto.generateKeyPairSync( "rsa", {
     modulusLength: 4096, // length of key size (4096 is standard)

@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  
+  mongodb:
+    image: mongo:latest
+    container_name: mongo
+    volumes:
+      - mongodb-data:/data/db
+    ports:
+      - 27017:27017
+
+  api:
+    build: ./api/
+    container_name: api
+    volumes:
+      - ./api/:/app
+    ports:
+      - 5000:5000
+    depends_on:
+      - mongodb
+
+  ui:
+    build: ./www/
+    container_name: ui
+    ports:
+      - 3000:3000
+
+volumes:
+  mongodb-data:

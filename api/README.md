@@ -1,7 +1,3 @@
-# Agenda
-
-Agenda will allow for more efficient meetings by estabilshing meeting topics in advance, establishing each topics value, and then deciding on the order and allocating time to the topics based on their value. In addition, agenda will simplify meeting notes avoiding TLDR through action items for each topic.
-
 ### Reference
 
 - [Getting started with docker](https://www.youtube.com/watch?v=gAkwW2tuIqE&t=121s)

@@ -1,7 +1,6 @@
 const jsonwebtoken = require( "jsonwebtoken" );
 const path         = require( "path" );
 const fs           = require( "fs" );
-const User         = require( "../models/user" );
 
 const pathToKey = path.join( __dirname, "..", "id_rsa_pub.pem" );
 const PUB_KEY   = fs.readFileSync( pathToKey, "utf8" );
@@ -21,8 +20,6 @@ const authenticate = ( req, res, next ) => {
         algorithms: [ "RS256" ]
       }
     );
-
-    console.log( req.jwt );
 
     next();
 
