@@ -1,0 +1,105 @@
+.btn {
+  border: none;
+  padding: 0.5em 1.2em;
+  min-height: 32px;
+  min-width: 96px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 0.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+/* sizes */
+.xl {
+  font-size: 24px;
+}
+
+.large {
+  font-size: 20px;
+}
+
+.medium {
+  font-size: 16px;
+}
+
+.small {
+  font-size: 12px;
+}
+/* varients */
+
+.danger {
+  background-color: var(--danger);
+  border: 1px solid var(--danger);
+  color: white;
+}
+
+.danger:hover {
+  background-color: #df140598;
+}
+
+.primary {
+  background-color: var(--agendaPrimary);
+  border: 1px solid var(--agendaPrimary);
+  color: black;
+}
+
+.primary:hover {
+  background-color: #10be1098;
+}
+
+.secondary {
+  background-color: var(--background);
+  color: var(--agendaSecondary);
+  border: 1px solid var(--agendaSecondary);
+}
+
+.secondary:hover {
+  background-color: #dfe9df98;
+}
+
+.disabled {
+  background-color: white;
+  color: var(--background);
+  border: 1px solid var(--background);
+  cursor: default;
+}
+
+.menu {
+  background-color: var(--menuColor);
+  color: var(--agendaSecondary);
+  font-weight: bold;
+  justify-content: flex-start;
+  align-items: left;
+}
+
+.menu:hover {
+  background-color: var(--menuColorOp);
+  color: var(--agendaSecondary);
+  font-weight: bold;
+}
+
+.topic {
+  background-color: var(--menuColor);
+  color: var(--agendaSecondary);
+  border: 1px solid var(--agendaSecondary);
+}
+
+.topic:hover {
+  background-color: var(--menuColorOp);
+  color: var(--agendaSecondary);
+  border: 1px solid var(--agendaSecondary);
+}
+
+/* stretch */
+.stretchMedium {
+  width: 70%;
+}
+
+.stretchWide {
+  width: 90%;
+}

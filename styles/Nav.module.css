@@ -1,0 +1,33 @@
+.nav {
+  height: 100px;
+  padding: 10px;
+  color: var(--textBlue);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.login {
+  height: 50px;
+  padding: 10px;
+  color: var(--textBlue);
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  list-style: none;
+}
+
+.Agenda {
+  display: flex;
+  font-size: 2em;
+  list-style: none;
+  font-weight: bold;
+}
+
+.nav ul li a {
+  margin: 5px 15px;
+}
+
+.nav Button {
+  margin: 5px 10px;
+}

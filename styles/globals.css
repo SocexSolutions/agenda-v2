@@ -1,0 +1,29 @@
+html,
+body {
+  padding: 0;
+  background-color: var(--background);
+  margin: 0;
+  font-family: Droid Sans;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --agendaPrimary: #244a93;
+  --background: #082050;
+  --agendaSecondary: #9dbeff;
+  --skyBlue: #5486e5;
+  --textBlue: #c6d7f6;
+  --danger: #df1405;
+  --menuColor: #0e2d68;
+  --menuColorOp: #244a93;
+  --agendaPurple: #5d5fef;
+  --agendaGreen: #41AE4C;
+}
