@@ -1,0 +1,21 @@
+{
+  "name": "agenda",
+  "version": "0.2.0",
+  "description": "Agenda",
+  "scripts": {
+    "test": "mocha --recursive",
+    "lint": "eslint .",
+    "dev": "bash scripts/dev.sh",
+    "setup": "bash scripts/setup.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SocexSolutions/agenda-v2.git"
+  },
+  "author": "Tom Hudson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SocexSolutions/agenda-v2/issues"
+  },
+  "homepage": "https://github.com/SocexSolutions/agenda-v2#readme"
+}

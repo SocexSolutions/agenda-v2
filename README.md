@@ -6,11 +6,12 @@ Agenda will allow for more efficient meetings by estabilshing meeting topics in 
 
 1. Generate public and private keys and install dependencies:
 ```
-bash scripts/setup
+npm run setup
 ```
 2. Run the backend in docker containers and the frontend with node:
 ```
-bash scripts/dev
+npm run dev
 ```
 All output will be be seen in the terminal that the commands are run in. 
-Changes in the api and frontend are listened to seperately.
+Changes in the api and frontend are listened to seperately. The UI can be found
+as `localhost:3000` while the api is at `localhost:5000`.
