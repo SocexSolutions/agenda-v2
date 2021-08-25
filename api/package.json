@@ -1,0 +1,39 @@
+{
+  "name": "agenda",
+  "version": "1.0.0",
+  "description": "Agenda",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "start": "node lib/index.js",
+    "test": "mocha --recursive",
+    "lint": "eslint .",
+    "dev": "nodemon -L lib/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SocexSolutions/agenda-api.git"
+  },
+  "keywords": [
+    "keywords"
+  ],
+  "author": "anonymous",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SocexSolutions/agenda-api/issues"
+  },
+  "homepage": "https://github.com/SocexSolutions/agenda-api#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "express": "4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "5.12.10"
+  },
+  "devDependencies": {
+    "eslint": "^7.27.0",
+    "mocha": "^8.4.0",
+    "nodemon": "2.0.7"
+  }
+}
