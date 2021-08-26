@@ -1,8 +1,9 @@
-const assert       = require( "assert" );
-const dbUtils      = require( "../../utils/db" );
-const db           = require( "../../../lib/db" );
-const ObjectID     = require( "mongoose" ).Types.ObjectId;
-const axios        = require( "axios" );
+const assert   = require( "assert" );
+const dbUtils  = require( "../../utils/db" );
+const db       = require( "../../../lib/db" );
+const api      = require( "../../utils/api" );
+const ObjectID = require( "mongoose" ).Types.ObjectId;
+const axios    = require( "axios" );
 
 const participant = {
   firstName: "linus",
@@ -11,9 +12,11 @@ const participant = {
   meeting_id: new ObjectID
 };
 
+
 describe.only( "controllers/participant", () => {
 
   before( async() => {
+    await api.start();
     await db.connect();
   });
 
@@ -22,6 +25,7 @@ describe.only( "controllers/participant", () => {
   });
 
   after( async() => {
+    await api.stop();
     await db.disconnect();
   });
 
@@ -32,7 +36,7 @@ describe.only( "controllers/participant", () => {
       const res = await axios.post( path, participant );
 
       assert(
-        res.status === 200,
+        res.status === 201,
         "failed to create participant with valid args"
       );
     });
