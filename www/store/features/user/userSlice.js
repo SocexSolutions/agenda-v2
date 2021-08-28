@@ -1,29 +1,59 @@
+import client from '../../client';
+import axios from 'axios';
+
 const initialState = {
-  user: {
-    jwt: null,
-    username: null,
-    email: null
-  }
+  token: null,
+  _id: null,
+  username: null,
+  email: null
 }
 
 const reducer = ( state = initialState, action ) => {
   switch( action.type ) {
 
-    case 'user/login':
-      const jwt = 'jwt';
-      const username = 'username';
-      const email = 'email';
-
+    case 'user/register':
       return {
-        ...state,
-        jwt,
-        username,
-        email
+        token:    action.payload.token,
+        _id:      action.payload._id,
+        username: action.payload.username,
+        email:    action.payload.email,
+        ...state
       }
 
     default:
       return state;
   }
 }
+
+export const userRegister = ( email, username, password ) => {
+  return async function registerUser( dispatch, getState ) {
+    try {
+
+      const { data } = await axios.post(
+        'http://localhost:5000/user/register',
+        {
+          email,
+          username,
+          password
+        }
+      )
+
+      dispatch( 
+        { 
+          type: 'user/register', 
+          payload: {
+            token:    data.token,
+            _id:      data.user._id,
+            username: data.user.username,
+            email:    data.user.email
+          } 
+        }
+      )
+    } catch ( error ) {
+
+      console.error( error.message );
+    }
+  }
+} 
 
 export default reducer;

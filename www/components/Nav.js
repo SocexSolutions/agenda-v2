@@ -1,15 +1,24 @@
 import Link from "next/link";
+import { useDispatch, useSelector } from 'react-redux';
+
 import styles from "../styles/Nav.module.css";
 import Button from "./Button";
-import { useDispatch, useSelector } from 'react-redux';
+import { userRegister } from "../store/features/user/userSlice";
 
 
 // this should probably go somewhere else so we can reuse it
-const selectUser = state => state.user;
+const selectUser = state => state;
 
 const Nav = () => {
-  const user = useSelector( selectUser );
+  const dispatch = useDispatch();
 
+  dispatch( userRegister(
+    'bacon@bacon.com',
+    'bacon',
+    'bacon'
+  ) );
+
+  const user = useSelector( selectUser );
   console.log( user );
 
   return (
