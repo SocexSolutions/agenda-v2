@@ -1,4 +1,5 @@
 const express     = require( "express" );
+const cors        = require( "cors" );
 const mongoose    = require( "mongoose" ); // eslint-disable-line
 const db          = require( "./db" );
 const router      = require( "./routes" );
@@ -15,6 +16,9 @@ const start = async() => {
     // these two lines for body parsing
     app.use( express.json() );
     app.use( express.urlencoded({ extended: true }) );
+
+    // cors
+    app.use( cors({ origin: "http://localhost:3000" }) );
 
     app.use( "/", router );
 
