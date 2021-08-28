@@ -26,14 +26,4 @@ const reducer = ( state = initialState, action ) => {
   }
 }
 
-const userLogin = ( username, password ) => {
-  return {
-    type: 'user/login',
-    payload: { 
-      username,
-      password
-    }
-  }
-}
-
 export default reducer;
