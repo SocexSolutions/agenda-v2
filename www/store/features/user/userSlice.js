@@ -1,4 +1,4 @@
-initialState = {
+const initialState = {
   user: {
     jwt: null,
     username: null,
@@ -6,7 +6,7 @@ initialState = {
   }
 }
 
-const reducer = ( state = initialState ) {
+const reducer = ( state = initialState, action ) => {
   switch( action.type ) {
 
     case 'user/login':
@@ -26,7 +26,7 @@ const reducer = ( state = initialState ) {
   }
 }
 
-export const userLogin = ( username, password ) => {
+const userLogin = ( username, password ) => {
   return {
     type: 'user/login',
     payload: { 
@@ -35,3 +35,5 @@ export const userLogin = ( username, password ) => {
     }
   }
 }
+
+export default reducer;
