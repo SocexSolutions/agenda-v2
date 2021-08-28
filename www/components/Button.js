@@ -1,12 +1,10 @@
 import PropTypes from "prop-types";
-import { render } from "react-dom";
 import styles from "../styles/Button.module.css";
 
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
-import CheckBoxOutlinedIcon from "@material-ui/icons/Checkboxoutlined"
+import CheckBoxOutlinedIcon from "@material-ui/icons/CheckBoxOutlined";
 import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-
 
 const Button = ({ icon, text, size, onClick, varient, stretch }) => {
   Button.propTypes = {

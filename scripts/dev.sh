@@ -7,3 +7,5 @@ npm run dev &
 cd ../api
 
 docker compose up &
+
+wait

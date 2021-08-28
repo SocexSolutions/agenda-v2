@@ -3,7 +3,14 @@ version: "3.7"
 services:
   
   agenda:
-    build: ./
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: agenda
+    restart: always
+    volumes:
+      - ./:/app
+      - /app/node_modules
+      - /app/.next
     ports:
       - 3000:3000

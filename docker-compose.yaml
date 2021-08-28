@@ -23,6 +23,10 @@ services:
   ui:
     build: ./www/
     container_name: ui
+    volumes:
+      - ./www/:/app
+      - /app/node_modules
+      - /app/.next
     ports:
       - 3000:3000
 
