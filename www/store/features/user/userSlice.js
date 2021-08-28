@@ -12,13 +12,7 @@ const reducer = ( state = initialState, action ) => {
   switch( action.type ) {
 
     case 'user/register':
-      return {
-        token:    action.payload.token,
-        _id:      action.payload._id,
-        username: action.payload.username,
-        email:    action.payload.email,
-        ...state
-      }
+      return action.payload;
 
     default:
       return state;
