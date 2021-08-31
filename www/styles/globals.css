@@ -1,9 +1,14 @@
+@font-face {
+  font-family: open-sans;
+  src: url('../public/font/OpenSans-Regular.ttf');
+}
+
 html,
 body {
   padding: 0;
-  background-color: var(--background);
   margin: 0;
-  font-family: Droid Sans;
+  background-color: var(--background);
+  font-family: open-sans;
 }
 
 a {
