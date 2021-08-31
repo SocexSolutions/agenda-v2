@@ -1,0 +1,57 @@
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  position: relative;
+  width: 50%;
+  padding: 2rem;
+  background-color: white;
+}
+
+.formContainer label {
+  color: var(--agendaPurple);
+  background-color: inherit;
+  position: relative;
+  width: max-content;
+  border: 2px solid inherit;
+  top: 8px;
+  left: 10px;
+}
+
+.formContainer input:focus {
+  outline-width: 0;
+}
+
+.formContainer input::placeholder {
+  color: var(--agendaPurple);
+}
+
+
+.formContainer div {
+  padding: 1rem;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: inherit;
+}
+
+/* varients */
+.default {
+  height: 1.5em;
+  background-color: inherit;
+  color: var(--textBlue);
+  border: 0;
+  border-bottom: 2px solid var(--agendaSecondary);
+  padding: 0.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  
+}
+
+.outlined {
+  border-color: var(--agendaPurple);
+  background-color: inherit;
+  border-width: 2px;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
