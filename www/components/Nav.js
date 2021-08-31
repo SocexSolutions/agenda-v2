@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 import Button from "./Button";
 import { userRegister } from "../store/features/user/userSlice";
 

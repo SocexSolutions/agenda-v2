@@ -1,5 +1,5 @@
-import styles from "../styles/Inbox.module.css"
-import Button from "./Button"
+import styles from "../styles/Inbox.module.css";
+import Button from "./Button";
 
 const InboxMenu = () => {
   return (
@@ -9,11 +9,11 @@ const InboxMenu = () => {
       <Button icon="checkBox" stretch="wide" text="Voting" varient="menu"/>
       <Button icon="cancel" stretch="wide" text="Completed" varient="menu"/>
       <div className={styles.menuDropDownsContainer}>
-      <Button icon="arrow" stretch="wide" text="Priority" varient="menu"/>
-      <Button icon="arrow" stretch="wide" text="Tags" varient="menu"/>
+        <Button icon="arrow" stretch="wide" text="Priority" varient="menu"/>
+        <Button icon="arrow" stretch="wide" text="Tags" varient="menu"/>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default InboxMenu
+export default InboxMenu;
