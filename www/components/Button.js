@@ -9,25 +9,6 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 
 const Button = ({ icon, text, size, onClick, varient, stretch }) => {
-  Button.propTypes = {
-    onClick: PropTypes.func,
-    stretch: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.bool
-    ]),
-    varient: PropTypes.string,
-    text: PropTypes.string,
-    size: PropTypes.string,
-    icon: PropTypes.string,
-  };
-
-  Button.defaultProps = {
-    stretch: false,
-    text: "Button Text",
-    size: "medium",
-    varient: "primary",
-    icon: "",
-  };
 
   let className = styles.btn;
   // size cases
@@ -99,6 +80,26 @@ const Button = ({ icon, text, size, onClick, varient, stretch }) => {
       {text}
     </button>
   );
+};
+
+Button.propTypes = {
+  onClick: PropTypes.func,
+  stretch: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.bool
+  ]),
+  varient: PropTypes.string,
+  text: PropTypes.string,
+  size: PropTypes.string,
+  icon: PropTypes.string,
+};
+
+Button.defaultProps = {
+  stretch: false,
+  text: "Button Text",
+  size: "medium",
+  varient: "primary",
+  icon: "",
 };
 
 export default Button;
