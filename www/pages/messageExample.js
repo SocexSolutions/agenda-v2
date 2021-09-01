@@ -1,6 +1,6 @@
-import styles from "../styles/Inbox.module.css"
-import InboxMenu from "../components/InboxMenu"
-import MailBox from "../components/MailBox"
+import styles from "../styles/Inbox.module.css";
+import InboxMenu from "../components/InboxMenu";
+import MailBox from "../components/MailBox";
 
 const messageExample = () => {
   return (
@@ -8,7 +8,7 @@ const messageExample = () => {
       <InboxMenu />
       <MailBox />
     </div>
-  )
-}
+  );
+};
 
-export default messageExample
+export default messageExample;
