@@ -1,10 +1,9 @@
-import InboxMenu from "../components/InboxMenu"
-import Inbox from "../components/Inbox"
+import Inbox from "../components/Inbox";
 
 const userPage = () => {
   return (
-      <Inbox />
-  )
-}
+    <Inbox />
+  );
+};
 
-export default userPage
+export default userPage;

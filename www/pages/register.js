@@ -1,12 +1,12 @@
-import { Component } from 'react';
-import { userRegister } from '../store/features/user/userSlice';
-import store from '../store/store';
+import { Component } from "react";
+import { userRegister } from "../store/features/user/userSlice";
+import store from "../store/store";
 
 const initialState = {
-  email:    '',
-  username: '',
-  password: ''
-}
+  email:    "",
+  username: "",
+  password: ""
+};
 
 class Register extends Component {
   constructor( props ) {
@@ -18,7 +18,7 @@ class Register extends Component {
     this.handleSubmit = this.handleSubmit.bind( this );
   }
 
-  handleChange(event) {
+  handleChange( event ) {
     this.setState(
       {
         [event.target.name]: event.target.value
@@ -26,14 +26,14 @@ class Register extends Component {
     );
   }
 
-  handleSubmit(event) {
+  handleSubmit( event ) {
     store.dispatch(
       userRegister(
         this.state.email,
         this.state.username,
         this.state.password
       )
-    )
+    );
 
     this.setState( initialState );
 
@@ -46,17 +46,17 @@ class Register extends Component {
         <h1>Register Page</h1>
         <form>
           <label htmlFor='email'>Email:</label>
-          <input 
+          <input
             name='email'
-            type='email' 
-            id='email' 
+            type='email'
+            id='email'
             value={this.state.email}
-            onChange={this.handleChange} 
+            onChange={this.handleChange}
           />
           <label htmlFor='username'>Username:</label>
           <input
-            name='username' 
-            type='text' 
+            name='username'
+            type='text'
             id='username'
             value={this.state.username}
             onChange={this.handleChange}
@@ -64,7 +64,7 @@ class Register extends Component {
           <label htmlFor='password'>Password:</label>
           <input
             name='password'
-            type='password' 
+            type='password'
             id='password'
             value= {this.state.password}
             onChange={this.handleChange}
@@ -72,7 +72,7 @@ class Register extends Component {
           <input type='submit' value='Submit' onClick={this.handleSubmit}/>
         </form>
       </>
-    )
+    );
   }
 }
 
