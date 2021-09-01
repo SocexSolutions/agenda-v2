@@ -1,5 +1,4 @@
 import PropTypes from "prop-types";
-import { render } from "react-dom";
 import styles from "../styles/Button.module.css";
 
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
@@ -95,7 +94,9 @@ const Button = ({ icon, text, size, onClick, varient, stretch }) => {
 
   return (
     <button className={className} onClick={onClick}>
-      {icon}
+      <div className={styles.iconContainer}>
+        {icon}
+      </div>
       {text}
     </button>
   );
