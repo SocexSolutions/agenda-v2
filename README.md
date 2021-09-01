@@ -20,4 +20,4 @@ as `localhost:3000` while the api is at `localhost:5000`.
 More information can be found in the README.md files for the `api` and `www` directories.
 
 # Tickets
-The project Kanban can be found [here](https://thomashudsonnotes.notion.site/Agenda-2e3d638bc8fc47568efea587ec6628b3)
+The project Kanban can be found [here](https://thomashudsonnotes.notion.site/a1f3e7cd3bf74c62b06dbda78b2c9c7c?v=43d3f2b9730045f691cd254967c6949d)
