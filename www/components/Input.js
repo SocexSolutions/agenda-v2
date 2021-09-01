@@ -7,6 +7,8 @@ const Input = ({
   placeholder,
   onChange,
   value,
+  name,
+  id,
   size,
   required,
   varient,
@@ -16,6 +18,8 @@ const Input = ({
     label: PropTypes.string,
     placeholder: PropTypes.string,
     value: PropTypes.string,
+    name: PropTypes.string,
+    id: PropTypes.string,
     size: PropTypes.number,
     required: PropTypes.bool,
     varient: PropTypes.string,
@@ -31,42 +35,42 @@ const Input = ({
   let className = "";
 
   //size cases
-  switch (size) {
-    case "xs":
-      size = "15";
-      break;
-    case "small":
-      size = "20";
-      break;
-    case "medium":
-      size = "30";
-      break;
-    case "large":
-      size = "40";
-      break;
-    case "xl":
-      size = "50";
-      break;
+  switch ( size ) {
+  case "xs":
+    size = "15";
+    break;
+  case "small":
+    size = "20";
+    break;
+  case "medium":
+    size = "30";
+    break;
+  case "large":
+    size = "40";
+    break;
+  case "xl":
+    size = "50";
+    break;
   }
 
   //required cases
-  switch (required) {
-    case true:
-      required = " *";
-      break;
-    case false:
-      required = "";
-      break;
+  switch ( required ) {
+  case true:
+    required = " *";
+    break;
+  case false:
+    required = "";
+    break;
   }
 
   //varient cases
-  switch (varient) {
-    case "default":
-      className += " " + styles.default;
-      break;
-    case "outlined":
-      className += " " + styles.outlined;
-      break;
+  switch ( varient ) {
+  case "default":
+    className += " " + styles.default;
+    break;
+  case "outlined":
+    className += " " + styles.outlined;
+    break;
   }
 
   return (
@@ -78,6 +82,8 @@ const Input = ({
       <input
         placeholder={placeholder}
         value={value}
+        name={name}
+        id={id}
         onChange={onChange}
         size={size}
         className={className}
