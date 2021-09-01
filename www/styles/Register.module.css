@@ -1,0 +1,33 @@
+.formContainer {
+  width: 100%;
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.formContainer form {
+  background-color: var(--menuColor);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column; 
+  justify-content: center;
+  align-items: center;
+  padding: 20px 30px 30px 30px;
+}
+
+.formContainer Button {
+  margin: 15px 0px 0px 0px;
+}
+
+.formTitle {
+  color: var(--agendaSecondary);
+  margin: 0px 10px 15px 10px;
+}
+
+.formContainer Input {
+  margin: 0px 0px 20px 0px;
+}
+
+
