@@ -13,24 +13,6 @@ const Input = ({
   required,
   varient,
 }) => {
-  Input.propTypes = {
-    onChange: PropTypes.func,
-    label: PropTypes.string,
-    placeholder: PropTypes.string,
-    value: PropTypes.string,
-    name: PropTypes.string,
-    id: PropTypes.string,
-    size: PropTypes.number,
-    required: PropTypes.bool,
-    varient: PropTypes.string,
-  };
-
-  Input.defaultProps = {
-    label: "",
-    placeholder: "",
-    size: "20",
-    varient: "default"
-  };
 
   let className = "";
 
@@ -90,6 +72,23 @@ const Input = ({
       />
     </div>
   );
+};
+
+Input.propTypes = {
+  onChange: PropTypes.func,
+  label: PropTypes.string,
+  placeholder: PropTypes.string,
+  value: PropTypes.string,
+  size: PropTypes.number,
+  required: PropTypes.bool,
+  varient: PropTypes.string,
+};
+
+Input.defaultProps = {
+  label: "",
+  placeholder: "",
+  size: "20",
+  varient: "default",
 };
 
 export default Input;

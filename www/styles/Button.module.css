@@ -81,7 +81,7 @@
 }
 
 .menu {
-  background-color: var(--menuColor);
+  background-color: inherit;
   color: var(--agendaSecondary);
   font-weight: bold;
   justify-content: flex-start;
