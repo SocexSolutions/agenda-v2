@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  height: 90vh;
+}
+
+.drawerContainer {
+  overflow: hidden;
+  width: 350px;
+  transition: width 500ms;
+}
+
+.drawerClosed {
+  width: 0px;
+}
+
+.container main {
+  width: 100%;
+}

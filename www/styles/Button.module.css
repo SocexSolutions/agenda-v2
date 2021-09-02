@@ -5,6 +5,7 @@
   min-width: 96px;
   justify-content: center;
   display: flex;
+  flex-direction: row;
   align-items: center;
   cursor: pointer;
   font-size: 16px;
@@ -113,4 +114,8 @@
 
 .stretchWide {
   width: 90%;
+}
+
+.iconContainer {
+  margin-right: 5px;
 }
