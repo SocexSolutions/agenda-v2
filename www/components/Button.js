@@ -6,7 +6,9 @@ import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import CheckBoxOutlinedIcon from "@material-ui/icons/Checkboxoutlined";
 import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
-
+import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
+import AddToPhotosOutlinedIcon from "@material-ui/icons/AddToPhotosOutlined";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 const Button = ({ icon, text, size, onClick, varient, stretch }) => {
   Button.propTypes = {
@@ -16,14 +18,17 @@ const Button = ({ icon, text, size, onClick, varient, stretch }) => {
       PropTypes.bool
     ] ),
     varient: PropTypes.string,
+
     text: PropTypes.string,
     size: PropTypes.string,
-    icon: PropTypes.string,
+    onClick: PropTypes.func,
+    varient: PropTypes.string,
+    stretch: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   };
 
   Button.defaultProps = {
     stretch: false,
-    text: "Button Text",
+    text: " ",
     size: "medium",
     varient: "primary",
     icon: "",
@@ -46,25 +51,30 @@ const Button = ({ icon, text, size, onClick, varient, stretch }) => {
     break;
   }
   //varient case
-  switch ( varient ) {
-  case "primary":
-    className += " " + styles.primary;
-    break;
-  case "secondary":
-    className += " " + styles.secondary;
-    break;
-  case "danger":
-    className += " " + styles.danger;
-    break;
-  case "disabled":
-    className += " " + styles.disabled;
-    break;
-  case "menu":
-    className += " " + styles.menu;
-    break;
-  case "topic":
-    className += " " + styles.topic;
-    break;
+
+  switch (varient) {
+    case "primary":
+      className += " " + styles.primary;
+      break;
+    case "secondary":
+      className += " " + styles.secondary;
+      break;
+    case "danger":
+      className += " " + styles.danger;
+      break;
+    case "disabled":
+      className += " " + styles.disabled;
+      break;
+    case "menu":
+      className += " " + styles.menu;
+      break;
+    case "topic":
+      className += " " + styles.topic;
+      break;
+    case "icon":
+      className += " " + styles.icon;
+      break;
+
   }
   //stretch case
   switch ( stretch ) {
@@ -78,6 +88,7 @@ const Button = ({ icon, text, size, onClick, varient, stretch }) => {
     break;
   }
   //icons
+
   switch ( icon ) {
   case "doubleArrow":
     icon = <DoubleArrowIcon style={{ color: "var(--agendaPurple)" }} />;
@@ -91,6 +102,15 @@ const Button = ({ icon, text, size, onClick, varient, stretch }) => {
   case "arrow":
     icon = <ArrowForwardIosIcon style={{ fontSize: "medium", color: "var(--textBlue)" }}/>;
     break;
+    case "home":
+      icon = <HomeOutlinedIcon />;
+      break;
+    case "addicon":
+      icon = <AddToPhotosOutlinedIcon />;
+      break;
+    case "person":
+      icon = <AccountCircleIcon />;
+      break;
   }
 
   return (
