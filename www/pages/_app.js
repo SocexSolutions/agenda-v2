@@ -1,6 +1,6 @@
 import Layout from "../components/Layout";
 import { Provider } from "react-redux";
-import store from '../store/store';
+import store from "../store/store";
 
 import "../styles/globals.css";
 

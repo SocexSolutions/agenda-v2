@@ -1,5 +1,5 @@
-import styles from "../styles/Inbox.module.css"
-import InboxMenu from "./InboxMenu"
+import styles from "../styles/Inbox.module.css";
+import InboxMenu from "./InboxMenu";
 
 const Inbox = () => {
   return (
@@ -18,7 +18,7 @@ const Inbox = () => {
         <p className={styles.messages}>test</p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Inbox
+export default Inbox;

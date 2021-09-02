@@ -49,17 +49,17 @@
 }
 
 .primary:hover {
-  background-color: #10be1098;
+  background-color: #244a9398;
 }
 
 .secondary {
-  background-color: var(--background);
+  background-color: inherit;
   color: var(--agendaSecondary);
   border: 1px solid var(--agendaSecondary);
 }
 
 .secondary:hover {
-  background-color: #dfe9df98;
+  opacity: 50%;
 }
 
 .icon {

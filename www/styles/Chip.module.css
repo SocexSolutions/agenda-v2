@@ -1,0 +1,28 @@
+.container {
+  border: 3px solid var(--agendaPrimary);
+  border-radius: 7px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: fit-content;
+  margin: 0;
+  cursor: default;
+}
+
+.container p {
+  font-size: 18px;
+  padding: 0px;
+  margin: 7px;
+}
+
+.deleteIcon {
+  color: var(--agendaSecondary);
+  margin: 7px;
+  opacity: .5;
+}
+
+.deleteIcon:hover {
+  cursor: pointer;
+  opacity: .8;
+}
