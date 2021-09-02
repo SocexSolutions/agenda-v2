@@ -25,7 +25,7 @@ module.exports = {
       const { token, expiresIn } = JWTUtils.issueJWT( res );
 
       // send back token to be saved in local storage by browser
-      res.status( 200 ).json({
+      res.status( 201 ).json({
         success: true,
         user,
         token,
@@ -34,7 +34,6 @@ module.exports = {
 
     } catch ( err ) {
 
-      console.error( err );
       res.status( 500 ).send( err );
     }
   },
@@ -82,7 +81,6 @@ module.exports = {
 
     } catch ( err ) {
 
-      console.error( err );
       res.status( 500 ).send( err );
     }
   },

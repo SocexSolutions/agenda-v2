@@ -13,7 +13,7 @@ const participant = {
 };
 
 
-describe.only( "controllers/participant", () => {
+describe( "controllers/participant", () => {
 
   before( async() => {
     await api.start();

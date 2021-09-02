@@ -1,14 +1,22 @@
-const assert  = require( "assert" );
-const http    = require( "../../utils/http" );
+const assert = require( "assert" );
+const api    = require( "../../utils/api" );
+const axios  = require( "axios" );
 
 describe( "controllers/health.js", function() {
+  const path = "http://localhost:5000/health";
 
-  it( "should respond with ok", async() => {
-    const path = "/health";
+  before( async() => {
+    await api.start();
+  });
 
-    const res = await http.get( path );
+  after( async() => {
+    await api.stop();
+  });
 
-    assert( res === "OK" );
+  it( "should respond with OK", async() => {
+    const res = await axios.get( path );
+
+    assert( res.data === "OK" );
   });
 
 });
