@@ -1,6 +1,6 @@
 .vscode
 
-.pem
+*.pem
 
 node_modules
 
