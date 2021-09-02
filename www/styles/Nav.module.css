@@ -1,6 +1,6 @@
 .nav {
   height: 100px;
-  padding: 10px;
+  padding: 0px 5px 0px 25px;
   color: var(--textBlue);
   display: flex;
   flex-direction: row;
@@ -15,6 +15,10 @@
   align-items: center;
   margin-left: auto;
   list-style: none;
+}
+
+.navcentered {
+  margin: auto;
 }
 
 .Agenda {

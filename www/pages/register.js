@@ -1,6 +1,11 @@
 import { Component } from "react";
 import { userRegister } from "../store/features/user/userSlice";
+import styles from "../styles/Register.module.css";
 import store from "../store/store";
+
+import Link from "next/link";
+import Input from "../components/Input";
+import Button from "../components/Button";
 
 const initialState = {
   email:    "",
@@ -42,36 +47,47 @@ class Register extends Component {
 
   render() {
     return (
-      <>
-        <h1>Register Page</h1>
+      <div className={styles.formContainer}>
         <form>
-          <label htmlFor='email'>Email:</label>
-          <input
+          <h1 className={styles.formTitle}>
+            Register
+          </h1>
+          <Input
             name='email'
             type='email'
             id='email'
+            placeholder='Email'
+            size='medium'
             value={this.state.email}
             onChange={this.handleChange}
           />
-          <label htmlFor='username'>Username:</label>
-          <input
+          <Input
             name='username'
             type='text'
             id='username'
+            placeholder='Username'
+            size='medium'
             value={this.state.username}
             onChange={this.handleChange}
           />
-          <label htmlFor='password'>Password:</label>
-          <input
+          <Input
             name='password'
             type='password'
             id='password'
+            placeholder='Password'
+            size='medium'
             value= {this.state.password}
             onChange={this.handleChange}
           />
-          <input type='submit' value='Submit' onClick={this.handleSubmit}/>
+          <Button
+            onClick={this.handleSubmit}
+            text='Register'
+            size='medium'
+            stretch='wide'
+            varient='secondary'
+          />
         </form>
-      </>
+      </div>
     );
   }
 }

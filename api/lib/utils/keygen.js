@@ -11,12 +11,12 @@ function generateKeyPair() {
     modulusLength: 4096, // length of key size (4096 is standard)
     publicKeyEncoding: {
       type: "pkcs1", // public key crypography standards 1
-      format: "pem"
+      format: "pem",
     },
     privateKeyEncoding: {
       type: "pkcs1",
-      format: "pem"
-    }
+      format: "pem",
+    },
   });
 
   fs.writeFileSync( __dirname + "/../id_rsa_pub.pem", keyPair.publicKey );
