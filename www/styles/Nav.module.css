@@ -14,6 +14,7 @@
   display: flex;
   align-items: center;
   margin-left: auto;
+  margin-right: 100px;
   list-style: none;
 }
 
@@ -26,6 +27,7 @@
   font-size: 2em;
   list-style: none;
   font-weight: bold;
+  color: #9dbeff
 }
 
 .nav ul li a {
@@ -34,4 +36,11 @@
 
 .nav Button {
   margin: 5px 10px;
+}
+
+.moveOver {
+  margin-left: 100px;
+}
+.moveOver1 {
+  margin-left: 10px;
 }
