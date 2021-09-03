@@ -18,7 +18,7 @@ module.exports = {
 
     try {
       await Meeting.create({ owner_id, date });
-      res.sendStatus( 200 );
+      res.sendStatus( 201 );
     } catch ( error ) {
       res.status( 500 ).send( error.message );
     }
