@@ -16,5 +16,6 @@
   "bugs": {
     "url": "https://github.com/SocexSolutions/agenda-v2/issues"
   },
-  "homepage": "https://github.com/SocexSolutions/agenda-v2#readme"
+  "homepage": "https://github.com/SocexSolutions/agenda-v2#readme",
+  "dependencies": {}
 }
