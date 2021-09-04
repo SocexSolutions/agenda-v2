@@ -8,14 +8,14 @@ const meetingSchema = new Schema(
       ref: "User",
       required: true
     },
+    date: {
+      type: String,
+      required: true
+    },
     participants: [ {
       type: Schema.Types.ObjectId,
       ref: "Participant"
     } ],
-    date: {
-      type: String,
-      required: true
-    }
   },
   {
     timestamps: true,

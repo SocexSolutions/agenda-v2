@@ -3,12 +3,10 @@ const dbUtils  = require( "../../utils/db" );
 const db       = require( "../../../lib/db" );
 const api      = require( "../../utils/api" );
 const client   = require( "../../utils/client" );
-const ObjectId = require( "mongoose" ).Types.ObjectId;
 
+describe( "controllers/meeting", () => {
 
-let owner_id;
-
-describe.only( "controllers/meeting", () => {
+  let meeting;
 
   before( async() => {
     await api.start();
@@ -23,7 +21,14 @@ describe.only( "controllers/meeting", () => {
       }
     );
 
-    owner_id = new ObjectId( data.user._id );
+    meeting = {
+      owner_id: data.user._id,
+      date: "10/10/10",
+      participants: [
+        "brian@socnet.com",
+        "herman@socnet.com"
+      ]
+    };
   });
 
   beforeEach( async() => {
@@ -36,13 +41,8 @@ describe.only( "controllers/meeting", () => {
   });
 
   describe( "#create", () => {
-    const path = "/meeting/create";
 
-    const meeting = {
-      owner_id,
-      participants: [],
-      date: "1"
-    };
+    const path = "/meeting/create";
 
     it( "should create a meeting with valid inputs", async() => {
       const res = await client.post( path, meeting );
@@ -51,28 +51,65 @@ describe.only( "controllers/meeting", () => {
         res.status === 201,
         "failed to create meeting with valid args"
       );
+
+      assert(
+        res.data.date === meeting.date,
+        "created meeting with incorrect date: " + res.data.date
+      );
     });
 
     it( "should not create a meeting without id", async() => {
-      const invalidMeeting = { ...meeting, owner_id: "" };
+      const invalidMeeting = { ...meeting, owner_id: "invalid_id" };
+      const errorRegex     = /^Meeting validation failed: owner_id/;
 
       try {
         await client.post( path, invalidMeeting );
 
-        throw new Error( "accepted invalid ownder_id" );
+        throw new Error( "accepted invalid owner_id" );
 
       } catch ( err ) {
 
-        console.log( err.message );
+        assert(
+          errorRegex.test( err.response.data ),
+          "Error occured for wrong reason: " + err
+        );
       }
     });
 
     it( "should not create a meeting without date", async() => {
       const invalidMeeting = { ...meeting, date: "" };
+      const errorRegex     = /^Meeting validation failed: date/;
 
-      const res = await client.post( path, invalidMeeting );
+      try {
+        await client.post( path, invalidMeeting );
 
-      console.log( res.status );
+        throw new Error( "accepted invalid owner_id" );
+
+      } catch ( err ) {
+
+        assert(
+          errorRegex.test( err.response.data ),
+          "Error occured for wrong reason: " + err
+        );
+      }
+    });
+
+    it( "should not create a meeting without date", async() => {
+      const invalidMeeting = { ...meeting, date: "" };
+      const errorRegex     = /^Meeting validation failed: date/;
+
+      try {
+        await client.post( path, invalidMeeting );
+
+        throw new Error( "accepted invalid owner_id" );
+
+      } catch ( err ) {
+
+        assert(
+          errorRegex.test( err.response.data ),
+          "Error occured for wrong reason: " + err
+        );
+      }
     });
 
   });

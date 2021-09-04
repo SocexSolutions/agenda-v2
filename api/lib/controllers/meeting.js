@@ -8,7 +8,9 @@ module.exports = {
       const meeting = await Meeting.findById( _id );
 
       res.sendStatus( 200 ).send( meeting );
+
     } catch ( error ) {
+
       res.status( 500 ).send( error.message );
     }
   },
@@ -16,14 +18,12 @@ module.exports = {
   create: async( req, res ) => {
     const { owner_id, date } = req.body;
 
-    console.log( owner_id );
-
     try {
-      await Meeting.create({ owner_id, date });
-      res.sendStatus( 201 );
-    } catch ( error ) {
+      const meeting = await Meeting.create({ owner_id, date });
 
-      console.log( error.message );
+      res.status( 201 ).send( meeting );
+
+    } catch ( error ) {
 
       res.status( 500 ).send( error.message );
     }
