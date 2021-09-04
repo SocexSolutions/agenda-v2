@@ -2,10 +2,14 @@ import PropTypes from "prop-types";
 import styles from "../styles/Chip.module.css";
 import CancelOutlined from "@material-ui/icons/CancelOutlined";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-const Chip = ({ text, editing, deleteFunc }) => {
+const Chip = ({ text, editing, deleteFunc, icon }) => {
+  if ( icon == true ) {
+    icon=<AccountCircleIcon className={styles.icons} />;
+  }
+
   return (
     <div className={styles.container}>
-      <AccountCircleIcon className={styles.icons} />
+      {icon}
       <p>{text}</p>
       { editing &&
         <CancelOutlined
@@ -16,6 +20,7 @@ const Chip = ({ text, editing, deleteFunc }) => {
     </div>
   );
 };
+
 
 Chip.propTypes = {
   text: PropTypes.string,

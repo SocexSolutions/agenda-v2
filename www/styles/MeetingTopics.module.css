@@ -1,0 +1,19 @@
+.topicbox {
+    background-color: #0E2D68;
+    color: white;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-bottom: 20px;
+}
+
+.topicsW{
+    margin-left: 20px;
+
+}
+.topics {
+    display: flex;
+    margin-bottom: 15px;
+}
+.topicsTitle{
+    margin-bottom: 15px;
+}
