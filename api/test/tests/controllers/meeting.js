@@ -2,20 +2,28 @@ const assert   = require( "assert" );
 const dbUtils  = require( "../../utils/db" );
 const db       = require( "../../../lib/db" );
 const api      = require( "../../utils/api" );
-const ObjectID = require( "mongoose" ).Types.ObjectId;
-const axios    = require( "axios" );
+const client   = require( "../../utils/client" );
+const ObjectId = require( "mongoose" ).Types.ObjectId;
 
-const meeting = {
-  owner_id: new ObjectID,
-  date: "1"
-};
 
+let owner_id;
 
 describe.only( "controllers/meeting", () => {
 
   before( async() => {
     await api.start();
     await db.connect();
+
+    const { data } = await client.post(
+      "/user/register",
+      {
+        username: "tom",
+        password: "pass",
+        email:    "thudson@starry.com"
+      }
+    );
+
+    owner_id = new ObjectId( data.user._id );
   });
 
   beforeEach( async() => {
@@ -28,10 +36,16 @@ describe.only( "controllers/meeting", () => {
   });
 
   describe( "#create", () => {
-    const path = "http://localhost:5000/meeting/create";
+    const path = "/meeting/create";
+
+    const meeting = {
+      owner_id,
+      participants: [],
+      date: "1"
+    };
 
     it( "should create a meeting with valid inputs", async() => {
-      const res = await axios.post( path, meeting );
+      const res = await client.post( path, meeting );
 
       assert(
         res.status === 201,
@@ -43,22 +57,22 @@ describe.only( "controllers/meeting", () => {
       const invalidMeeting = { ...meeting, owner_id: "" };
 
       try {
-        await axios.post( path, invalidMeeting );
+        await client.post( path, invalidMeeting );
 
         throw new Error( "accepted invalid ownder_id" );
 
-      } catch ( err ) { }
+      } catch ( err ) {
+
+        console.log( err.message );
+      }
     });
 
     it( "should not create a meeting without date", async() => {
       const invalidMeeting = { ...meeting, date: "" };
 
-      try {
-        await axios.post( path, invalidMeeting );
+      const res = await client.post( path, invalidMeeting );
 
-        throw new Error( "accepted invalid date" );
-
-      } catch ( err ) { }
+      console.log( res.status );
     });
 
   });
