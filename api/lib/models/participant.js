@@ -15,7 +15,11 @@ const participantSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    meeting_id: { type: Schema.Types.ObjectId, ref: "Meeting", required: true },
+    meeting_id: {
+      type: Schema.Types.ObjectId,
+      ref: "Meeting",
+      required: true
+    },
   },
   {
     timestamps: true
