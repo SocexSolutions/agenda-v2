@@ -6,8 +6,13 @@ import styles from "../styles/Participant.module.css";
 function Participant({ text, owner }) {
   return (
     <div>
-      <Chip className={styles.text} text={text} editing={true}
-        deleteFunc={true} icon={true}/>
+      <Chip
+        className={styles.text}
+        text={text}
+        editing={true}
+        deleteFunc={true}
+        icon={true}
+      />
     </div>
   );
 }

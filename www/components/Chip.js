@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import styles from "../styles/Chip.module.css";
 import CancelOutlined from "@material-ui/icons/CancelOutlined";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+
 const Chip = ({ text, editing, deleteFunc, icon }) => {
   if ( icon == true ) {
     icon=<AccountCircleIcon className={styles.icons} />;
