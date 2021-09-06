@@ -4,10 +4,12 @@ import MailBox from "../components/MailBox";
 
 const messageExample = () => {
   return (
-    <div className={styles.inboxContainer}>
-      <InboxMenu />
-      <MailBox />
-    </div>
+    <>
+      <div className={styles.inboxContainer}>
+        <InboxMenu />
+        <MailBox />
+      </div>
+    </>
   );
 };
 

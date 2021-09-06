@@ -14,10 +14,11 @@
   font-size: 18px;
   padding: 0px;
   margin: 7px;
+  color: var(--textBlue)
 }
 
 .deleteIcon {
-  color: var(--agendaSecondary);
+  color: var(--danger);
   margin: 7px;
   opacity: .5;
 }
@@ -25,4 +26,11 @@
 .deleteIcon:hover {
   cursor: pointer;
   opacity: .8;
+}
+
+
+.icons {
+  color: var(--skyBlue);
+  display: inline-block;
+  margin-left: .5rem;
 }
