@@ -17,17 +17,12 @@ const Nav = () => {
     return (
       <>
         <nav className={styles.nav}>
-          <div className={styles.moveOver}>
-            <Link href="/">
-              <div className={styles.Agenda}>
-                <AgendaIcon />
-                <div className={styles.moveOver1}></div>
-                Agenda
-              </div>
-            </Link>
-          </div>
-
-
+          <Link href="/">
+            <div className={styles.Agenda}>
+              <AgendaIcon />
+              <h1>Agenda</h1>
+            </div>
+          </Link>
 
           <div className={styles.login}>
             <Link href="/login">
