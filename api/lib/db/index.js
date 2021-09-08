@@ -4,7 +4,7 @@ let db = {};
 
 db.connect = async() => {
   try {
-    let dbConStr = "mongodb://host.docker.internal:27017/";
+    let dbConStr = "mongodb://localhost:27017/";
 
     if ( process.env.NODE_ENV === "test" ) {
       dbConStr = dbConStr + "agenda";
