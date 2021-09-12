@@ -1,14 +1,13 @@
 import { Component } from "react";
-import { userRegister } from "../store/features/user/userSlice";
-import styles from "../styles/LogReg.module.css";
+import { userLogin } from "../store/features/user/userSlice";
+import styles from "../styles/Register.module.css";
 import store from "../store/store";
 import Button from "../components/Button";
 import Input from "../components/Input";
 
 const initialState = {
-  email: "",
   username: "",
-  password: "",
+  password: ""
 };
 
 class Register extends Component {
@@ -29,7 +28,10 @@ class Register extends Component {
 
   handleSubmit( event ) {
     store.dispatch(
-      userRegister( this.state.email, this.state.username, this.state.password )
+      userLogin(
+        this.state.username,
+        this.state.password
+      )
     );
 
     this.setState( initialState );
@@ -39,16 +41,41 @@ class Register extends Component {
 
   render() {
     return (
-      <form className={styles.formContainer}>
-        <Input label="username" placeholder="Username" varient="outlined" />
-        <Input placeholder="Username" varient="outlined" size="xs" />
-        <Input label="username" varient="outlined" size="large" />
-        <Input placeholder="SSN" size="large" />
-        <Input label="Password" />
-        <Button text="submit" onClick={this.handleSubmit} />
-      </form>
+      <div className={styles.formContainer}>
+        <form>
+          <h1 className={styles.formTitle}>
+            Login
+          </h1>
+          <Input
+            name='username'
+            type='text'
+            id='username'
+            placeholder='Username'
+            size='medium'
+            value={this.state.username}
+            onChange={this.handleChange}
+          />
+          <Input
+            name='password'
+            type='password'
+            id='password'
+            placeholder='Password'
+            size='medium'
+            value= {this.state.password}
+            onChange={this.handleChange}
+          />
+          <Button
+            onClick={this.handleSubmit}
+            text='Login'
+            size='medium'
+            stretch='wide'
+            varient='secondary'
+          />
+        </form>
+      </div>
     );
   }
 }
+
 
 export default Register;
