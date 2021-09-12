@@ -27,7 +27,11 @@ module.exports = {
       // send back token to be saved in local storage by browser
       res.status( 201 ).json({
         success: true,
-        user,
+        user: {
+          _id: user._id,
+          email: user.email,
+          username: user.username
+        },
         token,
         expiresIn
       });
@@ -69,6 +73,11 @@ module.exports = {
 
         res.status( 200 ).json({
           success: true,
+          user: {
+            _id: user._id,
+            email: user.email,
+            username: user.username
+          },
           token,
           expiresIn
         });

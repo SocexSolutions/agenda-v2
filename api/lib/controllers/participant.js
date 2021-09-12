@@ -12,7 +12,7 @@ module.exports = {
 
       res.status( 201 ).send( participant );
     } catch ( error ) {
-      res.status( 500 ).send( error.message );
+      res.status( 500 ).send( error );
     }
   },
 };
