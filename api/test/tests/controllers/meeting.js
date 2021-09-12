@@ -7,17 +7,13 @@ const ObjectID = require( "mongoose" ).Types.ObjectId;
 
 const meeting = {
   owner_id: new ObjectID(),
-  date: "10/10/10",
-  participants: [ "brian@socnet.com", "herman@socnet.com" ],
+  date: "10/10/10"
 };
 
 describe( "controllers/meeting", () => {
   before( async() => {
     await api.start();
     await db.connect();
-  });
-
-  beforeEach( async() => {
     await dbUtils.clean();
   });
 
@@ -26,8 +22,12 @@ describe( "controllers/meeting", () => {
     await db.disconnect();
   });
 
+  afterEach( async() => {
+    await dbUtils.clean();
+  });
+
   describe( "#create", () => {
-    const path = "/meeting/create";
+    const path = "/meeting/";
 
     it( "should create a meeting with valid inputs", async() => {
       const res = await client.post( path, meeting );
@@ -51,7 +51,7 @@ describe( "controllers/meeting", () => {
       } catch ( err ) {
         assert(
           errorRegex.test( err.response.data ),
-          "Error occured for wrong reason: " + err
+          "Error occurred for wrong reason: " + err
         );
       }
     });
@@ -67,7 +67,7 @@ describe( "controllers/meeting", () => {
       } catch ( err ) {
         assert(
           errorRegex.test( err.response.data ),
-          "Error occured for wrong reason: " + err
+          "Error occurred for wrong reason: " + err
         );
       }
     });
@@ -83,9 +83,35 @@ describe( "controllers/meeting", () => {
       } catch ( err ) {
         assert(
           errorRegex.test( err.response.data ),
-          "Error occured for wrong reason: " + err
+          "Error occurred for wrong reason: " + err
         );
       }
+    });
+  });
+
+  describe( "#display", () => {
+
+    it( "should fetch meeting with participants", async() => {
+      const meetingRes = await client.post( "meeting/", meeting );
+
+      const participant = {
+        email: "email@email.com",
+        meeting_id: meetingRes.data._id
+      };
+
+      const participantRes = await client.post( "participant/", participant );
+
+      const res = await client.get( `meeting/${ meetingRes.data._id }` );
+
+      const aggregatedMeeting = {
+        ...meetingRes.data,
+        participants: [ participantRes.data ]
+      };
+
+      assert.deepEqual(
+        res.data[ 0 ],
+        aggregatedMeeting
+      );
     });
   });
 });
