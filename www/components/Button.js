@@ -29,28 +29,28 @@ const Button = ({ icon, text, size, onClick, varient, stretch }) => {
   }
   //varient case
 
-  switch (varient) {
-    case "primary":
-      className += " " + styles.primary;
-      break;
-    case "secondary":
-      className += " " + styles.secondary;
-      break;
-    case "danger":
-      className += " " + styles.danger;
-      break;
-    case "disabled":
-      className += " " + styles.disabled;
-      break;
-    case "menu":
-      className += " " + styles.menu;
-      break;
-    case "topic":
-      className += " " + styles.topic;
-      break;
-    case "icon":
-      className += " " + styles.icon;
-      break;
+  switch ( varient ) {
+  case "primary":
+    className += " " + styles.primary;
+    break;
+  case "secondary":
+    className += " " + styles.secondary;
+    break;
+  case "danger":
+    className += " " + styles.danger;
+    break;
+  case "disabled":
+    className += " " + styles.disabled;
+    break;
+  case "menu":
+    className += " " + styles.menu;
+    break;
+  case "topic":
+    className += " " + styles.topic;
+    break;
+  case "icon":
+    className += " " + styles.icon;
+    break;
 
   }
   //stretch case
@@ -79,15 +79,15 @@ const Button = ({ icon, text, size, onClick, varient, stretch }) => {
   case "arrow":
     icon = <ArrowForwardIosIcon style={{ fontSize: "medium", color: "var(--textBlue)" }}/>;
     break;
-    case "home":
-      icon = <HomeOutlinedIcon />;
-      break;
-    case "addicon":
-      icon = <AddToPhotosOutlinedIcon />;
-      break;
-    case "person":
-      icon = <AccountCircleIcon />;
-      break;
+  case "home":
+    icon = <HomeOutlinedIcon />;
+    break;
+  case "addicon":
+    icon = <AddToPhotosOutlinedIcon />;
+    break;
+  case "person":
+    icon = <AccountCircleIcon />;
+    break;
   }
 
   return (
@@ -102,10 +102,10 @@ const Button = ({ icon, text, size, onClick, varient, stretch }) => {
 
 Button.propTypes = {
   onClick: PropTypes.func,
-  stretch: PropTypes.oneOfType([
+  stretch: PropTypes.oneOfType( [
     PropTypes.string,
     PropTypes.bool
-  ]),
+  ] ),
   varient: PropTypes.string,
   text: PropTypes.string,
   size: PropTypes.string,

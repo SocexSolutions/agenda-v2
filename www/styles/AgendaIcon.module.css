@@ -1,0 +1,10 @@
+.container {
+  position: relative;
+  display: flex;
+}
+
+.check {
+  position: absolute;
+  margin-left: 9px;
+  margin-top: 13px;
+}

@@ -17,10 +17,11 @@ module.exports = {
     const { owner_id, date } = req.body;
 
     try {
-      await Meeting.create({ owner_id, date });
-      res.sendStatus( 200 );
+      const meeting = await Meeting.create({ owner_id, date });
+
+      res.status( 201 ).send( meeting );
     } catch ( error ) {
       res.status( 500 ).send( error.message );
     }
-  }
+  },
 };

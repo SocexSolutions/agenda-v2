@@ -3,8 +3,8 @@
   padding: 0px 5px 0px 25px;
   color: var(--textBlue);
   display: flex;
-  flex-direction: row;
   align-items: center;
+  margin: 0 10vw 0 10vw;
 }
 
 .login {
@@ -14,7 +14,6 @@
   display: flex;
   align-items: center;
   margin-left: auto;
-  list-style: none;
 }
 
 .navcentered {
@@ -23,9 +22,10 @@
 
 .Agenda {
   display: flex;
-  font-size: 2em;
-  list-style: none;
-  font-weight: bold;
+  justify-content: space-between;
+  align-items: center;
+  width: 140px;
+  color: var(--textBlue);
 }
 
 .nav ul li a {
@@ -35,3 +35,4 @@
 .nav Button {
   margin: 5px 10px;
 }
+

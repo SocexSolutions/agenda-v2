@@ -4,29 +4,32 @@ import { useEffect } from "react";
 import Button from "./Button";
 import { userRegister } from "../store/features/user/userSlice";
 import styles from "../styles/Nav.module.css";
-import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
-import PersonIcon from "@material-ui/icons/Person";
+import AgendaIcon from "./AgendaIcon";
 
 // this should probably go somewhere else so we can reuse it
-const selectUser = (state) => state.user;
+const selectUser = ( state ) => state.user;
 
 const Nav = () => {
-  const user = useSelector(selectUser);
-  console.log(user);
+  const user = useSelector( selectUser );
+  console.log( user );
 
-  if (user.token === null) {
+  if ( user.token === null ) {
     return (
       <>
         <nav className={styles.nav}>
-          <div className={styles.Agenda}>
-            <Link href="/">Agenda</Link>
-          </div>
+          <Link href="/">
+            <div className={styles.Agenda}>
+              <AgendaIcon />
+              <h1>Agenda</h1>
+            </div>
+          </Link>
+
           <div className={styles.login}>
             <Link href="/login">
               <Button varient="secondary" text="Login" />
             </Link>
             <Link href="/register">
-              <Button text="Sign Up" />
+              <Button varient="secondary" text="Sign Up" />
             </Link>
           </div>
         </nav>

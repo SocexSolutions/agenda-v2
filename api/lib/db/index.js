@@ -4,12 +4,10 @@ let db = {};
 
 db.connect = async() => {
   try {
-    let dbConStr = "mongodb://localhost:27017/";
+    let dbConStr = "mongodb://host.docker.internal:27017/agenda";
 
     if ( process.env.NODE_ENV === "test" ) {
-      dbConStr = dbConStr + "agenda";
-    } else {
-      dbConStr = dbConStr + "agenda-test";
+      dbConStr = "mongodb://localhost:27017/agenda-test";
     }
 
     await mongoose.connect( dbConStr, {

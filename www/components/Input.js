@@ -79,7 +79,7 @@ Input.propTypes = {
   label: PropTypes.string,
   placeholder: PropTypes.string,
   value: PropTypes.string,
-  size: PropTypes.number,
+  size: PropTypes.string,
   required: PropTypes.bool,
   varient: PropTypes.string,
 };

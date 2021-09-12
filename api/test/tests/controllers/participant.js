@@ -1,20 +1,16 @@
-const assert   = require( "assert" );
-const dbUtils  = require( "../../utils/db" );
-const db       = require( "../../../lib/db" );
-const api      = require( "../../utils/api" );
+const assert = require( "assert" );
+const dbUtils = require( "../../utils/db" );
+const db = require( "../../../lib/db" );
+const api = require( "../../utils/api" );
 const ObjectID = require( "mongoose" ).Types.ObjectId;
-const axios    = require( "axios" );
+const client = require( "../../utils/client" );
 
 const participant = {
-  firstName: "linus",
-  lastName: "torvalds",
   email: "lt@linux.com",
-  meeting_id: new ObjectID
+  meeting_id: new ObjectID(),
 };
 
-
-describe.only( "controllers/participant", () => {
-
+describe( "controllers/participant", () => {
   before( async() => {
     await api.start();
     await db.connect();
@@ -30,50 +26,52 @@ describe.only( "controllers/participant", () => {
   });
 
   describe( "#create", () => {
-    const path = "http://localhost:5000/participant/create";
+    const path = "/participant/create";
 
     it( "should create a participant with valid inputs", async() => {
-      const res = await axios.post( path, participant );
+      const res = await client.post( path, participant );
 
       assert(
         res.status === 201,
         "failed to create participant with valid args"
       );
+
+      assert(
+        res.data.email === participant.email,
+        "created participant with incorrect email"
+      );
     });
 
     it( "should not create a participant without email", async() => {
       const invalidParticipant = { ...participant, email: "" };
+      const errorRegex = /^Participant validation failed: email/;
 
       try {
-        await axios.post( path, invalidParticipant );
+        await client.post( path, invalidParticipant );
 
         throw new Error( "accepted invalid email" );
-
-      } catch ( err ) { }
+      } catch ( err ) {
+        assert(
+          errorRegex.test( err.response.data ),
+          "Error occured for the wrong reason: " + err
+        );
+      }
     });
 
-    it( "should not create a participant without firstname", async() => {
-      const invalidParticipant = { ...participant, firstName: "" };
+    it( "should not create a participant without meeting_id", async() => {
+      const invalidParticipant = { ...participant, meeting_id: "" };
+      const errorRegex = /^Participant validation failed: meeting_id/;
 
       try {
-        await axios.post( path, invalidParticipant );
+        await client.post( path, invalidParticipant );
 
-        throw new Error( "accepted invalid firstname" );
-
-      } catch ( err ) { }
+        throw new Error( "accepted invalid email" );
+      } catch ( err ) {
+        assert(
+          errorRegex.test( err.response.data ),
+          "Error occured for the wrong reason: " + err
+        );
+      }
     });
-
-    it( "should not create a participant without lastname", async() => {
-      const invalidParticipant = { ...participant, lastname: "" };
-
-      try {
-        await axios.post( path, invalidParticipant );
-
-        throw new Error( "accepted empty last name" );
-
-      } catch ( err ) { }
-    });
-
   });
-
 });

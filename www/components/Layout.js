@@ -22,7 +22,7 @@ const Layout = ({ children }) => {
           <Drawer />
         </div>
         <main
-          onClick={ () => setOpen( !open ) }
+          //onClick={ () => setOpen( !open ) }
         >
           {children}
         </main>
