@@ -114,7 +114,7 @@ Button.propTypes = {
 
 Button.defaultProps = {
   stretch: false,
-  text: "Button Text",
+  text: "",
   size: "medium",
   varient: "primary",
   icon: "",
