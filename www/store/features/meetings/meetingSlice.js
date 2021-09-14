@@ -10,6 +10,9 @@ const reducer = ( state = initialState, action ) => {
 
   case "meeting/fetch":
     return { ...state, openMeeting: action.payload };
+
+  default:
+    return state;
   }
 };
 
