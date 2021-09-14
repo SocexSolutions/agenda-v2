@@ -57,19 +57,21 @@ describe( "controllers/group", () => {
     it( "should fetch group with members", async() => {
       const groupRes = await client.post( "group/", group );
 
-      const member = {
+      const user = {
         username: "zach",
-        password: "zach123",
-        email:    "email"
+        email: "zach@w00!.com",
+        password: "H1Th!siZZ@kk"
       };
 
-      const memberRes = await client.post( "member/", member );
+      const path = "http://localhost:5000/user/register";
+
+      const memberRes = await client.post( path, user );
 
       const res = await client.get( `group/${ groupRes.data._id }` );
 
       const aggregatedGroup = {
         ...groupRes.data,
-        members: [ memberRes.data ]
+        members: [ memberRes.data.user._id ]
       };
 
       assert.deepEqual(
