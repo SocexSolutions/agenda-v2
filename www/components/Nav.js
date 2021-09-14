@@ -45,10 +45,16 @@ const Nav = () => {
 
           <div className={styles.navcentered}>
             <Link href="/messageExample" passHref>
-              <Button icon="addicon" text="create" varient="secondary" />
+              <Button icon="addicon"
+                text="create" varient="secondary" />
             </Link>
           </div>
-          <Button icon="person" varient="icon" size="small" />
+          <Link href={`/User/${user._id}`} passHref>
+            <Button text={user.username}
+              icon="person"
+              varient="icon"
+              size="small" />
+          </Link>
         </nav>
       </>
     );

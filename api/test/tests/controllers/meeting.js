@@ -7,7 +7,12 @@ const ObjectID = require( "mongoose" ).Types.ObjectId;
 
 const meeting = {
   owner_id: new ObjectID(),
-  date: "10/10/10"
+  date: "10/10/10",
+};
+
+const meeting2 = {
+  owner_id: new ObjectID(),
+  date: "10/12/10",
 };
 
 describe( "controllers/meeting", () => {
@@ -24,6 +29,39 @@ describe( "controllers/meeting", () => {
 
   afterEach( async() => {
     await dbUtils.clean();
+  });
+
+  describe( "#index", () => {
+    it.only( "should fetch meeting with particpant", async() => {
+      const meetingRes = await client.post( "meeting/", meeting );
+      const meetingRes2 = await client.post( "meeting/", meeting2 );
+
+      const meetings = await client.get( "meeting/", meeting );
+
+      assert.deepEqual( meetings.data, [ meetingRes.data, meetingRes2.data ] );
+    });
+  });
+
+  describe( "#display", () => {
+    it( "should fetch meeting with participants", async() => {
+      const meetingRes = await client.post( "meeting/", meeting );
+
+      const participant = {
+        email: "email@email.com",
+        meeting_id: meetingRes.data._id,
+      };
+
+      const participantRes = await client.post( "participant/", participant );
+
+      const res = await client.get( `meeting/${meetingRes.data._id}` );
+
+      const aggregatedMeeting = {
+        ...meetingRes.data,
+        participants: [ participantRes.data ],
+      };
+
+      assert.deepEqual( res.data[0], aggregatedMeeting );
+    });
   });
 
   describe( "#create", () => {
@@ -86,32 +124,6 @@ describe( "controllers/meeting", () => {
           "Error occurred for wrong reason: " + err
         );
       }
-    });
-  });
-
-  describe( "#display", () => {
-
-    it( "should fetch meeting with participants", async() => {
-      const meetingRes = await client.post( "meeting/", meeting );
-
-      const participant = {
-        email: "email@email.com",
-        meeting_id: meetingRes.data._id
-      };
-
-      const participantRes = await client.post( "participant/", participant );
-
-      const res = await client.get( `meeting/${ meetingRes.data._id }` );
-
-      const aggregatedMeeting = {
-        ...meetingRes.data,
-        participants: [ participantRes.data ]
-      };
-
-      assert.deepEqual(
-        res.data[ 0 ],
-        aggregatedMeeting
-      );
     });
   });
 });
