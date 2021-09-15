@@ -93,4 +93,8 @@ module.exports = {
       res.status( 500 ).send( err );
     }
   },
+
+  async meetings( req, res ) {
+    const { _id } = user
+  }
 };
