@@ -37,17 +37,17 @@ class Meeting extends Component {
     this.setState({ ...this.state, topics: newTopics });
   }
 
-  setMeetingName( name ) {
+  setMeetingName( event ) {
     this.setState({
       ...this.state,
-      meeting: { ...this.meeting, name },
+      meeting: { ...this.meeting, name: event.target.value },
     });
   }
 
-  setMeetingDate( date ) {
+  setMeetingDate( event ) {
     this.setState({
       ...this.state,
-      meeting: { ...this.meeting, date },
+      meeting: { ...this.meeting, date: event.target.value },
     });
   }
 
@@ -67,10 +67,10 @@ class Meeting extends Component {
     this.setState({ ...this.state, participant: newParticipants });
   }
 
-  setImportance( flag ) {
+  setImportance( event ) {
     this.setState({
       ...this.state,
-      meeting: { ...this.meeting, importance: flag },
+      meeting: { ...this.meeting, importance: event.target.value },
     });
   }
 
