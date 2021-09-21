@@ -1,0 +1,15 @@
+.container {
+  width: 200px;
+  top: 80px;
+  right: 5%;
+  background-color: var(--menuColor);
+  position: absolute;
+  overflow: hidden;
+  justify-content: center;
+}
+
+.container Button {
+  justify-content: left;
+  margin-left: 10px;
+  padding: 0;
+}
