@@ -7,10 +7,13 @@ class Meeting extends Component {
   constructor( props ) {
     super( props );
 
-    this.meeting = {};
-    this.topics = [];
-    this.attendies = [];
-    this.editing = false;
+    this.state = {
+      meeting: {},
+      topics: [],
+      owner: "Tom Hudson",
+      participants: [ "David Oligney", "Zach Barnes" ],
+      editing: true,
+    };
 
     this.addTopic = this.addTopic.bind( this );
     this.deleteTopic = this.deleteTopic.bind( this );
@@ -22,7 +25,7 @@ class Meeting extends Component {
   }
 
   addTopic( topicName ) {
-    const newTopics = this.topics;
+    const newTopics = this.state.topics;
 
     newTopics.push( topicName );
 
@@ -30,7 +33,7 @@ class Meeting extends Component {
   }
 
   deleteTopic( deleteTopic ) {
-    const newTopics = this.topics.filter( ( topic ) => {
+    const newTopics = this.state.topics.filter( ( topic ) => {
       return topic !== deleteTopic;
     });
 
@@ -79,14 +82,20 @@ class Meeting extends Component {
       <div>
         <MeetingNameDate
           setImportance={this.setImportance}
+          importance={this.state.importance}
           setMeetingName={this.setMeetingName}
+          meetingName={this.state.meetingName}
           setMeetingDate={this.setMeetingDate}
+          meetingDate={this.state.meetingDate}
         />
         <MeetingTopics
+          topics={this.state.topics}
           addTopic={this.addTopic}
           deleteTopic={this.deleteTopic}
         />
         <Attendies
+          owner={this.state.owner}
+          participants={this.state.participants}
           addParticipant={this.addParticipant}
           deleteParticipant={this.deleteParticipant}
         />
