@@ -7,10 +7,13 @@ class Meeting extends Component {
   constructor( props ) {
     super( props );
 
-    this.meeting = {};
-    this.topics = [];
-    this.attendies = [];
-    this.editing = false;
+    this.state = {
+      meeting: {},
+      topics: [],
+      owner: "Tom Hudson",
+      participants: [ "David Oligney", "Zach Barnes" ],
+      editing: true,
+    };
 
     this.addTopic = this.addTopic.bind( this );
     this.deleteTopic = this.deleteTopic.bind( this );
@@ -22,7 +25,7 @@ class Meeting extends Component {
   }
 
   addTopic( topicName ) {
-    const newTopics = this.topics;
+    const newTopics = this.state.topics;
 
     newTopics.push( topicName );
 
@@ -30,24 +33,24 @@ class Meeting extends Component {
   }
 
   deleteTopic( deleteTopic ) {
-    const newTopics = this.topics.filter( ( topic ) => {
+    const newTopics = this.state.topics.filter( ( topic ) => {
       return topic !== deleteTopic;
     });
 
     this.setState({ ...this.state, topics: newTopics });
   }
 
-  setMeetingName( name ) {
+  setMeetingName( event ) {
     this.setState({
       ...this.state,
-      meeting: { ...this.meeting, name },
+      meeting: { ...this.meeting, name: event.target.value },
     });
   }
 
-  setMeetingDate( date ) {
+  setMeetingDate( event ) {
     this.setState({
       ...this.state,
-      meeting: { ...this.meeting, date },
+      meeting: { ...this.meeting, date: event.target.value },
     });
   }
 
@@ -67,10 +70,10 @@ class Meeting extends Component {
     this.setState({ ...this.state, participant: newParticipants });
   }
 
-  setImportance( flag ) {
+  setImportance( event ) {
     this.setState({
       ...this.state,
-      meeting: { ...this.meeting, importance: flag },
+      meeting: { ...this.meeting, importance: event.target.value },
     });
   }
 
@@ -79,14 +82,20 @@ class Meeting extends Component {
       <div>
         <MeetingNameDate
           setImportance={this.setImportance}
+          importance={this.state.importance}
           setMeetingName={this.setMeetingName}
+          meetingName={this.state.meetingName}
           setMeetingDate={this.setMeetingDate}
+          meetingDate={this.state.meetingDate}
         />
         <MeetingTopics
+          topics={this.state.topics}
           addTopic={this.addTopic}
           deleteTopic={this.deleteTopic}
         />
         <Attendies
+          owner={this.state.owner}
+          participants={this.state.participants}
           addParticipant={this.addParticipant}
           deleteParticipant={this.deleteParticipant}
         />
