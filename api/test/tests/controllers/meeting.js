@@ -6,13 +6,15 @@ const client = require( "../../utils/client" );
 const ObjectID = require( "mongoose" ).Types.ObjectId;
 
 const meeting = {
+  name: "Meeting 1",
   owner_id: new ObjectID(),
-  date: "10/10/10",
+  date: "10/10/10"
 };
 
 const meeting2 = {
+  name: "Meeting 2",
   owner_id: new ObjectID(),
-  date: "10/12/10",
+  date: "10/12/10"
 };
 
 describe( "controllers/meeting", () => {
@@ -32,7 +34,7 @@ describe( "controllers/meeting", () => {
   });
 
   describe( "#index", () => {
-    it.only( "should fetch meeting with particpant", async() => {
+    it( "should fetch all meetings", async() => {
       const meetingRes = await client.post( "meeting/", meeting );
       const meetingRes2 = await client.post( "meeting/", meeting2 );
 
@@ -48,7 +50,7 @@ describe( "controllers/meeting", () => {
 
       const participant = {
         email: "email@email.com",
-        meeting_id: meetingRes.data._id,
+        meeting_id: meetingRes.data._id
       };
 
       const participantRes = await client.post( "participant/", participant );
@@ -58,6 +60,28 @@ describe( "controllers/meeting", () => {
       const aggregatedMeeting = {
         ...meetingRes.data,
         participants: [ participantRes.data ],
+        topics: [ ]
+      };
+
+      assert.deepEqual( res.data[0], aggregatedMeeting );
+    });
+
+    it( "should fetch meeting with topics", async() => {
+      const meetingRes = await client.post( "meeting/", meeting );
+
+      const topic = {
+        name: "Jazz",
+        meeting_id: meetingRes.data._id
+      };
+
+      const topicRes = await client.post( "topic/", topic );
+
+      const res = await client.get( `meeting/${meetingRes.data._id}` );
+
+      const aggregatedMeeting = {
+        ...meetingRes.data,
+        topics: [ topicRes.data ],
+        participants: [ ]
       };
 
       assert.deepEqual( res.data[0], aggregatedMeeting );

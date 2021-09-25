@@ -1,9 +1,9 @@
 const assert = require( "assert" );
 const api    = require( "../../utils/api" );
-const axios  = require( "axios" );
+const client = require( "../../utils/client" );
 
 describe( "controllers/health.js", function() {
-  const path = "http://localhost:5000/health";
+  const path = "/health";
 
   before( async() => {
     await api.start();
@@ -14,7 +14,7 @@ describe( "controllers/health.js", function() {
   });
 
   it( "should respond with OK", async() => {
-    const res = await axios.get( path );
+    const res = await client.get( path );
 
     assert( res.data === "OK" );
   });

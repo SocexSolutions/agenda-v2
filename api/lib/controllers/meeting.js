@@ -30,6 +30,14 @@ module.exports = {
             as: "participants",
           },
         },
+        {
+          $lookup: {
+            from: "topics",
+            localField: "_id",
+            foreignField: "meeting_id",
+            as: "topics"
+          }
+        }
       ] );
 
       res.status( 200 ).send( meeting );
@@ -39,10 +47,10 @@ module.exports = {
   },
 
   create: async( req, res ) => {
-    const { owner_id, date } = req.body;
+    const { owner_id, date, name } = req.body;
 
     try {
-      const meeting = await Meeting.create({ owner_id, date });
+      const meeting = await Meeting.create({ owner_id, date, name });
 
       res.status( 201 ).send( meeting );
     } catch ( error ) {
