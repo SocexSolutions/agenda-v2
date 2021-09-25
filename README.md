@@ -21,3 +21,8 @@ More information can be found in the README.md files for the `api` and `www` dir
 
 # Tickets
 The project Kanban can be found [here](https://thomashudsonnotes.notion.site/a1f3e7cd3bf74c62b06dbda78b2c9c7c?v=43d3f2b9730045f691cd254967c6949d)
+
+# Technical Decisions
+
+## Service Architecture
+![image](https://user-images.githubusercontent.com/54583311/120655368-db876780-c43f-11eb-9ccc-5ea9deba79fe.png)
