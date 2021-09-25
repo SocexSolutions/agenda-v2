@@ -2,7 +2,7 @@ const assert  = require( "assert" );
 const dbUtils = require( "../../utils/db" );
 const db      = require( "../../../lib/db" );
 const api     = require( "../../utils/api" );
-const axios   = require( "axios" );
+const client  = require( "../../utils/client" );
 
 const user = {
   username: "thudson",
@@ -16,9 +16,6 @@ describe( "controllers/user.js", function() {
   before( async() => {
     await api.start();
     await db.connect();
-  });
-
-  beforeEach( async() => {
     await dbUtils.clean();
   });
 
@@ -27,12 +24,16 @@ describe( "controllers/user.js", function() {
     await db.disconnect();
   });
 
+  afterEach( async() => {
+    await dbUtils.clean();
+  });
+
   describe( "#register", () => {
 
-    const path = "http://localhost:5000/user/register";
+    const path = "/user/register";
 
     it( "should register successfully when given valid creds", async() => {
-      const res = await axios.post( path, user );
+      const res = await client.post( path, user );
 
       assert( res.status === 201 );
     });
@@ -43,15 +44,14 @@ describe( "controllers/user.js", function() {
         email: ""
       };
 
+      let acceptedInvalidEmail = false;
+
       try {
-        await axios.post( path, invalidUser );
+        await client.post( path, invalidUser );
+        acceptedInvalidEmail = true;
+      } catch ( err ) {}
 
-        throw new Error( "accepted user with invalid email" );
-
-      } catch ( err ) {
-
-        assert( true );
-      }
+      assert( !acceptedInvalidEmail );
     });
 
     it( "should not register user with invalid username", async() => {
@@ -60,15 +60,14 @@ describe( "controllers/user.js", function() {
         username: ""
       };
 
+      let acceptedInvalidUsername = false;
+
       try {
-        await axios.post( path, invalidUser );
+        await client.post( path, invalidUser );
+        acceptedInvalidUsername = true;
+      } catch ( err ) {}
 
-        throw new Error( "accepted user with invalid username" );
-
-      } catch ( err ) {
-
-        assert( true );
-      }
+      assert( !acceptedInvalidUsername );
     });
 
     it( "should not register user with invalid password", async() => {
@@ -77,22 +76,21 @@ describe( "controllers/user.js", function() {
         password: ""
       };
 
+      let acceptedInvalidPassword = false;
+
       try {
-        await axios.post( path, invalidUser );
+        await client.post( path, invalidUser );
+        acceptedInvalidPassword = true;
+      } catch ( err ) {}
 
-        throw new Error( "accepted user with invalid password" );
-
-      } catch ( err ) {
-
-        assert( true );
-      }
+      assert( !acceptedInvalidPassword );
     });
 
   });
 
   describe( "#login", () => {
 
-    const path = "http://localhost:5000/user/login";
+    const path = "/user/login";
 
     const loginCreds = {
       username: user.username,
@@ -100,14 +98,14 @@ describe( "controllers/user.js", function() {
     };
 
     beforeEach( async() => {
-      await axios.post(
-        "http://localhost:5000/user/register",
+      await client.post(
+        "/user/register",
         user
       );
     });
 
     it( "should login successfully when given valid creds", async() => {
-      const res = await axios.post( path, loginCreds );
+      const res = await client.post( path, loginCreds );
 
       assert( res.status === 200 );
     });
@@ -118,15 +116,14 @@ describe( "controllers/user.js", function() {
         password: "bacon"
       };
 
+      let acceptedInvalidPassword = false;
+
       try {
-        await axios.post( path, invalidUser );
+        await client.post( path, invalidUser );
+        acceptedInvalidPassword = true;
+      } catch ( err ) {}
 
-        throw new Error( "authenticated user with invalid password" );
-
-      } catch ( err ) {
-
-        assert( true );
-      }
+      assert( !acceptedInvalidPassword );
     });
 
     it( "should not login user with invalid username", async() => {
@@ -135,15 +132,13 @@ describe( "controllers/user.js", function() {
         username: "bacon"
       };
 
+      let acceptedInvalidUsername = false;
+
       try {
-        await axios.post( path, invalidUser );
+        await client.post( path, invalidUser );
+      } catch ( err ) {}
 
-        throw new Error( "authenticated user with invalid username" );
-
-      } catch ( err ) {
-
-        assert( true );
-      }
+      assert( !acceptedInvalidUsername );
     });
 
   });

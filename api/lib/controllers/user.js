@@ -8,7 +8,12 @@ module.exports = {
       // unpack from request by variable names in form
       const { email, username, password } = req.body;
 
-      // take password and create salted hash
+      // password is not stored in db and is thus not validated by the model so
+      // we quality check it here.
+      if ( !password ) {
+        throw new Error( "Invalid Password" );
+      }
+
       const { hash, salt } = PassUtils.genPassword( password );
 
       const newUser = {
@@ -18,13 +23,10 @@ module.exports = {
         salt
       };
 
-      // create user
       const user = await User.create( newUser );
 
-      // generate signed jwt
       const { token, expiresIn } = JWTUtils.issueJWT( res );
 
-      // send back token to be saved in local storage by browser
       res.status( 201 ).json({
         success: true,
         user: {

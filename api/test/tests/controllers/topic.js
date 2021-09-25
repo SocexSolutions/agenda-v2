@@ -27,7 +27,7 @@ describe( "/controllers/topic", () => {
   });
 
   describe( "#create", () => {
-    const path = "/topic/create";
+    const path = "/topic";
 
     it( "should create topic with valid inputs", async() => {
       const res = await client.post( path, topic );
