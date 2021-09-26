@@ -16,6 +16,12 @@ function MeetingTopics( props ) {
     setTopic( event.target.value );
   }
 
+  function handleEnter( event ) {
+    if ( event.key === "Enter" ) {
+      handleSubmit();
+    }
+  }
+
   function handleSubmit() {
     if ( topic ) {
       props.addTopic( topic );
@@ -40,8 +46,8 @@ function MeetingTopics( props ) {
       <div className={styles.topics}>{topics}</div>
       <p>Add Topic</p>
       <div className={styles.inputContainer}>
-        <Input name="topic" value={topic} onChange={handleChange} />
-        <Button text="add" varient="primary" onClick={handleSubmit} />
+        <Input name="topic" value={topic} onChange={handleChange} onKeyPress={handleEnter} />
+        <Button text="add" varient="secondary" onClick={handleSubmit} />
       </div>
     </div>
   );

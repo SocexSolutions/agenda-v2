@@ -1,8 +1,8 @@
 import { Component } from "react";
 import MeetingNameDate from "../components/MeetingNameDate";
 import MeetingTopics from "../components/MeetingTopics";
-import Attendies from "../components/Attendies";
-
+import MeetingParticipants from "../components/MeetingParticipants";
+import Button from "../components/Button";
 class Meeting extends Component {
   constructor( props ) {
     super( props );
@@ -11,7 +11,7 @@ class Meeting extends Component {
       meeting: {},
       topics: [],
       owner: "Tom Hudson",
-      participants: [ "David Oligney", "Zach Barnes" ],
+      participants: [],
       editing: true,
     };
 
@@ -26,6 +26,10 @@ class Meeting extends Component {
 
   addTopic( topicName ) {
     const newTopics = this.state.topics;
+
+    if ( newTopics.includes( topicName ) ) {
+      return;
+    }
 
     newTopics.push( topicName );
 
@@ -55,19 +59,23 @@ class Meeting extends Component {
   }
 
   addParticipant( participant ) {
-    const newParticipant = this.attendies;
+    const newParticipants = this.state.participants;
 
-    newParticipant.push( participant );
+    if ( newParticipants.includes( participant ) ) {
+      return;
+    }
 
-    this.setState({ ...this.state, attendies: newParticipant });
+    newParticipants.push( participant );
+
+    this.setState({ ...this.state, participants: newParticipants });
   }
 
   deleteParticipant( deleteParticipant ) {
-    const newParticipants = this.topics.filter( ( participant ) => {
-      return participant === deleteParticipant;
+    const newParticipants = this.state.participants.filter( ( participant ) => {
+      return participant !== deleteParticipant;
     });
 
-    this.setState({ ...this.state, participant: newParticipants });
+    this.setState({ ...this.state, participants: newParticipants });
   }
 
   setImportance( event ) {
@@ -93,12 +101,13 @@ class Meeting extends Component {
           addTopic={this.addTopic}
           deleteTopic={this.deleteTopic}
         />
-        <Attendies
+        <MeetingParticipants
           owner={this.state.owner}
           participants={this.state.participants}
           addParticipant={this.addParticipant}
           deleteParticipant={this.deleteParticipant}
         />
+        <Button text="submit" />
       </div>
     );
   }
