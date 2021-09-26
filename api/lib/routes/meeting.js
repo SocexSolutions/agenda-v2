@@ -7,4 +7,6 @@ router.get( "/:_id", meetingController.display );
 
 router.post( "/", meetingController.create );
 
+router.patch( "/:_id", meetingController.update );
+
 module.exports = router;

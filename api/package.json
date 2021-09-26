@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/SocexSolutions/agenda-api#readme",
   "dependencies": {
+    "@starryinternet/jobi": "^1.1.0",
     "axios": "^0.21.1",
     "cors": "^2.8.5",
     "express": "4.17.1",
