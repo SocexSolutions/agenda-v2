@@ -9,9 +9,9 @@ class Meeting extends Component {
 
     this.state = {
       meeting: {},
-      topics: [],
       owner: "Tom Hudson",
-      participants: [],
+      topics: new Set(),
+      participants: new Set(),
       editing: true,
     };
 
@@ -27,19 +27,15 @@ class Meeting extends Component {
   addTopic( topicName ) {
     const newTopics = this.state.topics;
 
-    if ( newTopics.includes( topicName ) ) {
-      return;
-    }
-
-    newTopics.push( topicName );
+    newTopics.add( topicName );
 
     this.setState({ ...this.state, topics: newTopics });
   }
 
   deleteTopic( deleteTopic ) {
-    const newTopics = this.state.topics.filter( ( topic ) => {
-      return topic !== deleteTopic;
-    });
+    const newTopics = this.state.topics;
+
+    newTopics.delete( deleteTopic );
 
     this.setState({ ...this.state, topics: newTopics });
   }
@@ -61,19 +57,15 @@ class Meeting extends Component {
   addParticipant( participant ) {
     const newParticipants = this.state.participants;
 
-    if ( newParticipants.includes( participant ) ) {
-      return;
-    }
-
-    newParticipants.push( participant );
+    newParticipants.add( participant );
 
     this.setState({ ...this.state, participants: newParticipants });
   }
 
   deleteParticipant( deleteParticipant ) {
-    const newParticipants = this.state.participants.filter( ( participant ) => {
-      return participant !== deleteParticipant;
-    });
+    const newParticipants = this.state.participants;
+
+    newParticipants.delete( deleteParticipant );
 
     this.setState({ ...this.state, participants: newParticipants });
   }

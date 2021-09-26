@@ -6,7 +6,9 @@ import Button from "../components/Button";
 import { useState } from "react";
 
 MeetingTopics.PropTypes = {
-  topics: PropTypes.string,
+  addTopic: PropTypes.func,
+  deleteTopic: PropTypes.func,
+  topics: PropTypes.object
 };
 
 function MeetingTopics( props ) {
@@ -29,8 +31,10 @@ function MeetingTopics( props ) {
     }
   }
 
-  const topics = props.topics.map( ( topic ) => {
-    return (
+  const topics = [];
+
+  props.topics.forEach( ( topic ) => {
+    topics.push(
       <Chip
         editing={true}
         text={topic}

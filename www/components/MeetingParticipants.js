@@ -30,8 +30,10 @@ function MeetingParticipants( props ) {
     }
   }
 
-  const participants = props.participants.map( ( participant ) => {
-    return (
+  const participants = [];
+
+  props.participants.forEach( ( participant ) => {
+    participants.push(
       <Chip
         editing={true}
         text={participant}
