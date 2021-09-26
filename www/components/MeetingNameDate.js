@@ -12,7 +12,7 @@ function MeetingNameDate( props ) {
     <div className={styles.meetingBar}>
       <FlagIcon style={{ color: "var(--agendaSecondary)", fontSize: 37 }} />
       <form className={styles.form}>
-        <Input placeholder="Meeting Name" onChange={props.setMeetingName} />
+        <Input placeholder="Meeting Name" onChange={props.setMeetingName} size="xl" />
         <div className={styles.date}>
           <Input
             placeholder="mm/dd/yy hh:mm"

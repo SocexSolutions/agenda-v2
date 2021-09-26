@@ -12,6 +12,7 @@ const Input = ({
   size,
   required,
   varient,
+  onKeyPress,
 }) => {
 
   let className = "";
@@ -69,6 +70,7 @@ const Input = ({
         onChange={onChange}
         size={size}
         className={className}
+        onKeyPress={onKeyPress}
       />
     </div>
   );
