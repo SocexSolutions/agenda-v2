@@ -10,4 +10,5 @@ cd ../api
 docker compose up &
 P2=$!
 
+
 wait $P1 $P2
