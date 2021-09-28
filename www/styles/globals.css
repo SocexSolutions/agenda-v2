@@ -9,6 +9,7 @@ body {
   margin: 0;
   background-color: var(--background);
   font-family: open-sans;
+  overflow-x:hidden; 
 }
 
 a {
@@ -24,6 +25,7 @@ a {
   --agendaPrimary: #244a93;
   --background: #082050;
   --agendaSecondary: #9dbeff;
+  --agendaThree: #2254af ;
   --skyBlue: #5486e5;
   --textBlue: #c6d7f6;
   --danger: #df1405;
