@@ -6,11 +6,23 @@ import Nav from "./Nav";
 import Drawer from "./Drawer";
 
 const Layout = ({ children }) => {
+
   const [ open, setOpen ] = useState( true );
+
+  if( open ) {
+    switch( children.type.name ) {
+    case "Meeting":
+      setOpen( !open );
+      break;
+    case "Inbox":
+      setOpen( !open );
+      break;
+    }
+  }
 
   let drawer = styles.drawerContainer;
 
-  if ( !open ) {
+  if ( open ) {
     drawer = drawer + " " + styles.drawerClosed;
   }
 
