@@ -1,29 +1,60 @@
-const db = ( "../db" );
+const db = require( "../db" );
 const ObjectID = require( "mongoose" ).Types.ObjectId;
+const { genPassword } = require( "./password" );
+const user = require( "../models/user" );
+const meeting = require( "../models/meeting" );
+const { clean } = require( "../../test/utils/db" );
 
+const testPassword = "pass";
 
+const { hash, salt } = genPassword( testPassword );
 
-db.user.insertOne({
-  username: "Johnny Test",
-  email: "JTest@socex.com",
-  password: "1234"
-});
+async function hydrateDB() {
+  await db.connect();
 
-db.user.insertOne({
-  username: "zbarnz",
-  email: "zbarnz@socnet.org",
-  password: "1234"
-});
+  await clean();
 
-db.meeting.insertOne({
-  name: "How to cook a big meaty sausage",
-  owner_id: new ObjectID(),
-  date: "Munday"
-});
+  const promises = [];
 
-db.meeting.insertOne({
-  name: "Discussion of de-obuscating firewalls and amicus curiae brief",
-  owner_id: new ObjectID(),
-  date: "01/23/22"
-});
+  promises.push(
+    user.create({
+      username: "Johnny Test",
+      email: "JTest@socex.com",
+      hash,
+      salt,
+    })
+  );
 
+  promises.push(
+    user.create({
+      username: "zbarnz",
+      email: "zbarnz@socnet.org",
+      hash,
+      salt,
+    })
+  );
+
+  promises.push(
+    meeting.create({
+      name: "Simple Hash Ring Algorithm",
+      owner_id: new ObjectID(),
+      date: "Monday",
+    })
+  );
+
+  promises.push(
+    meeting.create({
+      name: "Discussion of de-obuscating firewalls",
+      owner_id: new ObjectID(),
+      date: "01/23/22",
+    })
+  );
+
+  await Promise.all( promises );
+
+  console.log( await user.find({}) );
+
+  await db.disconnect();
+}
+
+hydrateDB();
