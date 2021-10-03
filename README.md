@@ -12,7 +12,7 @@ npm run setup
 ```
 npm run dev
 ```
-3. Run api tests with (testing while api is live is supported)
+3. Run api tests with the following. Testing the api while the api is running is supported.
 ```
 npm run test
 ```
