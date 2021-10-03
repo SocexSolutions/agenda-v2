@@ -3,17 +3,26 @@
   width: 330px;
   height: 120px;
   border-radius: 6px;
-  bottom: 0;
-  right: 0;
-  padding: 10px 17px 0px 17px;
+  top: 0;
+  left: 50vw;
+  padding: 7px 17px 0px 17px;
   margin: 20px;
   background-color: var(--agendaThree);
-  animation: notificationPopout ease 1s,  fadeOut 1s forwards 5s;
+  box-shadow: 3px 3px 5px var(--backgroundShadow);
+   animation: notificationPopout ease 1s, fadeOut 1s forwards 5s; 
+}
+
+.container h1{
+  padding: 0;
+  margin: 0;
+  font-size: x-large;
+  text-align: center;
+  color: var(--agendaSecondary);
 }
 
 .close{
   position: absolute;
-  top: -18px;
+  bottom: -18px;
   left: 5px;
   color: var(--agendaThree);
   cursor: pointer;
@@ -44,7 +53,7 @@
 
 @keyframes notificationPopout {
   0% {
-    transform: translate(50%);
+    transform: translate(0, -50%);
     opacity: 0%;
   }
   100% {
