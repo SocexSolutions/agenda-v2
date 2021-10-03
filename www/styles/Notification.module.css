@@ -9,7 +9,8 @@
   margin: 20px;
   background-color: var(--agendaThree);
   box-shadow: 3px 3px 5px var(--backgroundShadow);
-   animation: notificationPopout ease 1s, fadeOut 1s forwards 5s; 
+  animation: notificationPopout ease 1s, fadeOut 1s forwards 5s;
+  z-index: 1; 
 }
 
 .container h1{
