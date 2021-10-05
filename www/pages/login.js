@@ -1,7 +1,6 @@
 import { Component } from "react";
 import { userLogin } from "../store/features/user/userSlice";
 import styles from "../styles/Register.module.css";
-import store from "../store/store";
 import Button from "../components/Button";
 import Input from "../components/Input";
 
@@ -10,7 +9,7 @@ const initialState = {
   password: ""
 };
 
-class Register extends Component {
+class Login extends Component {
   constructor( props ) {
     super( props );
 
@@ -27,15 +26,14 @@ class Register extends Component {
   }
 
   handleSubmit( event ) {
-    store.dispatch(
+    this.props.store.dispatch(
       userLogin(
         this.state.username,
         this.state.password
       )
     );
 
-    this.setState( initialState );
-
+    // this.setState( initialState );
     event.preventDefault();
   }
 
@@ -78,4 +76,4 @@ class Register extends Component {
 }
 
 
-export default Register;
+export default Login;

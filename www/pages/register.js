@@ -1,9 +1,6 @@
 import { Component } from "react";
 import { userRegister } from "../store/features/user/userSlice";
 import styles from "../styles/Register.module.css";
-import store from "../store/store";
-
-import Link from "next/link";
 import Input from "../components/Input";
 import Button from "../components/Button";
 
@@ -14,6 +11,7 @@ const initialState = {
 };
 
 class Register extends Component {
+
   constructor( props ) {
     super( props );
 
@@ -32,7 +30,7 @@ class Register extends Component {
   }
 
   handleSubmit( event ) {
-    store.dispatch(
+    this.props.store.dispatch(
       userRegister(
         this.state.email,
         this.state.username,
