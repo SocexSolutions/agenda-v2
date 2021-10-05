@@ -1,14 +1,16 @@
-import Layout from "../components/Layout";
+import Layout       from "../components/Layout";
 import { Provider } from "react-redux";
-import store from "../store/store";
+import { useStore } from "../store/store";
 
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
+  const store = useStore({});
+
   return (
     <Provider store={store}>
       <Layout>
-        <Component {...pageProps} />
+        <Component store={store} {...pageProps} />
       </Layout>
     </Provider>
   );
