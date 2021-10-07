@@ -8,6 +8,8 @@ db.connect = async() => {
 
     if ( process.env.NODE_ENV === "test" ) {
       dbConStr = "mongodb://localhost:27017/agenda-test";
+    } else if ( process.env.NODE_ENV === "dev" ) {
+      dbConStr = "mongodb://localhost:27017/agenda-dev";
     }
 
     await mongoose.connect( dbConStr, {

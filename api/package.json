@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "eslint": "^7.27.0",
+    "faker": "^5.5.3",
     "mocha": "^8.4.0",
     "nodemon": "2.0.7"
   }
