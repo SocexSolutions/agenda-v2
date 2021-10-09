@@ -10,7 +10,11 @@ function MyApp({ Component, pageProps }) {
   const store = useStore({});
 
   useEffect( () => {
-    userRefresh( document.cookie );
+    const token = document.cookie.split( "=" )[ 1 ];
+
+    store.dispatch(
+      userRefresh( token )
+    );
   });
 
   return(

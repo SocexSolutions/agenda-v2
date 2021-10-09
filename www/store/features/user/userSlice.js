@@ -27,7 +27,6 @@ const reducer = ( state = initialState, action ) => {
 export const userRegister = ( email, username, password ) => {
   return async function registerUser( dispatch, getState ) {
     try {
-
       const { data } = await client.post(
         "/user/register",
         {
@@ -36,7 +35,6 @@ export const userRegister = ( email, username, password ) => {
           password
         }
       );
-
 
       document.cookie = `auth-token=${data.token}`;
 
@@ -93,7 +91,7 @@ export const userLogin = ( username, password ) => {
 export const userRefresh = ( token ) => {
   return async function refreshUser( dispatch, getState ) {
     try {
-       const { data } = await client.get(
+      const { data } = await client.get(
         "user/refresh",
         {
           headers: { "authorization": token }
@@ -115,7 +113,6 @@ export const userRefresh = ( token ) => {
     }
   };
 };
-
 
 
 export default reducer;

@@ -19,10 +19,6 @@ class Login extends Component {
     this.handleSubmit = this.handleSubmit.bind( this );
   }
 
-  componentDidMount() {
-    console.log( document.cookie );
-  }
-
   handleChange( event ) {
     this.setState({
       [event.target.name]: event.target.value,
