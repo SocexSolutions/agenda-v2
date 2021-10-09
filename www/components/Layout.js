@@ -14,6 +14,8 @@ const Layout = ({ children }) => {
     drawer = drawer + " " + styles.drawerClosed;
   }
 
+
+
   return (
     <>
       <Nav />

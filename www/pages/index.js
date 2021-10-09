@@ -1,6 +1,7 @@
 import styles from "../styles/Home.module.css";
 
 const home = () => {
+
   return (
     <>
       <div className={styles.homeContainer}>

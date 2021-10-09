@@ -1,13 +1,19 @@
-import Layout       from "../components/Layout";
-import { Provider } from "react-redux";
-import { useStore } from "../store/store";
+import Layout          from "../components/Layout";
+import { Provider }    from "react-redux";
+import { useStore }    from "../store/store";
+import { useEffect }   from "react";
+import { userRefresh } from "../store/features/user/userSlice";
 
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }) {
   const store = useStore({});
 
-  return (
+  useEffect( () => {
+    userRefresh( document.cookie );
+  });
+
+  return(
     <Provider store={store}>
       <Layout>
         <Component store={store} {...pageProps} />

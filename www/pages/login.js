@@ -1,6 +1,5 @@
 import { Component } from "react";
 import { userLogin } from "../store/features/user/userSlice";
-import { userLoginCookie } from "../store/features/user/userCookie";
 import styles from "../styles/Register.module.css";
 import Button from "../components/Button";
 import Input from "../components/Input";
@@ -18,6 +17,10 @@ class Login extends Component {
 
     this.handleChange = this.handleChange.bind( this );
     this.handleSubmit = this.handleSubmit.bind( this );
+  }
+
+  componentDidMount() {
+    console.log( document.cookie );
   }
 
   handleChange( event ) {
