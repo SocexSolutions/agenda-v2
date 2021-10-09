@@ -25,7 +25,7 @@ module.exports = {
 
       const user = await User.create( newUser );
 
-      const { token, expiresIn } = JWTUtils.issueJWT( res );
+      const { token, expiresIn } = JWTUtils.issueJWT( user );
 
       res.status( 201 ).json({
         success: true,
@@ -96,7 +96,24 @@ module.exports = {
     }
   },
 
-  async meetings( req, res ) {
-    const { _id } = user
-  }
+  async refresh( req, res ) { // get route
+    try {
+      const token = req.headers.authorization;
+
+      const decoded = JWTUtils.verifyJwt( token );
+
+      const user = await User.findById( decoded.sub );
+
+      res.status( 200 ).json({
+        success: true,
+        user: {
+          _id: user._id,
+          email: user.email,
+          username: user.username
+        }
+      });
+    } catch ( err ) {
+      console.log( err );
+    }
+  },
 };

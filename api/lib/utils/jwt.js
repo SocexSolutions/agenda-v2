@@ -2,8 +2,11 @@ const JsonWebToken = require( "jsonwebtoken" );
 const fs           = require( "fs" );
 const path         = require( "path" );
 
-const pathToKey = path.join( __dirname, "..", "id_rsa_priv.pem" );
-const PRIV_KEY  = fs.readFileSync( pathToKey, "utf8" );
+const pathToPrivKey = path.join( __dirname, "..", "id_rsa_priv.pem" );
+const PRIV_KEY  = fs.readFileSync( pathToPrivKey, "utf8" );
+
+const pathToPubKey = path.join( __dirname, "..", "id_rsa_pub.pem" );
+const PUB_KEY = fs.readFileSync( pathToPubKey, "utf8" );
 
 module.exports = {
   /**
@@ -28,7 +31,7 @@ module.exports = {
       PRIV_KEY,
       {
         expiresIn,
-        algorithm: "RS256"
+        algorithm: "RS256",
       }
     );
 
@@ -37,5 +40,17 @@ module.exports = {
       token: "Bearer " + signedToken,
       expiresIn
     };
+  },
+
+  verifyJwt( signedToken ) {
+    const token = signedToken.split( " " )[ 1 ];
+
+    const decoded = JsonWebToken.verify(
+      token,
+      PUB_KEY,
+      { algorithms: [ "RS256" ] }
+    );
+
+    return decoded;
   }
 };

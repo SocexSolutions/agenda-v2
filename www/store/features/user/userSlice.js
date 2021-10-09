@@ -16,6 +16,9 @@ const reducer = ( state = initialState, action ) => {
   case "user/login":
     return action.payload;
 
+  case "user/refresh":
+    return action.payload;
+
   default:
     return state;
   }
@@ -24,7 +27,6 @@ const reducer = ( state = initialState, action ) => {
 export const userRegister = ( email, username, password ) => {
   return async function registerUser( dispatch, getState ) {
     try {
-
       const { data } = await client.post(
         "/user/register",
         {
@@ -33,6 +35,8 @@ export const userRegister = ( email, username, password ) => {
           password
         }
       );
+
+      document.cookie = `auth-token=${data.token}`;
 
       dispatch(
         {
@@ -64,6 +68,9 @@ export const userLogin = ( username, password ) => {
         }
       );
 
+      // set the token in the browser local storage
+      document.cookie = `auth-token=${data.token}`;
+
       dispatch(
         {
           type: "user/login",
@@ -80,5 +87,32 @@ export const userLogin = ( username, password ) => {
     }
   };
 };
+
+export const userRefresh = ( token ) => {
+  return async function refreshUser( dispatch, getState ) {
+    try {
+      const { data } = await client.get(
+        "user/refresh",
+        {
+          headers: { "authorization": token }
+        }
+      );
+
+      dispatch(
+        {
+          type: "user/refresh",
+          payload: {
+            token:    data.token,
+            _id:      data.user._id,
+            username: data.user.username
+          }
+        }
+      );
+    } catch ( err ) {
+      console.log( err );
+    }
+  };
+};
+
 
 export default reducer;
