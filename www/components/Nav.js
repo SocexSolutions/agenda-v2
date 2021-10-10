@@ -45,7 +45,7 @@ const Nav = () => {
                 text="create" varient="secondary" />
             </Link>
           </div>
-          <Link href={`/User/${user._id}`} passHref>
+          <Link href={`/user/${user._id}`} passHref>
             <Button text={user.username}
               icon="person"
               varient="icon"
