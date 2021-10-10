@@ -68,7 +68,6 @@ export const userLogin = ( username, password ) => {
         }
       );
 
-      // set the token in the browser local storage
       document.cookie = `auth-token=${data.token}`;
 
       dispatch(
@@ -77,7 +76,8 @@ export const userLogin = ( username, password ) => {
           payload: {
             token:    data.token,
             _id:      data.user._id,
-            username: data.user.username
+            username: data.user.username,
+            email:    data.user.email
           }
         }
       );
@@ -104,7 +104,8 @@ export const userRefresh = ( token ) => {
           payload: {
             token:    data.token,
             _id:      data.user._id,
-            username: data.user.username
+            username: data.user.username,
+            email:    data.user.email
           }
         }
       );

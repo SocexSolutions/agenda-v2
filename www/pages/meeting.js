@@ -3,13 +3,16 @@ import MeetingNameDate from "../components/MeetingNameDate";
 import MeetingTopics from "../components/MeetingTopics";
 import MeetingParticipants from "../components/MeetingParticipants";
 import Button from "../components/Button";
+import { saveMeeting } from "../store/features/meetings/meetingSlice";
 class Meeting extends Component {
   constructor( props ) {
     super( props );
 
+    const state = this.props.store.getState();
+
     this.state = {
       meeting: {},
-      owner: "Tom Hudson",
+      owner: state.user.email,
       topics: new Set(),
       participants: new Set(),
       editing: true,
@@ -22,6 +25,7 @@ class Meeting extends Component {
     this.addParticipant = this.addParticipant.bind( this );
     this.deleteParticipant = this.deleteParticipant.bind( this );
     this.setImportance = this.setImportance.bind( this );
+    this.saveMeeting = this.saveMeeting.bind( this );
   }
 
   addTopic( topicName ) {
@@ -77,6 +81,16 @@ class Meeting extends Component {
     });
   }
 
+  saveMeeting() {
+    this.store.dispatch(
+      saveMeeting({
+        meetingInfo: { ...this.state.meeting, owner: this.state.owner },
+        topics: this.state.topics,
+        participants: this.state.participants
+      })
+    );
+  }
+
   render() {
     return (
       <div>
@@ -99,7 +113,7 @@ class Meeting extends Component {
           addParticipant={this.addParticipant}
           deleteParticipant={this.deleteParticipant}
         />
-        <Button text="submit" />
+        <Button onClick={this.saveMeeting} text="submit" />
       </div>
     );
   }

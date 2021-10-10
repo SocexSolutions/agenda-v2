@@ -40,7 +40,7 @@ const Nav = () => {
           </Link>
 
           <div className={styles.navcentered}>
-            <Link href="/messageExample" passHref>
+            <Link href="/meeting" passHref>
               <Button icon="addicon"
                 text="create" varient="secondary" />
             </Link>
