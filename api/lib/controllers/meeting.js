@@ -69,7 +69,18 @@ module.exports = {
       session = await mongoose.connection.startSession();
 
       await session.withTransaction( async() => {
-        meeting = await Meeting.findOneAndUpdate( meeting, { upsert: true });
+        const filter = meeting._id ? { _id: meeting._id } : {};
+
+        const meetingRes = await Meeting.updateOne(
+          filter,
+          meeting,
+          { upsert: true }
+        );
+
+        if ( meetingRes.upserted ) {
+          const meeting_id = meetingRes.upserted[ 0 ]._id;
+          meeting._id = meeting_id;
+        }
 
         topics = topics.map( topic => {
           return { name: topic, meeting_id: meeting._id };

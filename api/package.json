@@ -34,6 +34,8 @@
     "mongoose": "5.12.10"
   },
   "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-subset": "^1.6.0",
     "eslint": "^7.27.0",
     "faker": "^5.5.3",
     "mocha": "^8.4.0",

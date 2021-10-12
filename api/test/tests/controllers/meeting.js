@@ -1,9 +1,14 @@
-const assert   = require( "assert" );
-const dbUtils  = require( "../../utils/db" );
-const db       = require( "../../../lib/db" );
-const api      = require( "../../utils/api" );
-const client   = require( "../../utils/client" );
-const ObjectID = require( "mongoose" ).Types.ObjectId;
+const chai       = require( "chai" );
+const chaiSubset = require( "chai-subset" );
+const dbUtils    = require( "../../utils/db" );
+const db         = require( "../../../lib/db" );
+const api        = require( "../../utils/api" );
+const client     = require( "../../utils/client" );
+const ObjectID   = require( "mongoose" ).Types.ObjectId;
+
+chai.use( chaiSubset );
+
+const assert = chai.assert;
 
 const MEETING = {
   name: "Meeting 1",
@@ -17,9 +22,13 @@ const MEETING_2 = {
   date: "10/12/10"
 };
 
-const PARTICIPANTS = ["zbarnz@yahoo.com", "thudson1998@hotmail.com"]
+const PARTICIPANTS = [ "zbarnz@yahoo.com", "thudson1998@hotmail.com" ];
 
-const TOPICS = ["LUNCH", "math", "2984@"]
+const PARTICIPANTS_2 = [ "zbarnz@socnet.org", "thudson1998@yahoo.com" ];
+
+const TOPICS = [ "LUNCH", "math", "2984@" ];
+
+const TOPICS_2 = [ "Food", "English", "1783@" ];
 
 describe( "controllers/meeting", () => {
   before( async() => {
@@ -92,10 +101,10 @@ describe( "controllers/meeting", () => {
     });
   });
 
-  describe.only( "#create", () => {
+  describe( "#create", () => {
     const path = "/meeting";
 
-    it.only( "should create a new meeting", async() => {
+    it( "should create a new meeting", async() => {
       const payload = {
         meeting: MEETING,
         participants: PARTICIPANTS,
@@ -107,53 +116,65 @@ describe( "controllers/meeting", () => {
         payload
       );
 
-      assert( );
-    });
+      assert.containSubset(
+        res.data.meeting,
+        { name: MEETING.name, date: MEETING.date }
+      );
 
-    it( "should not create a meeting without id", async() => {
-      const invalidMeeting = { ...MEETING, owner_id: "invalid_id" };
-      const errorRegex = /^Meeting validation failed: owner_id/;
+      for ( let i = 0; i < PARTICIPANTS.length; i++ ) {
+        assert.containSubset(
+          res.data.participants[i], { email: PARTICIPANTS[i] }
+        );
+      }
 
-      try {
-        await client.post( path, invalidMeeting );
-
-        throw new Error( "accepted invalid owner_id" );
-      } catch ( err ) {
-        assert(
-          errorRegex.test( err.response.data ),
-          "Error occurred for wrong reason: " + err
+      for ( let i = 0; i < TOPICS.length; i++ ) {
+        assert.containSubset(
+          res.data.topics[i], { name: TOPICS[i] }
         );
       }
     });
 
-    it( "should not create a meeting without date", async() => {
-      const invalidMeeting = { ...MEETING, date: "" };
-      const errorRegex = /^Meeting validation failed: date/;
+    it( "should update an existing meeting", async() => {
+      const payload = {
+        meeting: MEETING,
+        participants: PARTICIPANTS,
+        topics: TOPICS
+      };
 
-      try {
-        await client.post( path, invalidMeeting );
+      const res = await client.post(
+        path,
+        payload
+      );
 
-        throw new Error( "accepted invalid owner_id" );
-      } catch ( err ) {
-        assert(
-          errorRegex.test( err.response.data ),
-          "Error occurred for wrong reason: " + err
+      const meeting_id = res.data.meeting._id;
+
+      MEETING_2._id = meeting_id;
+
+      const payload2 = {
+        meeting: MEETING_2,
+        participants: PARTICIPANTS_2,
+        topics: TOPICS_2
+      };
+
+      const secondRes = await client.post(
+        path,
+        payload2
+      );
+
+      assert.containSubset(
+        secondRes.data.meeting,
+        { name: MEETING_2.name, date: MEETING_2.date, _id: meeting_id }
+      );
+
+      for ( let i = 0; i < PARTICIPANTS_2.length; i++ ) {
+        assert.containSubset(
+          secondRes.data.participants[i], { email: PARTICIPANTS_2[i] }
         );
       }
-    });
 
-    it( "should not create a meeting without date", async() => {
-      const invalidMeeting = { ...MEETING, date: "" };
-      const errorRegex = /^Meeting validation failed: date/;
-
-      try {
-        await client.post( path, invalidMeeting );
-
-        throw new Error( "accepted invalid owner_id" );
-      } catch ( err ) {
-        assert(
-          errorRegex.test( err.response.data ),
-          "Error occurred for wrong reason: " + err
+      for ( let i = 0; i < TOPICS_2.length; i++ ) {
+        assert.containSubset(
+          secondRes.data.topics[i], { name: TOPICS_2[i] }
         );
       }
     });
