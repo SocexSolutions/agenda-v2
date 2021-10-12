@@ -6,13 +6,13 @@
     "lint": "eslint .",
     "dev": "bash scripts/dev.sh",
     "setup": "bash scripts/setup.sh",
-    "test": "NODE_ENV=test mocha ./api/test --recursive"
+    "test": "mocha ./api/test --recursive"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SocexSolutions/agenda-v2.git"
   },
-  "authors": "Architect: Tom Hudson, Engineers: Zach Barns, David Oligney",
+  "authors": "Architect: Tom Hudson, Engineers: Zach Barnes, David Oligney",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/SocexSolutions/agenda-v2/issues"
