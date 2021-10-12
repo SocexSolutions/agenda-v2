@@ -1,10 +1,10 @@
-const express     = require( "express" );
-const cors        = require( "cors" );
-const mongoose    = require( "mongoose" ); // eslint-disable-line
-const db          = require( "./db" );
-const router      = require( "./routes" );
+const express  = require( "express" );
+const cors     = require( "cors" );
+const mongoose = require( "mongoose" ); // eslint-disable-line
+const  db      = require( "./db" );
+const router   = require( "./routes" );
 
-const app         = express();
+const app      = express();
 
 
 const start = async() => {
