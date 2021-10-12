@@ -17,6 +17,10 @@ const MEETING_2 = {
   date: "10/12/10"
 };
 
+const PARTICIPANTS = ["zbarnz@yahoo.com", "thudson1998@hotmail.com"]
+
+const TOPICS = ["LUNCH", "math", "2984@"]
+
 describe( "controllers/meeting", () => {
   before( async() => {
     await api.start();
@@ -89,17 +93,21 @@ describe( "controllers/meeting", () => {
   });
 
   describe.only( "#create", () => {
-    const path = "/meeting/";
+    const path = "/meeting";
 
-    it( "should create a meeting with valid inputs", async() => {
-      const res = await client.post( path, MEETING );
+    it.only( "should create a new meeting", async() => {
+      const payload = {
+        meeting: MEETING,
+        participants: PARTICIPANTS,
+        topics: TOPICS
+      };
 
-      assert( res.status === 201, "failed to create meeting with valid args" );
-
-      assert(
-        res.data.date === MEETING.date,
-        "created meeting with incorrect date: " + res.data.date
+      const res = await client.post(
+        path,
+        payload
       );
+
+      assert( );
     });
 
     it( "should not create a meeting without id", async() => {
