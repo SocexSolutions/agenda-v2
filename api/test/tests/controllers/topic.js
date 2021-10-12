@@ -1,8 +1,8 @@
-const assert = require( "assert" );
-const dbUtils = require( "../../utils/db" );
-const db = require( "../../../lib/db" );
-const api = require( "../../utils/api" );
-const client = require( "../../utils/client" );
+const assert   = require( "assert" );
+const dbUtils  = require( "../../utils/db" );
+const { db }   = require( "../../../lib/db" );
+const api      = require( "../../utils/api" );
+const client   = require( "../../utils/client" );
 const ObjectID = require( "mongoose" ).Types.ObjectId;
 
 const topic = {

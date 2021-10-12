@@ -1,6 +1,9 @@
-const Meeting = require( "../models/meeting" );
-const ObjectID = require( "mongoose" ).Types.ObjectId;
-const logger = require( "@starryinternet/jobi" );
+const mongoose    = require( "mongoose" );
+const Meeting     = require( "../models/meeting" );
+const Topic       = require( "../models/topic" );
+const Participant = require( "../models/participant" );
+const ObjectID    = require( "mongoose" ).Types.ObjectId;
+const logger      = require( "@starryinternet/jobi" );
 
 module.exports = {
   index: async( req, res ) => {
@@ -56,18 +59,43 @@ module.exports = {
   },
 
   create: async( req, res ) => {
-    const { owner_id, date, name } = req.body;
+    let session;
 
     try {
-      const meeting = await Meeting.create({ owner_id, date, name });
+      logger.log( "debug", "req.body: " + JSON.stringify( req.body ) );
 
-      logger.log( "debug", "Created: " + meeting );
-      res.status( 201 ).send( meeting );
+      let { meeting, topics, participants } = req.body;
+
+      session = await mongoose.connection.startSession();
+
+      await session.withTransaction( async() => {
+        meeting = await Meeting.findOneAndUpdate( meeting, { upsert: true });
+
+        topics = topics.map( topic => {
+          return { name: topic, meeting_id: meeting._id };
+        });
+
+        participants = participants.map( participant => {
+          return { email: participant, meeting_id: meeting._id };
+        });
+
+        await Topic.deleteMany({ meeting_id: meeting._id });
+        topics = await Topic.insertMany( topics );
+
+        await Participant.deleteMany({ meeting_id: meeting._id });
+        participants = await Participant.insertMany( participants );
+      });
+
+      logger.log( "debug", "meeting transaction completed" );
+
+      res.status( 201 ).send({ meeting, topics, participants });
 
     } catch ( error ) {
+      logger.log( "error", error.message );
 
-      logger.log( "error", "Create Failed: " + error.message );
       res.status( 500 ).send( error.message );
+    } finally {
+      session.endSession();
     }
   },
 

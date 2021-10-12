@@ -1,6 +1,6 @@
 const mongoose = require( "mongoose" );
 
-let db = {};
+let db  = {};
 
 db.connect = async() => {
   try {
@@ -17,8 +17,6 @@ db.connect = async() => {
       useUnifiedTopology: true,
       useCreateIndex: true
     });
-
-    db = mongoose.connection;
 
     console.log( "database connected" );
 
