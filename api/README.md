@@ -9,7 +9,7 @@ are saved to `.js` files (after installing nodemon with `npm i -g nodemon`) with
 the following:
 
 ```
-LOCAL=true nodemon lib/index.js
+npm run dev
 ```
 
 Then start mongo in docker desktop (this will not need to be restarted).
@@ -38,4 +38,3 @@ this for production).
 
 - [Getting started with docker](https://www.youtube.com/watch?v=gAkwW2tuIqE&t=121s)
 - [Express.js Apis](https://www.youtube.com/watch?v=-MTSQjw5DrM)
-
