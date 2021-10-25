@@ -16,6 +16,7 @@ function MeetingNameDate( props ) {
         <div className={styles.date}>
           <Input
             placeholder="mm/dd/yy hh:mm"
+            type="date"
             onChange={props.setMeetingDate}
           />
         </div>
