@@ -20,6 +20,14 @@ module.exports = {
     }
   },
 
+  /**
+   * Get all related meeting data (topics, participants)
+   * @param {Object} req - request object
+   * @param {Object[]} req.params._id - meeting _id to lookup
+   * participants model
+   * @param {Object} res - response object
+   * @returns {Promise<Object>} created meeting data corresponding to params
+   */
   display: async( req, res ) => {
     const { _id } = req.params;
 
@@ -58,51 +66,74 @@ module.exports = {
     }
   },
 
+  /**
+   * Create or update a meeting
+   * @param {Object} req - request object
+   * @param {string} req.body.name - meeting name
+   * @param {string} req.body.date - meeting date
+   * @param {string} req.body.owner_id - meeting owner's id
+   * @param {Object[]} req.body.topics - topics array that fits the topics model
+   * @param {Object[]} req.body.participants - participants array that fits the
+   * participants model
+   * @param {Object} res - response object
+   * @returns {Promise<Object>} created meeting data corresponding to params
+   */
   create: async( req, res ) => {
     let session;
 
     try {
       logger.log( "debug", "req.body: " + JSON.stringify( req.body ) );
 
-      let { meeting, topics, participants } = req.body;
+      const {
+        name,
+        date,
+        owner_id
+      } = req.body;
+
+      let topics       = req.body.topics || null;
+      let participants = req.body.participants || null;
+      let meeting;
+
 
       session = await mongoose.connection.startSession();
 
       await session.withTransaction( async() => {
-        const filter = meeting._id ? { _id: meeting._id } : {};
 
-        const meetingRes = await Meeting.updateOne(
-          filter,
-          meeting,
-          { upsert: true }
-        );
+        meeting = await Meeting.create({
+          name,
+          date,
+          owner_id
+        });
 
-        if ( meetingRes.upserted ) {
-          const meeting_id = meetingRes.upserted[ 0 ]._id;
-          meeting._id = meeting_id;
+        if ( topics ) {
+          topics = topics.map( topic => {
+            return { name: topic.name, meeting_id: meeting._id };
+          });
+
+          topics = await Topic.insertMany( topics );
         }
 
-        topics = topics.map( topic => {
-          return { name: topic, meeting_id: meeting._id };
-        });
+        if ( participants ) {
+          participants = participants.map( participant => {
+            return { email: participant.email, meeting_id: meeting._id };
+          });
 
-        participants = participants.map( participant => {
-          return { email: participant, meeting_id: meeting._id };
-        });
-
-        await Topic.deleteMany({ meeting_id: meeting._id });
-        topics = await Topic.insertMany( topics );
-
-        await Participant.deleteMany({ meeting_id: meeting._id });
-        participants = await Participant.insertMany( participants );
+          participants = await Participant.insertMany( participants );
+        }
       });
 
       logger.log( "debug", "meeting transaction completed" );
 
-      res.status( 201 ).send({ meeting, topics, participants });
+      res.status( 201 ).send({
+        ...meeting,
+        topics,
+        participants
+      });
 
     } catch ( error ) {
       logger.log( "error", error.message );
+
+      console.log( error.message );
 
       res.status( 500 ).send( error.message );
     } finally {
@@ -110,26 +141,4 @@ module.exports = {
     }
   },
 
-  update: async( req, res ) => {
-    const { _id } = req.params;
-
-    try {
-      const meeting = await Meeting.findOneAndUpdate(
-        { _id },
-        req.body,
-        {
-          new: true, // specify to return updated doc instead of original
-          useFindAndModify: false
-        }
-      );
-
-      logger.log( "debug", "Updated: " + meeting );
-      res.status( 200 ).send( meeting );
-
-    } catch ( error ) {
-
-      logger.log( "error", "Update Failed: " + error.message );
-      res.status( 500 ).send( error.message );
-    }
-  },
 };
