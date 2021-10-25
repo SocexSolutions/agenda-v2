@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 /* eslint-disable no-trailing-spaces */
 // David
-// This component has a flag icon which will have to show priority of the meetin
+// This component has a flag icon which will have to show priority of the meeting
 
 import styles from "../styles/MeetingNameDate.module.css";
 import Input from "./Input";
