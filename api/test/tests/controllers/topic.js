@@ -1,6 +1,6 @@
 const assert   = require( "assert" );
 const dbUtils  = require( "../../utils/db" );
-const { db }   = require( "../../../lib/db" );
+const db       = require( "../../../lib/db" );
 const api      = require( "../../utils/api" );
 const client   = require( "../../utils/client" );
 const ObjectID = require( "mongoose" ).Types.ObjectId;
@@ -11,7 +11,8 @@ const topic = {
   likes: [ new ObjectID(), new ObjectID() ],
 };
 
-describe( "/controllers/topic", () => {
+describe( "api/lib/controllers/topic", () => {
+
   before( async() => {
     await api.start();
     await db.connect();
@@ -23,6 +24,7 @@ describe( "/controllers/topic", () => {
 
   after( async() => {
     await api.stop();
+    await dbUtils.clean();
     await db.disconnect();
   });
 
@@ -84,5 +86,7 @@ describe( "/controllers/topic", () => {
         );
       }
     });
+
   });
+
 });

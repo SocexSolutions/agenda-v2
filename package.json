@@ -5,8 +5,7 @@
   "scripts": {
     "lint": "eslint .",
     "dev": "bash scripts/dev.sh",
-    "setup": "bash scripts/setup.sh",
-    "test": "mocha ./api/test --recursive"
+    "setup": "bash scripts/setup.sh"
   },
   "repository": {
     "type": "git",

@@ -10,22 +10,21 @@ const user = {
   email:    "email"
 };
 
-
-describe( "controllers/user.js", function() {
+describe( "api/lib/controllers/user.js", () => {
 
   before( async() => {
     await api.start();
     await db.connect();
+  });
+
+  beforeEach( async() => {
     await dbUtils.clean();
   });
 
   after( async() => {
     await api.stop();
-    await db.disconnect();
-  });
-
-  afterEach( async() => {
     await dbUtils.clean();
+    await db.disconnect();
   });
 
   describe( "#register", () => {
@@ -36,6 +35,22 @@ describe( "controllers/user.js", function() {
       const res = await client.post( path, user );
 
       assert( res.status === 201 );
+    });
+
+    it( "should register return user info", async() => {
+      const res = await client.post( path, user );
+
+      assert.strictEqual( res.data.user.email, "email" );
+      assert.strictEqual( res.data.user.username, "thudson" );
+    });
+
+    it( "should register return an auth token", async() => {
+      const res = await client.post( path, user );
+
+      // eslint-disable-next-line
+      const tokenRegex = new RegExp(/^Bearer\s/);
+
+      assert( tokenRegex.test( res.data.token ) );
     });
 
     it( "should not register user with invalid email", async() => {
