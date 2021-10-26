@@ -115,5 +115,20 @@ export const userRefresh = ( token ) => {
   };
 };
 
+export const userLogout = () => {
+  return async function logoutUser( dispatch, getState ) {
+    const cookie = document.cookie
+      .match( new RegExp( "(^| )" + "auth-token" + "=([^;]+)" ) );
+
+    if( cookie ) {
+      document.cookie = `${cookie}; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
+    } else {
+      return;
+    }
+
+    dispatch( push( "/home" ) );
+  };
+};
+
 
 export default reducer;
