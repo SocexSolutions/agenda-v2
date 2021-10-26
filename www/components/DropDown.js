@@ -8,6 +8,7 @@ const DropDown = () => {
       <Button icon="account" varient="menu" stretch="wide" text="Account" />
       <Button icon="settings" varient="menu" stretch="wide" text="Settings" />
       <Button icon="help" varient="menu" stretch="wide" text="Help" />
+      <Button icon="logout" varient="menu" stretch="wide" text="Logout" />
     </div>
   );
 };

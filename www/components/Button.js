@@ -13,6 +13,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import SettingsIcon from "@material-ui/icons/Settings";
 import AccountTreeIcon from "@material-ui/icons/AccountTree";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import LogoutIcon from "@material-ui/icons/ExitToApp";
 
 const Button = ({ icon, text, size, onClick, varient, stretch, children }) => {
 
@@ -103,6 +104,9 @@ const Button = ({ icon, text, size, onClick, varient, stretch, children }) => {
     break;
   case "help":
     icon = <HelpOutlineIcon />;
+    break;
+  case "logout":
+    icon = <LogoutIcon />;
     break;
   }
 
