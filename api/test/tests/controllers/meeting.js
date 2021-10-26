@@ -52,7 +52,7 @@ describe( "controllers/meeting", () => {
       Meeting.create( fakeMeeting );
       Meeting.create( fakeMeeting );
 
-      const meetings = await client.get( "/meeting/" );
+      const meetings = await client.get( "/meeting" );
 
       assert.containSubset(
         meetings.data[0],
@@ -106,7 +106,7 @@ describe( "controllers/meeting", () => {
 
     it( "should create meeting with participants and topics", async() => {
       const meeting = {
-        ...fakeMeeting,
+        meeting: fakeMeeting,
         participants: [ fakeParticipant ],
         topics: [ fakeTopic ]
       };
@@ -117,7 +117,7 @@ describe( "controllers/meeting", () => {
       );
 
       assert.containSubset(
-        data._doc,
+        data.meeting,
         fakeMeeting
       );
 
@@ -131,30 +131,72 @@ describe( "controllers/meeting", () => {
         fakeParticipant
       );
 
-      const savedMeeting = await Meeting.find({ _id: data._doc._id });
-      const topics       = await Topic.find({ meeting_id: data._doc._id });
-      const participants = await Participant.find({
-        meeting_id: data._doc._id
+    });
+
+  });
+
+  describe( "#update", () => {
+
+    it( "should update a meetings participants and topics", async() => {
+      const { _id } = await Meeting.create( fakeMeeting );
+
+      await Participant.create({
+        ...fakeParticipant,
+        meeting_id: _id
       });
 
-      assert.containSubset(
+      await Topic.create({
+        ...fakeTopic,
+        meeting_id: _id
+      });
+
+      const meetingUpdate = {
+        _id: _id.toString(),
+        owner_id: fakeMeeting.owner_id,
+        name: "meeting 2",
+        date: "10/10/12",
+      };
+
+      const topicsUpdate = [
         {
-          ...savedMeeting[0]._doc,
-          owner_id: savedMeeting[0]._doc.owner_id.toString()
-        },
-        fakeMeeting
+          name: "Topic 3",
+          likes: [
+            new ObjectID().toString()
+          ]
+        }
+      ];
+
+      const participantsUpdate = [
+        {
+          email: "thudson@thudson.com"
+        }
+      ];
+
+      const payload = {
+        meeting: meetingUpdate,
+        topics: topicsUpdate,
+        participants: participantsUpdate
+      };
+
+      const { data } = await client.put(
+        "/meeting",
+        payload
       );
 
       assert.containSubset(
-        participants[0]._doc,
-        fakeParticipant
+        data.meeting,
+        meetingUpdate
       );
 
       assert.containSubset(
-        topics[0]._doc,
-        fakeTopic
+        data.topics[0],
+        topicsUpdate[0]
       );
 
+      assert.containSubset(
+        data.participants[0],
+        participantsUpdate[0]
+      );
     });
 
   });
