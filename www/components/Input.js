@@ -13,6 +13,7 @@ const Input = ({
   required,
   varient,
   onKeyPress,
+  type,
 }) => {
 
   let className = "";
@@ -63,6 +64,7 @@ const Input = ({
         {required}
       </label>
       <input
+        type={type}
         placeholder={placeholder}
         value={value}
         name={name}
@@ -84,9 +86,11 @@ Input.propTypes = {
   size: PropTypes.string,
   required: PropTypes.bool,
   varient: PropTypes.string,
+  type: PropTypes.string,
 };
 
 Input.defaultProps = {
+  type: "",
   label: "",
   placeholder: "",
   size: "20",
