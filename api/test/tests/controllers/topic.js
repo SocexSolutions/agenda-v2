@@ -1,8 +1,8 @@
-const assert = require( "assert" );
-const dbUtils = require( "../../utils/db" );
-const db = require( "../../../lib/db" );
-const api = require( "../../utils/api" );
-const client = require( "../../utils/client" );
+const assert   = require( "assert" );
+const dbUtils  = require( "../../utils/db" );
+const db       = require( "../../../lib/db" );
+const api      = require( "../../utils/api" );
+const client   = require( "../../utils/client" );
 const ObjectID = require( "mongoose" ).Types.ObjectId;
 
 const topic = {
@@ -11,7 +11,8 @@ const topic = {
   likes: [ new ObjectID(), new ObjectID() ],
 };
 
-describe( "/controllers/topic", () => {
+describe( "api/lib/controllers/topic", () => {
+
   before( async() => {
     await api.start();
     await db.connect();
@@ -23,11 +24,12 @@ describe( "/controllers/topic", () => {
 
   after( async() => {
     await api.stop();
+    await dbUtils.clean();
     await db.disconnect();
   });
 
   describe( "#create", () => {
-    const path = "/topic/create";
+    const path = "/topic";
 
     it( "should create topic with valid inputs", async() => {
       const res = await client.post( path, topic );
@@ -84,5 +86,7 @@ describe( "/controllers/topic", () => {
         );
       }
     });
+
   });
+
 });

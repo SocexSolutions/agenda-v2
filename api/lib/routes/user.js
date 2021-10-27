@@ -5,4 +5,6 @@ router.post( "/register", userController.register );
 
 router.post( "/login", userController.login );
 
+router.get( "/refresh", userController.refresh );
+
 module.exports = router;

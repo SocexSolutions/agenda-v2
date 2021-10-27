@@ -1,21 +1,36 @@
-const assert = require( "assert" );
-const dbUtils = require( "../../utils/db" );
-const db = require( "../../../lib/db" );
-const api = require( "../../utils/api" );
-const client = require( "../../utils/client" );
-const ObjectID = require( "mongoose" ).Types.ObjectId;
+const chai        = require( "chai" );
+const chaiSubset  = require( "chai-subset" );
+const dbUtils     = require( "../../utils/db" );
+const db          = require( "../../../lib/db" );
+const api         = require( "../../utils/api" );
+const client      = require( "../../utils/client" );
+const ObjectID    = require( "mongoose" ).Types.ObjectId;
+const Meeting     = require( "../../../lib/models/meeting" );
+const Participant = require( "../../../lib/models/participant" );
+const Topic       = require( "../../../lib/models/topic" );
 
-const meeting = {
-  owner_id: new ObjectID(),
-  date: "10/10/10",
+chai.use( chaiSubset );
+
+const assert = chai.assert;
+
+
+const fakeMeeting = {
+  name:     "Meeting 1",
+  owner_id: new ObjectID().toString(),
+  date:     "10/10/10"
 };
 
-const meeting2 = {
-  owner_id: new ObjectID(),
-  date: "10/12/10",
+const fakeParticipant = {
+  email: "thudson@thudson.thud"
+};
+
+const fakeTopic = {
+  name:  "Topic 1",
+  likes: [ ]
 };
 
 describe( "controllers/meeting", () => {
+
   before( async() => {
     await api.start();
     await db.connect();
@@ -32,98 +47,158 @@ describe( "controllers/meeting", () => {
   });
 
   describe( "#index", () => {
-    it.only( "should fetch meeting with particpant", async() => {
-      const meetingRes = await client.post( "meeting/", meeting );
-      const meetingRes2 = await client.post( "meeting/", meeting2 );
 
-      const meetings = await client.get( "meeting/", meeting );
+    it( "should fetch all meetings", async() => {
+      Meeting.create( fakeMeeting );
+      Meeting.create( fakeMeeting );
 
-      assert.deepEqual( meetings.data, [ meetingRes.data, meetingRes2.data ] );
-    });
-  });
+      const meetings = await client.get( "/meeting" );
 
-  describe( "#display", () => {
-    it( "should fetch meeting with participants", async() => {
-      const meetingRes = await client.post( "meeting/", meeting );
+      assert.containSubset(
+        meetings.data[0],
+        fakeMeeting
+      );
 
-      const participant = {
-        email: "email@email.com",
-        meeting_id: meetingRes.data._id,
-      };
-
-      const participantRes = await client.post( "participant/", participant );
-
-      const res = await client.get( `meeting/${meetingRes.data._id}` );
-
-      const aggregatedMeeting = {
-        ...meetingRes.data,
-        participants: [ participantRes.data ],
-      };
-
-      assert.deepEqual( res.data[0], aggregatedMeeting );
-    });
-  });
-
-  describe( "#create", () => {
-    const path = "/meeting/";
-
-    it( "should create a meeting with valid inputs", async() => {
-      const res = await client.post( path, meeting );
-
-      assert( res.status === 201, "failed to create meeting with valid args" );
-
-      assert(
-        res.data.date === meeting.date,
-        "created meeting with incorrect date: " + res.data.date
+      assert.containSubset(
+        meetings.data[1],
+        fakeMeeting
       );
     });
 
-    it( "should not create a meeting without id", async() => {
-      const invalidMeeting = { ...meeting, owner_id: "invalid_id" };
-      const errorRegex = /^Meeting validation failed: owner_id/;
-
-      try {
-        await client.post( path, invalidMeeting );
-
-        throw new Error( "accepted invalid owner_id" );
-      } catch ( err ) {
-        assert(
-          errorRegex.test( err.response.data ),
-          "Error occurred for wrong reason: " + err
-        );
-      }
-    });
-
-    it( "should not create a meeting without date", async() => {
-      const invalidMeeting = { ...meeting, date: "" };
-      const errorRegex = /^Meeting validation failed: date/;
-
-      try {
-        await client.post( path, invalidMeeting );
-
-        throw new Error( "accepted invalid owner_id" );
-      } catch ( err ) {
-        assert(
-          errorRegex.test( err.response.data ),
-          "Error occurred for wrong reason: " + err
-        );
-      }
-    });
-
-    it( "should not create a meeting without date", async() => {
-      const invalidMeeting = { ...meeting, date: "" };
-      const errorRegex = /^Meeting validation failed: date/;
-
-      try {
-        await client.post( path, invalidMeeting );
-
-        throw new Error( "accepted invalid owner_id" );
-      } catch ( err ) {
-        assert(
-          errorRegex.test( err.response.data ),
-          "Error occurred for wrong reason: " + err
-        );
-      }
-    });
   });
+
+  describe( "#display", () => {
+
+    it( "should fetch meeting with participants and topics", async() => {
+      const { _id } = await Meeting.create( fakeMeeting );
+
+      await Participant.create({
+        ...fakeParticipant,
+        meeting_id: _id
+      });
+
+      await Topic.create({
+        ...fakeTopic,
+        meeting_id: _id
+      });
+
+      const res = await client.get( `/meeting/${_id}` );
+
+      assert.containSubset(
+        res.data[0],
+        fakeMeeting
+      );
+
+      assert.containSubset(
+        res.data[0].participants[0],
+        fakeParticipant
+      );
+
+      assert.containSubset(
+        res.data[0].topics[0],
+        fakeTopic
+      );
+    });
+
+  });
+
+  describe( "#create", () => {
+
+    it( "should create meeting with participants and topics", async() => {
+      const meeting = {
+        meeting: fakeMeeting,
+        participants: [ fakeParticipant ],
+        topics: [ fakeTopic ]
+      };
+
+      const { data } = await client.post(
+        "/meeting",
+        meeting
+      );
+
+      assert.containSubset(
+        data.meeting,
+        fakeMeeting
+      );
+
+      assert.containSubset(
+        data.topics[0],
+        fakeTopic
+      );
+
+      assert.containSubset(
+        data.participants[0],
+        fakeParticipant
+      );
+
+    });
+
+  });
+
+  describe( "#update", () => {
+
+    it( "should update a meetings participants and topics", async() => {
+      const { _id } = await Meeting.create( fakeMeeting );
+
+      await Participant.create({
+        ...fakeParticipant,
+        meeting_id: _id
+      });
+
+      await Topic.create({
+        ...fakeTopic,
+        meeting_id: _id
+      });
+
+      const meetingUpdate = {
+        _id: _id.toString(),
+        owner_id: fakeMeeting.owner_id,
+        name: "meeting 2",
+        date: "10/10/12",
+      };
+
+      const topicsUpdate = [
+        {
+          name: "Topic 3",
+          likes: [
+            new ObjectID().toString()
+          ]
+        }
+      ];
+
+      const participantsUpdate = [
+        {
+          email: "thudson@thudson.com"
+        }
+      ];
+
+      const payload = {
+        meeting: meetingUpdate,
+        topics: topicsUpdate,
+        participants: participantsUpdate
+      };
+
+      const { data } = await client.put(
+        "/meeting",
+        payload
+      );
+
+      assert.containSubset(
+        data.meeting,
+        meetingUpdate
+      );
+
+      assert.containSubset(
+        data.topics[0],
+        topicsUpdate[0]
+      );
+
+      assert.containSubset(
+        data.participants[0],
+        participantsUpdate[0]
+      );
+    });
+
+  });
+
 });

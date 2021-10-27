@@ -3,6 +3,10 @@ const Schema   = mongoose.Schema;
 
 const meetingSchema = new Schema(
   {
+    name: {
+      type: String,
+      required: true
+    },
     owner_id: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -11,11 +15,7 @@ const meetingSchema = new Schema(
     date: {
       type: String,
       required: true
-    },
-    participants: [ {
-      type: Schema.Types.ObjectId,
-      ref: "Participant"
-    } ],
+    }
   },
   {
     timestamps: true,

@@ -3,17 +3,16 @@ import React, {  useState } from "react";
 import PropTypes from "prop-types";
 
 import Link from "next/link";
+import { useSelector } from "react-redux";
 import Button from "./Button";
+import styles from "../styles/Nav.module.css";
 import AgendaIcon from "./AgendaIcon";
 import DropDown from "../components/DropDown"
 
-import styles from "../styles/Nav.module.css";
-// this should probably go somewhere else so we can reuse it
 const selectUser = ( state ) => state.user;
 
 const Nav = ( props ) => {
   const user = useSelector( selectUser );
-  console.log( user );
 
   if ( user.token === null ) {
     return (
@@ -46,19 +45,17 @@ const Nav = ( props ) => {
           </Link>
 
           <div className={styles.navcentered}>
-            <Link href="/messageExample" passHref>
+            <Link href="/meeting" passHref>
               <Button icon="addicon"
                 text="create" varient="secondary" />
             </Link>
           </div>
-          <Button text={user.username}
-            icon="person"
-            varient="icon"
-            size="medium"
-            onClick="dropDown"
-          >
-            <DropDown />
-          </Button>
+          <Link href={`/user/${user._id}`} passHref>
+            <Button text={user.username}
+              icon="person"
+              varient="icon"
+              size="small" />
+          </Link>
         </nav>
       </>
     );

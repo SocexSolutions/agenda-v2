@@ -18,3 +18,9 @@
 .topics >* {
     margin-right: 5px;
 }
+
+.inputContainer {
+    display: flex;
+    align-items: flex-start;
+    margin-left: 5px;
+}

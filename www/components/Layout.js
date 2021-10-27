@@ -14,13 +14,12 @@ const Layout = ({ children }) => {
     drawer = drawer + " " + styles.drawerClosed;
   }
 
+
+
   return (
     <>
       <Nav />
       <div className={styles.container}>
-        <div className={drawer}>
-          <Drawer />
-        </div>
         <main
           //onClick={ () => setOpen( !open ) }
         >

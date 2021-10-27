@@ -1,9 +1,9 @@
-const assert = require( "assert" );
-const dbUtils = require( "../../utils/db" );
-const db = require( "../../../lib/db" );
-const api = require( "../../utils/api" );
+const assert   = require( "assert" );
+const dbUtils  = require( "../../utils/db" );
+const db       = require( "../../../lib/db" );
+const api      = require( "../../utils/api" );
 const ObjectID = require( "mongoose" ).Types.ObjectId;
-const client = require( "../../utils/client" );
+const client   = require( "../../utils/client" );
 
 const participant = {
   email: "lt@linux.com",
@@ -14,9 +14,10 @@ describe( "controllers/participant", () => {
   before( async() => {
     await api.start();
     await db.connect();
+    await dbUtils.clean();
   });
 
-  beforeEach( async() => {
+  afterEach( async() => {
     await dbUtils.clean();
   });
 
@@ -26,7 +27,7 @@ describe( "controllers/participant", () => {
   });
 
   describe( "#create", () => {
-    const path = "/participant/create";
+    const path = "/participant";
 
     it( "should create a participant with valid inputs", async() => {
       const res = await client.post( path, participant );
@@ -52,8 +53,8 @@ describe( "controllers/participant", () => {
         throw new Error( "accepted invalid email" );
       } catch ( err ) {
         assert(
-          errorRegex.test( err.response.data ),
-          "Error occured for the wrong reason: " + err
+          errorRegex.test( err.response.data.message ),
+          JSON.stringify( err.response.data.message )
         );
       }
     });
@@ -68,8 +69,8 @@ describe( "controllers/participant", () => {
         throw new Error( "accepted invalid email" );
       } catch ( err ) {
         assert(
-          errorRegex.test( err.response.data ),
-          "Error occured for the wrong reason: " + err
+          errorRegex.test( err.response.data.message ),
+          JSON.stringify( err.response.data.message )
         );
       }
     });
