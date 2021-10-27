@@ -19,6 +19,9 @@ const reducer = ( state = initialState, action ) => {
   case "user/refresh":
     return action.payload;
 
+  case "user/logout":
+    return action.payload;
+
   default:
     return state;
   }
@@ -120,13 +123,18 @@ export const userLogout = () => {
     const cookie = document.cookie
       .match( new RegExp( "(^| )" + "auth-token" + "=([^;]+)" ) );
 
-    if( cookie ) {
+    if ( cookie ) {
       document.cookie = `${cookie}; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
-    } else {
-      return;
     }
 
-    dispatch( push( "/home" ) );
+    history.push( "/home" );
+
+    dispatch(
+      {
+        type: "user/logout",
+        payload: {}
+      }
+    );
   };
 };
 
