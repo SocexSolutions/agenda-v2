@@ -7,6 +7,15 @@
   margin: 0 10vw 0 10vw;
 }
 
+.navLoggedIn {
+  height: 100px;
+  padding: 0px 5px 0px 25px;
+  color: var(--textBlue);
+  display: flex;
+  align-items: center;
+  margin: 0 5vw 0 3vw;
+}
+
 .login {
   height: 50px;
   padding: 10px;
@@ -28,9 +37,18 @@
   color: var(--textBlue);
 }
 
+.navLoggedIn ul li a {
+  margin: 5px 15px;
+}
+
+.navLoggedIn Button {
+  margin: 5px 0px;
+}
+
 .nav ul li a {
   margin: 5px 15px;
 }
+
 
 .nav Button {
   margin: 5px 10px;

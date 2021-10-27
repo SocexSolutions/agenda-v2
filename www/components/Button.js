@@ -1,4 +1,6 @@
+import React from "react";
 import PropTypes from "prop-types";
+import { useState } from "react";
 import styles from "../styles/Button.module.css";
 
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
@@ -8,8 +10,14 @@ import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 import AddToPhotosOutlinedIcon from "@material-ui/icons/AddToPhotosOutlined";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import SettingsIcon from "@material-ui/icons/Settings";
+import AccountTreeIcon from "@material-ui/icons/AccountTree";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import LogoutIcon from "@material-ui/icons/ExitToApp";
 
-const Button = ({ icon, text, size, onClick, varient, stretch }) => {
+const Button = ({ icon, text, size, onClick, varient, stretch, children }) => {
+
+  const [ open, setOpen ] = useState( false );
 
   let className = styles.btn;
   // size cases
@@ -88,19 +96,40 @@ const Button = ({ icon, text, size, onClick, varient, stretch }) => {
   case "person":
     icon = <AccountCircleIcon />;
     break;
+  case "settings":
+    icon = <SettingsIcon />;
+    break;
+  case "account":
+    icon = <AccountTreeIcon />;
+    break;
+  case "help":
+    icon = <HelpOutlineIcon />;
+    break;
+  case "logout":
+    icon = <LogoutIcon />;
+    break;
+  }
+
+  switch ( onClick ) {
+  case "dropDown":
+    onClick = () => setOpen( !open );
   }
 
   return (
-    <button className={className} onClick={onClick}>
-      <div className={styles.iconContainer}>
-        {icon}
-      </div>
-      {text}
-    </button>
+    <>
+      <button className={className} onClick={onClick}>
+        <div className={styles.iconContainer}>
+          {icon}
+        </div>
+        {text}
+      </button>
+      { open && children }
+    </>
   );
 };
 
 Button.propTypes = {
+  children: PropTypes.element,
   onClick: PropTypes.func,
   stretch: PropTypes.oneOfType( [
     PropTypes.string,

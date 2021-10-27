@@ -1,12 +1,17 @@
+import { useSelector } from "react-redux";
+import React, {  useState } from "react";
+import PropTypes from "prop-types";
+
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import Button from "./Button";
 import styles from "../styles/Nav.module.css";
 import AgendaIcon from "./AgendaIcon";
+import DropDown from "../components/DropDown"
 
 const selectUser = ( state ) => state.user;
 
-const Nav = () => {
+const Nav = ( props ) => {
   const user = useSelector( selectUser );
 
   if ( user.token === null ) {
@@ -22,7 +27,7 @@ const Nav = () => {
 
           <div className={styles.login}>
             <Link href="/login">
-              <Button varient="secondary" text="Login" />
+              <Button varient="secondary" text="Login"/>
             </Link>
             <Link href="/register">
               <Button varient="secondary" text="Sign Up" />
@@ -34,9 +39,9 @@ const Nav = () => {
   } else {
     return (
       <>
-        <nav className={styles.nav}>
+        <nav className={styles.navLoggedIn}>
           <Link href="/" passHref>
-            <Button icon="home" varient="icon" />
+            <Button icon="home" varient="icon"/>
           </Link>
 
           <div className={styles.navcentered}>
