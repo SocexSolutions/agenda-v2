@@ -19,6 +19,9 @@ const reducer = ( state = initialState, action ) => {
   case "user/refresh":
     return action.payload;
 
+  case "user/logout":
+    return action.payload;
+
   default:
     return state;
   }
@@ -112,6 +115,26 @@ export const userRefresh = ( token ) => {
     } catch ( err ) {
       console.log( err );
     }
+  };
+};
+
+export const userLogout = () => {
+  return async function logoutUser( dispatch, getState ) {
+    const cookie = document.cookie
+      .match( new RegExp( "(^| )" + "auth-token" + "=([^;]+)" ) );
+
+    if ( cookie ) {
+      document.cookie = `${cookie}; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
+    }
+
+    history.push( "/home" );
+
+    dispatch(
+      {
+        type: "user/logout",
+        payload: {}
+      }
+    );
   };
 };
 
