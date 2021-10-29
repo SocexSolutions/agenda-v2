@@ -5,7 +5,7 @@ import Input from "./Input";
 import Button from "./Button";
 import { useState } from "react";
 
-MeetingParticipants.PropTypes = {
+MeetingParticipants.propTypes = {
   participants: PropTypes.Array,
   owner: PropTypes.string,
 };

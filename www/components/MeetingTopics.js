@@ -5,7 +5,7 @@ import Input from "./Input";
 import Button from "../components/Button";
 import { useState } from "react";
 
-MeetingTopics.PropTypes = {
+MeetingTopics.propTypes = {
   addTopic: PropTypes.func,
   deleteTopic: PropTypes.func,
   topics: PropTypes.object

@@ -36,6 +36,13 @@ export const userRegister = ( email, username, password ) => {
         }
       );
 
+      await client.post(
+        "/sendgrid/welcomeemail",
+        {
+          token: data.token
+        }
+      );
+
       document.cookie = `auth-token=${data.token}`;
 
       dispatch(
