@@ -4,34 +4,35 @@ Agenda will allow for more efficient meetings by estabilshing meeting topics in 
 
 # Getting Started
 
+## Setup
 1. Generate public and private keys and install dependencies:
 ```
 npm run setup
 ```
-2. Run the backend in docker containers and the frontend with node:
+
+## Containerized (Recommended)
+
+To run the frontend, backend, and database in separate containers use:
+```
+docker compose up --build
+```
+
+## Local
+2. Run the frontend and backend using local node and create or use a container
+called `mongo` for the database.
 ```
 npm run dev
 ```
-
 All output will be be seen in the terminal that the commands are run in.
-Changes in the api and frontend are listened to seperately. The UI can be found
+Changes in the api and frontend are listened to separately. The UI can be found
 as `localhost:3000` while the api is at `localhost:5000`.
+
 
 # Testing
 
-## API
-
-To test the api, first confirm that there is a mongodb container running with:
+To run the tests use:
 ```
-docker ps
-```
-If the mongodb container isn't running use the following to start it. If this fails `docker-compose up --build` *from the `api` directory* will create the containers needed, you will need to stop the `agenda-api` container before testing.
-```
-docker container start agenda-mongo
-```
-Then run the tests with:
-```
-NODE_ENV=test npm run test
+npm run test
 ```
 
 # Info
