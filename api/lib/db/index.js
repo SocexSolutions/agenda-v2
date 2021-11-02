@@ -1,3 +1,4 @@
+const logger   = require( "@starryinternet/jobi" );
 const mongoose = require( "mongoose" );
 
 let db  = {};
@@ -12,21 +13,25 @@ db.connect = async() => {
       dbConStr = "mongodb://localhost:27017/agenda-dev";
     }
 
+    logger.info( "using dbConStr " + dbConStr );
+
     await mongoose.connect( dbConStr, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true
     });
 
-    console.log( "database connected" );
+    logger.info( "database connected" );
 
   } catch ( error ) {
 
-    console.error( "database connection failed: " + error.message );
+    logger.error( "database connection failed: " + error.message );
   }
 };
 
 db.disconnect = async() => {
+  logger.info( "disconnecting database" );
+
   try {
     await mongoose.disconnect();
 
@@ -34,6 +39,8 @@ db.disconnect = async() => {
 
     console.error( err );
   }
+
+  logger.info( "database disconnected" );
 };
 
 module.exports = db;
