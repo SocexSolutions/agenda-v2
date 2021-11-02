@@ -1,9 +1,9 @@
-const db              = require( "../db" );
+const db              = require( "../api/lib/db" );
 const ObjectID        = require( "mongoose" ).Types.ObjectId;
-const { genPassword } = require( "./password" );
-const User            = require( "../models/user" );
-const Meeting         = require( "../models/meeting" );
-const { clean }       = require( "../../test/utils/db" );
+const { genPassword } = require( "../api/lib/utils/password" );
+const User            = require( "../api/lib/models/user" );
+const Meeting         = require( "../api/lib/models/meeting" );
+const { clean }       = require( "../api/test/utils/db" );
 const faker           = require( "faker" );
 const assert          = require( "assert" );
 

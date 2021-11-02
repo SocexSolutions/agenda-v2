@@ -12,27 +12,7 @@ the following:
 npm run dev
 ```
 
-Then start mongo in docker desktop (this will not need to be restarted).
-
-### Dockerized
-
-With the use of docker compose, you can now use the following to setup agenda-api
-as a docker swarm.
-
-```shell
-docker-compose build
-```
-
-To build the mongo and api containers.
-
-```shell
-docker-compose up
-```
-
-To run the two containers. The mongodb container will be available through
-`port 27017` and the api will be running on port 5000. (We will need to change
-this for production).
-
+Then start the container named `mongo` in docker desktop (this will not need to be restarted).
 
 ### Reference
 

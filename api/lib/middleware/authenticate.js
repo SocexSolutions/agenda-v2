@@ -1,8 +1,8 @@
 const jsonwebtoken = require( "jsonwebtoken" );
-const path         = require( "path" );
 const fs           = require( "fs" );
+const path         = require( "path" );
 
-const pathToKey = path.join( __dirname, "..", "id_rsa_pub.pem" );
+const pathToKey = path.join( __dirname, "../../keys/id_rsa_pub.pem" );
 const PUB_KEY   = fs.readFileSync( pathToKey, "utf8" );
 
 const authenticate = ( req, res, next ) => {
