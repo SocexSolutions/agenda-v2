@@ -1,11 +1,16 @@
 const User      = require( "../models/user" );
 const PassUtils = require( "../utils/password" );
 const JWTUtils  = require( "../utils/jwt" );
+const logger    = require( "@starryinternet/jobi" );
+
 
 module.exports = {
   async register( req, res ) {
+    logger.info( "registering user" );
+
     try {
       // unpack from request by variable names in form
+      logger.info( req.body );
       const { email, username, password } = req.body;
 
       // password is not stored in db and is thus not validated by the model so
@@ -38,6 +43,8 @@ module.exports = {
         expiresIn
       });
 
+      logger.info( "user registered" );
+
     } catch ( err ) {
 
       res.status( 500 ).send( err );
@@ -45,8 +52,12 @@ module.exports = {
   },
 
   async login( req, res ) {
+
+    logger.info( "logging in user" );
+
     try {
       // unpack from request
+      logger.info( req.body );
       const { username, password } = req.body;
 
       // search for user
@@ -83,6 +94,9 @@ module.exports = {
           token,
           expiresIn
         });
+
+        logger.info( "logged in user" );
+
       } else {
         res.status( 401 ).json({
           success: false,
@@ -92,12 +106,20 @@ module.exports = {
 
     } catch ( err ) {
 
+      logger.error( err.message );
+
       res.status( 500 ).send( err );
     }
   },
 
-  async refresh( req, res ) { // get route
+  async refresh( req, res ) {
+    logger.info( "refreshing token" );
+
     try {
+      logger.info(
+        "authorization: " + JSON.stringify( req.headers.authorization )
+      );
+
       const token = req.headers.authorization;
 
       const decoded = JWTUtils.verifyJwt( token );
@@ -112,8 +134,12 @@ module.exports = {
           username: user.username
         }
       });
+
+      logger.info( "refreshed token" );
+
     } catch ( err ) {
-      console.log( err );
+
+      logger.error( err.message );
     }
   },
 };

@@ -1,10 +1,12 @@
 #!/bin/bash
 
+npm i
+
+node ./scripts/keygen.js
+
 cd ./api
 
 npm i
-
-node ./lib/utils/keygen.js
 
 cd ../www
 

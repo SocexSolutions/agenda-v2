@@ -1,9 +1,0 @@
-version: "3.7"
-
-services:
-  
-  agenda:
-    build: ./
-    container_name: agenda
-    ports:
-      - 3000:3000

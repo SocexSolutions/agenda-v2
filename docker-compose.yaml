@@ -4,7 +4,7 @@ services:
 
   mongodb:
     image: mongo:latest
-    container_name: mongo
+    container_name: agenda.mongo
     volumes:
       - mongodb-data:/data/db
     ports:
@@ -12,19 +12,26 @@ services:
 
   api:
     build: ./api/
-    container_name: api
+    container_name: agenda.api
+    environment:
+      NODE_DEBUG: info
     volumes:
       - ./api/:/app
     ports:
-      - 5000:5000
+      - 4000:4000
     depends_on:
       - mongodb
 
   ui:
     build: ./www/
-    container_name: ui
+    container_name: agenda.ui
+    volumes:
+      - ./www/:/app
     ports:
       - 3000:3000
+    depends_on:
+      - mongodb
+      - api
 
 volumes:
   mongodb-data:
