@@ -5,7 +5,7 @@ const sendGrid = require( "../classes/sendGrid" );
 const JWTUtils  = require( "../utils/jwt" );
 const templates = require( "./emailTemplates/templates" );
 
-const key =  getKey(); 
+const key =  getKey();
 
 module.exports = new sendGrid({
   key,
@@ -13,19 +13,12 @@ module.exports = new sendGrid({
 });
 
 module.exports = {
-  sendWelcomeEmail: async( req, res ) => {
+  sendWelcomeEmail: ( username, email ) => {
     try {
-
-      const decoded = JWTUtils.verifyJwt( req.body.token );
-
-      const user = await User.findById( decoded.sub );
-
-      console.log( user );
-
       const welcomeEmail = new templates
-        .WelcomeEmail( user.username );
+        .WelcomeEmail( username );
 
-      sendGrid.send( user.email, welcomeEmail )
+      sendGrid.send( email, welcomeEmail )
         .then( ( res ) => { res.send( res ); })
         .catch( ( err ) => { res.send( err ); });
 

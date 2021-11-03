@@ -2,6 +2,7 @@ const User      = require( "../models/user" );
 const PassUtils = require( "../utils/password" );
 const JWTUtils  = require( "../utils/jwt" );
 
+
 module.exports = {
   async register( req, res ) {
     try {
