@@ -3,6 +3,7 @@ const PassUtils = require( "../utils/password" );
 const JWTUtils  = require( "../utils/jwt" );
 const logger    = require( "@starryinternet/jobi" );
 
+
 module.exports = {
   async register( req, res ) {
     logger.info( "registering user" );
