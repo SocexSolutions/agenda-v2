@@ -25,7 +25,7 @@ npm run dev
 ```
 All output will be be seen in the terminal that the commands are run in.
 Changes in the api and frontend are listened to separately. The UI can be found
-as `localhost:3000` while the api is at `localhost:5000`.
+as `localhost:3000` while the api is at `localhost:4000`.
 
 
 # Testing
