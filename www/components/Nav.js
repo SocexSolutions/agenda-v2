@@ -3,7 +3,6 @@ import React, {  useState } from "react";
 import PropTypes from "prop-types";
 
 import Link from "next/link";
-import { useSelector } from "react-redux";
 import Button from "./Button";
 import styles from "../styles/Nav.module.css";
 import AgendaIcon from "./AgendaIcon";

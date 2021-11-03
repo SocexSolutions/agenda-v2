@@ -41,17 +41,22 @@
   background-color: inherit;
   color: var(--textBlue);
   border: 0;
-  border-bottom: 2px solid var(--agendaSecondary);
+  border-bottom: 2px solid var(--skyBlue);
   padding: 0.5rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
-  
+  outline-width: 0;
 }
 
 .outlined {
-  border-color: var(--agendaPurple);
+  border-color: var(--skyBlue);
   background-color: inherit;
   border-width: 2px;
   padding: 0.5rem;
   border-radius: 5px;
+}
+
+.wrapper input::placeholder {
+  color: var(--textBlue);
+  font-style: italic;
 }

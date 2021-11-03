@@ -58,7 +58,7 @@ const Input = ({
   }
 
   return (
-    <div>
+    <div className={styles.wrapper}>
       <label>
         {label}
         {required}
