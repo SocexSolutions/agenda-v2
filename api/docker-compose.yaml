@@ -16,7 +16,7 @@ services:
     volumes:
       - ./:/app
     ports:
-      - 5000:5000
+      - 4000:4000
     depends_on:
       - mongodb
 

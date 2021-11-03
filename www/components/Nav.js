@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import React, {  useState } from "react";
 import PropTypes from "prop-types";
 

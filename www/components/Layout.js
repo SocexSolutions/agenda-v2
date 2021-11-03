@@ -20,8 +20,9 @@ const Layout = ({ children }) => {
     <>
       <Nav />
       <div className={styles.container}>
+        <Drawer className={drawer}/>
         <main
-          //onClick={ () => setOpen( !open ) }
+          onClick={ () => setOpen( !open ) }
         >
           {children}
         </main>
