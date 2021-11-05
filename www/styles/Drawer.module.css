@@ -1,7 +1,6 @@
 .container {
   background-color: var(--menuColor);
-  width: 100%;
-  height: 100%;
+  height: 80%;
 }
 
 .container h2 {
@@ -17,4 +16,16 @@
 .hr {
   background-color: var(--background);
   height: 20px;
+}
+
+.drawerContainer {
+  width: 250px;
+  transition: width 350ms;
+}
+
+.drawerClosed {
+  overflow: hidden;
+  width: 10px;
+  transition: width 350ms;
+
 }

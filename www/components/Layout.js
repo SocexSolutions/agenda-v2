@@ -1,28 +1,17 @@
-import { useState } from "react";
 
 import styles from "../styles/Layout.module.css";
 
 import Nav from "./Nav";
 import Drawer from "./Drawer";
-
+import {useSelector} from "react-redux"
 const Layout = ({ children }) => {
-  const [ open, setOpen ] = useState( true );
-
-  let drawer = styles.drawerContainer;
-
-  if ( !open ) {
-    drawer = drawer + " " + styles.drawerClosed;
-  }
-
-
 
   return (
     <>
       <Nav />
       <div className={styles.container}>
-        <main
-          //onClick={ () => setOpen( !open ) }
-        >
+        <Drawer />
+        <main>
           {children}
         </main>
       </div>
