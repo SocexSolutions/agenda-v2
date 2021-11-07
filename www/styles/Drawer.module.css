@@ -1,58 +1,35 @@
 .container {
+  width: 270px;
   background-color: var(--menuColor);
   height: 80%;
+  transition: width 600ms;
+  overflow: hidden;
 }
 
 .container h2 {
   color: var(--agendaSecondary);
   padding-top: 20px;
-  margin: 20px;
+  margin: 22px;
 }
 
 .container Button {
-  margin: 10px;
+  margin: 12px;
 }
 
-.hr {
-  background-color: var(--background);
-  height: 10px;
-}
-
-.drawerContainer {
-  width: 250px;
-  transition: width 350ms;
-}
-
-.drawerClosed {
-  overflow: hidden;
-  width: 0px;
-  transition: width 350ms;
-}
-
-.arrows {
-  display: flex;
-  color: var(--agendaSecondary);
+.closed {
+  width: 22px;
 }
 
 .arrow {
-  width: 0px;;
-  position: relative;
-  left: -90%;
+  color: var(--agendaSecondary);
+  float: right;
 }
 
-.showOpenArrow {
-  width: 0px;
-  /* overflow: hidden; */
+.arrowClose {
+  transform: rotate(180deg);
+  transition: transform 600ms linear;
 }
-
-.backArrow {
-  width: 0px;
-  position: relative;
-  right: -90%;
+.arrowOpen {
+  transform: rotate(0deg);
+  transition: transform 600ms linear;
 }
-
-.hideBackArrow {
-  position: relative;
-  left: -100px;;
-}
-

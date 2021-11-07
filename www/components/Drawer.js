@@ -5,59 +5,58 @@ import Button from "../components/Button";
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIosTwoTone';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIosTwoTone';
 import CloseIcon from '@material-ui/icons/Close';
-const Drawer = (drawerStatus) => {
-  
-  const [ open, setOpen ] = useState(true);
-  const showDrawer = () => setOpen(!open);
-  // console.log(open);
 
 
+const Drawer = ({ drawerOpen, setDrawerOpen }) => {
 
   return (
-    <div className={styles.container}>
-      <div className={open ? styles.drawerContainer : styles.drawerClosed}>
-        <h2>Socnet</h2>
-        <div className={styles.hr}></div>
-        <Button
-          text='Upcoming'
-          size='large'
-          stretch='wide'
-          varient='menu'
-          icon='doubleArrow'
-          />
-        <Button
-          text='Voting'
-          size='large'
-          stretch='wide'
-          varient='menu'
-          icon='checkBox'
-          />
-        <Button
-          text='Completed'
-          size='large'
-          stretch='wide'
-          varient='menu'
-          icon='cancel'
-          />
-          </div>
-        <div className={styles.arrows} onClick={showDrawer}>
-          <div className={open ? styles.arrow : styles.showOpenArrow} >
-            <ArrowForwardIosIcon />
-          </div>
-          <div className={open ? styles.backArrow : styles.hideBackArrow} >
-            <ArrowBackIosIcon />
-          </div>
+    <div 
+      className={`${ styles.container } ${ !drawerOpen && styles.closed }`}
+    >
+      <h2>Socnet</h2>
+      <Button
+        text='Upcoming'
+        size='large'
+        stretch='wide'
+        varient='menu'
+        icon='doubleArrow'
+      />
+      <Button
+        text='Voting'
+        size='large'
+        stretch='wide'
+        varient='menu'
+        icon='checkBox'
+      />
+      <Button
+        text='Completed'
+        size='large'
+        stretch='wide'
+        varient='menu'
+        icon='cancel'
+      />
+      <div 
+        className={styles.arrow} 
+        onClick={() => setDrawerOpen(!drawerOpen)}
+      >
+        <div 
+          className={drawerOpen ? styles.arrowClose : styles.arrowOpen} 
+        >
+          <ArrowForwardIosIcon />
         </div>
+      </div>
     </div>
   );
 };  
 
 Drawer.propTypes = {
   drawerStatus: PropTypes.bool,
+  setDrawerOpen: PropTypes.func,
 }
 
 Drawer.defaultProps = {
-  drawerStatus: true,
+  drawerOpen: true,
+  // setDrawerOpen: 
 };
 
 export default Drawer;

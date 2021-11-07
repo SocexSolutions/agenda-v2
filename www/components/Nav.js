@@ -1,12 +1,15 @@
 import { useSelector } from "react-redux";
+import PropTypes from "prop-types";
 import Link from "next/link";
 import Button from "./Button";
 import styles from "../styles/Nav.module.css";
 import AgendaIcon from "./AgendaIcon";
+import AttachmentIcon from '@material-ui/icons/Attachment';
 
 const selectUser = ( state ) => state.user;
 
-const Nav = ( props ) => {
+const Nav = ({ drawerOpen, setDrawerOpen }) => {
+
   const user = useSelector( selectUser );
 
   if ( user.token === null ) {
@@ -35,6 +38,11 @@ const Nav = ( props ) => {
     return (
       <>
         <nav className={styles.navLoggedIn}>
+          <Button 
+            icon="drawer" 
+            varient="icon" 
+            onClick={ () => setDrawerOpen(!drawerOpen) }
+          />
           <Link href="/" passHref>
             <Button icon="home" varient="icon"/>
           </Link>
@@ -55,6 +63,16 @@ const Nav = ( props ) => {
       </>
     );
   }
+};
+
+Nav.propTypes = {
+  drawerOpen: PropTypes.bool,
+  setDrawerOpen: PropTypes.func
+}
+
+Nav.defaultProps = {
+  drawerOpen: true,
+  // setDrawerOpen: 
 };
 
 export default Nav;
