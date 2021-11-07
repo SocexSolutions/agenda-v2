@@ -14,6 +14,7 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import AccountTreeIcon from "@material-ui/icons/AccountTree";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import LogoutIcon from "@material-ui/icons/ExitToApp";
+import MenuIcon from '@material-ui/icons/Menu';
 
 const Button = ({ icon, text, size, onClick, varient, stretch, children }) => {
 
@@ -107,6 +108,9 @@ const Button = ({ icon, text, size, onClick, varient, stretch, children }) => {
     break;
   case "logout":
     icon = <LogoutIcon />;
+    break;
+  case "drawer":
+    icon = <MenuIcon />;
     break;
   }
 

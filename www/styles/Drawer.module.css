@@ -15,7 +15,7 @@
 
 .hr {
   background-color: var(--background);
-  height: 20px;
+  height: 10px;
 }
 
 .drawerContainer {
@@ -25,7 +25,34 @@
 
 .drawerClosed {
   overflow: hidden;
-  width: 10px;
+  width: 0px;
   transition: width 350ms;
-
 }
+
+.arrows {
+  display: flex;
+  color: var(--agendaSecondary);
+}
+
+.arrow {
+  width: 0px;;
+  position: relative;
+  left: -90%;
+}
+
+.showOpenArrow {
+  width: 0px;
+  /* overflow: hidden; */
+}
+
+.backArrow {
+  width: 0px;
+  position: relative;
+  right: -90%;
+}
+
+.hideBackArrow {
+  position: relative;
+  left: -100px;;
+}
+
