@@ -18,4 +18,26 @@ module.exports = {
       res.status( 500 ).send( error );
     }
   },
+  getMeetings: async( req, res ) => {
+    logger.debug( "finding meetings " + JSON.stringify( req.params ) );
+
+    const { email } = req.params;
+    const participantMeetings = new Array;
+
+    try{
+      const participant = Participant.find( email );
+
+      participant.forEach( ( element ) => {
+        participantMeetings.push( element.meeting_id );
+      });
+
+      logger.debug(
+        "participant meetings found " + JSON.stringify( participantMeetings )
+      );
+      res.status( 201 ).send( participantMeetings );
+    }
+    catch( error ) {
+      res.status( 500 ).send( error );
+    }
+  }
 };
