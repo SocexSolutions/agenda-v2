@@ -41,7 +41,7 @@ const Nav = ({ drawerOpen, setDrawerOpen }) => {
           <Button 
             icon="drawer" 
             varient="icon" 
-            onClick={ () => setDrawerOpen(!drawerOpen) }
+            onClick={() => setDrawerOpen(!drawerOpen)}
           />
           <Link href="/" passHref>
             <Button icon="home" varient="icon"/>
@@ -49,15 +49,21 @@ const Nav = ({ drawerOpen, setDrawerOpen }) => {
 
           <div className={styles.navcentered}>
             <Link href="/meeting" passHref>
-              <Button icon="addicon"
-                text="create" varient="secondary" />
+              <Button 
+                icon="addicon"
+                text="create" 
+                varient="secondary" 
+              />
             </Link>
           </div>
+
           <Link href={`/user/${user._id}`} passHref>
-            <Button text={user.username}
+            <Button 
+              text={user.username}
               icon="person"
               varient="icon"
-              size="small" />
+              size="small"
+            />
           </Link>
         </nav>
       </>
