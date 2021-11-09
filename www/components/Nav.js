@@ -4,7 +4,6 @@ import Link from "next/link";
 import Button from "./Button";
 import styles from "../styles/Nav.module.css";
 import AgendaIcon from "./AgendaIcon";
-import AttachmentIcon from '@material-ui/icons/Attachment';
 
 const selectUser = ( state ) => state.user;
 

@@ -13,7 +13,7 @@
   color: var(--textBlue);
   display: flex;
   align-items: center;
-  margin: 0 5vw 0 3vw;
+  margin: 0 3vw 0 0;
 }
 
 .login {
@@ -26,7 +26,8 @@
 }
 
 .navcentered {
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .Agenda {
