@@ -22,11 +22,11 @@ const Chip = ({ text, editing, deleteFunc, icon }) => {
   );
 };
 
-
 Chip.propTypes = {
   text: PropTypes.string,
   editing: PropTypes.bool,
-  deleteFunc: PropTypes.func
+  deleteFunc: PropTypes.func,
+  icon: PropTypes.object
 };
 
 module.exports = Chip;

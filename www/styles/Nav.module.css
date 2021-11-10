@@ -8,11 +8,6 @@
 }
 
 .navLoggedIn {
-  height: 100px;
-  padding: 0px 5px 0px 25px;
-  color: var(--textBlue);
-  display: flex;
-  align-items: center;
   margin: 0 3vw 0 0;
 }
 
@@ -25,12 +20,12 @@
   margin-left: auto;
 }
 
-.navcentered {
+.navCentered {
   margin-left: auto;
   margin-right: auto;
 }
 
-.Agenda {
+.agenda {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -54,4 +49,3 @@
 .nav Button {
   margin: 5px 10px;
 }
-

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Button from "./Button";
 import styles from "../styles/Nav.module.css";
 import AgendaIcon from "./AgendaIcon";
+import classNames from "classNames";
 
 const selectUser = ( state ) => state.user;
 
@@ -16,7 +17,7 @@ const Nav = ({ drawerOpen, setDrawerOpen }) => {
       <>
         <nav className={styles.nav}>
           <Link href="/">
-            <div className={styles.Agenda}>
+            <div className={styles.agenda}>
               <AgendaIcon />
               <h1>Agenda</h1>
             </div>
@@ -36,28 +37,28 @@ const Nav = ({ drawerOpen, setDrawerOpen }) => {
   } else {
     return (
       <>
-        <nav className={styles.navLoggedIn}>
-          <Button 
-            icon="drawer" 
-            varient="icon" 
-            onClick={() => setDrawerOpen(!drawerOpen)}
+        <nav className={classNames( styles.nav, styles.navLoggedIn )}>
+          <Button
+            icon="drawer"
+            varient="icon"
+            onClick={() => setDrawerOpen( !drawerOpen )}
           />
           <Link href="/" passHref>
             <Button icon="home" varient="icon"/>
           </Link>
 
-          <div className={styles.navcentered}>
+          <div className={styles.navCentered}>
             <Link href="/meeting" passHref>
-              <Button 
+              <Button
                 icon="addicon"
-                text="create" 
-                varient="secondary" 
+                text="create"
+                varient="secondary"
               />
             </Link>
           </div>
 
           <Link href={`/user/${user._id}`} passHref>
-            <Button 
+            <Button
               text={user.username}
               icon="person"
               varient="icon"
@@ -73,11 +74,10 @@ const Nav = ({ drawerOpen, setDrawerOpen }) => {
 Nav.propTypes = {
   drawerOpen: PropTypes.bool,
   setDrawerOpen: PropTypes.func
-}
+};
 
 Nav.defaultProps = {
-  drawerOpen: true,
-  // setDrawerOpen: 
+  drawerOpen: true
 };
 
 export default Nav;
