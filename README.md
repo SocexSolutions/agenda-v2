@@ -5,7 +5,7 @@ Agenda will allow for more efficient meetings by estabilshing meeting topics in 
 # Getting Started
 
 ## Setup
-1. Generate public and private keys and install dependencies:
+Generate public and private keys and install dependencies:
 ```
 npm run setup
 ```
