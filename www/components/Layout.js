@@ -4,7 +4,9 @@ import Drawer from "./Drawer";
 import { useState } from "react";
 
 const pagesWithoutDrawer = new Set( [
-  "home"
+  "home",
+  "Login",
+  "Register"
 ] );
 
 const Layout = ({ children }) => {
@@ -20,10 +22,12 @@ const Layout = ({ children }) => {
         setDrawerOpen={setDrawerOpen}
       />
       <div className={styles.container}>
-        <Drawer
-          drawerOpen={drawerOpen}
-          setDrawerOpen={setDrawerOpen}
-        />
+        { showDrawer &&
+          <Drawer
+            drawerOpen={drawerOpen}
+            setDrawerOpen={setDrawerOpen}
+          />
+        }
         <main>
           {children}
         </main>

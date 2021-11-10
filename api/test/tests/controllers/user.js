@@ -44,6 +44,17 @@ describe( "api/lib/controllers/user.js", () => {
       assert.strictEqual( res.data.user.username, "thudson" );
     });
 
+    it( "should not register a user with an existing username", async() => {
+      await client.post( path, user );
+
+      try {
+        await client.post( path, user );
+        assert( false );
+      } catch ( err ) {
+        assert( err.response.status === 403 );
+      }
+    });
+
     it( "should register return an auth token", async() => {
       const res = await client.post( path, user );
 

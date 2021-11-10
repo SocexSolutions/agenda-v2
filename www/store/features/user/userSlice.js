@@ -63,6 +63,8 @@ export const userLogin = ( username, password ) => {
   return async function loginUser( dispatch, getState ) {
     try {
 
+      console.log( "bacon" );
+
       const { data } = await client.post(
         "/user/login",
         {
@@ -70,6 +72,8 @@ export const userLogin = ( username, password ) => {
           password
         }
       );
+
+      console.log( data );
 
       document.cookie = `auth-token=${data.token}`;
 
