@@ -13,6 +13,14 @@ module.exports = {
       logger.info( req.body );
       const { email, username, password } = req.body;
 
+      const existingUser = await User.findOne({ username });
+
+      if ( existingUser ) {
+        return res.status( 403 ).send(
+          new Error( "username already exists" )
+        );
+      }
+
       // password is not stored in db and is thus not validated by the model so
       // we quality check it here.
       if ( !password ) {

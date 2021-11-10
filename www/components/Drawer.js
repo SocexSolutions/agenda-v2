@@ -1,12 +1,19 @@
 import styles from "../styles/Drawer.module.css";
-
+import PropTypes from "prop-types";
+import {useState} from "react"
 import Button from "../components/Button";
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIosTwoTone';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIosTwoTone';
+import CloseIcon from '@material-ui/icons/Close';
 
-const Drawer = () => {
+
+const Drawer = ({ drawerOpen, setDrawerOpen }) => {
+
   return (
-    <div className={styles.container}>
+    <div 
+      className={`${ styles.container } ${ !drawerOpen && styles.closed }`}
+    >
       <h2>Socnet</h2>
-      <div className={styles.hr}></div>
       <Button
         text='Upcoming'
         size='large'
@@ -28,8 +35,28 @@ const Drawer = () => {
         varient='menu'
         icon='cancel'
       />
+      <div 
+        className={styles.arrow} 
+        onClick={() => setDrawerOpen(!drawerOpen)}
+      >
+        <div 
+          className={drawerOpen ? styles.arrowClose : styles.arrowOpen} 
+        >
+          <ArrowForwardIosIcon />
+        </div>
+      </div>
     </div>
   );
+};  
+
+Drawer.propTypes = {
+  drawerStatus: PropTypes.bool,
+  setDrawerOpen: PropTypes.func,
+}
+
+Drawer.defaultProps = {
+  drawerOpen: true,
+  // setDrawerOpen: 
 };
 
 export default Drawer;

@@ -4,16 +4,6 @@
   height: 90vh;
 }
 
-.drawerContainer {
-  overflow: hidden;
-  width: 350px;
-  transition: width 500ms;
-}
-
-.drawerClosed {
-  width: 70000px;
-}
-
 .container main {
   width: 100%;
 }
