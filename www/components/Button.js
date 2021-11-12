@@ -3,17 +3,6 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import styles from "../styles/Button.module.css";
 
-import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
-import CheckBoxOutlinedIcon from "@material-ui/icons/Checkboxoutlined";
-import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
-import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
-import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
-import AddToPhotosOutlinedIcon from "@material-ui/icons/AddToPhotosOutlined";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import SettingsIcon from "@material-ui/icons/Settings";
-import AccountTreeIcon from "@material-ui/icons/AccountTree";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import LogoutIcon from "@material-ui/icons/ExitToApp";
 
 const Button = ({ icon, text, size, onClick, varient, stretch, children }) => {
 
