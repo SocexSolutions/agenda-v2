@@ -5,6 +5,10 @@ import Button from "./Button";
 import styles from "../styles/Nav.module.css";
 import AgendaIcon from "./AgendaIcon";
 import classNames from "classNames";
+import MenuIcon from '@material-ui/icons/Menu';
+import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
+import AddToPhotosOutlinedIcon from "@material-ui/icons/AddToPhotosOutlined";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 const selectUser = ( state ) => state.user;
 
@@ -39,18 +43,18 @@ const Nav = ({ drawerOpen, setDrawerOpen }) => {
       <>
         <nav className={classNames( styles.nav, styles.navLoggedIn )}>
           <Button
-            icon="drawer"
+            icon={<MenuIcon />}
             varient="icon"
             onClick={() => setDrawerOpen( !drawerOpen )}
           />
           <Link href="/" passHref>
-            <Button icon="home" varient="icon"/>
+            <Button icon={<HomeOutlinedIcon />} varient="icon"/>
           </Link>
 
           <div className={styles.navCentered}>
             <Link href="/meeting" passHref>
               <Button
-                icon="addicon"
+                icon={<AddToPhotosOutlinedIcon />}
                 text="create"
                 varient="secondary"
               />
@@ -60,7 +64,7 @@ const Nav = ({ drawerOpen, setDrawerOpen }) => {
           <Link href={`/user/${user._id}`} passHref>
             <Button
               text={user.username}
-              icon="person"
+              icon={<AccountCircleIcon />}
               varient="icon"
               size="small"
             />

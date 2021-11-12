@@ -1,11 +1,12 @@
 import styles from "../styles/Drawer.module.css";
 import PropTypes from "prop-types";
-import {useState} from "react"
 import Button from "../components/Button";
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIosTwoTone';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIosTwoTone';
-import CloseIcon from '@material-ui/icons/Close';
 
+
+import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
+import CheckBoxOutlinedIcon from "@material-ui/icons/Checkboxoutlined";
+import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
 
 const Drawer = ({ drawerOpen, setDrawerOpen }) => {
 
@@ -19,21 +20,21 @@ const Drawer = ({ drawerOpen, setDrawerOpen }) => {
         size='large'
         stretch='wide'
         varient='menu'
-        icon='doubleArrow'
+        icon={<DoubleArrowIcon style={{ color: "var(--agendaPurple)" }} /> }
       />
       <Button
         text='Voting'
         size='large'
         stretch='wide'
         varient='menu'
-        icon='checkBox'
+        icon={<CheckBoxOutlinedIcon style={{ color: "var(--agendaGreen)" }} />}
       />
       <Button
         text='Completed'
         size='large'
         stretch='wide'
         varient='menu'
-        icon='cancel'
+        icon={<CancelOutlinedIcon style={{ color: "var(--danger)" }} />}
       />
       <div 
         className={styles.arrow} 
