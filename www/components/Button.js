@@ -3,18 +3,6 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import styles from "../styles/Button.module.css";
 
-import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
-import CheckBoxOutlinedIcon from "@material-ui/icons/Checkboxoutlined";
-import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
-import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
-import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
-import AddToPhotosOutlinedIcon from "@material-ui/icons/AddToPhotosOutlined";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import SettingsIcon from "@material-ui/icons/Settings";
-import AccountTreeIcon from "@material-ui/icons/AccountTree";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import LogoutIcon from "@material-ui/icons/ExitToApp";
-import MenuIcon from '@material-ui/icons/Menu';
 
 const Button = ({ icon, text, size, onClick, varient, stretch, children }) => {
 
@@ -73,46 +61,6 @@ const Button = ({ icon, text, size, onClick, varient, stretch, children }) => {
   case false:
     break;
   }
-  //icons
-
-  switch ( icon ) {
-  case "doubleArrow":
-    icon = <DoubleArrowIcon style={{ color: "var(--agendaPurple)" }} />;
-    break;
-  case "checkBox":
-    icon = <CheckBoxOutlinedIcon style={{ color: "var(--agendaGreen)" }} />;
-    break;
-  case "cancel":
-    icon = <CancelOutlinedIcon style={{ color: "var(--danger)" }} />;
-    break;
-  case "arrow":
-    icon = <ArrowForwardIosIcon style={{ fontSize: "medium", color: "var(--textBlue)" }}/>;
-    break;
-  case "home":
-    icon = <HomeOutlinedIcon />;
-    break;
-  case "addicon":
-    icon = <AddToPhotosOutlinedIcon />;
-    break;
-  case "person":
-    icon = <AccountCircleIcon />;
-    break;
-  case "settings":
-    icon = <SettingsIcon />;
-    break;
-  case "account":
-    icon = <AccountTreeIcon />;
-    break;
-  case "help":
-    icon = <HelpOutlineIcon />;
-    break;
-  case "logout":
-    icon = <LogoutIcon />;
-    break;
-  case "drawer":
-    icon = <MenuIcon />;
-    break;
-  }
 
   switch ( onClick ) {
   case "dropDown":
@@ -142,7 +90,7 @@ Button.propTypes = {
   varient: PropTypes.string,
   text: PropTypes.string,
   size: PropTypes.string,
-  icon: PropTypes.string,
+  icon: PropTypes.object,
 };
 
 Button.defaultProps = {
