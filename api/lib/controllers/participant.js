@@ -1,5 +1,5 @@
 const Participant = require( "../models/participant" );
-const Meeting     = require( "../models/participant" )
+const Meeting     = require( "../models/participant" );
 const logger      = require( "@starryinternet/jobi" );
 
 module.exports = {
@@ -26,10 +26,12 @@ module.exports = {
     const participantMeetings = new Array;
 
     try{
-      const participant = Participant.find({ email });
+      const participant = Participant.findOne({ email });
 
       participant.forEach( ( element ) => {
-        participantMeetings.push( element.meeting_id );
+        participantMeetings.push(
+          Meeting.findOne({ "_id": element.meeting_id })
+        );
       });
 
       logger.debug(

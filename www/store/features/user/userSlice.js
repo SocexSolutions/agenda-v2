@@ -138,5 +138,25 @@ export const userLogout = () => {
   };
 };
 
+export const getInbox = ( email ) => {
+  return async function InboxGet( dispatch, getState ) {
+    const { data } = await client.get(
+      "participant/getmeetings",
+      {
+        params: {
+          email: email
+        }
+      }
+    );
+
+    dispatch(
+      {
+        type: "user/getmeetings",
+        payload: { userMeetings: data }
+      }
+    );
+  };
+};
+
 
 export default reducer;
