@@ -2,10 +2,11 @@ import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import Link from "next/link";
 import Button from "./Button";
+import DropDown from "./DropDown";
 import styles from "../styles/Nav.module.css";
 import AgendaIcon from "./AgendaIcon";
 import classNames from "classNames";
-import MenuIcon from '@material-ui/icons/Menu';
+import MenuIcon from "@material-ui/icons/Menu";
 import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
 import AddToPhotosOutlinedIcon from "@material-ui/icons/AddToPhotosOutlined";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -61,14 +62,15 @@ const Nav = ({ drawerOpen, setDrawerOpen }) => {
             </Link>
           </div>
 
-          <Link href={`/user/${user._id}`} passHref>
-            <Button
-              text={user.username}
-              icon={<AccountCircleIcon />}
-              varient="icon"
-              size="small"
-            />
-          </Link>
+          <Button
+            text={user.username}
+            icon={<AccountCircleIcon />}
+            varient="icon"
+            size="small"
+            onClick="dropDown"
+          >
+            <DropDown />
+          </ Button>
         </nav>
       </>
     );
