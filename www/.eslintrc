@@ -1,13 +1,13 @@
 {
   "env": {
     "browser": true,
-    "node": true,
     "commonjs": true,
     "es2021": true
   },
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended"
   ],
   "plugins": [
     "react",
@@ -21,28 +21,16 @@
     }
   },
   "rules": {
-    "indent": [ "error", 2 ],
-    "quotes": [ "error", "double" ],
-    "semi": [ "error", "always" ],
-    "space-in-parens": [ "error", "always", { "exceptions": ["{}"] } ],
-    "object-curly-spacing": [ "error", "always" ],
-    "array-bracket-spacing": [ "error", "always" ],
-    "block-spacing": [ "error", "always" ],
-    "comma-spacing": [ "error", { "before": false, "after": true } ],
-    "no-trailing-spaces": [ "error" ],
-    "semi-spacing": [ "error", { "before": false, "after": true } ],
-    "no-spaced-func": [ "error" ],
-    "key-spacing": [ "error",
-      {
-        "beforeColon" : false,
-        "afterColon": true,
-        "mode": "minimum"
-      }
-    ],
-    "max-len": [ "error" ],
-    "space-before-blocks": [ "error", "always" ],
-    "space-before-function-paren": [ "error", "never" ],
     "react/react-in-jsx-scope": "off",
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+    "react/prop-types": "off",
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
+      }
+    ]
   }
 }
