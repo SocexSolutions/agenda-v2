@@ -22,7 +22,7 @@
     "@starryinternet/eslint-config-starry": "10.4.0",
     "chai": "^4.3.4",
     "chai-subset": "^1.6.0",
-    "chalk": "^4.1.2",
+    "chalk": "^5.0.0",
     "eslint": "^8.3.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-react": "^7.25.1",
