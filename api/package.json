@@ -1,5 +1,5 @@
 {
-  "name": "agenda-api",
+  "name": "api",
   "version": "1.0.0",
   "description": "Agenda",
   "main": "lib/index.js",

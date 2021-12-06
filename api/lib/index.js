@@ -1,8 +1,9 @@
-const express  = require( "express" );
-const cors     = require( "cors" );
+const express  = require('express');
+const cors     = require('cors');
 const mongoose = require( "mongoose" ); // eslint-disable-line
-const  db      = require( "./db" );
-const router   = require( "./routes" );
+const db       = require('./db');
+const router   = require('./routes');
+const jobi     = require('@starryinternet/jobi');
 
 const app      = express();
 
@@ -18,19 +19,19 @@ const start = async() => {
     app.use( express.urlencoded({ extended: true }) );
 
     // cors
-    app.use( cors({ origin: "http://localhost:3000" }) );
+    app.use( cors({ origin: 'http://localhost:4000' }) );
 
-    app.use( "/", router );
+    app.use( '/', router );
 
     const port = process.env.PORT || 4000;
 
     app.listen( port );
 
-    console.log( "agenda api listening on port: " + port );
+    jobi.info( 'agenda api listening on port: ' + port );
 
   } catch ( error ) {
 
-    console.error( "agenda api failed to start: " + error.message );
+    jobi.info( 'agenda api failed to start: ' + error.message );
   }
 };
 

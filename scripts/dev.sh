@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Create db container
+# Create db container if not found
 if [ ! "$( docker ps -q -f name=mongo )" ]; then
 
   printf "\nmongodb container required for tests not found\n";
