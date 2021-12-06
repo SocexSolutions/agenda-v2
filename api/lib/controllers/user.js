@@ -1,12 +1,12 @@
-const User      = require( "../models/user" );
-const PassUtils = require( "../utils/password" );
-const JWTUtils  = require( "../utils/jwt" );
-const logger    = require( "@starryinternet/jobi" );
+const User      = require('../models/user');
+const PassUtils = require('../utils/password');
+const JWTUtils  = require('../utils/jwt');
+const logger    = require('@starryinternet/jobi');
 
 
 module.exports = {
   async register( req, res ) {
-    logger.info( "registering user" );
+    logger.info('registering user');
 
     try {
       // unpack from request by variable names in form
@@ -17,14 +17,14 @@ module.exports = {
 
       if ( existingUser ) {
         return res.status( 403 ).send(
-          new Error( "username already exists" )
+          new Error('username already exists')
         );
       }
 
       // password is not stored in db and is thus not validated by the model so
       // we quality check it here.
       if ( !password ) {
-        throw new Error( "Invalid Password" );
+        throw new Error('Invalid Password');
       }
 
       const { hash, salt } = PassUtils.genPassword( password );
@@ -51,7 +51,7 @@ module.exports = {
         expiresIn
       });
 
-      logger.info( "user registered" );
+      logger.info('user registered');
 
     } catch ( err ) {
 
@@ -61,7 +61,7 @@ module.exports = {
 
   async login( req, res ) {
 
-    logger.info( "logging in user" );
+    logger.info('logging in user');
 
     try {
       // unpack from request
@@ -76,7 +76,7 @@ module.exports = {
         return (
           res.status( 401 ).json({
             success: false,
-            msg: "invalid username" // need to change for prod
+            msg: 'invalid username' // need to change for prod
           })
         );
       }
@@ -103,12 +103,12 @@ module.exports = {
           expiresIn
         });
 
-        logger.info( "logged in user" );
+        logger.info('logged in user');
 
       } else {
         res.status( 401 ).json({
           success: false,
-          msg: "invalid credentials"
+          msg: 'invalid credentials'
         });
       }
 
@@ -121,11 +121,11 @@ module.exports = {
   },
 
   async refresh( req, res ) {
-    logger.info( "refreshing token" );
+    logger.info('refreshing token');
 
     try {
       logger.info(
-        "authorization: " + JSON.stringify( req.headers.authorization )
+        'authorization: ' + JSON.stringify( req.headers.authorization )
       );
 
       const token = req.headers.authorization;
@@ -143,11 +143,11 @@ module.exports = {
         }
       });
 
-      logger.info( "refreshed token" );
+      logger.info('refreshed token');
 
     } catch ( err ) {
 
       logger.error( err.message );
     }
-  },
+  }
 };
