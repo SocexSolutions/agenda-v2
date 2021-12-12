@@ -1,16 +1,16 @@
-const assert  = require( "assert" );
-const dbUtils = require( "../../utils/db" );
-const db      = require( "../../../lib/db" );
-const api     = require( "../../utils/api" );
-const client  = require( "../../utils/client" );
+const assert  = require('assert');
+const dbUtils = require('../../utils/db');
+const db      = require('../../../lib/db');
+const api     = require('../../utils/api');
+const client  = require('../../utils/client');
 
 const user = {
-  username: "thudson",
-  password: "thudson",
-  email:    "email"
+  username: 'thudson',
+  password: 'thudson',
+  email:    'email'
 };
 
-describe( "api/lib/controllers/user.js", () => {
+describe( 'api/lib/controllers/user.js', () => {
 
   before( async() => {
     await api.start();
@@ -23,28 +23,27 @@ describe( "api/lib/controllers/user.js", () => {
 
   after( async() => {
     await api.stop();
-    await dbUtils.clean();
     await db.disconnect();
   });
 
-  describe( "#register", () => {
+  describe( '#register', () => {
 
-    const path = "/user/register";
+    const path = '/user/register';
 
-    it( "should register successfully when given valid creds", async() => {
+    it( 'should register successfully when given valid creds', async() => {
       const res = await client.post( path, user );
 
       assert( res.status === 201 );
     });
 
-    it( "should register return user info", async() => {
+    it( 'should register return user info', async() => {
       const res = await client.post( path, user );
 
-      assert.strictEqual( res.data.user.email, "email" );
-      assert.strictEqual( res.data.user.username, "thudson" );
+      assert.strictEqual( res.data.user.email, 'email' );
+      assert.strictEqual( res.data.user.username, 'thudson' );
     });
 
-    it( "should not register a user with an existing username", async() => {
+    it( 'should not register a user with an existing username', async() => {
       await client.post( path, user );
 
       try {
@@ -55,7 +54,7 @@ describe( "api/lib/controllers/user.js", () => {
       }
     });
 
-    it( "should register return an auth token", async() => {
+    it( 'should register return an auth token', async() => {
       const res = await client.post( path, user );
 
       // eslint-disable-next-line
@@ -64,10 +63,10 @@ describe( "api/lib/controllers/user.js", () => {
       assert( tokenRegex.test( res.data.token ) );
     });
 
-    it( "should not register user with invalid email", async() => {
+    it( 'should not register user with invalid email', async() => {
       const invalidUser = {
         ...user,
-        email: ""
+        email: ''
       };
 
       let acceptedInvalidEmail = false;
@@ -80,10 +79,10 @@ describe( "api/lib/controllers/user.js", () => {
       assert( !acceptedInvalidEmail );
     });
 
-    it( "should not register user with invalid username", async() => {
+    it( 'should not register user with invalid username', async() => {
       const invalidUser = {
         ...user,
-        username: ""
+        username: ''
       };
 
       let acceptedInvalidUsername = false;
@@ -96,10 +95,10 @@ describe( "api/lib/controllers/user.js", () => {
       assert( !acceptedInvalidUsername );
     });
 
-    it( "should not register user with invalid password", async() => {
+    it( 'should not register user with invalid password', async() => {
       const invalidUser = {
         ...user,
-        password: ""
+        password: ''
       };
 
       let acceptedInvalidPassword = false;
@@ -114,9 +113,9 @@ describe( "api/lib/controllers/user.js", () => {
 
   });
 
-  describe( "#login", () => {
+  describe( '#login', () => {
 
-    const path = "/user/login";
+    const path = '/user/login';
 
     const loginCreds = {
       username: user.username,
@@ -125,21 +124,21 @@ describe( "api/lib/controllers/user.js", () => {
 
     beforeEach( async() => {
       await client.post(
-        "/user/register",
+        '/user/register',
         user
       );
     });
 
-    it( "should login successfully when given valid creds", async() => {
+    it( 'should login successfully when given valid creds', async() => {
       const res = await client.post( path, loginCreds );
 
       assert( res.status === 200 );
     });
 
-    it( "should not login user with invalid password", async() => {
+    it( 'should not login user with invalid password', async() => {
       const invalidUser = {
         ...loginCreds,
-        password: "bacon"
+        password: 'bacon'
       };
 
       let acceptedInvalidPassword = false;
@@ -152,13 +151,13 @@ describe( "api/lib/controllers/user.js", () => {
       assert( !acceptedInvalidPassword );
     });
 
-    it( "should not login user with invalid username", async() => {
+    it( 'should not login user with invalid username', async() => {
       const invalidUser = {
         ...loginCreds,
-        username: "bacon"
+        username: 'bacon'
       };
 
-      let acceptedInvalidUsername = false;
+      const acceptedInvalidUsername = false;
 
       try {
         await client.post( path, invalidUser );

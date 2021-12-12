@@ -1,4 +1,4 @@
-const mongoose = require( "mongoose" );
+const mongoose = require('mongoose');
 
 /**
  * Utils for testing regarding the database like clearing all data.
@@ -14,12 +14,12 @@ const utils = {
     const collections = await mongoose.connection.db.collections();
     const promises = [];
 
-    for ( let collection of collections ) {
+    for ( const collection of collections ) {
       promises.push( collection.deleteMany({}) );
     }
 
     return Promise.all( promises );
-  },
+  }
 };
 
 module.exports = utils;

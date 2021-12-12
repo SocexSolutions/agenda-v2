@@ -7,10 +7,10 @@ const logger    = require('@starryinternet/jobi');
 module.exports = {
   async register( req, res ) {
     logger.info('registering user');
+    logger.info( req.body );
 
     try {
       // unpack from request by variable names in form
-      logger.info( req.body );
       const { email, username, password } = req.body;
 
       const existingUser = await User.findOne({ username });
