@@ -18,11 +18,7 @@ db.connect = async() => {
 
     jobi.info( 'using dbConStr ' + dbConStr );
 
-    await mongoose.connect( dbConStr, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true
-    });
+    await mongoose.connect( dbConStr );
 
     jobi.info('database connected');
 
