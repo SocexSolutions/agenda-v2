@@ -1,39 +1,48 @@
-const chai        = require( "chai" );
-const chaiSubset  = require( "chai-subset" );
-const dbUtils     = require( "../../utils/db" );
-const db          = require( "../../../lib/db" );
-const api         = require( "../../utils/api" );
-const client      = require( "../../utils/client" );
-const ObjectID    = require( "mongoose" ).Types.ObjectId;
-const Meeting     = require( "../../../lib/models/meeting" );
-const Participant = require( "../../../lib/models/participant" );
-const Topic       = require( "../../../lib/models/topic" );
+const chai        = require('chai');
+const chaiSubset  = require('chai-subset');
+const dbUtils     = require('../../utils/db');
+const db          = require('../../../lib/db');
+const api         = require('../../utils/api');
+const client      = require('../../utils/client');
+const ObjectID    = require('mongoose').Types.ObjectId;
+const Meeting     = require('../../../lib/models/meeting');
+const Participant = require('../../../lib/models/participant');
+const Topic       = require('../../../lib/models/topic');
 
 chai.use( chaiSubset );
 
 const assert = chai.assert;
 
-
 const fakeMeeting = {
-  name:     "Meeting 1",
+  name:     'Meeting 1',
   owner_id: new ObjectID().toString(),
-  date:     "10/10/10"
+  date:     '10/10/10'
 };
 
 const fakeParticipant = {
-  email: "thudson@thudson.thud"
+  email: 'thudson@thudson.thud'
 };
 
 const fakeTopic = {
-  name:  "Topic 1",
+  name:  'Topic 1',
   likes: [ ]
 };
 
-describe( "controllers/meeting", () => {
+describe( 'controllers/meeting', () => {
 
   before( async() => {
     await api.start();
     await db.connect();
+
+    const res = await client.post(
+      '/user/register',
+      { username: 'user', password: 'pass', email: 'email' }
+    );
+
+    client.defaults.headers.common['Authorization'] = res.data.token;
+  });
+
+  beforeEach( async() => {
     await dbUtils.clean();
   });
 
@@ -42,34 +51,30 @@ describe( "controllers/meeting", () => {
     await db.disconnect();
   });
 
-  afterEach( async() => {
-    await dbUtils.clean();
-  });
+  describe( '#index', () => {
 
-  describe( "#index", () => {
-
-    it( "should fetch all meetings", async() => {
+    it( 'should fetch all meetings', async() => {
       Meeting.create( fakeMeeting );
       Meeting.create( fakeMeeting );
 
-      const meetings = await client.get( "/meeting" );
+      const meetings = await client.get('/meeting');
 
       assert.containSubset(
-        meetings.data[0],
+        meetings.data[ 0 ],
         fakeMeeting
       );
 
       assert.containSubset(
-        meetings.data[1],
+        meetings.data[ 1 ],
         fakeMeeting
       );
     });
 
   });
 
-  describe( "#display", () => {
+  describe( '#display', () => {
 
-    it( "should fetch meeting with participants and topics", async() => {
+    it( 'should fetch meeting with participants and topics', async() => {
       const { _id } = await Meeting.create( fakeMeeting );
 
       await Participant.create({
@@ -82,29 +87,29 @@ describe( "controllers/meeting", () => {
         meeting_id: _id
       });
 
-      const res = await client.get( `/meeting/${_id}` );
+      const res = await client.get( `/meeting/${ _id }` );
 
       assert.containSubset(
-        res.data[0],
+        res.data[ 0 ],
         fakeMeeting
       );
 
       assert.containSubset(
-        res.data[0].participants[0],
+        res.data[ 0 ].participants[ 0 ],
         fakeParticipant
       );
 
       assert.containSubset(
-        res.data[0].topics[0],
+        res.data[ 0 ].topics[ 0 ],
         fakeTopic
       );
     });
 
   });
 
-  describe( "#create", () => {
+  describe( '#create', () => {
 
-    it( "should create meeting with participants and topics", async() => {
+    it( 'should create meeting with participants and topics', async() => {
       const meeting = {
         meeting: fakeMeeting,
         participants: [ fakeParticipant ],
@@ -112,7 +117,7 @@ describe( "controllers/meeting", () => {
       };
 
       const { data } = await client.post(
-        "/meeting",
+        '/meeting',
         meeting
       );
 
@@ -122,12 +127,12 @@ describe( "controllers/meeting", () => {
       );
 
       assert.containSubset(
-        data.topics[0],
+        data.topics[ 0 ],
         fakeTopic
       );
 
       assert.containSubset(
-        data.participants[0],
+        data.participants[ 0 ],
         fakeParticipant
       );
 
@@ -135,9 +140,9 @@ describe( "controllers/meeting", () => {
 
   });
 
-  describe( "#update", () => {
+  describe( '#update', () => {
 
-    it( "should update a meetings participants and topics", async() => {
+    it( 'should update a meetings participants and topics', async() => {
       const { _id } = await Meeting.create( fakeMeeting );
 
       await Participant.create({
@@ -153,13 +158,13 @@ describe( "controllers/meeting", () => {
       const meetingUpdate = {
         _id: _id.toString(),
         owner_id: fakeMeeting.owner_id,
-        name: "meeting 2",
-        date: "10/10/12",
+        name: 'meeting 2',
+        date: '10/10/12'
       };
 
       const topicsUpdate = [
         {
-          name: "Topic 3",
+          name: 'Topic 3',
           likes: [
             new ObjectID().toString()
           ]
@@ -168,7 +173,7 @@ describe( "controllers/meeting", () => {
 
       const participantsUpdate = [
         {
-          email: "thudson@thudson.com"
+          email: 'thudson@thudson.com'
         }
       ];
 
@@ -179,7 +184,7 @@ describe( "controllers/meeting", () => {
       };
 
       const { data } = await client.put(
-        "/meeting",
+        '/meeting',
         payload
       );
 
@@ -189,13 +194,13 @@ describe( "controllers/meeting", () => {
       );
 
       assert.containSubset(
-        data.topics[0],
-        topicsUpdate[0]
+        data.topics[ 0 ],
+        topicsUpdate[ 0 ]
       );
 
       assert.containSubset(
-        data.participants[0],
-        participantsUpdate[0]
+        data.participants[ 0 ],
+        participantsUpdate[ 0 ]
       );
     });
 
