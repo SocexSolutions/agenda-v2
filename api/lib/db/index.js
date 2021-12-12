@@ -20,8 +20,7 @@ db.connect = async() => {
 
     await mongoose.connect( dbConStr, {
       useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true
+      useUnifiedTopology: true
     });
 
     jobi.info('database connected');
