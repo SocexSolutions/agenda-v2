@@ -4,6 +4,20 @@ const db       = require( "../../../lib/db" );
 const api      = require( "../../utils/api" );
 const ObjectID = require( "mongoose" ).Types.ObjectId;
 const client   = require( "../../utils/client" );
+const Meeting  = require( "../../../lib/models/meeting" );
+const Participant  = require( "../../../lib/models/participant" );
+
+const meeting1 = {
+  name: "meeting1",
+  owner_id: new ObjectID(),
+  date: "tues"
+};
+
+const meeting2 = {
+  name: "meeting2",
+  owner_id: new ObjectID(),
+  date: "tuesdy"
+};
 
 const participant = {
   email: "lt@linux.com",
@@ -72,6 +86,30 @@ describe( "controllers/participant", () => {
           errorRegex.test( err.response.data.message ),
           JSON.stringify( err.response.data.message )
         );
+      }
+    });
+  });
+  describe.only( "#getMeetings", () => {
+    it( "should return meetings", async() => {
+
+      const res = await Meeting.insertMany( [ meeting1, meeting2 ] );
+
+      let participants = new Array();
+
+      res.forEach( ( meeting ) => {
+        participants.push(
+          { email: "jack@aol.com", meeting_id: meeting._id }
+        );
+      });
+
+      const res2 = await Participant.insertMany( participants );
+
+      try{
+        console.log( "posting..." );
+        await client.post( "participant/getmeetings", { email: "jack@aol.com" });
+      }
+      catch ( err ) {
+        console.log( err.response );
       }
     });
   });
