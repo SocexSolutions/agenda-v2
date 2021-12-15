@@ -24,7 +24,7 @@ module.exports = {
     logger.debug( "finding meetings " + JSON.stringify( req.params ) );
 
     const conn = mongoose.connection;
-    const col = conn.collection( "Meeting" );
+    const col = conn.collection( "meetings" );
 
     const { email } = req.body;
     const participantMeetings = new Array;
@@ -38,23 +38,20 @@ module.exports = {
         meetingIds.push( participant.meeting_id );
       });
 
-      console.log( meetingIds );
-
       const query = { _id: { $in: meetingIds } };
 
       const cursorMeetings = await col.find( query, {}).toArray();
 
-      console.log( cursorMeetings );
-
-      conn.close();
-
       logger.debug(
-        "participant meetings found " + JSON.stringify( participantMeetings )
+        "participant meetings found " + JSON.stringify( cursorMeetings )
       );
       res.status( 201 ).send( cursorMeetings );
     }
     catch( error ) {
       res.status( 500 ).send( error );
+    }
+    finally {
+      await conn.disconnect();
     }
   }
 };

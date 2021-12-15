@@ -1,3 +1,5 @@
+const chai        = require( "chai" );
+const chaiSubset  = require( "chai-subset" );
 const assert   = require( "assert" );
 const dbUtils  = require( "../../utils/db" );
 const db       = require( "../../../lib/db" );
@@ -89,7 +91,7 @@ describe( "controllers/participant", () => {
       }
     });
   });
-  describe.only( "#getMeetings", () => {
+  describe( "#getMeetings", () => {
     it( "should return meetings", async() => {
 
       const res = await Meeting.insertMany( [ meeting1, meeting2 ] );
@@ -102,14 +104,18 @@ describe( "controllers/participant", () => {
         );
       });
 
-      const res2 = await Participant.insertMany( participants );
+      await Participant.insertMany( participants );
 
       try{
-        console.log( "posting..." );
-        await client.post( "participant/getmeetings", { email: "jack@aol.com" });
+        const resMain = await client.post(
+          "participant/getmeetings", { email: "jack@aol.com" }
+        );
+        assert( resMain.data[1].name === "meeting2", "found Meetings" );
       }
       catch ( err ) {
-        console.log( err.response );
+        throw new Error(
+          "Failed to find Participant meetings | reason: " + err
+        );
       }
     });
   });
