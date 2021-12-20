@@ -1,5 +1,5 @@
 {
-  "name": "agenda",
+  "name": "api",
   "version": "1.0.0",
   "description": "Agenda",
   "main": "lib/index.js",
@@ -28,18 +28,10 @@
   "dependencies": {
     "@sendgrid/mail": "^7.5.0",
     "@starryinternet/jobi": "^1.1.0",
-    "axios": "^0.21.1",
+    "axios": "^0.24.0",
     "cors": "^2.8.5",
-    "express": "4.17.1",
+    "express": "4.17.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "5.12.10"
-  },
-  "devDependencies": {
-    "chai": "^4.3.4",
-    "chai-subset": "^1.6.0",
-    "eslint": "^7.27.0",
-    "faker": "^5.5.3",
-    "mocha": "^8.4.0",
-    "nodemon": "2.0.7"
+    "mongoose": "6.1.2"
   }
 }

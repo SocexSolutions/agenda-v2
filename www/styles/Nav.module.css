@@ -8,12 +8,7 @@
 }
 
 .navLoggedIn {
-  height: 100px;
-  padding: 0px 5px 0px 25px;
-  color: var(--textBlue);
-  display: flex;
-  align-items: center;
-  margin: 0 5vw 0 3vw;
+  margin: 0 3vw 0 0;
 }
 
 .login {
@@ -25,11 +20,12 @@
   margin-left: auto;
 }
 
-.navcentered {
-  margin: auto;
+.navCentered {
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.Agenda {
+.agenda {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -42,7 +38,7 @@
 }
 
 .navLoggedIn Button {
-  margin: 5px 0px;
+  margin: 55px 0px;
 }
 
 .nav ul li a {
@@ -53,4 +49,3 @@
 .nav Button {
   margin: 5px 10px;
 }
-

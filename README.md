@@ -5,7 +5,7 @@ Agenda will allow for more efficient meetings by estabilshing meeting topics in 
 # Getting Started
 
 ## Setup
-1. Generate public and private keys and install dependencies:
+Generate public and private keys and install dependencies:
 ```
 npm run setup
 ```
@@ -18,7 +18,7 @@ docker compose up --build
 ```
 
 ## Local
-2. Run the frontend and backend using local node and create or use a container
+Run the frontend and backend using local node and create or use a container
 called `mongo` for the database.
 ```
 npm run dev

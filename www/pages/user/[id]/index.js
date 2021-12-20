@@ -1,7 +1,9 @@
 import InboxMenu from "../../../components/InboxMenu";
 import Inbox from "../../../components/Inbox";
 
-const user = () => {
+const user = ({children}) => {
+  console.log(children)
+
   return (
     <Inbox />
   );

@@ -1,28 +1,34 @@
-import { useState } from "react";
-
 import styles from "../styles/Layout.module.css";
-
 import Nav from "./Nav";
 import Drawer from "./Drawer";
+import { useState } from "react";
+
+const pagesWithoutDrawer = new Set( [
+  "home",
+  "Login",
+  "Register"
+] );
 
 const Layout = ({ children }) => {
-  const [ open, setOpen ] = useState( true );
 
-  let drawer = styles.drawerContainer;
+  const [ drawerOpen, setDrawerOpen ] = useState( true );
 
-  if ( !open ) {
-    drawer = drawer + " " + styles.drawerClosed;
-  }
-
-
+  const showDrawer = !pagesWithoutDrawer.has( children.type.name );
 
   return (
     <>
-      <Nav />
+      <Nav
+        drawerOpen={drawerOpen}
+        setDrawerOpen={setDrawerOpen}
+      />
       <div className={styles.container}>
-        <main
-          //onClick={ () => setOpen( !open ) }
-        >
+        { showDrawer &&
+          <Drawer
+            drawerOpen={drawerOpen}
+            setDrawerOpen={setDrawerOpen}
+          />
+        }
+        <main>
           {children}
         </main>
       </div>
