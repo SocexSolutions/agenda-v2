@@ -4,63 +4,74 @@ import { useState } from 'react';
 import styles from '../styles/Button.module.css';
 
 
-const Button = ({ icon, text, size, onClick, varient, stretch, children }) => {
+const Button = ({
+  icon,
+  text,
+  size,
+  onClick,
+  varient,
+  stretch,
+  children,
+  className
+}) => {
 
   const [ open, setOpen ] = useState( false );
 
-  let className = styles.btn;
+  let classNames = styles.btn;
   // size cases
   switch ( size ) {
     case 'small':
-      className += ' ' + styles.small;
+      classNames += ' ' + styles.small;
       break;
     case 'medium':
-      className += ' ' + styles.medium;
+      classNames += ' ' + styles.medium;
       break;
     case 'large':
-      className += ' ' + styles.large;
+      classNames += ' ' + styles.large;
       break;
     case 'xl':
-      className += ' ' + styles.xl;
+      classNames += ' ' + styles.xl;
       break;
   }
 
   //varient case
   switch ( varient ) {
     case 'primary':
-      className += ' ' + styles.primary;
+      classNames += ' ' + styles.primary;
       break;
     case 'secondary':
-      className += ' ' + styles.secondary;
+      classNames += ' ' + styles.secondary;
       break;
     case 'danger':
-      className += ' ' + styles.danger;
+      classNames += ' ' + styles.danger;
       break;
     case 'disabled':
-      className += ' ' + styles.disabled;
+      classNames += ' ' + styles.disabled;
       break;
     case 'menu':
-      className += ' ' + styles.menu;
+      classNames += ' ' + styles.menu;
       break;
     case 'topic':
-      className += ' ' + styles.topic;
+      classNames += ' ' + styles.topic;
       break;
     case 'icon':
-      className += ' ' + styles.icon;
+      classNames += ' ' + styles.icon;
       break;
 
   }
   //stretch case
   switch ( stretch ) {
     case 'medium':
-      className += ' ' + styles.stretchMedium;
+      classNames += ' ' + styles.stretchMedium;
       break;
     case 'wide':
-      className += ' ' + styles.stretchWide;
+      classNames += ' ' + styles.stretchWide;
       break;
     case false:
       break;
   }
+
+  classNames = className ? classNames + ' ' + className : classNames;
 
   switch ( onClick ) {
     case 'dropDown':
@@ -69,7 +80,7 @@ const Button = ({ icon, text, size, onClick, varient, stretch, children }) => {
 
   return (
     <>
-      <button className={className} onClick={onClick}>
+      <button className={classNames} onClick={onClick}>
         <div className={styles.iconContainer}>
           {icon}
         </div>

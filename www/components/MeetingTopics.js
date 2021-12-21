@@ -6,7 +6,6 @@ import Button from '../components/Button';
 import { useState } from 'react';
 
 
-
 function MeetingTopics( props ) {
   const [ topic, setTopic ] = useState();
 
@@ -46,8 +45,19 @@ function MeetingTopics( props ) {
       <div className={styles.topics}>{topics}</div>
       <p>Add Topic</p>
       <div className={styles.inputContainer}>
-        <Input name="topic" value={topic} onChange={handleChange} onKeyPress={handleEnter} />
-        <Button text="add" varient="secondary" onClick={handleSubmit} />
+        <Input
+          name="topic"
+          placeholder="Topic"
+          value={topic}
+          onChange={handleChange}
+          onKeyPress={handleEnter}
+        />
+        <Button
+          text="add"
+          varient="secondary"
+          onClick={handleSubmit}
+          className={styles.addButton}
+        />
       </div>
     </div>
   );
