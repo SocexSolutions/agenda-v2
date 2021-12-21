@@ -63,8 +63,6 @@ export const userLogin = ( username, password ) => {
   return async function loginUser( dispatch, getState ) {
     try {
 
-      console.log( "bacon" );
-
       const { data } = await client.post(
         "/user/login",
         {
@@ -72,8 +70,6 @@ export const userLogin = ( username, password ) => {
           password
         }
       );
-
-      console.log( data );
 
       document.cookie = `auth-token=${data.token}`;
 
@@ -97,6 +93,11 @@ export const userLogin = ( username, password ) => {
 
 export const userRefresh = ( token ) => {
   return async function refreshUser( dispatch, getState ) {
+
+    // if ( !token ) {
+    //   return;
+    // }
+
     try {
       const { data } = await client.get(
         "user/refresh",
@@ -116,7 +117,9 @@ export const userRefresh = ( token ) => {
           }
         }
       );
+
     } catch ( err ) {
+
       console.log( err );
     }
   };

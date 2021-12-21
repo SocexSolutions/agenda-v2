@@ -1,15 +1,11 @@
-import PropTypes from "prop-types";
-import styles from "../styles/MeetingTopics.module.css";
-import Chip from "./Chip";
-import Input from "./Input";
-import Button from "../components/Button";
-import { useState } from "react";
+import PropTypes from 'prop-types';
+import styles from '../styles/MeetingTopics.module.css';
+import Chip from './Chip';
+import Input from './Input';
+import Button from '../components/Button';
+import { useState } from 'react';
 
-MeetingTopics.PropTypes = {
-  addTopic: PropTypes.func,
-  deleteTopic: PropTypes.func,
-  topics: PropTypes.object
-};
+
 
 function MeetingTopics( props ) {
   const [ topic, setTopic ] = useState();
@@ -19,7 +15,7 @@ function MeetingTopics( props ) {
   }
 
   function handleEnter( event ) {
-    if ( event.key === "Enter" ) {
+    if ( event.key === 'Enter' ) {
       handleSubmit();
     }
   }
@@ -27,7 +23,7 @@ function MeetingTopics( props ) {
   function handleSubmit() {
     if ( topic ) {
       props.addTopic( topic );
-      setTopic( "" );
+      setTopic('');
     }
   }
 
@@ -57,4 +53,9 @@ function MeetingTopics( props ) {
   );
 }
 
+MeetingTopics.propTypes = {
+  addTopic: PropTypes.func,
+  deleteTopic: PropTypes.func,
+  topics: PropTypes.object
+};
 export default MeetingTopics;

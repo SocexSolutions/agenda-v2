@@ -1,24 +1,20 @@
-import PropTypes from "prop-types";
-import styles from "../styles/MeetingParticipants.module.css";
-import Chip from "./Chip";
-import Input from "./Input";
-import Button from "./Button";
-import { useState } from "react";
+import styles from '../styles/MeetingParticipants.module.css';
+import Chip from './Chip';
+import Input from './Input';
+import Button from './Button';
+import { useState } from 'react';
 
-MeetingParticipants.PropTypes = {
-  participants: PropTypes.Array,
-  owner: PropTypes.string,
-};
+
 
 function MeetingParticipants( props ) {
-  const [ participant, setParticipant ] = useState( "" );
+  const [ participant, setParticipant ] = useState('');
 
   function handleChange( event ) {
     setParticipant( event.target.value );
   }
 
   function handleEnter( event ) {
-    if ( event.key === "Enter" ) {
+    if ( event.key === 'Enter' ) {
       handleSubmit();
     }
   }
@@ -26,7 +22,7 @@ function MeetingParticipants( props ) {
   function handleSubmit() {
     if ( participant ) {
       props.addParticipant( participant );
-      setParticipant( "" );
+      setParticipant('');
     }
   }
 

@@ -1,4 +1,4 @@
-import client from "../../client";
+import client from '../../client';
 
 const initialState = {
   openMeeting: {},
@@ -8,24 +8,29 @@ const initialState = {
 const reducer = ( state = initialState, action ) => {
   switch ( action.type ) {
 
-  case "meeting/fetch":
-    return { ...state, openMeeting: action.payload };
+    case 'meeting/fetch':
+      return { ...state, openMeeting: action.payload };
 
-  case "meeting/save":
-    return { ...state, openMeeting: action.payload };
+    case 'meeting/save':
+      return { ...state, openMeeting: action.payload };
 
-  default:
-    return state;
+    default:
+      return state;
   }
 };
 
 export const fetchMeeting = ( meeting_id ) => {
   return async function fetchMeeting( dispatch, getState ) {
     try {
-      const { data } = await client.get( `meeting/${ meeting_id }` );
+      const { data } = await client.get(
+        `meeting/${ meeting_id }`
+        // {
+        //   headers: { 'authorization': document}
+        // }
+      );
 
       dispatch({
-        type: "meeting/fetch",
+        type: 'meeting/fetch',
         payload: {
           ...data
         }
@@ -41,7 +46,7 @@ export const saveMeeting = ( meetingInfo, topics, participants ) => {
   return async function MeetingSave( dispatch, getState ) {
     try {
       const { data } = await client.post(
-        "meeting",
+        'meeting',
         {
           meetingInfo,
           topics,
@@ -50,7 +55,7 @@ export const saveMeeting = ( meetingInfo, topics, participants ) => {
       );
 
       dispatch({
-        type: "meeting/save",
+        type: 'meeting/save',
         payload: {
           ...meetingInfo,
           topics,

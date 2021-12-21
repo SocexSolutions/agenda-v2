@@ -19,7 +19,7 @@ const start = async() => {
     app.use( express.urlencoded({ extended: true }) );
 
     // cors
-    app.use( cors({ origin: 'http://localhost:4000' }) );
+    app.use( cors({ origin: 'http://localhost:3000' }) );
 
     app.use( '/', router );
 
