@@ -3,6 +3,7 @@ import { Provider }    from 'react-redux';
 import { useStore }    from '../store/store';
 import { useEffect }   from 'react';
 import { userRefresh } from '../store/features/user/userSlice';
+import parseCookie     from '../utils/parseCookie';
 
 import '../styles/globals.css';
 
@@ -10,13 +11,9 @@ function MyApp({ Component, pageProps }) {
   const store = useStore({});
 
   useEffect( () => {
-    const pair = document.cookie.split('; ').filter( str => {
-      return 'agenda-auth' === str.split('=')[ 0 ];
-    });
+    const token = parseCookie( document.cookie, 'agenda-auth' );
 
-    const token = pair[ 0 ].split('=')[ 1 ];
-
-    if ( pair.length ) {
+    if ( token ) {
       store.dispatch(
         userRefresh( token )
       );
