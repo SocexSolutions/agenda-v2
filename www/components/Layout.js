@@ -1,13 +1,13 @@
-import styles from "../styles/Layout.module.css";
-import Nav from "./Nav";
-import Drawer from "./Drawer";
-import { useState } from "react";
+import styles from '../styles/Layout.module.css';
+import Nav from './Nav';
+import Drawer from './Drawer';
+import { useState } from 'react';
 
-const pagesWithoutDrawer = new Set( [
-  "home",
-  "Login",
-  "Register"
-] );
+const pagesWithoutDrawer = new Set([
+  'home',
+  'Login',
+  'Register'
+]);
 
 const Layout = ({ children }) => {
 
@@ -29,7 +29,9 @@ const Layout = ({ children }) => {
           />
         }
         <main>
-          {children}
+          <content>
+            {children}
+          </content>
         </main>
       </div>
     </>
