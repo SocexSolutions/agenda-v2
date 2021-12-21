@@ -39,7 +39,7 @@ export const userRegister = ( email, username, password ) => {
         }
       );
 
-      document.cookie = `auth-token=${ data.token }`;
+      document.cookie = `agenda-auth=${ data.token }`;
 
       dispatch({
         type: 'user/register',
@@ -69,7 +69,8 @@ export const userLogin = ( username, password ) => {
         }
       );
 
-      document.cookie = `auth-token=${ data.token }`;
+
+      document.cookie = `agenda-auth=${ data.token }`;
 
       dispatch({
         type: 'user/login',
@@ -89,13 +90,6 @@ export const userLogin = ( username, password ) => {
 
 export const userRefresh = ( token ) => {
   return async function refreshUser( dispatch, getState ) {
-
-    if ( !token ) {
-      return;
-    }
-
-    console.log( token );
-
     try {
       const { data } = await client.get(
         'user/refresh',
@@ -124,7 +118,7 @@ export const userRefresh = ( token ) => {
 export const userLogout = () => {
   return async function logoutUser( dispatch, getState ) {
     const cookie = document.cookie
-    .match( new RegExp( '(^| )' + 'auth-token' + '=([^;]+)' ) );
+    .match( new RegExp( '(^| )' + 'agenda-auth' + '=([^;]+)' ) );
 
 
     if ( cookie ) {

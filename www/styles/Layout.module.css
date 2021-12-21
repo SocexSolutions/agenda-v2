@@ -6,4 +6,11 @@
 
 .container main {
   width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.container content {
+  width: 100%;
+  max-width: 1500px;
 }
