@@ -13,10 +13,10 @@ const Input = ({
   required,
   varient,
   onKeyPress,
-  type,
+  type
 }) => {
 
-  let className = "";
+  let classNames = "";
 
   //size cases
   switch ( size ) {
@@ -50,10 +50,10 @@ const Input = ({
   //varient cases
   switch ( varient ) {
   case "default":
-    className += " " + styles.default;
+    classNames += " " + styles.default;
     break;
   case "outlined":
-    className += " " + styles.outlined;
+    classNames += " " + styles.outlined;
     break;
   }
 
@@ -71,7 +71,7 @@ const Input = ({
         id={id}
         onChange={onChange}
         size={size}
-        className={className}
+        className={classNames}
         onKeyPress={onKeyPress}
       />
     </div>
