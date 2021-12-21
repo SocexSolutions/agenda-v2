@@ -9,6 +9,8 @@ import { useState } from 'react';
 function MeetingParticipants( props ) {
   const [ participant, setParticipant ] = useState('');
 
+  console.log( styles.button );
+
   function handleChange( event ) {
     setParticipant( event.target.value );
   }
@@ -49,18 +51,21 @@ function MeetingParticipants( props ) {
       <p>Participant(s)</p>
       <div className={styles.participantContainer}>{participants}</div>
       <p>Add Participant</p>
-      <Input
-        placeholder="Email"
-        value={participant}
-        onChange={handleChange}
-        onKeyPress={handleEnter}
-      />
-      <Button
-        name="submit"
-        varient="secondary"
-        onClick={handleSubmit}
-        text="add"
-      />
+      <div className={styles.inputContainer}>
+        <Input
+          placeholder="Email"
+          value={participant}
+          onChange={handleChange}
+          onKeyPress={handleEnter}
+        />
+        <Button
+          name="submit"
+          varient="secondary"
+          onClick={handleSubmit}
+          text="add"
+          className={styles.addButton}
+        />
+      </div>
     </div>
   );
 }

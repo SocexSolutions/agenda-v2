@@ -69,6 +69,7 @@ export const userLogin = ( username, password ) => {
         }
       );
 
+
       document.cookie = `agenda-auth=${ data.token }`;
 
       dispatch({
