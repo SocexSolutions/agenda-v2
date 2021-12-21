@@ -1,4 +1,4 @@
-import client from "../../client";
+import client from '../../client';
 
 const initialState = {
   token: null,
@@ -8,22 +8,22 @@ const initialState = {
 };
 
 const reducer = ( state = initialState, action ) => {
-  switch( action.type ) {
+  switch ( action.type ) {
 
-  case "user/register":
-    return action.payload;
+    case 'user/register':
+      return action.payload;
 
-  case "user/login":
-    return action.payload;
+    case 'user/login':
+      return action.payload;
 
-  case "user/refresh":
-    return action.payload;
+    case 'user/refresh':
+      return action.payload;
 
-  case "user/logout":
-    return action.payload;
+    case 'user/logout':
+      return action.payload;
 
-  default:
-    return state;
+    default:
+      return state;
   }
 };
 
@@ -31,7 +31,7 @@ export const userRegister = ( email, username, password ) => {
   return async function registerUser( dispatch, getState ) {
     try {
       const { data } = await client.post(
-        "/user/register",
+        '/user/register',
         {
           email,
           username,
@@ -39,19 +39,17 @@ export const userRegister = ( email, username, password ) => {
         }
       );
 
-      document.cookie = `auth-token=${data.token}`;
+      document.cookie = `agenda-auth=${ data.token }`;
 
-      dispatch(
-        {
-          type: "user/register",
-          payload: {
-            token:    data.token,
-            _id:      data.user._id,
-            username: data.user.username,
-            email:    data.user.email
-          }
+      dispatch({
+        type: 'user/register',
+        payload: {
+          token:    data.token,
+          _id:      data.user._id,
+          username: data.user.username,
+          email:    data.user.email
         }
-      );
+      });
     } catch ( error ) {
 
       console.error( error.message );
@@ -64,26 +62,24 @@ export const userLogin = ( username, password ) => {
     try {
 
       const { data } = await client.post(
-        "/user/login",
+        '/user/login',
         {
           username,
           password
         }
       );
 
-      document.cookie = `auth-token=${data.token}`;
+      document.cookie = `agenda-auth=${ data.token }`;
 
-      dispatch(
-        {
-          type: "user/login",
-          payload: {
-            token:    data.token,
-            _id:      data.user._id,
-            username: data.user.username,
-            email:    data.user.email
-          }
+      dispatch({
+        type: 'user/login',
+        payload: {
+          token:    data.token,
+          _id:      data.user._id,
+          username: data.user.username,
+          email:    data.user.email
         }
-      );
+      });
     } catch ( error ) {
 
       console.error( error.message );
@@ -93,30 +89,23 @@ export const userLogin = ( username, password ) => {
 
 export const userRefresh = ( token ) => {
   return async function refreshUser( dispatch, getState ) {
-
-    // if ( !token ) {
-    //   return;
-    // }
-
     try {
       const { data } = await client.get(
-        "user/refresh",
+        'user/refresh',
         {
-          headers: { "authorization": token }
+          headers: { 'authorization': token }
         }
       );
 
-      dispatch(
-        {
-          type: "user/refresh",
-          payload: {
-            token:    data.token,
-            _id:      data.user._id,
-            username: data.user.username,
-            email:    data.user.email
-          }
+      dispatch({
+        type: 'user/refresh',
+        payload: {
+          token:    data.token,
+          _id:      data.user._id,
+          username: data.user.username,
+          email:    data.user.email
         }
-      );
+      });
 
     } catch ( err ) {
 
@@ -128,21 +117,19 @@ export const userRefresh = ( token ) => {
 export const userLogout = () => {
   return async function logoutUser( dispatch, getState ) {
     const cookie = document.cookie
-      .match( new RegExp( "(^| )" + "auth-token" + "=([^;]+)" ) );
+    .match( new RegExp( '(^| )' + 'agenda-auth' + '=([^;]+)' ) );
 
 
     if ( cookie ) {
-      document.cookie = `${cookie}; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
+      document.cookie = `${ cookie }; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
     }
 
-    window.location.href = "/";
+    window.location.href = '/';
 
-    dispatch(
-      {
-        type: "user/logout",
-        payload: {}
-      }
-    );
+    dispatch({
+      type: 'user/logout',
+      payload: {}
+    });
   };
 };
 

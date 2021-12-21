@@ -1,23 +1,29 @@
-import Layout          from "../components/Layout";
-import { Provider }    from "react-redux";
-import { useStore }    from "../store/store";
-import { useEffect }   from "react";
-import { userRefresh } from "../store/features/user/userSlice";
+import Layout          from '../components/Layout';
+import { Provider }    from 'react-redux';
+import { useStore }    from '../store/store';
+import { useEffect }   from 'react';
+import { userRefresh } from '../store/features/user/userSlice';
 
-import "../styles/globals.css";
+import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }) {
   const store = useStore({});
 
   useEffect( () => {
-    const token = document.cookie.split( "=" )[ 1 ];
+    const pair = document.cookie.split('; ').filter( str => {
+      return 'agenda-auth' === str.split('=')[ 0 ];
+    });
 
-    store.dispatch(
-      userRefresh( token )
-    );
+    const token = pair[ 0 ].split('=')[ 1 ];
+
+    if ( pair.length ) {
+      store.dispatch(
+        userRefresh( token )
+      );
+    }
   });
 
-  return(
+  return (
     <Provider store={store}>
       <Layout>
         <Component store={store} {...pageProps} />
