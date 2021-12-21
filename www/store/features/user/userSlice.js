@@ -127,11 +127,12 @@ export const userLogout = () => {
     const cookie = document.cookie
       .match( new RegExp( "(^| )" + "auth-token" + "=([^;]+)" ) );
 
+
     if ( cookie ) {
       document.cookie = `${cookie}; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
     }
 
-    history.push( "/home" );
+    window.location.href = "/";
 
     dispatch(
       {
