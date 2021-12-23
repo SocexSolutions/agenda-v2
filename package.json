@@ -7,7 +7,8 @@
     "dev": "bash scripts/dev.sh",
     "setup": "bash scripts/setup.sh",
     "test": "bash scripts/test.sh",
-    "coverage": "nyc npm run test"
+    "coverage": "nyc npm run test",
+    "keygen": "node scripts/keygen.js"
   },
   "repository": {
     "type": "git",
