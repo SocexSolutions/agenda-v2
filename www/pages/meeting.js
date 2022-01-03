@@ -1,9 +1,10 @@
-import { Component } from "react";
-import MeetingNameDate from "../components/MeetingNameDate";
-import MeetingTopics from "../components/MeetingTopics";
-import MeetingParticipants from "../components/MeetingParticipants";
-import Button from "../components/Button";
-import { saveMeeting } from "../store/features/meetings/meetingSlice";
+import { Component } from 'react';
+import MeetingNameDate from '../components/MeetingNameDate';
+import MeetingTopics from '../components/MeetingTopics';
+import MeetingParticipants from '../components/MeetingParticipants';
+import Button from '../components/Button';
+import { saveMeeting } from '../store/features/meetings/meetingSlice';
+
 class Meeting extends Component {
   constructor( props ) {
     super( props );
@@ -15,7 +16,7 @@ class Meeting extends Component {
       owner: state.user.email,
       topics: new Set(),
       participants: new Set(),
-      editing: true,
+      editing: true
     };
 
     this.addTopic = this.addTopic.bind( this );
@@ -47,14 +48,14 @@ class Meeting extends Component {
   setMeetingName( event ) {
     this.setState({
       ...this.state,
-      meeting: { ...this.meeting, name: event.target.value },
+      meeting: { ...this.meeting, name: event.target.value }
     });
   }
 
   setMeetingDate( event ) {
     this.setState({
       ...this.state,
-      meeting: { ...this.meeting, date: event.target.value },
+      meeting: { ...this.meeting, date: event.target.value }
     });
   }
 
@@ -77,12 +78,12 @@ class Meeting extends Component {
   setImportance( event ) {
     this.setState({
       ...this.state,
-      meeting: { ...this.meeting, importance: event.target.value },
+      meeting: { ...this.meeting, importance: event.target.value }
     });
   }
 
   saveMeeting() {
-    this.store.dispatch(
+    this.props.store.dispatch(
       saveMeeting({
         meetingInfo: { ...this.state.meeting, owner: this.state.owner },
         topics: this.state.topics,

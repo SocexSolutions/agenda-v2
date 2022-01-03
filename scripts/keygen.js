@@ -1,52 +1,43 @@
-const crypto = require( "crypto" );
-const fs     = require( "fs" );
-const chalk  = require( "chalk" );
+const crypto = require('crypto');
+const fs     = require('fs');
 
 /**
  * Generates a public private key pair to be used by the app.
  */
 function generateKeyPair() {
-  console.log(
-    chalk.blue( "\nInfo: generating keys...\n" )
-  );
+  console.log('Info: generating keys...\n');
 
-  const keyPair = crypto.generateKeyPairSync( "rsa", {
+  const keyPair = crypto.generateKeyPairSync( 'rsa', {
     modulusLength: 4096,
     publicKeyEncoding: {
-      type: "pkcs1",
-      format: "pem",
+      type: 'pkcs1',
+      format: 'pem'
     },
     privateKeyEncoding: {
-      type: "pkcs1",
-      format: "pem",
-    },
+      type: 'pkcs1',
+      format: 'pem'
+    }
   });
 
-  console.log(
-    chalk.blue( "Info: keys created, writing to files...\n" )
-  );
+  console.log('Info: keys created, writing to files...\n');
 
   try {
-    fs.mkdirSync( "./api/keys" );
+    fs.mkdirSync('./api/keys');
   } catch ( e ) {
-    console.log(
-      chalk.yellow( "Warning: Failed to create keys directory\n" )
-    );
+    console.log('Warning: Failed to create keys directory\n');
   }
 
   fs.writeFileSync(
-    "./api/keys/id_rsa_pub.pem",
+    './api/keys/id_rsa_pub.pem',
     keyPair.publicKey
   );
 
   fs.writeFileSync(
-    "./api/keys/id_rsa_priv.pem",
+    './api/keys/id_rsa_priv.pem',
     keyPair.privateKey
   );
 
-  console.log(
-    chalk.green( "Success: Keygen successful\n" )
-  );
+  console.log('Key generation successful.');
 }
 
 generateKeyPair();
