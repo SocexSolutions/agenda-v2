@@ -1,3 +1,8 @@
+.godContainer {
+  display: flex;
+  flex-direction:row;
+}
+
 .container {
   width: 270px;
   background-color: var(--menuColor);
@@ -20,7 +25,15 @@
   width: 22px;
 }
 
+.arrowContainer{
+  margin-top: 30vh;
+  width: 20px;
+  height: 50px;
+  background-color: var(--menuColor);
+}
+
 .arrow {
+  margin-top: 10px;
   color: var(--agendaSecondary);
   float: right;
 }
