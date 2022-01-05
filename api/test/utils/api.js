@@ -1,5 +1,5 @@
-const express = require( "express" );
-const router = require( "../../lib/routes" );
+const express = require('express');
+const router  = require('../../lib/routes');
 
 const app = express();
 
@@ -11,13 +11,13 @@ const api = {
       app.use( express.json() );
       app.use( express.urlencoded({ extended: true }) );
 
-      app.use( "/", router );
+      app.use( '/', router );
 
-      const port = process.env.PORT || 4000;
+      const port = process.env.PORT || 5000;
 
       server = app.listen( port );
     } catch ( error ) {
-      console.error( "agenda api failed to start: " + error.message );
+      console.error( 'agenda api failed to start: ' + error.message );
     }
   },
 
@@ -25,9 +25,9 @@ const api = {
     try {
       server.close();
     } catch ( error ) {
-      console.error( "agenda api failed to stop: " + error.message );
+      console.error( 'agenda api failed to stop: ' + error.message );
     }
-  },
+  }
 };
 
 module.exports = api;

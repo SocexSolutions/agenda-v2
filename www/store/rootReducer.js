@@ -1,7 +1,7 @@
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
 
-import userReducer    from "./features/user/userSlice";
-import meetingReducer from "./features/meetings/meetingSlice";
+import userReducer    from './features/user/userSlice';
+import meetingReducer from './features/meetings/meetingSlice';
 
 const rootReducer = combineReducers({
   user: userReducer,

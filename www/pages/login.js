@@ -1,12 +1,12 @@
-import { Component } from "react";
-import { userLogin } from "../store/features/user/userSlice";
-import styles from "../styles/Register.module.css";
-import Button from "../components/Button";
-import Input from "../components/Input";
+import { Component } from 'react';
+import { userLogin } from '../store/features/user/userSlice';
+import styles from '../styles/Register.module.css';
+import Button from '../components/Button';
+import Input from '../components/Input';
 
 const initialState = {
-  username: "",
-  password: ""
+  username: '',
+  password: ''
 };
 
 class Login extends Component {
@@ -21,7 +21,7 @@ class Login extends Component {
 
   handleChange( event ) {
     this.setState({
-      [event.target.name]: event.target.value,
+      [ event.target.name ]: event.target.value
     });
   }
 

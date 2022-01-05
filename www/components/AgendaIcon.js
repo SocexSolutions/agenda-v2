@@ -1,6 +1,6 @@
-import CalendarTodayRoundedIcon from "@material-ui/icons/CalendarTodayRounded";
-import AccessAlarmRoundedIcon from "@material-ui/icons/AccessAlarmRounded";
-import styles from "../styles/AgendaIcon.module.css";
+import CalendarTodayRoundedIcon from '@material-ui/icons/CalendarTodayRounded';
+import AccessAlarmRoundedIcon from '@material-ui/icons/AccessAlarmRounded';
+import styles from '../styles/AgendaIcon.module.css';
 
 function AgendaIcon() {
   return (

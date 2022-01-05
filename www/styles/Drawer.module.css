@@ -20,6 +20,10 @@
   width: 22px;
 }
 
+.arrowContainer{
+  width: 270;
+}
+
 .arrow {
   color: var(--agendaSecondary);
   float: right;

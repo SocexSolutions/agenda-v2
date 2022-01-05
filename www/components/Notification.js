@@ -1,19 +1,18 @@
-import React from "react";
-import styles from "../styles/Notification.module.css";
-import classNames from "classnames";
-import PropTypes from "prop-types";
-import { useState } from "react";
+import React from 'react';
+import styles from '../styles/Notification.module.css';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
 
-import CancelPresentationIcon from "@material-ui/icons/CancelPresentation";
+import CancelPresentationIcon from '@material-ui/icons/CancelPresentation';
 
 const Notification = ({ message, error }) => {
   const [ close, setClose ] = useState( false );
 
-  if( error == true ) {
-    error = "Error:";
-  }
-  else {
-    error == "Success:";
+  if ( error === true ) {
+    error = 'Error:';
+  } else {
+    error === 'Success:';
   }
 
   return (
@@ -38,7 +37,7 @@ Notification.propTypes = {
 };
 
 Notification.defaultProps = {
-  message: "Something went wrong",
+  message: 'Something went wrong',
   error: true
 };
 
