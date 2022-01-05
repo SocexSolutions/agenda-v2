@@ -13,7 +13,7 @@ const api = {
 
       app.use( '/', router );
 
-      const port = process.env.PORT || 4000;
+      const port = process.env.PORT || 5000;
 
       server = app.listen( port );
     } catch ( error ) {

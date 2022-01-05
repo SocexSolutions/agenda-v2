@@ -5,8 +5,7 @@ const db       = require('./db');
 const router   = require('./routes');
 const jobi     = require('@starryinternet/jobi');
 
-const app      = express();
-
+const app = express();
 
 const start = async() => {
   try {
