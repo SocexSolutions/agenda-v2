@@ -1,4 +1,4 @@
-const Crypto = require( "crypto" );
+const Crypto = require('crypto');
 
 module.exports = {
   /**
@@ -18,8 +18,8 @@ module.exports = {
       salt,
       10000,
       64,
-      "sha512"
-    ).toString( "hex" );
+      'sha512'
+    ).toString('hex');
 
     return reqHash === hash;
   },
@@ -32,7 +32,7 @@ module.exports = {
   */
   genPassword( password ) {
     // create salt (random information)
-    const salt = Crypto.randomBytes( 32 ).toString( "hex" );
+    const salt = Crypto.randomBytes( 32 ).toString('hex');
 
     // generate hash with new password and salt
     const hash = Crypto.pbkdf2Sync(
@@ -40,8 +40,8 @@ module.exports = {
       salt,
       10000,
       64,
-      "sha512"
-    ).toString( "hex" );
+      'sha512'
+    ).toString('hex');
 
     return {
       salt,

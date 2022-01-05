@@ -23,6 +23,8 @@
 .arrow {
   color: var(--agendaSecondary);
   float: right;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .arrowClose {

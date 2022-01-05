@@ -1,7 +1,7 @@
-import styles from "../styles/Inbox.module.css";
-import Button from "../components/Button";
+import styles from '../styles/Inbox.module.css';
+import Button from '../components/Button';
 
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 const MailBox = () => {
   return (

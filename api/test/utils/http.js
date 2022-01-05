@@ -1,6 +1,6 @@
-const http = require( "http" );
+const http = require('http');
 
-const hostname = "localhost";
+const hostname = 'localhost';
 const port     = 4000;
 
 
@@ -15,9 +15,9 @@ module.exports = {
       hostname,
       port,
       path,
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       }
     };
 
@@ -39,10 +39,10 @@ module.exports = {
       hostname,
       port,
       path,
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "Content-Length": base64Encoded.length
+        'Content-Type': 'application/json',
+        'Content-Length': base64Encoded.length
       }
     };
 
@@ -58,20 +58,20 @@ module.exports = {
  */
 function makeRequest( options, data ) {
   return new Promise( ( resolve, reject ) => {
-    let payload = "";
+    let payload = '';
 
     const req = http.request( options, ( res ) => {
-      res.setEncoding( "utf8" );
+      res.setEncoding('utf8');
 
-      res.on( "data", ( chunk ) => {
+      res.on( 'data', ( chunk ) => {
         payload = payload + chunk;
       });
 
-      res.on( "end", () => {
+      res.on( 'end', () => {
         resolve( payload );
       });
 
-      res.on( "error", ( error ) => {
+      res.on( 'error', ( error ) => {
         reject( error );
       });
     });
@@ -83,4 +83,3 @@ function makeRequest( options, data ) {
     req.end();
   });
 }
-

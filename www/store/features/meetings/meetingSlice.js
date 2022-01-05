@@ -42,26 +42,26 @@ export const fetchMeeting = ( meeting_id ) => {
   };
 };
 
-export const saveMeeting = ( meetingInfo, topics, participants ) => {
+export const saveMeeting = ( meeting ) => {
   return async function MeetingSave( dispatch, getState ) {
+
     try {
+
+      meeting.topics       = Array.from( meeting.topics );
+      meeting.participants = Array.from( meeting.participants );
+
       const { data } = await client.post(
         'meeting',
-        {
-          meetingInfo,
-          topics,
-          participants
-        }
+        meeting
       );
 
       dispatch({
         type: 'meeting/save',
         payload: {
-          ...meetingInfo,
-          topics,
-          participants
+          meeting
         }
       });
+
     } catch ( error ) {
 
       console.error( error.message );

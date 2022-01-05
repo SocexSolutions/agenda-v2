@@ -1,15 +1,15 @@
-import styles from "../styles/DropDown.module.css";
-import Button from "../components/Button";
+import styles from '../styles/DropDown.module.css';
+import Button from '../components/Button';
 
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import SettingsIcon from "@material-ui/icons/Settings";
-import AccountTreeIcon from "@material-ui/icons/AccountTree";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import LogoutIcon from "@material-ui/icons/ExitToApp";
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import SettingsIcon from '@material-ui/icons/Settings';
+import AccountTreeIcon from '@material-ui/icons/AccountTree';
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
+import LogoutIcon from '@material-ui/icons/ExitToApp';
 
-import { useStore }    from "../store/store";
-import { userLogout } from "../store/features/user/userSlice";
-import { useEffect }   from "react";
+import { useStore }    from '../store/store';
+import { userLogout } from '../store/features/user/userSlice';
+import { useEffect }   from 'react';
 
 
 const DropDown = () => {

@@ -1,8 +1,8 @@
-import { applyMiddleware, createStore } from "redux";
-import { useMemo }                      from "react";
-import thunkMiddleware                  from "redux-thunk";
-import { composeWithDevTools }          from "redux-devtools-extension";
-import rootReducer                      from "./rootReducer";
+import { applyMiddleware, createStore } from 'redux';
+import { useMemo }                      from 'react';
+import thunkMiddleware                  from 'redux-thunk';
+import { composeWithDevTools }          from 'redux-devtools-extension';
+import rootReducer                      from './rootReducer';
 
 let store;
 
@@ -21,13 +21,13 @@ export const initializeStore = ( preloadedState ) => {
   if ( preloadedState && store ) {
     _store = initStore({
       ...store.getState(),
-      ...preloadedState,
+      ...preloadedState
     });
 
     store = undefined;
   }
 
-  if ( typeof window === "undefined" ) {
+  if ( typeof window === 'undefined' ) {
     return _store;
   }
 

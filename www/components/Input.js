@@ -1,6 +1,6 @@
-import React from "react";
-import styles from "../styles/LogReg.module.css";
-import PropTypes from "prop-types";
+import React from 'react';
+import styles from '../styles/LogReg.module.css';
+import PropTypes from 'prop-types';
 
 const Input = ({
   label,
@@ -16,45 +16,45 @@ const Input = ({
   type
 }) => {
 
-  let classNames = "";
+  let classNames = '';
 
   //size cases
   switch ( size ) {
-  case "xs":
-    size = "15";
-    break;
-  case "small":
-    size = "20";
-    break;
-  case "medium":
-    size = "30";
-    break;
-  case "large":
-    size = "40";
-    break;
-  case "xl":
-    size = "50";
-    break;
+    case 'xs':
+      size = '15';
+      break;
+    case 'small':
+      size = '20';
+      break;
+    case 'medium':
+      size = '30';
+      break;
+    case 'large':
+      size = '40';
+      break;
+    case 'xl':
+      size = '50';
+      break;
   }
 
   //required cases
   switch ( required ) {
-  case true:
-    required = " *";
-    break;
-  case false:
-    required = "";
-    break;
+    case true:
+      required = ' *';
+      break;
+    case false:
+      required = '';
+      break;
   }
 
   //varient cases
   switch ( varient ) {
-  case "default":
-    classNames += " " + styles.default;
-    break;
-  case "outlined":
-    classNames += " " + styles.outlined;
-    break;
+    case 'default':
+      classNames += ' ' + styles.default;
+      break;
+    case 'outlined':
+      classNames += ' ' + styles.outlined;
+      break;
   }
 
   return (
@@ -86,15 +86,15 @@ Input.propTypes = {
   size: PropTypes.string,
   required: PropTypes.bool,
   varient: PropTypes.string,
-  type: PropTypes.string,
+  type: PropTypes.string
 };
 
 Input.defaultProps = {
-  type: "",
-  label: "",
-  placeholder: "",
-  size: "20",
-  varient: "default",
+  type: '',
+  label: '',
+  placeholder: '',
+  size: '20',
+  varient: 'default'
 };
 
 export default Input;

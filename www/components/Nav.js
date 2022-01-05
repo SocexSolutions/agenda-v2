@@ -1,15 +1,15 @@
-import { useSelector } from "react-redux";
-import PropTypes from "prop-types";
-import Link from "next/link";
-import Button from "./Button";
-import DropDown from "./DropDown";
-import styles from "../styles/Nav.module.css";
-import AgendaIcon from "./AgendaIcon";
-import classNames from "classNames";
-import MenuIcon from "@material-ui/icons/Menu";
-import HomeOutlinedIcon from "@material-ui/icons/HomeOutlined";
-import AddToPhotosOutlinedIcon from "@material-ui/icons/AddToPhotosOutlined";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import Link from 'next/link';
+import Button from './Button';
+import DropDown from './DropDown';
+import styles from '../styles/Nav.module.css';
+import AgendaIcon from './AgendaIcon';
+import classNames from 'classNames';
+import MenuIcon from '@material-ui/icons/Menu';
+import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
+import AddToPhotosOutlinedIcon from '@material-ui/icons/AddToPhotosOutlined';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 const selectUser = ( state ) => state.user;
 

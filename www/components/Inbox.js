@@ -1,4 +1,4 @@
-import styles from "../styles/Inbox.module.css";
+import styles from '../styles/Inbox.module.css';
 
 const Inbox = () => {
   return (

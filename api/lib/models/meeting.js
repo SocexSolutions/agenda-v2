@@ -1,4 +1,4 @@
-const mongoose = require( "mongoose" );
+const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
 
 const meetingSchema = new Schema(
@@ -9,7 +9,7 @@ const meetingSchema = new Schema(
     },
     owner_id: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true
     },
     date: {
@@ -18,8 +18,8 @@ const meetingSchema = new Schema(
     }
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 );
 
-module.exports = mongoose.model( "Meeting", meetingSchema );
+module.exports = mongoose.model( 'Meeting', meetingSchema );
