@@ -1,12 +1,12 @@
-const JsonWebToken = require( "jsonwebtoken" );
-const fs           = require( "fs" );
-const path         = require( "path" );
+const JsonWebToken = require('jsonwebtoken');
+const fs           = require('fs');
+const path         = require('path');
 
-const pathToPrivKey = path.join( __dirname, "../../keys/id_rsa_priv.pem" );
-const pathToPubKey  = path.join( __dirname, "../../keys/id_rsa_pub.pem" );
+const pathToPrivKey = path.join( __dirname, '../../keys/id_rsa_priv.pem' );
+const pathToPubKey  = path.join( __dirname, '../../keys/id_rsa_pub.pem' );
 
-const PRIV_KEY  = fs.readFileSync( pathToPrivKey, "utf8" );
-const PUB_KEY   = fs.readFileSync( pathToPubKey, "utf8" );
+const PRIV_KEY  = fs.readFileSync( pathToPrivKey, 'utf8' );
+const PUB_KEY   = fs.readFileSync( pathToPubKey, 'utf8' );
 
 module.exports = {
   /**
@@ -18,7 +18,7 @@ module.exports = {
   issueJWT( user ) {
     const _id = user._id;
 
-    const expiresIn = "1d";
+    const expiresIn = '1d';
 
     const payload = {
       sub: _id, // sub property of jwt (subject) identified who it is for
@@ -31,24 +31,24 @@ module.exports = {
       PRIV_KEY,
       {
         expiresIn,
-        algorithm: "RS256",
+        algorithm: 'RS256'
       }
     );
 
     // Bearer is the name of the JWT auth strategy
     return {
-      token: "Bearer " + signedToken,
+      token: 'Bearer ' + signedToken,
       expiresIn
     };
   },
 
   verifyJwt( signedToken ) {
-    const token = signedToken.split( " " )[ 1 ];
+    const token = signedToken.split(' ')[ 1 ];
 
     const decoded = JsonWebToken.verify(
       token,
       PUB_KEY,
-      { algorithms: [ "RS256" ] }
+      { algorithms: [ 'RS256' ] }
     );
 
     return decoded;

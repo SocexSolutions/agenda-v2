@@ -5,11 +5,8 @@ import Button from './Button';
 import { useState } from 'react';
 
 
-
 function MeetingParticipants( props ) {
   const [ participant, setParticipant ] = useState('');
-
-  console.log( styles.button );
 
   function handleChange( event ) {
     setParticipant( event.target.value );

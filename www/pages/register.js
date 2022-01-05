@@ -1,13 +1,13 @@
-import { Component } from "react";
-import { userRegister } from "../store/features/user/userSlice";
-import styles from "../styles/Register.module.css";
-import Input from "../components/Input";
-import Button from "../components/Button";
+import { Component } from 'react';
+import { userRegister } from '../store/features/user/userSlice';
+import styles from '../styles/Register.module.css';
+import Input from '../components/Input';
+import Button from '../components/Button';
 
 const initialState = {
-  email:    "",
-  username: "",
-  password: ""
+  email:    '',
+  username: '',
+  password: ''
 };
 
 class Register extends Component {
@@ -22,11 +22,9 @@ class Register extends Component {
   }
 
   handleChange( event ) {
-    this.setState(
-      {
-        [event.target.name]: event.target.value
-      }
-    );
+    this.setState({
+      [ event.target.name ]: event.target.value
+    });
   }
 
   handleSubmit( event ) {

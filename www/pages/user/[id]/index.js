@@ -1,7 +1,6 @@
-import Inbox from "../../../components/Inbox";
+import Inbox from '../../../components/Inbox';
 
 const user = ({ children }) => {
-
   return (
     <Inbox />
   );

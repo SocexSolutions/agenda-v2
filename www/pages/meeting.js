@@ -1,9 +1,11 @@
-import { Component } from "react";
-import MeetingNameDate from "../components/MeetingNameDate";
-import MeetingTopics from "../components/MeetingTopics";
-import MeetingParticipants from "../components/MeetingParticipants";
-import Button from "../components/Button";
-import { saveMeeting } from "../store/features/meetings/meetingSlice";
+import { Component } from 'react';
+import MeetingNameDate from '../components/MeetingNameDate';
+import MeetingTopics from '../components/MeetingTopics';
+import MeetingParticipants from '../components/MeetingParticipants';
+import Button from '../components/Button';
+import { saveMeeting } from '../store/features/meetings/meetingSlice';
+import styles from'../styles/MeetingPage.module.css';
+
 class Meeting extends Component {
   constructor( props ) {
     super( props );
@@ -11,11 +13,12 @@ class Meeting extends Component {
     const state = this.props.store.getState();
 
     this.state = {
-      meeting: {},
-      owner: state.user.email,
+      name: '',
+      date: new Date(),
+      owner_id: state.user._id,
       topics: new Set(),
       participants: new Set(),
-      editing: true,
+      editing: true
     };
 
     this.addTopic = this.addTopic.bind( this );
@@ -47,14 +50,14 @@ class Meeting extends Component {
   setMeetingName( event ) {
     this.setState({
       ...this.state,
-      meeting: { ...this.meeting, name: event.target.value },
+      name: event.target.value
     });
   }
 
   setMeetingDate( event ) {
     this.setState({
       ...this.state,
-      meeting: { ...this.meeting, date: event.target.value },
+      date: event.target.value
     });
   }
 
@@ -77,14 +80,16 @@ class Meeting extends Component {
   setImportance( event ) {
     this.setState({
       ...this.state,
-      meeting: { ...this.meeting, importance: event.target.value },
+      meeting: { ...this.meeting, importance: event.target.value }
     });
   }
 
   saveMeeting() {
-    this.store.dispatch(
+    this.props.store.dispatch(
       saveMeeting({
-        meetingInfo: { ...this.state.meeting, owner: this.state.owner },
+        name: this.state.name,
+        date: this.state.date,
+        owner_id: this.state.owner_id,
         topics: this.state.topics,
         participants: this.state.participants
       })
@@ -113,7 +118,7 @@ class Meeting extends Component {
           addParticipant={this.addParticipant}
           deleteParticipant={this.deleteParticipant}
         />
-        <Button onClick={this.saveMeeting} text="submit" />
+        <Button className={styles.meetingButton} onClick={this.saveMeeting} text="submit" />
       </div>
     );
   }

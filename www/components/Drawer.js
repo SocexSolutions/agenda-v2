@@ -1,12 +1,12 @@
-import styles from "../styles/Drawer.module.css";
-import PropTypes from "prop-types";
-import Button from "../components/Button";
-import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIosTwoTone";
+import styles from '../styles/Drawer.module.css';
+import PropTypes from 'prop-types';
+import Button from '../components/Button';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIosTwoTone';
 
 
-import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
-import CheckBoxOutlinedIcon from "@material-ui/icons/Checkboxoutlined";
-import CancelOutlinedIcon from "@material-ui/icons/CancelOutlined";
+import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
+import CheckBoxOutlinedIcon from '@material-ui/icons/Checkboxoutlined';
+import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 
 const Drawer = ({ drawerOpen, setDrawerOpen }) => {
 

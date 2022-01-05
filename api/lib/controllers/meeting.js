@@ -1,23 +1,23 @@
-const mongoose    = require( "mongoose" );
-const Meeting     = require( "../models/meeting" );
-const Topic       = require( "../models/topic" );
-const Participant = require( "../models/participant" );
-const ObjectID    = require( "mongoose" ).Types.ObjectId;
-const logger      = require( "@starryinternet/jobi" );
+const mongoose    = require('mongoose');
+const Meeting     = require('../models/meeting');
+const Topic       = require('../models/topic');
+const Participant = require('../models/participant');
+const ObjectID    = require('mongoose').Types.ObjectId;
+const logger      = require('@starryinternet/jobi');
 
 module.exports = {
   index: async( req, res ) => {
-    logger.debug( "meeting index route" );
+    logger.debug('meeting index route');
 
     try {
       const meetings = await Meeting.find({});
 
-      logger.debug( "response: " + JSON.stringify( meetings ) );
+      logger.debug( 'response: ' + JSON.stringify( meetings ) );
       res.status( 200 ).send( meetings );
 
     } catch ( error ) {
 
-      logger.error( "Meeting index failed: " + error.message );
+      logger.error( 'Meeting index failed: ' + error.message );
       res.status( 500 ).send( error.message );
     }
   },
@@ -31,41 +31,41 @@ module.exports = {
    * @returns {Promise<Object>} created meeting data corresponding to params
    */
   display: async( req, res ) => {
-    logger.debug( "display meeting " + JSON.stringify( req.params ) );
+    logger.debug( 'display meeting ' + JSON.stringify( req.params ) );
 
     const { _id } = req.params;
 
     try {
-      const meeting = await Meeting.aggregate( [
+      const meeting = await Meeting.aggregate([
         {
           $match: {
-            _id: new ObjectID( _id ),
-          },
+            _id: new ObjectID( _id )
+          }
         },
         {
           $lookup: {
-            from: "participants",
-            localField: "_id",
-            foreignField: "meeting_id",
-            as: "participants",
-          },
+            from: 'participants',
+            localField: '_id',
+            foreignField: 'meeting_id',
+            as: 'participants'
+          }
         },
         {
           $lookup: {
-            from: "topics",
-            localField: "_id",
-            foreignField: "meeting_id",
-            as: "topics"
+            from: 'topics',
+            localField: '_id',
+            foreignField: 'meeting_id',
+            as: 'topics'
           }
         }
-      ] );
+      ]);
 
-      logger.debug( "found: " + JSON.stringify( meeting ) );
+      logger.debug( 'found: ' + JSON.stringify( meeting ) );
       res.status( 200 ).send( meeting );
 
     } catch ( error ) {
 
-      logger.error( "error getting meeting: " + error.message );
+      logger.error( 'error getting meeting: ' + error.message );
       res.status( 500 ).send( error.message );
     }
   },
@@ -86,9 +86,12 @@ module.exports = {
     let session;
 
     try {
-      logger.debug( "create meeting req.body: " + JSON.stringify( req.body ) );
+      logger.debug( 'create meeting req.body: ' + JSON.stringify( req.body ) );
 
-      let meeting      = req.body.meeting;
+      const name        = req.body.name;
+      const date        = req.body.date;
+      const owner_id    = req.body.owner_id;
+
       let topics       = req.body.topics || null;
       let participants = req.body.participants || null;
 
@@ -96,13 +99,15 @@ module.exports = {
 
       await session.withTransaction( async() => {
 
-        meeting = await Meeting.create(
-          meeting
-        );
+        const meeting = await Meeting.create({
+          name,
+          date,
+          owner_id
+        });
 
         if ( topics ) {
           topics = topics.map( topic => {
-            return { name: topic.name, meeting_id: meeting._id };
+            return { name: topic, meeting_id: meeting._id };
           });
 
           topics = await Topic.insertMany( topics );
@@ -110,26 +115,27 @@ module.exports = {
 
         if ( participants ) {
           participants = participants.map( participant => {
-            return { email: participant.email, meeting_id: meeting._id };
+            return { email: participant, meeting_id: meeting._id };
           });
 
           participants = await Participant.insertMany( participants );
         }
       });
 
-      logger.debug( "meeting transaction completed" );
-      logger.debug( "meeting: " + JSON.stringify( meeting ) );
-      logger.debug( "topics: " + JSON.stringify( topics ) );
-      logger.debug( "participants: " + JSON.stringify( participants ) );
+      logger.debug( 'meeting: ' + JSON.stringify({
+        date, owner_id, topics, participants
+      }) );
 
       res.status( 201 ).send({
-        meeting,
+        owner_id,
+        name,
+        date,
         topics,
         participants
       });
 
     } catch ( error ) {
-      logger.log( "error", error.message );
+      logger.log( 'error', error.message );
 
       console.log( error.message );
 
@@ -156,13 +162,13 @@ module.exports = {
     let session;
 
     try {
-      logger.debug( "update meeting req.body: " + JSON.stringify( req.body ) );
+      logger.debug( 'update meeting req.body: ' + JSON.stringify( req.body ) );
 
       const {
         _id,
         name,
         date,
-        owner_id,
+        owner_id
       } = req.body.meeting;
 
       let topics       = req.body.topics || null;
@@ -210,10 +216,10 @@ module.exports = {
         }
       });
 
-      logger.debug( "meeting transaction completed" );
-      logger.debug( "meeting: " + JSON.stringify( meeting ) );
-      logger.debug( "topics: " + JSON.stringify( topics ) );
-      logger.debug( "participants: " + JSON.stringify( participants ) );
+      logger.debug('meeting transaction completed');
+      logger.debug( 'meeting: ' + JSON.stringify( meeting ) );
+      logger.debug( 'topics: ' + JSON.stringify( topics ) );
+      logger.debug( 'participants: ' + JSON.stringify( participants ) );
 
       res.status( 201 ).send({
         meeting,
@@ -223,7 +229,7 @@ module.exports = {
 
     } catch ( error ) {
 
-      logger.error( "error updating meeting " + error.message );
+      logger.error( 'error updating meeting ' + error.message );
       res.status( 500 ).send( error.message );
     } finally {
       session.endSession();
