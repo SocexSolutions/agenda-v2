@@ -11,39 +11,44 @@ import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
 const Drawer = ({ drawerOpen, setDrawerOpen }) => {
 
   return (
-    <div
-      className={`${ styles.container } ${ !drawerOpen && styles.closed }`}
-    >
-      <h2>Socnet</h2>
-      <Button
-        text='Upcoming'
-        size='large'
-        stretch='wide'
-        varient='menu'
-        icon={<DoubleArrowIcon style={{ color: 'var(--agendaPurple)' }} /> }
-      />
-      <Button
-        text='Voting'
-        size='large'
-        stretch='wide'
-        varient='menu'
-        icon={<CheckBoxOutlinedIcon style={{ color: 'var(--agendaGreen)' }} />}
-      />
-      <Button
-        text='Completed'
-        size='large'
-        stretch='wide'
-        varient='menu'
-        icon={<CancelOutlinedIcon style={{ color: 'var(--danger)' }} />}
-      />
+    <div className={styles.godContainer}>
       <div
-        className={styles.arrow}
+        className={`${ styles.container } ${ !drawerOpen && styles.closed }`}
+      >
+        <h2>Socnet</h2>
+        <Button
+          text='Upcoming'
+          size='large'
+          stretch='wide'
+          varient='menu'
+          icon={<DoubleArrowIcon style={{ color: "var(--agendaPurple)" }} /> }
+        />
+        <Button
+          text='Voting'
+          size='large'
+          stretch='wide'
+          varient='menu'
+          icon={<CheckBoxOutlinedIcon style={{ color: "var(--agendaGreen)" }} />}
+        />
+        <Button
+          text='Completed'
+          size='large'
+          stretch='wide'
+          varient='menu'
+          icon={<CancelOutlinedIcon style={{ color: "var(--danger)" }} />}
+        />
+
+      </div>
+      <div
+        className={styles.arrowContainer}
         onClick={() => setDrawerOpen( !drawerOpen )}
       >
-        <div
-          className={drawerOpen ? styles.arrowClose : styles.arrowOpen}
-        >
-          <ArrowForwardIosIcon />
+        <div className={styles.arrow}>
+          <div
+            className={drawerOpen ? styles.arrowClose : styles.arrowOpen}
+          >
+            <ArrowForwardIosIcon />
+          </div>
         </div>
       </div>
     </div>
