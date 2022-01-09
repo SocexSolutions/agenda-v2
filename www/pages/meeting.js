@@ -1,10 +1,10 @@
 import { Component } from 'react';
-import MeetingNameDate from '../components/MeetingNameDate';
-import MeetingTopics from '../components/MeetingTopics';
-import MeetingParticipants from '../components/MeetingParticipants';
+import HeaderForm from '../components/Bundles/Meeting/HeaderForm';
+import TopicsForm from '../components/Bundles/Meeting/TopicsForm';
+import ParticipantsForm from '../components/Bundles/Meeting/ParticipantsForm';
 import Button from '../components/Button';
 import { saveMeeting } from '../store/features/meetings/meetingSlice';
-import styles from'../styles/MeetingPage.module.css';
+import styles from '../styles/MeetingPage.module.css';
 
 class Meeting extends Component {
   constructor( props ) {
@@ -15,36 +15,32 @@ class Meeting extends Component {
     this.state = {
       name: '',
       date: new Date(),
-      owner_id: state.user._id,
-      topics: new Set(),
-      participants: new Set(),
+      ownerId: state.user._id,
+      ownerEmail: state.user.email,
+      topics: [],
+      participants: [],
       editing: true
     };
 
-    this.addTopic = this.addTopic.bind( this );
-    this.deleteTopic = this.deleteTopic.bind( this );
+    this.setParticipants = this.setParticipants.bind( this );
+    this.setTopics = this.setTopics.bind( this );
     this.setMeetingName = this.setMeetingName.bind( this );
     this.setMeetingDate = this.setMeetingDate.bind( this );
-    this.addParticipant = this.addParticipant.bind( this );
-    this.deleteParticipant = this.deleteParticipant.bind( this );
-    this.setImportance = this.setImportance.bind( this );
     this.saveMeeting = this.saveMeeting.bind( this );
   }
 
-  addTopic( topicName ) {
-    const newTopics = this.state.topics;
-
-    newTopics.add( topicName );
-
-    this.setState({ ...this.state, topics: newTopics });
+  setTopics( topics ) {
+    this.setState({
+      ...this.state,
+      topics
+    });
   }
 
-  deleteTopic( deleteTopic ) {
-    const newTopics = this.state.topics;
-
-    newTopics.delete( deleteTopic );
-
-    this.setState({ ...this.state, topics: newTopics });
+  setParticipants( participants ) {
+    this.setState({
+      ...this.state,
+      participants
+    });
   }
 
   setMeetingName( event ) {
@@ -58,29 +54,6 @@ class Meeting extends Component {
     this.setState({
       ...this.state,
       date: event.target.value
-    });
-  }
-
-  addParticipant( participant ) {
-    const newParticipants = this.state.participants;
-
-    newParticipants.add( participant );
-
-    this.setState({ ...this.state, participants: newParticipants });
-  }
-
-  deleteParticipant( deleteParticipant ) {
-    const newParticipants = this.state.participants;
-
-    newParticipants.delete( deleteParticipant );
-
-    this.setState({ ...this.state, participants: newParticipants });
-  }
-
-  setImportance( event ) {
-    this.setState({
-      ...this.state,
-      meeting: { ...this.meeting, importance: event.target.value }
     });
   }
 
@@ -99,26 +72,27 @@ class Meeting extends Component {
   render() {
     return (
       <div>
-        <MeetingNameDate
-          setImportance={this.setImportance}
-          importance={this.state.importance}
+        <HeaderForm
           setMeetingName={this.setMeetingName}
           meetingName={this.state.meetingName}
           setMeetingDate={this.setMeetingDate}
           meetingDate={this.state.meetingDate}
         />
-        <MeetingTopics
+        <TopicsForm
           topics={this.state.topics}
-          addTopic={this.addTopic}
-          deleteTopic={this.deleteTopic}
+          setTopics={this.setTopics}
         />
-        <MeetingParticipants
-          owner={this.state.owner}
+        <ParticipantsForm
+          owner={this.state.ownerEmail}
           participants={this.state.participants}
-          addParticipant={this.addParticipant}
-          deleteParticipant={this.deleteParticipant}
+          setParticipants={this.setParticipants}
         />
-        <Button className={styles.meetingButton} onClick={this.saveMeeting} text="submit" />
+        <Button
+          varient='secondary'
+          className={styles.meetingButton}
+          onClick={this.saveMeeting}
+          text='submit'
+        />
       </div>
     );
   }
