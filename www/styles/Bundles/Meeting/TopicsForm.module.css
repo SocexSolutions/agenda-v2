@@ -1,0 +1,12 @@
+.container {
+  background-color: var(--menuColor);
+  color: var(--textBlue);
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-bottom: 20px;
+  padding: 15px;
+}
+
+.container h2 {
+  margin-top: -5px;
+}

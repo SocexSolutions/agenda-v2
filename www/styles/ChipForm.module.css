@@ -1,0 +1,18 @@
+.topics {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.topics >* {
+  margin-right: 5px;
+}
+
+.inputContainer {
+  display: flex;
+  align-items: flex-start;
+}
+
+.addButton {
+  margin-right: 0px;
+  margin-left: 30px;
+}

@@ -11,7 +11,7 @@ if [ ! "$( docker ps -q -f name=mongo )" ]; then
 
   if [ ! "$P3" ]; then
 
-    printf "\n creating new mongo container\n";
+    printf "\n creating new mongo container \n";
 
     docker container run -d -p 27017:27017 --name=mongo mongo
 
