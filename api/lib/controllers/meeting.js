@@ -1,5 +1,6 @@
 const mongoose    = require('mongoose');
 const Meeting     = require('../models/meeting');
+const User        = require('../models/user');
 const Topic       = require('../models/topic');
 const Participant = require('../models/participant');
 const ObjectID    = require('mongoose').Types.ObjectId;
@@ -71,55 +72,100 @@ module.exports = {
   },
 
   /**
-   * Create a meeting
+   * Create or update a meeting
    * @param {Object} req - request object
    * @param {string} req.body.name - meeting name
    * @param {string} req.body.date - meeting date
-   * @param {string} req.body.owner_id - meeting owner's id
+   * @param {string} req.body.ownerId - meeting owner's id
    * @param {Object[]} req.body.topics - topics array that fits the topics model
    * @param {Object[]} req.body.participants - participants array that fits the
    * participants model
    * @param {Object} res - response object
    * @returns {Promise<Object>} created meeting data corresponding to params
    */
-  create: async( req, res ) => {
+  save: async( req, res ) => {
     let session;
 
     try {
       logger.debug( 'create meeting req.body: ' + JSON.stringify( req.body ) );
 
-      const name        = req.body.name;
-      const date        = req.body.date;
-      const owner_id    = req.body.owner_id;
+      const name       = req.body.name;
+      const date       = req.body.date;
+      const owner_id   = req.body.ownerId;
+      const meeting_id = req.body.meeting_id || new ObjectID();
 
       let topics       = req.body.topics || null;
       let participants = req.body.participants || null;
+
+      let meeting;
 
       session = await mongoose.connection.startSession();
 
       await session.withTransaction( async() => {
 
-        const meeting = await Meeting.create({
-          name,
-          date,
-          owner_id
-        });
+        meeting = await Meeting.findOneAndUpdate(
+          { _id: meeting_id },
+          { name, date, owner_id },
+          {
+            upsert: true,
+            new: true
+          }
+        );
 
         if ( topics ) {
           topics = topics.map( topic => {
-            return { name: topic, meeting_id: meeting._id };
+            return {
+              name: topic.name,
+              meeting_id: meeting._id,
+              likes: topic.likes || []
+            };
           });
 
-          topics = await Topic.insertMany( topics );
+          const topicUpdates = topics.map( topic => {
+            return {
+              updateOne: {
+                filter: {
+                  name: topic.name,
+                  meeting_id: meeting._id
+                },
+                update: {
+                  $set: topic
+                },
+                upsert: true
+              }
+            };
+          });
+
+          await Topic.bulkWrite( topicUpdates );
         }
 
         if ( participants ) {
+
           participants = participants.map( participant => {
-            return { email: participant, meeting_id: meeting._id };
+            return {
+              email: participant.email,
+              meeting_id: meeting._id
+            };
           });
 
-          participants = await Participant.insertMany( participants );
+          const participantsUpdates = participants.map( participant => {
+            return {
+              updateOne: {
+                filter: {
+                  email: participant.email,
+                  meeting_id: meeting._id
+                },
+                update: {
+                  $set: participant
+                },
+                upsert: true
+              }
+            };
+          });
+
+          await Participant.bulkWrite( participantsUpdates );
         }
+
       });
 
       logger.debug( 'meeting: ' + JSON.stringify({
@@ -127,17 +173,16 @@ module.exports = {
       }) );
 
       res.status( 201 ).send({
-        owner_id,
-        name,
-        date,
+        _id: meeting._id,
+        name: meeting.name,
+        date: meeting.date,
+        owner_id: meeting.owner_id,
         topics,
         participants
       });
 
     } catch ( error ) {
       logger.log( 'error', error.message );
-
-      console.log( error.message );
 
       res.status( 500 ).send( error.message );
     } finally {
