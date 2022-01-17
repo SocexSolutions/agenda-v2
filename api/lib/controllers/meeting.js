@@ -82,11 +82,10 @@ module.exports = {
    * @returns {Promise<Object>} created meeting data corresponding to params
    */
   save: async( req, res ) => {
+    logger.debug('#save controllers/meeting');
     let session;
 
     try {
-      logger.debug( 'create meeting req.body: ' + JSON.stringify( req.body ) );
-
       const name       = req.body.name;
       const date       = req.body.date;
       const owner_id   = req.body.ownerId;
@@ -100,6 +99,8 @@ module.exports = {
       session = await mongoose.connection.startSession();
 
       await session.withTransaction( async() => {
+
+        logger.debug('creating meeting');
 
         meeting = await Meeting.findOneAndUpdate(
           { _id: meeting_id },
@@ -115,35 +116,30 @@ module.exports = {
             meeting_id: meeting._id,
             savedTopics: topics
           });
+        } else {
+          await Topic.deleteMany({ meeting_id: meeting._id });
+
+          topics = [];
         }
 
-        if ( participants ) {
+        await Participant.deleteMany({ meeting_id: meeting._id });
 
-          participants = participants.map( participant => {
+        if ( participants ) {
+          logger.debug(
+            'adding participants: ' + JSON.stringify( participants )
+          );
+
+          const formattedParticipants = participants.map( participant => {
             return {
               email: participant.email,
               meeting_id: meeting._id
             };
           });
 
-          const participantsUpdates = participants.map( participant => {
-            return {
-              updateOne: {
-                filter: {
-                  email: participant.email,
-                  meeting_id: meeting._id
-                },
-                update: {
-                  $set: participant
-                },
-                upsert: true
-              }
-            };
-          });
-
-          await Participant.bulkWrite( participantsUpdates );
+          await Participant.insertMany( formattedParticipants );
         }
 
+        participants = await Participant.find({ meeting_id: meeting._id });
       });
 
       logger.debug( 'meeting: ' + JSON.stringify({
@@ -160,102 +156,12 @@ module.exports = {
       });
 
     } catch ( error ) {
-      logger.log( 'error', error.message );
+      logger.error( error.message );
 
-      res.status( 500 ).send( error.message );
-    } finally {
-      session.endSession();
-    }
-  },
-
-  /**
-   * Update a meeting
-   * @param {Object} req - request object
-   * @param {string} req.body._id - mongodb _id of meeting to be updated
-   * @param {string} req.body.name - meeting name
-   * @param {string} req.body.date - meeting date
-   * @param {string} req.body.owner_id - meeting owner's id
-   * @param {Object[]} req.body.topics - topics array that fits the topics model
-   * @param {Object[]} req.body.participants - participants array that fits the
-   * participants model
-   * @param {Object} res - response object
-   * @returns {Promise<Object>} created meeting data corresponding to params
-   */
-  update: async( req, res ) => {
-    let session;
-
-    try {
-      logger.debug( 'update meeting req.body: ' + JSON.stringify( req.body ) );
-
-      const {
-        _id,
-        name,
-        date,
-        owner_id
-      } = req.body.meeting;
-
-      let topics       = req.body.topics || null;
-      let participants = req.body.participants || null;
-      let meeting;
-
-      session = await mongoose.connection.startSession();
-
-      await session.withTransaction( async() => {
-
-        meeting = await Meeting.findOneAndUpdate(
-          { _id },
-          { name, date, owner_id },
-          {
-            useFindAndModify: false,
-            new: true
-          }
-        );
-
-        if ( topics ) {
-          await Participant.deleteMany({ meeting_id: meeting._id });
-
-          topics = topics.map( topic => {
-            return {
-              name: topic.name,
-              meeting_id: meeting._id,
-              likes: topic.likes || []
-            };
-          });
-
-          topics = await Topic.insertMany( topics );
-        }
-
-        if ( participants ) {
-          await Participant.deleteMany({ meeting_id: meeting._id });
-
-          participants = participants.map( participant => {
-            return {
-              email: participant.email,
-              meeting_id: meeting._id
-            };
-          });
-
-          participants = await Participant.insertMany( participants );
-        }
-      });
-
-      logger.debug('meeting transaction completed');
-      logger.debug( 'meeting: ' + JSON.stringify( meeting ) );
-      logger.debug( 'topics: ' + JSON.stringify( topics ) );
-      logger.debug( 'participants: ' + JSON.stringify( participants ) );
-
-      res.status( 201 ).send({
-        meeting,
-        topics,
-        participants
-      });
-
-    } catch ( error ) {
-
-      logger.error( 'error updating meeting ' + error.message );
       res.status( 500 ).send( error.message );
     } finally {
       session.endSession();
     }
   }
+
 };

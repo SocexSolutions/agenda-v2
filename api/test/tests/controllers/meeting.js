@@ -232,12 +232,50 @@ describe( 'controllers/meeting', () => {
       );
     });
 
-    it( 'should delete old meeting participants', async() => {
-      
+    it( 'should delete old meeting topics', async() => {
+      const { _id } = await Meeting.create( meeting );
+
+      const topic = {
+        ...topic1,
+        meeting_id: _id.toString()
+      };
+
+      await Topic.create( topic );
+
+      const payload = {
+        meeting_id: _id.toString(),
+        topics: []
+      };
+
+      const { data } = await client.post(
+        '/meeting',
+        payload
+      );
+
+      assert.strictEqual( data.topics.length, 0 );
     });
 
-    it( 'should delete old meeting topics', async() => {
+    it( 'should delete old meeting participants', async() => {
+      const { _id } = await Meeting.create( meeting );
 
+      const participant = {
+        ...participant1,
+        meeting_id: _id.toString()
+      };
+
+      await Participant.create( participant );
+
+      const payload = {
+        meeting_id: _id.toString(),
+        participants: []
+      };
+
+      const { data } = await client.post(
+        '/meeting',
+        payload
+      );
+
+      assert.strictEqual( data.participants.length, 0 );
     });
 
   });

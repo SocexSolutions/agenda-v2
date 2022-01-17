@@ -33,7 +33,7 @@ const topicSchema = new mongoose.Schema(
  * @returns {Promise<Object[]>} - meeting's associated topics after save
  */
 async function saveMeetingTopics({ meeting_id, savedTopics }) {
-  logger.debug(`#saveMeetingTopics`);
+  logger.debug(`#saveMeetingTopics models/topic`);
 
   const writeOperations = [];
 
