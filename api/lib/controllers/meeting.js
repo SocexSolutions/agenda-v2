@@ -3,21 +3,15 @@ const Meeting     = require('../models/meeting');
 const Topic       = require('../models/topic');
 const Participant = require('../models/participant');
 const ObjectID    = require('mongoose').Types.ObjectId;
-const logger      = require('@starryinternet/jobi');
+const log         = require('@starryinternet/jobi');
 
 module.exports = {
   index: async( req, res ) => {
-    logger.debug('meeting index route');
-
     try {
       const meetings = await Meeting.find({});
-
-      logger.debug( 'response: ' + JSON.stringify( meetings ) );
       res.status( 200 ).send( meetings );
-
     } catch ( error ) {
-
-      logger.error( 'Meeting index failed: ' + error.message );
+      log.error( 'Meeting index failed: ' + error.message );
       res.status( 500 ).send( error.message );
     }
   },
@@ -31,8 +25,6 @@ module.exports = {
    * @returns {Promise<Object>} created meeting data corresponding to params
    */
   display: async( req, res ) => {
-    logger.debug( 'display meeting ' + JSON.stringify( req.params ) );
-
     const { _id } = req.params;
 
     try {
@@ -60,12 +52,11 @@ module.exports = {
         }
       ]);
 
-      logger.debug( 'found: ' + JSON.stringify( meeting ) );
       res.status( 200 ).send( meeting );
 
     } catch ( error ) {
 
-      logger.error( 'error getting meeting: ' + error.message );
+      log.error( 'error getting meeting: ' + error.message );
       res.status( 500 ).send( error.message );
     }
   },
@@ -86,8 +77,6 @@ module.exports = {
     let session;
 
     try {
-      logger.debug( 'create meeting req.body: ' + JSON.stringify( req.body ) );
-
       const name        = req.body.name;
       const date        = req.body.date;
       const owner_id    = req.body.owner_id;
@@ -122,10 +111,6 @@ module.exports = {
         }
       });
 
-      logger.debug( 'meeting: ' + JSON.stringify({
-        date, owner_id, topics, participants
-      }) );
-
       res.status( 201 ).send({
         owner_id,
         name,
@@ -135,10 +120,7 @@ module.exports = {
       });
 
     } catch ( error ) {
-      logger.log( 'error', error.message );
-
-      console.log( error.message );
-
+      log.error( error.message );
       res.status( 500 ).send( error.message );
     } finally {
       session.endSession();
@@ -162,8 +144,6 @@ module.exports = {
     let session;
 
     try {
-      logger.debug( 'update meeting req.body: ' + JSON.stringify( req.body ) );
-
       const {
         _id,
         name,
@@ -216,11 +196,6 @@ module.exports = {
         }
       });
 
-      logger.debug('meeting transaction completed');
-      logger.debug( 'meeting: ' + JSON.stringify( meeting ) );
-      logger.debug( 'topics: ' + JSON.stringify( topics ) );
-      logger.debug( 'participants: ' + JSON.stringify( participants ) );
-
       res.status( 201 ).send({
         meeting,
         topics,
@@ -228,8 +203,7 @@ module.exports = {
       });
 
     } catch ( error ) {
-
-      logger.error( 'error updating meeting ' + error.message );
+      log.error( 'error updating meeting ' + error.message );
       res.status( 500 ).send( error.message );
     } finally {
       session.endSession();

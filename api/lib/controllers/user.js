@@ -1,14 +1,11 @@
 const User      = require('../models/user');
 const PassUtils = require('../utils/password');
 const JWTUtils  = require('../utils/jwt');
-const logger    = require('@starryinternet/jobi');
+const log       = require('@starryinternet/jobi');
 
 
 module.exports = {
   async register( req, res ) {
-    logger.info('registering user');
-    logger.info( req.body );
-
     try {
       // unpack from request by variable names in form
       const { email, username, password } = req.body;
@@ -51,8 +48,6 @@ module.exports = {
         expiresIn
       });
 
-      logger.info('user registered');
-
     } catch ( err ) {
 
       res.status( 500 ).send( err );
@@ -61,11 +56,7 @@ module.exports = {
 
   async login( req, res ) {
 
-    logger.info('logging in user');
-
     try {
-      // unpack from request
-      logger.info( req.body );
       const { username, password } = req.body;
 
       // search for user
@@ -103,7 +94,7 @@ module.exports = {
           expiresIn
         });
 
-        logger.info('logged in user');
+        log.info('logged in user');
 
       } else {
         res.status( 401 ).json({
@@ -114,17 +105,16 @@ module.exports = {
 
     } catch ( err ) {
 
-      logger.error( err.message );
+      log.error( err.message );
 
       res.status( 500 ).send( err );
     }
   },
 
   async refresh( req, res ) {
-    logger.info('refreshing token');
 
     try {
-      logger.info(
+      log.info(
         'authorization: ' + JSON.stringify( req.headers.authorization )
       );
 
@@ -143,11 +133,9 @@ module.exports = {
         }
       });
 
-      logger.info('refreshed token');
-
     } catch ( err ) {
 
-      logger.error( err.message );
+      log.error( err.message );
     }
   }
 };
