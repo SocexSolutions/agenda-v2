@@ -6,8 +6,7 @@ import styles from '../styles/ChipForm.module.css';
 
 /**
  * Form for editing chip arrays
- * @param {Object} props
- * @param {Object[]} props.items - array of objects displayed in chips
+ * @param {Object} props.items - array of objects displayed in chips
  * @param {string} props.itemKey - key unique among chips (will be displayed)
  * @param {string} props.itemName - name of chips (tags, participants... )
  * @param {Function} props.setItems - function to overwrite parent's item array
