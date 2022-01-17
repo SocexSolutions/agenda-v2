@@ -25,14 +25,10 @@ module.exports = {
       iat: Date.now() // iat issued at identified when token was issued
     };
 
-    // sign web token (encrypt payload with private key)
     const signedToken = JsonWebToken.sign(
       payload,
       PRIV_KEY,
-      {
-        expiresIn,
-        algorithm: 'RS256'
-      }
+      { expiresIn, algorithm: 'RS256' }
     );
 
     // Bearer is the name of the JWT auth strategy
