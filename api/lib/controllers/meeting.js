@@ -1,7 +1,6 @@
 const mongoose    = require('mongoose');
 const Meeting     = require('../models/meeting');
-const User        = require('../models/user');
-const Topic       = require('../models/topic');
+const Topic       = require('../models/topic.js');
 const Participant = require('../models/participant');
 const ObjectID    = require('mongoose').Types.ObjectId;
 const logger      = require('@starryinternet/jobi');
@@ -73,7 +72,6 @@ module.exports = {
 
   /**
    * Create or update a meeting
-   * @param {Object} req - request object
    * @param {string} req.body.name - meeting name
    * @param {string} req.body.date - meeting date
    * @param {string} req.body.ownerId - meeting owner's id
@@ -113,30 +111,10 @@ module.exports = {
         );
 
         if ( topics ) {
-          topics = topics.map( topic => {
-            return {
-              name: topic.name,
-              meeting_id: meeting._id,
-              likes: topic.likes || []
-            };
+          topics = await Topic.saveMeetingTopics({
+            meeting_id: meeting._id,
+            savedTopics: topics
           });
-
-          const topicUpdates = topics.map( topic => {
-            return {
-              updateOne: {
-                filter: {
-                  name: topic.name,
-                  meeting_id: meeting._id
-                },
-                update: {
-                  $set: topic
-                },
-                upsert: true
-              }
-            };
-          });
-
-          await Topic.bulkWrite( topicUpdates );
         }
 
         if ( participants ) {
