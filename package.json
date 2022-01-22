@@ -23,6 +23,7 @@
   "devDependencies": {
     "@starryinternet/eslint-config-starry": "10.4.0",
     "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
     "chai-subset": "^1.6.0",
     "chalk": "^5.0.0",
     "eslint": "^8.3.0",

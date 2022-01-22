@@ -1,6 +1,6 @@
 const mongoose    = require('mongoose');
 const Meeting     = require('../models/meeting');
-const Topic       = require('../models/topic');
+const Topic       = require('../models/topic.js');
 const Participant = require('../models/participant');
 const ObjectID    = require('mongoose').Types.ObjectId;
 const log         = require('@starryinternet/jobi');
@@ -62,24 +62,25 @@ module.exports = {
   },
 
   /**
-   * Create a meeting
-   * @param {Object} req - request object
+   * Create or update a meeting
    * @param {string} req.body.name - meeting name
    * @param {string} req.body.date - meeting date
-   * @param {string} req.body.owner_id - meeting owner's id
+   * @param {string} req.body.ownerId - meeting owner's id
    * @param {Object[]} req.body.topics - topics array that fits the topics model
    * @param {Object[]} req.body.participants - participants array that fits the
    * participants model
    * @param {Object} res - response object
    * @returns {Promise<Object>} created meeting data corresponding to params
    */
-  create: async( req, res ) => {
+  save: async( req, res ) => {
+    logger.debug('#save controllers/meeting');
     let session;
 
     try {
-      const name        = req.body.name;
-      const date        = req.body.date;
-      const owner_id    = req.body.owner_id;
+      const name       = req.body.name;
+      const date       = req.body.date;
+      const owner_id   = req.body.ownerId;
+      const meeting_id = req.body.meeting_id || new ObjectID();
 
       let topics       = req.body.topics || null;
       let participants = req.body.participants || null;
@@ -153,60 +154,76 @@ module.exports = {
 
       let topics       = req.body.topics || null;
       let participants = req.body.participants || null;
+
       let meeting;
 
       session = await mongoose.connection.startSession();
 
       await session.withTransaction( async() => {
 
+        logger.debug('creating meeting');
+
         meeting = await Meeting.findOneAndUpdate(
-          { _id },
+          { _id: meeting_id },
           { name, date, owner_id },
           {
-            useFindAndModify: false,
+            upsert: true,
             new: true
           }
         );
 
         if ( topics ) {
-          await Participant.deleteMany({ meeting_id: meeting._id });
-
-          topics = topics.map( topic => {
-            return {
-              name: topic.name,
-              meeting_id: meeting._id,
-              likes: topic.likes || []
-            };
+          topics = await Topic.saveMeetingTopics({
+            meeting_id: meeting._id,
+            savedTopics: topics
           });
+        } else {
+          await Topic.deleteMany({ meeting_id: meeting._id });
 
-          topics = await Topic.insertMany( topics );
+          topics = [];
         }
 
-        if ( participants ) {
-          await Participant.deleteMany({ meeting_id: meeting._id });
+        await Participant.deleteMany({ meeting_id: meeting._id });
 
-          participants = participants.map( participant => {
+        if ( participants ) {
+          logger.debug(
+            'adding participants: ' + JSON.stringify( participants )
+          );
+
+          const formattedParticipants = participants.map( participant => {
             return {
               email: participant.email,
               meeting_id: meeting._id
             };
           });
 
-          participants = await Participant.insertMany( participants );
+          await Participant.insertMany( formattedParticipants );
         }
+
+        participants = await Participant.find({ meeting_id: meeting._id });
       });
 
+
+      logger.debug( 'meeting: ' + JSON.stringify({
+        date, owner_id, topics, participants
+      }) );
+
       res.status( 201 ).send({
-        meeting,
+        _id: meeting._id,
+        name: meeting.name,
+        date: meeting.date,
+        owner_id: meeting.owner_id,
         topics,
         participants
       });
 
     } catch ( error ) {
       log.error( 'error updating meeting ' + error.message );
+
       res.status( 500 ).send( error.message );
     } finally {
       session.endSession();
     }
   }
+
 };

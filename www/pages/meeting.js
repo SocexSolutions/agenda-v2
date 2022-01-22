@@ -15,8 +15,7 @@ class Meeting extends Component {
     this.state = {
       name: '',
       date: new Date(),
-      ownerId: state.user._id,
-      ownerEmail: state.user.email,
+      owner_id: state.user._id,
       topics: [],
       participants: [],
       editing: true
