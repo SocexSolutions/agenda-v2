@@ -7,21 +7,22 @@ const log       = require('@starryinternet/jobi');
 module.exports = {
   async register( req, res ) {
     try {
-      // unpack from request by variable names in form
       const { email, username, password } = req.body;
 
       const existingUser = await User.findOne({ username });
 
       if ( existingUser ) {
-        return res.status( 403 ).send(
-          new Error('username already exists')
-        );
+        return res.status( 403 ).json({
+          success: false,
+          msg: 'Username Already Exists'
+        });
       }
 
-      // password is not stored in db and is thus not validated by the model so
-      // we quality check it here.
       if ( !password ) {
-        throw new Error('Invalid Password');
+        return res.status( 401 ).json({
+          success: false,
+          msg: 'Invalid Credentials'
+        });
       }
 
       const { hash, salt } = PassUtils.genPassword( password );
@@ -37,7 +38,7 @@ module.exports = {
 
       const { token, expiresIn } = JWTUtils.issueJWT( user );
 
-      res.status( 201 ).json({
+      return res.status( 201 ).json({
         success: true,
         user: {
           _id: user._id,
@@ -49,41 +50,36 @@ module.exports = {
       });
 
     } catch ( err ) {
-
-      res.status( 500 ).send( err );
+      return res.status( 500 ).json({
+        success: false,
+        msg: 'Server Error'
+      });
     }
   },
 
   async login( req, res ) {
-
     try {
       const { username, password } = req.body;
 
-      // search for user
       const user = await User.findOne({ username });
 
-      // if no user return
       if ( !user ) {
-        return (
-          res.status( 401 ).json({
-            success: false,
-            msg: 'invalid username' // need to change for prod
-          })
-        );
+        return res.status( 401 ).json({
+          success: false,
+          msg: 'Invalid Credentials'
+        });
       }
 
-      // validate password
       const valid = PassUtils.validatePassword(
         password,
         user.hash,
         user.salt
       );
 
-      // if valid return 200 and issue a jwt
       if ( valid ) {
         const { token, expiresIn } = JWTUtils.issueJWT( user );
 
-        res.status( 200 ).json({
+        return res.status( 200 ).json({
           success: true,
           user: {
             _id: user._id,
@@ -94,37 +90,39 @@ module.exports = {
           expiresIn
         });
 
-        log.info('logged in user');
-
       } else {
-        res.status( 401 ).json({
+        return res.status( 401 ).json({
           success: false,
-          msg: 'invalid credentials'
+          msg: 'Invalid Credentials'
         });
       }
 
     } catch ( err ) {
-
       log.error( err.message );
 
-      res.status( 500 ).send( err );
+      return res.status( 500 ).json({
+        success: false,
+        msg: 'Server Error'
+      });
     }
   },
 
   async refresh( req, res ) {
-
     try {
-      log.info(
-        'authorization: ' + JSON.stringify( req.headers.authorization )
-      );
-
       const token = req.headers.authorization;
 
       const decoded = JWTUtils.verifyJwt( token );
 
       const user = await User.findById( decoded.sub );
 
-      res.status( 200 ).json({
+      if ( !user ) {
+        return res.status( 401 ).json({
+          success: false,
+          msg: 'Invalid Credentials'
+        });
+      }
+
+      return res.status( 200 ).json({
         success: true,
         user: {
           _id: user._id,
@@ -134,8 +132,12 @@ module.exports = {
       });
 
     } catch ( err ) {
-
       log.error( err.message );
+
+      res.status( 500 ).json({
+        success: false,
+        msg: 'Invalid Credentials'
+      });
     }
   }
 };

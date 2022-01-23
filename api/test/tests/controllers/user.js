@@ -1,8 +1,13 @@
-const assert  = require('assert');
-const dbUtils = require('../../utils/db');
-const db      = require('../../../lib/db');
-const api     = require('../../utils/api');
-const client  = require('../../utils/client');
+const dbUtils        = require('../../utils/db');
+const db             = require('../../../lib/db');
+const api            = require('../../utils/api');
+const client         = require('../../utils/client');
+const chai           = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+
+chai.use( chaiAsPromised );
+
+const { assert } = chai;
 
 const user = {
   username: 'thudson',
@@ -32,7 +37,6 @@ describe( 'api/lib/controllers/user.js', () => {
 
     it( 'should register successfully when given valid creds', async() => {
       const res = await client.post( path, user );
-
       assert( res.status === 201 );
     });
 
@@ -46,19 +50,13 @@ describe( 'api/lib/controllers/user.js', () => {
     it( 'should not register a user with an existing username', async() => {
       await client.post( path, user );
 
-      try {
-        await client.post( path, user );
-        assert( false );
-      } catch ( err ) {
-        assert( err.response.status === 403 );
-      }
+      return assert.isRejected( client.post( path, user ) );
     });
 
     it( 'should register return an auth token', async() => {
       const res = await client.post( path, user );
 
-      // eslint-disable-next-line
-      const tokenRegex = new RegExp(/^Bearer\s/);
+      const tokenRegex = new RegExp( /^Bearer\s/ );
 
       assert( tokenRegex.test( res.data.token ) );
     });
@@ -69,14 +67,7 @@ describe( 'api/lib/controllers/user.js', () => {
         email: ''
       };
 
-      let acceptedInvalidEmail = false;
-
-      try {
-        await client.post( path, invalidUser );
-        acceptedInvalidEmail = true;
-      } catch ( err ) {}
-
-      assert( !acceptedInvalidEmail );
+      return assert.isRejected( client.post( path, invalidUser ) );
     });
 
     it( 'should not register user with invalid username', async() => {
@@ -85,14 +76,7 @@ describe( 'api/lib/controllers/user.js', () => {
         username: ''
       };
 
-      let acceptedInvalidUsername = false;
-
-      try {
-        await client.post( path, invalidUser );
-        acceptedInvalidUsername = true;
-      } catch ( err ) {}
-
-      assert( !acceptedInvalidUsername );
+      return assert.isRejected( client.post( path, invalidUser ) );
     });
 
     it( 'should not register user with invalid password', async() => {
@@ -101,14 +85,7 @@ describe( 'api/lib/controllers/user.js', () => {
         password: ''
       };
 
-      let acceptedInvalidPassword = false;
-
-      try {
-        await client.post( path, invalidUser );
-        acceptedInvalidPassword = true;
-      } catch ( err ) {}
-
-      assert( !acceptedInvalidPassword );
+      return assert.isRejected( client.post( path, invalidUser ) );
     });
 
   });
@@ -141,14 +118,7 @@ describe( 'api/lib/controllers/user.js', () => {
         password: 'bacon'
       };
 
-      let acceptedInvalidPassword = false;
-
-      try {
-        await client.post( path, invalidUser );
-        acceptedInvalidPassword = true;
-      } catch ( err ) {}
-
-      assert( !acceptedInvalidPassword );
+      return assert.isRejected( client.post( path, invalidUser ) );
     });
 
     it( 'should not login user with invalid username', async() => {
@@ -157,13 +127,47 @@ describe( 'api/lib/controllers/user.js', () => {
         username: 'bacon'
       };
 
-      const acceptedInvalidUsername = false;
+      return assert.isRejected( client.post( path, invalidUser ) );
+    });
 
-      try {
-        await client.post( path, invalidUser );
-      } catch ( err ) {}
+  });
 
-      assert( !acceptedInvalidUsername );
+  describe( '#refresh', () => {
+
+    const path = '/user/refresh';
+
+    let token;
+    let user_id;
+
+    beforeEach( async() => {
+      const { data } = await client.post(
+        '/user/register',
+        user
+      );
+
+      token = data.token;
+      user_id = data.user._id;
+    });
+
+    it( 'should refresh a user info based on token', async() => {
+      const options = { headers: { authorization: token } };
+
+      const { data } = await client.get( path, options );
+
+      assert.deepInclude( data, {
+        success: true,
+        user: {
+          _id: user_id,
+          email: 'email',
+          username: 'thudson'
+        }
+      });
+    });
+
+    it( 'should reject invalid auth token', async() => {
+      const options = { headers: { authorization: 'token' } };
+
+      return assert.isRejected( client.get( path, options ) );
     });
 
   });

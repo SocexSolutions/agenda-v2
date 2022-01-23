@@ -43,5 +43,8 @@
   ],
   "dependencies": {
     "lodash": "^4.17.21"
+  },
+  "nyc": {
+    "include": "api/lib/**/*.js"
   }
 }

@@ -61,7 +61,7 @@ module.exports = {
     }
   },
 
-  /**
+ /**
    * Create or update a meeting
    * @param {string} req.body.name - meeting name
    * @param {string} req.body.date - meeting date
@@ -73,7 +73,6 @@ module.exports = {
    * @returns {Promise<Object>} created meeting data corresponding to params
    */
   save: async( req, res ) => {
-    logger.debug('#save controllers/meeting');
     let session;
 
     try {
@@ -85,83 +84,11 @@ module.exports = {
       let topics       = req.body.topics || null;
       let participants = req.body.participants || null;
 
-      session = await mongoose.connection.startSession();
-
-      await session.withTransaction( async() => {
-
-        const meeting = await Meeting.create({
-          name,
-          date,
-          owner_id
-        });
-
-        if ( topics ) {
-          topics = topics.map( topic => {
-            return { name: topic, meeting_id: meeting._id };
-          });
-
-          topics = await Topic.insertMany( topics );
-        }
-
-        if ( participants ) {
-          participants = participants.map( participant => {
-            return { email: participant, meeting_id: meeting._id };
-          });
-
-          participants = await Participant.insertMany( participants );
-        }
-      });
-
-      res.status( 201 ).send({
-        owner_id,
-        name,
-        date,
-        topics,
-        participants
-      });
-
-    } catch ( error ) {
-      log.error( error.message );
-      res.status( 500 ).send( error.message );
-    } finally {
-      session.endSession();
-    }
-  },
-
-  /**
-   * Update a meeting
-   * @param {Object} req - request object
-   * @param {string} req.body._id - mongodb _id of meeting to be updated
-   * @param {string} req.body.name - meeting name
-   * @param {string} req.body.date - meeting date
-   * @param {string} req.body.owner_id - meeting owner's id
-   * @param {Object[]} req.body.topics - topics array that fits the topics model
-   * @param {Object[]} req.body.participants - participants array that fits the
-   * participants model
-   * @param {Object} res - response object
-   * @returns {Promise<Object>} created meeting data corresponding to params
-   */
-  update: async( req, res ) => {
-    let session;
-
-    try {
-      const {
-        _id,
-        name,
-        date,
-        owner_id
-      } = req.body.meeting;
-
-      let topics       = req.body.topics || null;
-      let participants = req.body.participants || null;
-
       let meeting;
 
       session = await mongoose.connection.startSession();
 
       await session.withTransaction( async() => {
-
-        logger.debug('creating meeting');
 
         meeting = await Meeting.findOneAndUpdate(
           { _id: meeting_id },
@@ -186,10 +113,6 @@ module.exports = {
         await Participant.deleteMany({ meeting_id: meeting._id });
 
         if ( participants ) {
-          logger.debug(
-            'adding participants: ' + JSON.stringify( participants )
-          );
-
           const formattedParticipants = participants.map( participant => {
             return {
               email: participant.email,
@@ -203,11 +126,6 @@ module.exports = {
         participants = await Participant.find({ meeting_id: meeting._id });
       });
 
-
-      logger.debug( 'meeting: ' + JSON.stringify({
-        date, owner_id, topics, participants
-      }) );
-
       res.status( 201 ).send({
         _id: meeting._id,
         name: meeting.name,
@@ -218,7 +136,7 @@ module.exports = {
       });
 
     } catch ( error ) {
-      log.error( 'error updating meeting ' + error.message );
+      log.error( error.message );
 
       res.status( 500 ).send( error.message );
     } finally {

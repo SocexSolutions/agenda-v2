@@ -58,4 +58,19 @@ describe( 'lib/middleware/authenticate', () => {
     sinon.assert.notCalled( next );
   });
 
+  it( 'should catch failures', () => {
+    const request = { headers: { authorization: 'bearer' } };
+    const response = {
+      status: sinon.stub().returns({
+        json: sinon.stub().returns()
+      })
+    };
+    const next = sinon.stub().resolves();
+
+    this.module( request, response, next );
+
+    sinon.assert.notCalled( next );
+    sinon.assert.calledOnceWithExactly( response.status, 401 );
+  });
+
 });
