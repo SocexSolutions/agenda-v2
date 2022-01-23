@@ -3,21 +3,15 @@ const Meeting     = require('../models/meeting');
 const Topic       = require('../models/topic.js');
 const Participant = require('../models/participant');
 const ObjectID    = require('mongoose').Types.ObjectId;
-const logger      = require('@starryinternet/jobi');
+const log         = require('@starryinternet/jobi');
 
 module.exports = {
   index: async( req, res ) => {
-    logger.debug('meeting index route');
-
     try {
       const meetings = await Meeting.find({});
-
-      logger.debug( 'response: ' + JSON.stringify( meetings ) );
       res.status( 200 ).send( meetings );
-
     } catch ( error ) {
-
-      logger.error( 'Meeting index failed: ' + error.message );
+      log.error( 'Meeting index failed: ' + error.message );
       res.status( 500 ).send( error.message );
     }
   },
@@ -31,8 +25,6 @@ module.exports = {
    * @returns {Promise<Object>} created meeting data corresponding to params
    */
   display: async( req, res ) => {
-    logger.debug( 'display meeting ' + JSON.stringify( req.params ) );
-
     const { _id } = req.params;
 
     try {
@@ -60,12 +52,11 @@ module.exports = {
         }
       ]);
 
-      logger.debug( 'found: ' + JSON.stringify( meeting ) );
       res.status( 200 ).send( meeting );
 
     } catch ( error ) {
 
-      logger.error( 'error getting meeting: ' + error.message );
+      log.error( 'error getting meeting: ' + error.message );
       res.status( 500 ).send( error.message );
     }
   },
@@ -90,6 +81,76 @@ module.exports = {
       const date       = req.body.date;
       const owner_id   = req.body.ownerId;
       const meeting_id = req.body.meeting_id || new ObjectID();
+
+      let topics       = req.body.topics || null;
+      let participants = req.body.participants || null;
+
+      session = await mongoose.connection.startSession();
+
+      await session.withTransaction( async() => {
+
+        const meeting = await Meeting.create({
+          name,
+          date,
+          owner_id
+        });
+
+        if ( topics ) {
+          topics = topics.map( topic => {
+            return { name: topic, meeting_id: meeting._id };
+          });
+
+          topics = await Topic.insertMany( topics );
+        }
+
+        if ( participants ) {
+          participants = participants.map( participant => {
+            return { email: participant, meeting_id: meeting._id };
+          });
+
+          participants = await Participant.insertMany( participants );
+        }
+      });
+
+      res.status( 201 ).send({
+        owner_id,
+        name,
+        date,
+        topics,
+        participants
+      });
+
+    } catch ( error ) {
+      log.error( error.message );
+      res.status( 500 ).send( error.message );
+    } finally {
+      session.endSession();
+    }
+  },
+
+  /**
+   * Update a meeting
+   * @param {Object} req - request object
+   * @param {string} req.body._id - mongodb _id of meeting to be updated
+   * @param {string} req.body.name - meeting name
+   * @param {string} req.body.date - meeting date
+   * @param {string} req.body.owner_id - meeting owner's id
+   * @param {Object[]} req.body.topics - topics array that fits the topics model
+   * @param {Object[]} req.body.participants - participants array that fits the
+   * participants model
+   * @param {Object} res - response object
+   * @returns {Promise<Object>} created meeting data corresponding to params
+   */
+  update: async( req, res ) => {
+    let session;
+
+    try {
+      const {
+        _id,
+        name,
+        date,
+        owner_id
+      } = req.body.meeting;
 
       let topics       = req.body.topics || null;
       let participants = req.body.participants || null;
@@ -142,6 +203,7 @@ module.exports = {
         participants = await Participant.find({ meeting_id: meeting._id });
       });
 
+
       logger.debug( 'meeting: ' + JSON.stringify({
         date, owner_id, topics, participants
       }) );
@@ -156,7 +218,7 @@ module.exports = {
       });
 
     } catch ( error ) {
-      logger.error( error.message );
+      log.error( 'error updating meeting ' + error.message );
 
       res.status( 500 ).send( error.message );
     } finally {
