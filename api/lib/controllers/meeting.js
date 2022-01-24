@@ -52,7 +52,8 @@ module.exports = {
         }
       ]);
 
-      res.status( 200 ).send( meeting );
+
+      res.status( 200 ).send({ ...meeting });
 
     } catch ( error ) {
 
@@ -61,7 +62,7 @@ module.exports = {
     }
   },
 
- /**
+  /**
    * Create or update a meeting
    * @param {string} req.body.name - meeting name
    * @param {string} req.body.date - meeting date

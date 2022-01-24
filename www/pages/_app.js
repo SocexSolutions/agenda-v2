@@ -6,8 +6,8 @@ import { userRefresh } from '../store/features/user/userSlice';
 
 import '../styles/globals.css';
 
-function MyApp({ Component, pageProps }) {
-  const store = useStore({});
+function MyApp( props ) {
+  const store  = useStore({});
 
   useEffect( () => {
     store.dispatch(
@@ -15,10 +15,12 @@ function MyApp({ Component, pageProps }) {
     );
   });
 
+  const Component = props.Component;
+
   return (
     <Provider store={store}>
       <Layout>
-        <Component store={store} {...pageProps} />
+        <Component store={store} {...props.pageProps} />
       </Layout>
     </Provider>
   );
