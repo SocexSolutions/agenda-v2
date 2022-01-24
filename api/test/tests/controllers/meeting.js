@@ -90,10 +90,10 @@ describe( 'controllers/meeting', () => {
       await Participant.create( participant1 );
       await Topic.create( topic1 );
 
-      const { data: [ doc ] } = await client.get( `/meeting/${ _id }` );
+      const { data } = await client.get( `/meeting/${ _id }` );
 
       assert.containSubset(
-        doc,
+        data[ 0 ],
         {
           name: meeting.name,
           date: meeting.date.toString(),
@@ -102,12 +102,12 @@ describe( 'controllers/meeting', () => {
       );
 
       assert.containSubset(
-        doc.participants[ 0 ],
+        data[ 0 ].participants[ 0 ],
         { ...participant1, meeting_id: meeting_id.toString() }
       );
 
       assert.containSubset(
-        doc.topics[ 0 ],
+        data[ 0 ].topics[ 0 ],
         {
           ...topic1,
           meeting_id: meeting_id.toString()

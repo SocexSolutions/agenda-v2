@@ -90,27 +90,28 @@ export const userLogin = ( username, password ) => {
 
 export const userRefresh = ( token ) => {
   return async function refreshUser( dispatch, getState ) {
-    try {
-      const { data } = await client.get(
-        'user/refresh',
-        {
-          headers: { 'authorization': token }
-        }
-      );
+    if ( token ) {
+      try {
+        const { data } = await client.get(
+          'user/refresh',
+          {
+            headers: { 'authorization': token }
+          }
+        );
 
-      dispatch({
-        type: 'user/refresh',
-        payload: {
-          token:    data.token,
-          _id:      data.user._id,
-          username: data.user.username,
-          email:    data.user.email
-        }
-      });
+        dispatch({
+          type: 'user/refresh',
+          payload: {
+            token:    data.token,
+            _id:      data.user._id,
+            username: data.user.username,
+            email:    data.user.email
+          }
+        });
 
-    } catch ( err ) {
-
-      console.log( err );
+      } catch ( err ) {
+        console.log( err );
+      }
     }
   };
 };

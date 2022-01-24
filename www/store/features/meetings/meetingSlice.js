@@ -19,20 +19,22 @@ const reducer = ( state = initialState, action ) => {
   }
 };
 
+/**
+ * Retrieve a meeting
+ * @param {Object} meeting_id - meeting id of meeting to fetch
+ * @return {Promise<undefined>}
+ */
 export const fetchMeeting = ( meeting_id ) => {
   return async function fetchMeeting( dispatch, getState ) {
     try {
       const { data } = await client.get(
         `meeting/${ meeting_id }`
-        // {
-        //   headers: { 'authorization': document}
-        // }
       );
 
       dispatch({
         type: 'meeting/fetch',
         payload: {
-          ...data
+          ...data[ 0 ]
         }
       });
     } catch ( error ) {

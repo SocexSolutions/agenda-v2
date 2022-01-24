@@ -53,7 +53,7 @@ const Nav = ({ drawerOpen, setDrawerOpen }) => {
           </Link>
 
           <div className={styles.navCentered}>
-            <Link href="/meeting" passHref>
+            <Link href="/meeting/new" passHref>
               <Button
                 icon={<AddToPhotosOutlinedIcon />}
                 text="create"
