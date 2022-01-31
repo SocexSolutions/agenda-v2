@@ -1,15 +1,15 @@
-const db              = require( "../api/lib/db" );
-const ObjectID        = require( "mongoose" ).Types.ObjectId;
-const { genPassword } = require( "../api/lib/utils/password" );
-const User            = require( "../api/lib/models/user" );
-const Meeting         = require( "../api/lib/models/meeting" );
-const { clean }       = require( "../api/test/utils/db" );
-const faker           = require( "faker" );
-const assert          = require( "assert" );
+const db              = require('../lib/db');
+const ObjectID        = require('mongoose').Types.ObjectId;
+const { genPassword } = require('../lib/utils/password');
+const User            = require('../lib/models/user');
+const Meeting         = require('../lib/models/meeting');
+const { clean }       = require('../test/utils/db');
+const faker           = require('faker');
+const assert          = require('assert');
 
-const TEST_PASS  = "test";
-const TEST_USER  = "test";
-const TEST_EMAIL = "test@test.com";
+const TEST_PASS  = 'test';
+const TEST_USER  = 'test';
+const TEST_EMAIL = 'test@test.com';
 
 /**
  * Create the user for testing
@@ -35,7 +35,7 @@ async function populateFakeUsers( count ) {
   const users = [];
 
   for ( let i = 0; i < count; i++ ) {
-    let { hash, salt } = genPassword( faker.internet.password() );
+    const { hash, salt } = genPassword( faker.internet.password() );
 
     const user = {
       username: faker.internet.userName(),
@@ -63,7 +63,7 @@ async function populateFakeMeetings( count, userId ) {
     const date = Math.random() > .2 ? faker.date.soon() : faker.date.recent();
 
     const meeting = {
-      name:     faker.company.companyName() + " Acquisition",
+      name:     faker.company.companyName() + ' Acquisition',
       owner_id: userId,
       date
     };
@@ -85,14 +85,8 @@ async function hydrateDB() {
 
     const user = await createTestUser();
 
-    await populateFakeUsers( 30 );
-    await populateFakeMeetings( 10, user._id );
-
-    const users = await User.find({});
-    assert( users.length === 31, "Error ocurred in user creation." );
-
-    const meetings = await Meeting.find({});
-    assert( meetings.length === 10, "Error ocurred in meeting creation." );
+    await populateFakeUsers( 1000 );
+    await populateFakeMeetings( 20, user._id );
 
   } catch ( err ) {
     console.log( err );

@@ -1,4 +1,5 @@
 const User      = require('../models/user');
+const Meeting   = require('../models/meeting');
 const PassUtils = require('../utils/password');
 const JWTUtils  = require('../utils/jwt');
 const log       = require('@starryinternet/jobi');
@@ -138,6 +139,19 @@ module.exports = {
         success: false,
         msg: 'Invalid Credentials'
       });
+    }
+  },
+
+  async getOwnedMeetings( req, res ) {
+    try {
+      const { _id } = req.params;
+
+      const meetings = await Meeting.find({ owner_id: _id });
+
+      res.status( 200 ).json( meetings );
+
+    } catch ( error ) {
+      res.status( 500 ).send( error );
     }
   }
 };

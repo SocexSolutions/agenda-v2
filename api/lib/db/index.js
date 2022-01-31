@@ -8,7 +8,7 @@ db.connect = async() => {
     // because docker compose create a docker network, we use this internal
     // network by default, but for local dev we use localhost instead
 
-    let dbConStr = 'mongodb://host.docker.internal:27017/agenda';
+    let dbConStr = 'mongodb://host.docker.internal:27017/agenda-dev';
 
     if ( process.env.NODE_ENV === 'test' ) {
       dbConStr = 'mongodb://localhost:27017/agenda-test';

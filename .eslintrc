@@ -101,10 +101,6 @@
         "mode": "minimum"
       }
     ],
-    "linebreak-style": [
-      2,
-      "unix"
-    ],
     "no-spaced-func": 2,
     "no-trailing-spaces": 2,
     "object-curly-spacing": [

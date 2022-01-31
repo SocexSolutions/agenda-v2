@@ -1,9 +1,24 @@
-const assert   = require('assert');
-const dbUtils  = require('../../utils/db');
-const db       = require('../../../lib/db');
-const api      = require('../../utils/api');
-const ObjectID = require('mongoose').Types.ObjectId;
-const client   = require('../../utils/client');
+const chai        = require('chai');
+const assert      = require('assert');
+const dbUtils     = require('../../utils/db');
+const db          = require('../../../lib/db');
+const api         = require('../../utils/api');
+const ObjectID    = require('mongoose').Types.ObjectId;
+const client      = require('../../utils/client');
+const Meeting     = require('../../../lib/models/meeting');
+const Participant = require('../../../lib/models/participant');
+
+const meeting1 = {
+  name: 'meeting1',
+  owner_id: new ObjectID(),
+  date: 'tues'
+};
+
+const meeting2 = {
+  name: 'meeting2',
+  owner_id: new ObjectID(),
+  date: 'tuesdy'
+};
 
 const participant = {
   email: 'lt@linux.com',
@@ -81,4 +96,30 @@ describe( 'controllers/participant', () => {
       }
     });
   });
+
+  // describe( '#getMeetings', () => {
+  //   it( 'should return meetings', async() => {
+
+  //     const res = await Meeting.insertMany([ meeting1, meeting2 ]);
+
+  //     const participants = new Array();
+
+  //     res.forEach( ( meeting ) => {
+  //       participants.push({ email: 'jack@aol.com', meeting_id: meeting._id });
+  //     });
+
+  //     await Participant.insertMany( participants );
+
+  //     try {
+  //       const resMain = await client.post(
+  //         'participant/getmeetings', { email: 'jack@aol.com' }
+  //       );
+  //       assert( resMain.data[ 1 ].name === 'meeting2', 'found Meetings' );
+  //     } catch ( err ) {
+  //       throw new Error(
+  //         'Failed to find Participant meetings | reason: ' + err
+  //       );
+  //     }
+  //   });
+  // });
 });

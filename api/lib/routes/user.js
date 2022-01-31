@@ -7,4 +7,6 @@ router.post( '/login', userController.login );
 
 router.get( '/refresh', userController.refresh );
 
+router.get( '/meetings/:_id', userController.getOwnedMeetings );
+
 module.exports = router;
