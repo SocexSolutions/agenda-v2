@@ -1,11 +1,13 @@
-import client      from '../../client';
+import client from '../../client';
 
 const initialState = {
   openMeeting: {},
-  userMeetings: []
+  ownedMeetings: {},
+  participantMeetings: {}
 };
 
 const reducer = ( state = initialState, action ) => {
+
   switch ( action.type ) {
 
     case 'meeting/fetch':
@@ -13,6 +15,9 @@ const reducer = ( state = initialState, action ) => {
 
     case 'meeting/save':
       return { ...state, openMeeting: action.payload };
+
+    case 'meetings/getmeetings':
+      return { ...state, ...action.payload };
 
     default:
       return state;
@@ -68,6 +73,34 @@ export const saveMeeting = ( meeting ) => {
 
       console.error( error.message );
     }
+  };
+};
+
+export const getInbox = () => {
+  return async function InboxGet( dispatch, getState ) {
+
+    const state = getState();
+    const email = state.user.email;
+    const user_id = state.user._id;
+
+    const participantRes = await client.get(
+      `participant/meetings/${ email }`
+    );
+
+    let ownedRes = [];
+    if ( user_id ) {
+      ownedRes = await client.get(
+        `user/meetings/${ user_id }`
+      );
+    }
+
+    dispatch({
+      type: 'meetings/getmeetings',
+      payload: {
+        ownedMeetings: ownedRes.data,
+        participantMeetings: participantRes.data
+      }
+    });
   };
 };
 

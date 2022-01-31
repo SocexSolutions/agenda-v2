@@ -16,14 +16,12 @@
 
 .inboxContainer {
   display: flex;
-  height: 86vh;
-  width: 100vw;
+  margin-left: 0;
 }
 
 .messagesContainer {
-  width: 60vw;
   display: flex;
-  margin: auto;
+  margin-left: 5%;
   margin-top: 0;
   flex-direction: column;
 }
@@ -35,6 +33,10 @@
   padding: 1rem;
   display: flex;
   color: var(--textBlue);
+}
+
+.messages p :nth-child(2n-1){
+  margin-right: 10%;
 }
 
 .inboxMenuContainer h1 {

@@ -1,4 +1,5 @@
 import client from '../../client';
+import  parseCookie  from '../../../utils/parseCookie';
 
 const initialState = {
   token: null,
@@ -69,7 +70,6 @@ export const userLogin = ( username, password ) => {
         }
       );
 
-
       document.cookie = `agenda-auth=${ data.token }`;
 
       dispatch({
@@ -81,6 +81,9 @@ export const userLogin = ( username, password ) => {
           email:    data.user.email
         }
       });
+
+      window.location = `user/${ data.user._id }`;
+
     } catch ( error ) {
 
       console.error( error.message );
@@ -88,8 +91,11 @@ export const userLogin = ( username, password ) => {
   };
 };
 
-export const userRefresh = ( token ) => {
+export const userRefresh = ( ) => {
   return async function refreshUser( dispatch, getState ) {
+
+    const token = parseCookie( document.cookie, 'agenda-auth' );
+
     if ( token ) {
       try {
         const { data } = await client.get(
@@ -134,6 +140,5 @@ export const userLogout = () => {
     });
   };
 };
-
 
 export default reducer;

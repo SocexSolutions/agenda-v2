@@ -13,7 +13,6 @@ class Meeting extends Component {
 
     const state = this.props.store.getState();
 
-
     this.state = {
       ownerUsername: state.user.username,
       editing: true,
