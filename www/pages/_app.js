@@ -6,7 +6,7 @@ import { userRefresh } from '../store/features/user/userSlice';
 
 import '../styles/globals.css';
 
-function MyApp( props ) {
+const App = props => {
   const store  = useStore({});
 
   useEffect( () => {
@@ -24,6 +24,6 @@ function MyApp( props ) {
       </Layout>
     </Provider>
   );
-}
+};
 
-export default MyApp;
+export default App;

@@ -12,14 +12,6 @@ function HeaderForm( props ) {
           onChange={props.setMeetingName}
           size="xl"
         />
-        <div className={styles.date}>
-          {/* <Input
-            value={ props.meetingDate }
-            placeholder="mm/dd/yy hh:mm"
-            type="datetime-local"
-            onChange={props.setMeetingDate}
-          /> */}
-        </div>
       </form>
     </div>
   );

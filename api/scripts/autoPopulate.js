@@ -11,6 +11,8 @@ const TEST_PASS  = 'test';
 const TEST_USER  = 'test';
 const TEST_EMAIL = 'test@test.com';
 
+const fakeUsers = [];
+
 /**
  * Create the user for testing
  * @returns {Promise} test user doc
@@ -85,7 +87,7 @@ async function hydrateDB() {
 
     const user = await createTestUser();
 
-    await populateFakeUsers( 1000 );
+    await populateFakeUsers( 100 );
     await populateFakeMeetings( 20, user._id );
 
   } catch ( err ) {

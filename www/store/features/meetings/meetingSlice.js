@@ -53,11 +53,7 @@ export const saveMeeting = ( meeting ) => {
   return async function MeetingSave( dispatch, getState ) {
 
     try {
-
-      meeting.topics       = Array.from( meeting.topics );
-      meeting.participants = Array.from( meeting.participants );
-
-      const { data } = await client.post(
+      await client.post(
         'meeting',
         meeting
       );

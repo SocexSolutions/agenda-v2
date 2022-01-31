@@ -1,5 +1,5 @@
-import { useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleDrawer } from '../store/features/ui/uiSlice';
 import Link from 'next/link';
 import Button from './Button';
 import DropDown from './DropDown';
@@ -11,10 +11,11 @@ import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
 import AddToPhotosOutlinedIcon from '@material-ui/icons/AddToPhotosOutlined';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
-const selectUser = ( state ) => state.user;
 
-const Nav = ({ drawerOpen, setDrawerOpen }) => {
+const selectUser = state => state.user;
 
+const Nav = () => {
+  const dispatch = useDispatch();
   const user = useSelector( selectUser );
 
   if ( user.token === null ) {
@@ -46,7 +47,7 @@ const Nav = ({ drawerOpen, setDrawerOpen }) => {
           <Button
             icon={<MenuIcon />}
             varient="icon"
-            onClick={() => setDrawerOpen( !drawerOpen )}
+            onClick={() => dispatch( toggleDrawer() )}
           />
           <Link href="/" passHref>
             <Button icon={<HomeOutlinedIcon />} varient="icon"/>
@@ -75,15 +76,6 @@ const Nav = ({ drawerOpen, setDrawerOpen }) => {
       </>
     );
   }
-};
-
-Nav.propTypes = {
-  drawerOpen: PropTypes.bool,
-  setDrawerOpen: PropTypes.func
-};
-
-Nav.defaultProps = {
-  drawerOpen: true
 };
 
 export default Nav;

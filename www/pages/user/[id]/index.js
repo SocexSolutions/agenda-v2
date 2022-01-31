@@ -1,14 +1,14 @@
 import Inbox from '../../../components/Inbox';
 import LoadingIcon from '../../../components/LoadingIcon';
 import { getInbox } from '../../../store/features/meetings/meetingSlice';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-const selectUser = ( state ) => state.user;
-const selectOwnedMeetings = ( state ) => state.meetings.ownedMeetings;
-const selectParticipantMeetings = ( state ) => state.meetings.participantMeetings;
+const selectUser = state => state.user;
+const selectOwnedMeetings = state => state.meetings.ownedMeetings;
+const selectParticipantMeetings = state => state.meetings.participantMeetings;
 
-const User = ( props ) => {
+const User = () => {
   const dispatch = useDispatch();
 
   const user = useSelector( selectUser );

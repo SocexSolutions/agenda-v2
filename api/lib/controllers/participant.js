@@ -3,9 +3,9 @@ const Meeting     = require('../models/meeting');
 
 module.exports = {
   create: async( req, res ) => {
-    const { email, meeting_id } = req.body;
-
     try {
+      const { email, meeting_id } = req.body;
+
       const participant = await Participant.create({
         email,
         meeting_id
@@ -18,12 +18,12 @@ module.exports = {
   },
 
   getMeetings: async( req, res ) => {
-    const { email } = req.params;
-
     try {
+      const { email } = req.params;
+
       const participants = await Participant.find({ email });
 
-      const meetingIds = new Array();
+      const meetingIds = [];
 
       participants.forEach( ( participant ) => {
         meetingIds.push( participant.meeting_id );
