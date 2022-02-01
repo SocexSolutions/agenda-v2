@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 const db  = {};
 
+/* istanbul ignore next */
 db.connect = async() => {
   try {
     // because docker compose create a docker network, we use this internal
@@ -28,6 +29,7 @@ db.connect = async() => {
   }
 };
 
+/* istanbul ignore next */
 db.disconnect = async() => {
   jobi.info('disconnecting database');
 

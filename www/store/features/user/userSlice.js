@@ -28,7 +28,14 @@ const reducer = ( state = initialState, action ) => {
   }
 };
 
-export const userRegister = ( email, username, password ) => {
+/**
+ * Register a new user
+ * @param {string} props.email - email address
+ * @param {string} props.username - user's username
+ * @param {string} props.password - user's password
+ * @returns {Promise<undefined>}
+ */
+export const userRegister = ({ email, username, password }) => {
   return async function registerUser( dispatch, getState ) {
     try {
       const { data } = await client.post(
@@ -51,17 +58,22 @@ export const userRegister = ( email, username, password ) => {
           email:    data.user.email
         }
       });
-    } catch ( error ) {
 
+    } catch ( error ) {
       console.error( error.message );
     }
   };
 };
 
-export const userLogin = ( username, password ) => {
+/**
+ * Login an existing user
+ * @param {string} props.username - user's username
+ * @param {string} props.password - user's password
+ * @returns {Promise<undefined>}
+ */
+export const userLogin = ({ username, password }) => {
   return async function loginUser( dispatch, getState ) {
     try {
-
       const { data } = await client.post(
         '/user/login',
         {
@@ -85,15 +97,17 @@ export const userLogin = ( username, password ) => {
       window.location = `user/${ data.user._id }`;
 
     } catch ( error ) {
-
       console.error( error.message );
     }
   };
 };
 
-export const userRefresh = ( ) => {
+/**
+ * Refresh the user state based on auth token
+ * @returns {Promise<undefined>}
+ */
+export const userRefresh = () => {
   return async function refreshUser( dispatch, getState ) {
-
     const token = parseCookie( document.cookie, 'agenda-auth' );
 
     if ( token ) {
@@ -122,11 +136,14 @@ export const userRefresh = ( ) => {
   };
 };
 
+/**
+ * Logout a the user, invalidating the cookie and clearing the user state
+ * @returns {Promise<undefined>}
+ */
 export const userLogout = () => {
   return async function logoutUser( dispatch, getState ) {
     const cookie = document.cookie
     .match( new RegExp( '(^| )' + 'agenda-auth' + '=([^;]+)' ) );
-
 
     if ( cookie ) {
       document.cookie = `${ cookie }; expires=Thu, 01 Jan 1970 00:00:00 UTC`;

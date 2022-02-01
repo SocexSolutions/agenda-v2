@@ -1,5 +1,4 @@
-const chai        = require('chai');
-const assert      = require('assert');
+const { assert }  = require('chai');
 const dbUtils     = require('../../utils/db');
 const db          = require('../../../lib/db');
 const api         = require('../../utils/api');
@@ -97,29 +96,25 @@ describe( 'controllers/participant', () => {
     });
   });
 
-  // describe( '#getMeetings', () => {
-  //   it( 'should return meetings', async() => {
+  describe( '#getMeetings', () => {
 
-  //     const res = await Meeting.insertMany([ meeting1, meeting2 ]);
+    it( 'should return meetings', async() => {
+      const res = await Meeting.insertMany([ meeting1, meeting2 ]);
 
-  //     const participants = new Array();
+      const participants = [];
 
-  //     res.forEach( ( meeting ) => {
-  //       participants.push({ email: 'jack@aol.com', meeting_id: meeting._id });
-  //     });
+      res.forEach( ( meeting ) => {
+        participants.push({ email: 'jack@aol.com', meeting_id: meeting._id });
+      });
 
-  //     await Participant.insertMany( participants );
+      await Participant.insertMany( participants );
 
-  //     try {
-  //       const resMain = await client.post(
-  //         'participant/getmeetings', { email: 'jack@aol.com' }
-  //       );
-  //       assert( resMain.data[ 1 ].name === 'meeting2', 'found Meetings' );
-  //     } catch ( err ) {
-  //       throw new Error(
-  //         'Failed to find Participant meetings | reason: ' + err
-  //       );
-  //     }
-  //   });
-  // });
+      const { data } = await client.get('participant/meetings/jack@aol.com ');
+
+      assert.strictEqual( data.length, 2 );
+      assert.deepEqual( data[ 1 ].name, res[ 1 ].name );
+    });
+
+  });
+
 });

@@ -1,7 +1,6 @@
 import styles from '../styles/Home.module.css';
 
-const home = () => {
-
+const Home = () => {
   return (
     <>
       <div className={styles.homeContainer}>
@@ -18,4 +17,4 @@ const home = () => {
   );
 };
 
-export default home;
+export default Home;
