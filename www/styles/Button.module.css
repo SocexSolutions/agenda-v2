@@ -1,35 +1,35 @@
 .btn {
   border: none;
-  padding: 0.5em 1.2em;
-  min-height: 32px;
-  min-width: 96px;
+  min-width: 7rem;
   justify-content: center;
   display: flex;
   flex-direction: row;
   align-items: center;
   cursor: pointer;
-  font-size: 16px;
-  border-radius: 4px;
+  border-radius: .25rem;
   transition: background 0.2s ease;
 }
 /* sizes */
 .xl {
-  font-size: 24px;
+  font-size: 1.5rem;
 }
 
 .large {
-  font-size: 20px;
+  padding: 0.70rem;
+  font-size: 1.5rem;
 }
 
 .medium {
-  font-size: 16px;
+  padding: .5rem;
+  font-size: 1.25rem;
 }
 
 .small {
-  font-size: 12px;
+  padding-top: .25rem;
+  font-size: .8rem;
 }
-/* varients */
 
+/* varients */
 .danger {
   background-color: var(--danger);
   border: 1px solid var(--danger);
@@ -62,13 +62,19 @@
 
 .icon {
   background-color: var(--background);
+  margin: 0 !important;
   color: var(--agendaSecondary);
   min-width: 0px;
   padding: 0.2rem;
 }
 
 .icon:hover {
-  background-color: #dfe9df98;
+  opacity: 50%;
+}
+
+.iconContainer {
+  margin-right: .5rem;
+  margin-top: auto;
 }
 
 .disabled {
@@ -111,9 +117,4 @@
 
 .stretchWide {
   width: 90%;
-}
-
-.iconContainer {
-  margin-right: 5px;
-  margin-top: auto;
 }

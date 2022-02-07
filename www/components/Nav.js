@@ -16,7 +16,8 @@ const selectUser = state => state.user;
 
 const Nav = () => {
   const dispatch = useDispatch();
-  const user = useSelector( selectUser );
+  const user     = useSelector( selectUser );
+  const userLink = `/user/${ user._id }`;
 
   if ( user.token === null ) {
     return (
@@ -49,26 +50,26 @@ const Nav = () => {
             varient="icon"
             onClick={() => dispatch( toggleDrawer() )}
           />
-          <Link href="/" passHref>
+          <Link href={userLink} passHref>
             <Button icon={<HomeOutlinedIcon />} varient="icon"/>
           </Link>
-
           <div className={styles.navCentered}>
             <Link href="/meeting/new" passHref>
               <Button
                 icon={<AddToPhotosOutlinedIcon />}
                 text="create"
                 varient="secondary"
+                hollow={true}
               />
             </Link>
           </div>
 
           <Button
+            id="dropDownButton"
             text={user.username}
             icon={<AccountCircleIcon />}
             varient="icon"
             size="small"
-            onClick="dropDown"
           >
             <DropDown />
           </ Button>

@@ -18,7 +18,7 @@
 .homeContainer h1 {
   margin: auto;
   text-align: center;
-  font-size: 2em;
+  font-size: 2rem;
   color: var(--textBlue);
   font-weight: bold;
 }
@@ -26,7 +26,7 @@
 .homeContainer p {
   margin: auto;
   text-align: center;
-  font-size: 1em;
-  padding-top: 30px;
+  font-size: 1rem;
+  padding-top: 2.5rem;
   color: var(--textBlue);
 }

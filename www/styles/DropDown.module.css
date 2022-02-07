@@ -1,11 +1,10 @@
 .container {
   width: 200px;
-  top: 80px;
+  height: fit-content;
   right: 5%;
   background-color: var(--menuColor);
-  position: absolute;
-  overflow: hidden;
   justify-content: center;
+  position: absolute;
 }
 
 .container Button {

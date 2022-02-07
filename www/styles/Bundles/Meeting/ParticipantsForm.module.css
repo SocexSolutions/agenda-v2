@@ -1,12 +1,14 @@
 .container {
-  background-color: var(--menuColor);
   color: var(--textBlue);
-  margin-left: 50px;
-  margin-right: 50px;
-  margin-bottom: 20px;
+  background-color: var(--menuColor);
+  border: 1px solid var(--agendaThree);
+  margin-left: 3rem;
+  margin-right: 3rem;
+  margin-bottom: 2rem;
   padding: 15px;
+  border-radius: 10px;
 }
 
 .container h2 {
-  margin-top: -5px;
+  margin-top: -.25rem;
 }
