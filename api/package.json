@@ -28,10 +28,10 @@
   "dependencies": {
     "@sendgrid/mail": "^7.5.0",
     "@starryinternet/jobi": "^1.1.0",
-    "axios": "^0.25.0",
+    "axios": "^0.26.0",
     "cors": "^2.8.5",
-    "express": "4.17.2",
+    "express": "4.17.3",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "6.2.0"
+    "mongoose": "6.2.1"
   }
 }
