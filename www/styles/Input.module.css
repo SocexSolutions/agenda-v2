@@ -1,0 +1,24 @@
+.default {
+  height: 1.5rem;
+  background-color: inherit;
+  color: var(--textBlue);
+  border: 0;
+  border-bottom: 1px solid var(--agendaSecondary);
+  padding: 0.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  outline-width: 0;
+  font-size: 1rem;
+}
+
+.outlined {
+  border-color: var(--agendaSecondary);
+  background-color: inherit;
+  border-width: 2px;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.wrapper input::placeholder {
+  color: var(--agendaSecondary);
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../styles/LogReg.module.css';
+import styles from '../styles/Input.module.css';
 import PropTypes from 'prop-types';
 
 const Input = ({

@@ -16,6 +16,9 @@ const reducer = ( state = initialState, action ) => {
     case 'meeting/save':
       return { ...state, openMeeting: action.payload };
 
+    case 'meeting/clear':
+      return { ...state, openMeeting: {} };
+
     case 'meetings/getmeetings':
       return { ...state, ...action.payload };
 
@@ -96,6 +99,14 @@ export const getInbox = () => {
         ownedMeetings: ownedRes.data,
         participantMeetings: participantRes.data
       }
+    });
+  };
+};
+
+export const clearMeeting = () => {
+  return function clearMeeting( dispatch, getState ) {
+    dispatch({
+      type: 'meeting/clear'
     });
   };
 };

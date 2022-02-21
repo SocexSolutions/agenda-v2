@@ -7,19 +7,17 @@ const Inbox = ({ meetings }) => {
 
     return (
       <Link key={meeting._id} href={ `/meeting/${ meeting._id }`}>
-        <div className={styles.message} >
-          <p>{meeting.name} </p>
-          <p> {date} </p>
+        <div className={styles.item} >
+          <p>{meeting.name}</p>
+          <p>{date}</p>
         </div>
       </Link>
     );
   });
 
   return (
-    <div className={styles.inboxContainer}>
-      <div className={styles.messagesContainer}>
-        {lineItems}
-      </div>
+    <div className={styles.messagesContainer}>
+      {lineItems}
     </div>
   );
 };

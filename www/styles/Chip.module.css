@@ -1,25 +1,24 @@
 .container {
-  border: 3px solid var(--agendaPrimary);
+  border: 2px solid var(--agendaThree);
   border-radius: 7px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   width: fit-content;
-  margin: 0;
-  cursor: default;
+  margin-left: .25rem;
+  font-weight: 200;
 }
 
 .container p {
-  font-size: 18px;
-  padding: 0px;
-  margin: 7px;
+  font-size: 1rem;
+  margin: .5rem;
   color: var(--textBlue)
 }
 
 .deleteIcon {
   color: var(--danger);
-  margin: 7px;
+  margin: .5rem;
   opacity: .5;
 }
 
@@ -28,9 +27,8 @@
   opacity: .8;
 }
 
-
 .icons {
-  color: var(--skyBlue);
+  color: var(--textBlue);
   display: inline-block;
   margin-left: .5rem;
 }

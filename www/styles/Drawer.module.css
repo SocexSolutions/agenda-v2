@@ -1,48 +1,56 @@
 .godContainer {
   display: flex;
   flex-direction:row;
+  height: 100%;
 }
 
 .container {
-  width: 270px;
+  width: 18rem;
+  border: 1px solid var(--agendaThree);
   background-color: var(--menuColor);
-  height: 80%;
+  height: 100%;
   transition: width 600ms;
   overflow: hidden;
+  margin-top: 1rem;
+  border-radius: 0rem .5rem .5rem 0rem;
 }
 
 .container h2 {
   color: var(--agendaSecondary);
-  padding-top: 20px;
-  margin: 22px;
+  font-size: 2rem;
+  margin-left: 1rem;
 }
 
 .container Button {
-  margin: 12px;
+  margin: 1.25rem;
 }
 
 .closed {
-  width: 22px;
+  width: 0rem;
+  left: -1px;
 }
 
-.arrowContainer{
-  margin-top: 30vh;
-  width: 20px;
-  height: 50px;
+.arrowContainer {
+  border-radius: 0rem .5rem .5rem 0rem;
+  margin-top: calc( 50vh - 5.5rem );
+  border: 1px solid var(--agendaThree);
+  background-color: var(--menuColor);
+  margin-bottom: auto;
+  width: 2rem;
+  height: 3rem;
   background-color: var(--menuColor);
 }
 
 .arrow {
-  margin-top: 10px;
   color: var(--agendaSecondary);
   float: right;
 }
 
 .arrowClose {
-  transform: rotate(180deg);
+  transform: rotate(180deg) translate( 0, -.4rem );
   transition: transform 600ms linear;
 }
 .arrowOpen {
-  transform: rotate(0deg);
+  transform: rotate(0deg) translate( 0, .7rem );
   transition: transform 600ms linear;
 }

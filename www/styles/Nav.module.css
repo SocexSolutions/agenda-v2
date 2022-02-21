@@ -1,19 +1,19 @@
 .nav {
-  height: 100px;
-  padding: 0px 5px 0px 5px;
+  height: 5.5rem;
+  padding: 0rem .5rem 0rem .5rem;
   color: var(--textBlue);
   display: flex;
   align-items: center;
-  margin-left: 10px;
+  margin-left: 1rem;
 }
 
 .navLoggedIn {
-  margin: 0 3vw 0 0;
+  margin: 0 1.5rem 0 1.5rem;
 }
 
 .login {
-  height: 50px;
-  padding: 10px;
+  height: 4rem;
+  padding: 1rem;
   color: var(--textBlue);
   display: flex;
   align-items: center;
@@ -34,21 +34,21 @@
 }
 
 .agenda h1 {
-  margin-left: 10px;
+  margin-left: 1rem;
 }
 
 .navLoggedIn ul li a {
-  margin: 5px 15px;
+  margin: .5rem 1.5rem;
 }
 
 .navLoggedIn Button {
-  margin: 55px 0px;
+  margin: 4.5rem 0px;
 }
 
 .nav ul li a {
-  margin: 5px 15px;
+  margin: .5rem 1rem;
 }
 
 .nav Button {
-  margin: 5px 10px;
+  margin: .5rem 1rem;
 }

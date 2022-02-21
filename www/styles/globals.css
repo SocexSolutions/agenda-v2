@@ -20,17 +20,19 @@
 
 html,
 body {
+  height: 100vh;
   padding: 0;
   margin: 0;
   background-color: var(--background);
   font-family: open-sans;
   overflow-x:hidden;
-  color: var(--agendaSecondary)
+  color: var(--agendaSecondary);
 }
 
 a {
   color: inherit;
   text-decoration: none;
+
 }
 
 * {

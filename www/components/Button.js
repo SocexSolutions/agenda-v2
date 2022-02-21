@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import useClickAway from '../utils/clickAway';
 import styles from '../styles/Button.module.css';
 
 
@@ -17,77 +18,78 @@ const Button = ({
 
   const [ open, setOpen ] = useState( false );
 
-  let classNames = styles.btn;
+
+
+  let buttonStyles = styles.btn;
   // size cases
   switch ( size ) {
     case 'small':
-      classNames += ' ' + styles.small;
+      buttonStyles += ' ' + styles.small;
       break;
     case 'medium':
-      classNames += ' ' + styles.medium;
+      buttonStyles += ' ' + styles.medium;
       break;
     case 'large':
-      classNames += ' ' + styles.large;
+      buttonStyles += ' ' + styles.large;
       break;
     case 'xl':
-      classNames += ' ' + styles.xl;
+      buttonStyles += ' ' + styles.xl;
       break;
   }
 
   //varient case
   switch ( varient ) {
     case 'primary':
-      classNames += ' ' + styles.primary;
+      buttonStyles += ' ' + styles.primary;
       break;
     case 'secondary':
-      classNames += ' ' + styles.secondary;
+      buttonStyles += ' ' + styles.secondary;
       break;
     case 'danger':
-      classNames += ' ' + styles.danger;
+      buttonStyles += ' ' + styles.danger;
       break;
     case 'disabled':
-      classNames += ' ' + styles.disabled;
+      buttonStyles += ' ' + styles.disabled;
       break;
     case 'menu':
-      classNames += ' ' + styles.menu;
+      buttonStyles += ' ' + styles.menu;
       break;
     case 'topic':
-      classNames += ' ' + styles.topic;
+      buttonStyles += ' ' + styles.topic;
       break;
     case 'icon':
-      classNames += ' ' + styles.icon;
+      buttonStyles += ' ' + styles.icon;
       break;
 
   }
   //stretch case
   switch ( stretch ) {
     case 'medium':
-      classNames += ' ' + styles.stretchMedium;
+      buttonStyles += ' ' + styles.stretchMedium;
       break;
     case 'wide':
-      classNames += ' ' + styles.stretchWide;
+      buttonStyles += ' ' + styles.stretchWide;
       break;
     case false:
       break;
   }
 
-  classNames = className ? classNames + ' ' + className : classNames;
+  buttonStyles = className ? buttonStyles + ' ' + className : buttonStyles;
 
-  switch ( onClick ) {
-    case 'dropDown':
-      onClick = () => setOpen( !open );
-  }
+  const buttonRef = useRef( null );
+  useClickAway( buttonRef, () => setOpen( false ) );
 
   return (
-    <>
-      <button className={classNames} onClick={onClick}>
-        <div className={styles.iconContainer}>
-          {icon}
-        </div>
+    <div ref={buttonRef} onClick={() => setOpen( true )}>
+      <button className={buttonStyles} onClick={onClick}>
+        {
+          icon &&
+          <div className={styles.iconContainer}>{icon}</div>
+        }
         {text}
       </button>
       { open && children }
-    </>
+    </div>
   );
 };
 
@@ -108,8 +110,7 @@ Button.defaultProps = {
   stretch: false,
   text: '',
   size: 'medium',
-  varient: 'primary',
-  icon: ''
+  varient: 'primary'
 };
 
 export default Button;

@@ -1,22 +1,7 @@
-.inboxMenuContainer {
-  left: 0;
-  position: relative;
-  min-width: 200px;
-  width: 20vw;
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: column;
-  background-color: var(--menuColor);
-  height: 86vh;
-}
-
-.inboxMenuContainer ul {
-  list-style-type: none;
-}
-
 .inboxContainer {
   display: flex;
   margin-left: 0;
+  width: 100%;
 }
 
 .messagesContainer {
@@ -24,109 +9,29 @@
   margin-left: 5%;
   margin-top: 0;
   flex-direction: column;
+  margin: 3rem;
 }
 
-.messages {
-  border-bottom: 2px solid var(--agendaSecondary);
-  margin-top: 0;
-  margin-bottom: 0;
-  padding: 1rem;
+.item {
+  border-bottom: .5px solid var(--agendaSecondary);
+  padding: 0.5rem;
   display: flex;
   color: var(--textBlue);
 }
 
-.messages p :nth-child(2n-1){
-  margin-right: 10%;
+.item :nth-child(odd){
+  margin-right: auto;
 }
 
-.inboxMenuContainer h1 {
-  border-bottom: 3px solid var(--background);
-  font-size: x-large;
-  padding: 1rem;
-  padding-top: 0;
-  color: var(--textBlue);
-  font-weight: bold;
+.item:hover {
+  cursor: pointer;
+  background-color: var(---agendaSecondary);
 }
 
-.menuDropDownsContainer {
-  position: absolute;
-  top: 40%;
-  display: flex;
-  width: 100%;
-  height: 50%;
-  justify-content: flex-start;
-  flex-direction: column;
+.item p {
+  transition: linear .2s;
 }
 
-.mailBoxContainer {
-  position: relative;
-  width: 70vw;
-  margin: auto;
-  min-width: 550px;
-  height: 80vh;
-  margin-top: 0;
-  background-color: var(--background);
-}
-
-.mailBoxContainer h1 {
-  padding: 0;
-  display: inline-block;
-  margin-top: 0;
-  padding-top: 1rem;
-  padding-left: 1rem;
-  color: var(--textBlue);
-}
-.mailBoxContainer h4 {
-  padding: 0;
-  margin-top: 0;
-  padding-right: 1rem;
-  padding-top: 2rem;
-  float: right;
-  color: var(--textBlue);
-}
-
-.mailBoxContentContainer {
-  position: absolute;
-  margin-bottom: 0;
-  width: 100%;
-  height: 90%;
-  border-top: 1px solid var(--agendaSecondary);
-  border-bottom: 1px solid var(--agendaSecondary);
-  background-color: var(--background);
-}
-
-.topicsContainer {
-  position: absolute;
-  width: 100%;
-  height: 22vh;
-  min-height: 158px;
-  margin-top: 20px;
-  background-color: var(--menuColor);
-}
-
-.topicsContainer h2 {
-  text-align: center;
-  color: var(--textBlue);
-}
-
-.topicsContainer div {
-  display: flex;
-}
-
-.participantsContainer {
-  position: absolute;
-  margin-top: 210px;
-  width: 100%;
-  height: 38vh;
-  background-color: var(--menuColor);
-}
-
-.participantsContainer h5 {
-  color: var(--textBlue);
-}
-
-.icons {
-  color: var(--skyBlue);
-  display: inline-block;
-  margin-left: .5rem;
+.item:hover > p {
+  opacity: 70%;
 }
