@@ -2,9 +2,6 @@ import styles from '../styles/DropDown.module.css';
 
 import Button from '../components/Button';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import SettingsIcon from '@material-ui/icons/Settings';
-import AccountTreeIcon from '@material-ui/icons/AccountTree';
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import LogoutIcon from '@material-ui/icons/ExitToApp';
 
 import { userLogout } from '../store/features/user/userSlice';
@@ -30,24 +27,6 @@ const DropDown = () => {
         stretch="wide"
         text="Profile"
         onClick={() => ( window.location = `/user/${ user_id }` )}
-      />
-      <Button
-        icon={<AccountTreeIcon />}
-        varient="menu"
-        stretch="wide"
-        text="Account"
-      />
-      <Button
-        icon={<SettingsIcon />}
-        varient="menu"
-        stretch="wide"
-        text="Settings"
-      />
-      <Button
-        icon={<HelpOutlineIcon />}
-        varient="menu"
-        stretch="wide"
-        text="Help"
       />
       <Button
         icon={<LogoutIcon />}

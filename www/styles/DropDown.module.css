@@ -2,9 +2,11 @@
   width: 200px;
   height: fit-content;
   right: 5%;
-  background-color: var(--menuColor);
+  background-color: var(--agendaThree);
   justify-content: center;
   position: absolute;
+  border-radius: 10px;
+  border: 1px solid var(--agendaThree);
 }
 
 .container Button {

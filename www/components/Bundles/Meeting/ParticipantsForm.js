@@ -1,4 +1,5 @@
 import styles from '../../../styles/Bundles/Meeting/ParticipantsForm.module.css';
+
 import Chip from '../../Chip';
 import ChipForm from '../../ChipForm';
 

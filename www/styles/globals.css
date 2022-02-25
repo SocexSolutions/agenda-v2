@@ -12,10 +12,14 @@
   --skyBlue: #5486e5;
   --textBlue: #c6d7f6;
   --danger: #df1405;
+  --dangerText: #dcaca9;
+  --dangerBg: #940c03;
   --menuColor: #0e2d68;
   --menuColorOp: #244a93;
   --agendaPurple: #5d5fef;
-  --agendaGreen: #41AE4C;
+  --success: #9bc333;
+  --successText: #dae8aa;
+  --successBg: #5d8700;
 }
 
 html,

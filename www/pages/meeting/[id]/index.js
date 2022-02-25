@@ -3,10 +3,10 @@ import TopicsForm from '../../../components/Bundles/Meeting/TopicsForm';
 import ParticipantsForm from '../../../components/Bundles/Meeting/ParticipantsForm';
 import LoadingIcon from '../../../components/LoadingIcon';
 import Button from '../../../components/Button';
-import {Snackbar} from '@material-ui/core';
+import Snackbar from '../../../components/Snackbar';
 
 import { useEffect, useState } from 'react';
-import { saveMeeting, fetchMeeting, clearMeeting } from '../../../store/features/meetings/meetingSlice';
+import { saveMeeting, fetchMeeting } from '../../../store/features/meetings/meetingSlice';
 import { useSelector } from 'react-redux';
 
 import styles from '../../../styles/MeetingPage.module.css';
@@ -17,6 +17,7 @@ const Meeting = props => {
   const [ name, setName ] = useState('');
   const [ participants, setParticipants ] = useState([]);
   const [ topics, setTopics ] = useState([]);
+  const [ snackbarOpen, setSnackbarOpen ] = useState( false );
 
   const user = useSelector( state => state.user );
   const meeting = useSelector( state => state.meetings.openMeeting );
@@ -31,8 +32,6 @@ const Meeting = props => {
     const loadMeeting = async() => {
       const meeting_id = String( window.location.pathname ).split('/').pop();
       const realMeetingId = meeting_id.length === 24;
-
-
 
       if ( realMeetingId ) {
         await props.store.dispatch(
@@ -72,10 +71,7 @@ const Meeting = props => {
     save();
 
     if ( String( window.location.pathname ).split('/').pop().length === 24 ) {
-      alert('Successfully updated meeting');
-    } else {
-      window.open("about:blank", "_self");
-      window.close();
+      setSnackbarOpen( true );
     }
   };
 
@@ -107,6 +103,12 @@ const Meeting = props => {
         className={styles.meetingButton}
         onClick={handleSubmit}
         text='submit'
+      />
+      <Snackbar
+        message='Save Successful'
+        type='success'
+        open={snackbarOpen}
+        setOpen={setSnackbarOpen}
       />
     </div>
   );
