@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 /**
  * Snackbar used for displaying notifications to the user
  * @param {String} message - message to display
- * @param {String} type - type of message ['success' | 'warning' | 'danger']
+ * @param {String} type - type of message ['success' | 'danger']
  * @param {Boolean} open - if snackbar is open
  * @param {Number} timeout - how long till the snackbar closes
  * @param {Function} setOpen - set open
