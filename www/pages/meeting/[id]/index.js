@@ -6,7 +6,11 @@ import Button from '../../../components/Button';
 import Snackbar from '../../../components/Snackbar';
 
 import { useEffect, useState } from 'react';
-import { saveMeeting, fetchMeeting } from '../../../store/features/meetings/meetingSlice';
+import {
+  saveMeeting,
+  fetchMeeting
+} from '../../../store/features/meetings/meetingSlice';
+
 import { useSelector } from 'react-redux';
 
 import styles from '../../../styles/MeetingPage.module.css';
@@ -100,9 +104,9 @@ const Meeting = props => {
       />
       <Button
         varient='secondary'
-        className={styles.meetingButton}
+        customClass={styles.meetingButton}
         onClick={handleSubmit}
-        text='submit'
+        text='save'
       />
       <Snackbar
         message='Save Successful'

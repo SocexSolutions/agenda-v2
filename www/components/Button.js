@@ -13,12 +13,10 @@ const Button = ({
   varient,
   stretch,
   children,
-  className
+  customClass
 }) => {
 
   const [ open, setOpen ] = useState( false );
-
-
 
   let buttonStyles = styles.btn;
   // size cases
@@ -74,7 +72,7 @@ const Button = ({
       break;
   }
 
-  buttonStyles = className ? buttonStyles + ' ' + className : buttonStyles;
+  buttonStyles = customClass ? buttonStyles + ' ' + customClass : buttonStyles;
 
   const buttonRef = useRef( null );
   useClickAway( buttonRef, () => setOpen( false ) );

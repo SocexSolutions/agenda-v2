@@ -9,7 +9,7 @@
   border: 1px solid var(--agendaThree);
   background-color: var(--menuColor);
   height: 100%;
-  transition: width 600ms;
+  transition: width 400ms;
   overflow: hidden;
   margin-top: 1rem;
   border-radius: 0rem .5rem .5rem 0rem;
@@ -48,9 +48,9 @@
 
 .arrowClose {
   transform: rotate(180deg) translate( 0, -.4rem );
-  transition: transform 600ms linear;
+  transition: transform 400ms linear;
 }
 .arrowOpen {
   transform: rotate(0deg) translate( 0, .7rem );
-  transition: transform 600ms linear;
+  transition: transform 400ms linear;
 }

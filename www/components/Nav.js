@@ -32,10 +32,18 @@ const Nav = () => {
 
           <div className={styles.login}>
             <Link href="/login">
-              <Button varient="secondary" text="Login"/>
+              <Button
+                varient="secondary"
+                text="Login"
+                className={styles.navButton}
+              />
             </Link>
             <Link href="/register">
-              <Button varient="secondary" text="Sign Up" />
+              <Button
+                varient="secondary"
+                text="Sign Up"
+                className={styles.navButton}
+              />
             </Link>
           </div>
         </nav>
@@ -63,13 +71,12 @@ const Nav = () => {
               />
             </Link>
           </div>
-
           <Button
             id="dropDownButton"
             text={user.username}
             icon={<AccountCircleIcon />}
             varient="icon"
-            size="small"
+            size="medium"
           >
             <DropDown />
           </ Button>

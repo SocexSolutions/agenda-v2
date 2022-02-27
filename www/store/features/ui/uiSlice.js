@@ -21,7 +21,6 @@ export default ( state = initialState, action ) => {
  */
 export const toggleDrawer = () => {
   return function toggleDrawer( dispatch, getState ) {
-    console.log('toggleDrawer');
     dispatch({ type: 'ui/toggleDrawer', payload: {} });
   };
 };

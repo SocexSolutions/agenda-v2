@@ -9,6 +9,11 @@
 
 .chipContainer {
   display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: start;
+  flex-wrap: wrap;
+  min-height: 45px;
 }
 
 .inputContainer {
@@ -17,6 +22,6 @@
 }
 
 .addButton {
-  margin-right: 0px;
-  margin-left: 2rem;
+  margin-left: 1.5rem;
+  margin-top: -.4rem;
 }

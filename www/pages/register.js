@@ -32,7 +32,7 @@ const Register = props => {
     <div className={styles.formContainer}>
       <form>
         <h1 className={styles.formTitle}>
-            Register
+          Sign Up
         </h1>
         <Input
           name='email'
@@ -63,9 +63,9 @@ const Register = props => {
         />
         <Button
           onClick={handleSubmit}
-          text='Register'
+          text='Sign Up'
           size='medium'
-          stretch='wide'
+          customClass={styles.loginButton}
           varient='secondary'
         />
       </form>
