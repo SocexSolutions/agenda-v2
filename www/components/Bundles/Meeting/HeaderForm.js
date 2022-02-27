@@ -7,7 +7,7 @@ function HeaderForm( props ) {
     <div className={styles.meetingBar}>
       <form className={styles.form}>
         <Input
-          value={ props.meetingName }
+          value={props.meetingName}
           placeholder="Meeting Name"
           onChange={props.setMeetingName}
           size="xl"

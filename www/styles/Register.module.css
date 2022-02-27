@@ -5,28 +5,28 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background: var(--agendaBg );
 }
 
 .formContainer form {
   background-color: var(--menuColor);
   border-radius: 5px;
-  display: flex;
-  flex-direction: column; 
-  justify-content: center;
-  align-items: center;
   padding: 20px 30px 30px 30px;
-}
-
-.formContainer Button {
-  margin: 15px 0px 0px 0px;
+  opacity: 85%;
 }
 
 .formTitle {
+  width: 100%;
   color: var(--agendaSecondary);
-  margin: 0px 10px 15px 10px;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .formContainer Input {
   margin: 0px 0px 20px 0px;
 }
 
+.loginButton {
+  margin-top: 20px;
+  margin-left: auto;
+}

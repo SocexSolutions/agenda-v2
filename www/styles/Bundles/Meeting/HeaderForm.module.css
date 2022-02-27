@@ -1,8 +1,7 @@
 .meetingBar {
   display: flex;
-  margin-bottom: 2rem;
+  margin: 2rem;
   margin-left: 3rem;
-  margin-right: 3rem;
 }
 
 .form {

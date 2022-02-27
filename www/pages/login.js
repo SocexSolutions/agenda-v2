@@ -29,9 +29,7 @@ const Login = props => {
   return (
     <div className={styles.formContainer}>
       <form>
-        <h1 className={styles.formTitle}>
-          Login
-        </h1>
+        <h1 className={styles.formTitle}>Login</h1>
         <Input
           name='username'
           type='text'
@@ -54,8 +52,8 @@ const Login = props => {
           onClick={handleSubmit}
           text='Login'
           size='medium'
-          stretch='wide'
           varient='secondary'
+          customClass={styles.loginButton}
         />
       </form>
     </div>

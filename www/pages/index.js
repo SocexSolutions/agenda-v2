@@ -1,11 +1,6 @@
 import styles from '../styles/Home.module.css';
-import Button from '../components/Button';
-import { useState } from 'react';
-import SnackBar from '@material-ui/core/Snackbar'
 
 const Home = () => {
-  const [ open, setOpen ] = useState( false );
-
   return (
     <>
       <div className={styles.homeContainer}>
@@ -18,8 +13,6 @@ const Home = () => {
           overall user management of files, disks, and network volumes.
         </p>
       </div>
-      <Button text="click for a snackbar" onClick={() => setOpen( !open )}/>
-      <SnackBar open={open} onClose={() => setOpen( !open )} text="tom hudson sent you a new meeting" />
     </>
   );
 };

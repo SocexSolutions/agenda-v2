@@ -6,9 +6,12 @@ import ChipForm from '../../ChipForm';
 function ParticipantsForm( props ) {
   return (
     <div className={styles.container}>
-      <h2>Participants</h2>
-      <p>Owner</p>
-      <Chip text={props.owner} icon={true} />
+      <h3>Owner</h3>
+      <Chip
+        text={props.owner}
+        icon={true}
+      />
+      <br/>
       <ChipForm
         items={props.participants}
         itemKey='email'

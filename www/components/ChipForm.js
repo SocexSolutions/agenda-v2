@@ -65,8 +65,8 @@ function ChipForm( props ) {
   });
 
   return (
-    <div>
-      <p>{ props.itemName }s</p>
+    <div className={styles.chipForm}>
+      <h3>{ props.itemName }s</h3>
       <div className={styles.chipContainer}>
         {chips}
       </div>
@@ -81,9 +81,10 @@ function ChipForm( props ) {
         <Button
           varient='secondary'
           name="submit"
+          size="medium"
           onClick={handleSubmit}
           text="add"
-          className={styles.addButton}
+          customClass={styles.addButton}
         />
       </div>
     </div>
