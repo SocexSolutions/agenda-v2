@@ -33,14 +33,14 @@ const Nav = () => {
           <div className={styles.login}>
             <Link href="/login">
               <Button
-                varient="secondary"
+                variant="outlined"
                 text="Login"
                 className={styles.navButton}
               />
             </Link>
             <Link href="/register">
               <Button
-                varient="secondary"
+                variant="outlined"
                 text="Sign Up"
                 className={styles.navButton}
               />
@@ -55,18 +55,18 @@ const Nav = () => {
         <nav className={classNames( styles.nav, styles.navLoggedIn )}>
           <Button
             icon={<MenuIcon />}
-            varient="icon"
+            variant="icon"
             onClick={() => dispatch( toggleDrawer() )}
           />
           <Link href={userLink} passHref>
-            <Button icon={<HomeOutlinedIcon />} varient="icon"/>
+            <Button icon={<HomeOutlinedIcon />} variant="icon"/>
           </Link>
           <div className={styles.navCentered}>
             <Link href="/meeting/new" passHref>
               <Button
                 icon={<AddToPhotosOutlinedIcon />}
                 text="create"
-                varient="secondary"
+                variant="outlined"
                 hollow={true}
               />
             </Link>
@@ -75,7 +75,7 @@ const Nav = () => {
             id="dropDownButton"
             text={user.username}
             icon={<AccountCircleIcon />}
-            varient="icon"
+            variant="icon"
             size="medium"
           >
             <DropDown />

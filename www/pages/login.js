@@ -52,7 +52,7 @@ const Login = props => {
           onClick={handleSubmit}
           text='Login'
           size='medium'
-          varient='secondary'
+          variant='outlined'
           customClass={styles.loginButton}
         />
       </form>

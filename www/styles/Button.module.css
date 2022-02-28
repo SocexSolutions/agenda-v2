@@ -8,6 +8,7 @@
   border-radius: .25rem;
   transition: background 0.2s ease;
 }
+
 /* sizes */
 .xl {
   font-size: 1.5rem;
@@ -28,37 +29,6 @@
   font-size: .8rem;
 }
 
-/* varients */
-.danger {
-  background-color: var(--danger);
-  border: 1px solid var(--danger);
-  color: white;
-}
-
-.danger:hover {
-  background-color: #df140598;
-}
-
-.primary {
-  background-color: var(--agendaPrimary);
-  border: 1px solid var(--agendaPrimary);
-  color: black;
-}
-
-.primary:hover {
-  background-color: #244a9398;
-}
-
-.secondary {
-  background-color: inherit;
-  color: var(--agendaSecondary);
-  border: 1px solid var(--agendaSecondary);
-}
-
-.secondary:hover {
-  opacity: 50%;
-}
-
 .icon {
   background-color: var(--background);
   margin: 0 !important;
@@ -74,6 +44,7 @@
 
 .iconContainer {
   margin-right: .5rem;
+  margin-top: .4rem;
 }
 
 .disabled {
@@ -86,25 +57,24 @@
 .menu {
   background-color: inherit;
   color: var(--agendaSecondary);
-  font-weight: bold;
   justify-content: flex-start;
   align-items: left;
+  font-weight: 300;
 }
 
 .menu:hover {
-  background-color: var(--menuColorOp);
-  color: var(--agendaSecondary);
-  font-weight: bold;
+  background-color: var(--backgroundThree);
+  font-weight: 300;
 }
 
 .topic {
-  background-color: var(--menuColor);
+  background-color: var(--backgroundTwo);
   color: var(--agendaSecondary);
   border: 1px solid var(--agendaSecondary);
 }
 
 .topic:hover {
-  background-color: var(--menuColorOp);
+  background-color: var(--backgroundTwo);
   color: var(--agendaSecondary);
   border: 1px solid var(--agendaSecondary);
 }
@@ -116,4 +86,24 @@
 
 .stretchWide {
   width: 90%;
+}
+
+.outlined {
+  background-color: inherit;
+  border: 1px solid var(--agendaSecondary);
+  color: var(--textBlue);
+}
+
+.outlined:hover {
+  opacity: 50%;
+}
+
+.success {
+  border: 1px solid var(--success);
+  color: var(--successText);
+}
+
+.danger {
+  border: 1px solid var(--danger);
+  color: var(--dangerText);
 }

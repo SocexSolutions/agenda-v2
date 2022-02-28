@@ -66,7 +66,7 @@ const Register = props => {
           text='Sign Up'
           size='medium'
           customClass={styles.loginButton}
-          varient='secondary'
+          variant='outlined'
         />
       </form>
     </div>

@@ -11,7 +11,7 @@ const Input = ({
   id,
   size,
   required,
-  varient,
+  variant,
   onKeyPress,
   type
 }) => {
@@ -47,8 +47,8 @@ const Input = ({
       break;
   }
 
-  //varient cases
-  switch ( varient ) {
+  //variant cases
+  switch ( variant ) {
     case 'default':
       classNames += ' ' + styles.default;
       break;
@@ -85,7 +85,7 @@ Input.propTypes = {
   value: PropTypes.string,
   size: PropTypes.string,
   required: PropTypes.bool,
-  varient: PropTypes.string,
+  variant: PropTypes.string,
   type: PropTypes.string
 };
 
@@ -94,7 +94,7 @@ Input.defaultProps = {
   label: '',
   placeholder: '',
   size: '20',
-  varient: 'default'
+  variant: 'default'
 };
 
 export default Input;

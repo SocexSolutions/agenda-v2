@@ -4,7 +4,7 @@
   width: 100%;
 }
 
-.messagesContainer {
+.list {
   display: flex;
   margin-left: 5%;
   margin-top: 0;
@@ -16,11 +16,22 @@
   border-bottom: .5px solid var(--agendaSecondary);
   padding: 0.5rem;
   display: flex;
-  color: var(--textBlue);
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: var(--agendaSecondary);
 }
 
-.item :nth-child(odd){
+.item :nth-child(1){
   margin-right: auto;
+}
+
+.item :nth-child(2){
+  margin-left: auto;
+}
+
+.item :nth-child(3){
+  margin-left: 2rem;
 }
 
 .item:hover {

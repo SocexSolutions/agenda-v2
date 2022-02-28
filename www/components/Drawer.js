@@ -24,23 +24,23 @@ const Drawer = () => {
           text="Upcoming"
           size="large"
           stretch="wide"
-          varient="menu"
+          variant="menu"
           icon={<DoubleArrowIcon style={{ color: 'var(--agendaPurple)' }} />}
         />
         <Button
           text="Voting"
           size="large"
           stretch="wide"
-          varient="menu"
+          variant="menu"
           icon={
-            <CheckBoxOutlinedIcon style={{ color: 'var(--agendaGreen)' }} />
+            <CheckBoxOutlinedIcon style={{ color: 'var(--success)' }} />
           }
         />
         <Button
           text="Completed"
           size="large"
           stretch="wide"
-          varient="menu"
+          variant="menu"
           icon={<CancelOutlinedIcon style={{ color: 'var(--danger)' }} />}
         />
       </div>

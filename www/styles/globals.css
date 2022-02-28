@@ -5,18 +5,16 @@
 
 :root {
   --agendaPrimary: #244a93;
-  --background: #082050;
-  --backgroundShadow: #041435;
   --agendaSecondary: #9dbeff;
-  --agendaThree: #2254af ;
-  --skyBlue: #5486e5;
   --textBlue: #c6d7f6;
+  --agendaThree: #2254af ;
+  --background: #082050;
+  --backgroundTwo: #0e2d68;
+  --backgroundShadow: #041435;
+  --agendaPurple: #5d5fef;
   --danger: #df1405;
   --dangerText: #dcaca9;
   --dangerBg: #940c03;
-  --menuColor: #0e2d68;
-  --menuColorOp: #244a93;
-  --agendaPurple: #5d5fef;
   --success: #9bc333;
   --successText: #dae8aa;
   --successBg: #5d8700;
@@ -24,7 +22,7 @@
 
 html,
 body {
-  height: 100vh;
+  height: 100%;
   padding: 0;
   margin: 0;
   background-color: var(--background);
@@ -41,4 +39,37 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+h1 {
+  font-weight: 100;
+}
+
+h2 {
+  font-weight: 100;
+}
+
+h3 {
+  font-weight: 100;
+}
+
+.card {
+  color: var(--textBlue);
+  background-color: var(--backgroundTwo);
+  border: 1px solid var(--agendaThree);
+  width: 90%;
+  min-width: 177px;
+  min-height: 30px;
+  margin:15px 0px;
+  text-align: center;
+  border-radius: 10px;
+  line-height: 30px;
+  padding: 5px;
+  font-weight: 600;
+}
+
+@media only screen and (max-width: 600px) {
+  .card {
+    min-width: 90px;
+  }
 }

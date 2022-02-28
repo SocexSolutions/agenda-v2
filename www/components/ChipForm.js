@@ -79,7 +79,7 @@ function ChipForm( props ) {
           onKeyPress={handleEnter}
         />
         <Button
-          varient='secondary'
+          variant='outlined'
           name="submit"
           size="medium"
           onClick={handleSubmit}
