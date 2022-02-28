@@ -1,0 +1,32 @@
+.container {
+  color: var(--textBlue);
+  background-color: var(--backgroundTwo);
+  border: 1px solid var(--agendaThree);
+  width: 100%;
+  margin:15px 0px;
+  text-align: center;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.inputContainer {
+ display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.title {
+
+}
+
+.takeAwayContainer  {
+  color: var(--textBlue);
+  background-color: var(--backgroundTwo);
+  border: 1px solid var(--agendaThree);
+  width: 100%;
+  margin:15px 0px;
+  border-radius: 10px;
+  padding: 5px;
+  min-height: 10rem;
+  overflow: scroll;
+}

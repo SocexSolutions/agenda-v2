@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+
+.mainContainer {
+  width: 50%;
+  display: flex;
+  margin: 0 30px;
+  flex-direction: column;
+  align-items: center;
+  border-left: 2px solid var(--agendaPrimary);
+  border-right: 2px solid var(--agendaPrimary);
+  padding: 1rem;
+  box-shadow: inset -15px 0 10px -15px var(--backgroundShadow) , inset 15px 0 15px -15px var(--backgroundShadow);
+}
+
+.sideContainer {
+  width: 25%;
+  min-width: 250px;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.loadingContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

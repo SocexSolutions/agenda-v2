@@ -10,7 +10,8 @@ const Button = ({
   text,
   size,
   onClick,
-  varient,
+  variant,
+  type = 'neutral',
   stretch,
   children,
   customClass
@@ -35,16 +36,9 @@ const Button = ({
       break;
   }
 
-  //varient case
-  switch ( varient ) {
-    case 'primary':
-      buttonStyles += ' ' + styles.primary;
-      break;
-    case 'secondary':
-      buttonStyles += ' ' + styles.secondary;
-      break;
-    case 'danger':
-      buttonStyles += ' ' + styles.danger;
+  switch ( variant ) {
+    case 'outlined':
+      buttonStyles += ' ' + styles.outlined;
       break;
     case 'disabled':
       buttonStyles += ' ' + styles.disabled;
@@ -58,8 +52,17 @@ const Button = ({
     case 'icon':
       buttonStyles += ' ' + styles.icon;
       break;
-
   }
+
+  switch ( type ) {
+    case 'success':
+      buttonStyles += ' ' + styles.success;
+      break;
+    case 'danger':
+      buttonStyles += ' ' + styles.danger;
+      break;
+  }
+
   //stretch case
   switch ( stretch ) {
     case 'medium':
@@ -98,7 +101,7 @@ Button.propTypes = {
     PropTypes.string,
     PropTypes.bool
   ]),
-  varient: PropTypes.string,
+  variant: PropTypes.string,
   text: PropTypes.string,
   size: PropTypes.string,
   icon: PropTypes.any
@@ -108,7 +111,7 @@ Button.defaultProps = {
   stretch: false,
   text: '',
   size: 'medium',
-  varient: 'primary'
+  variant: 'outlined'
 };
 
 export default Button;

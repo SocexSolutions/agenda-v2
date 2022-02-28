@@ -7,10 +7,10 @@
 .container {
   width: 18rem;
   border: 1px solid var(--agendaThree);
-  background-color: var(--menuColor);
-  height: 100%;
+  background-color: var(--backgroundTwo);
   transition: width 400ms;
   overflow: hidden;
+  height: 90%;
   margin-top: 1rem;
   border-radius: 0rem .5rem .5rem 0rem;
 }
@@ -32,13 +32,13 @@
 
 .arrowContainer {
   border-radius: 0rem .5rem .5rem 0rem;
-  margin-top: calc( 50vh - 5.5rem );
+  margin-top: calc( 50vh - 7rem );
   border: 1px solid var(--agendaThree);
-  background-color: var(--menuColor);
+  background-color: var(--backgroundTwo);
   margin-bottom: auto;
   width: 2rem;
   height: 3rem;
-  background-color: var(--menuColor);
+  background-color: var(--backgroundTwo);
 }
 
 .arrow {

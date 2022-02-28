@@ -9,7 +9,7 @@
 }
 
 .formContainer form {
-  background-color: var(--menuColor);
+  background-color: var(--backgroundTwo);
   border-radius: 5px;
   padding: 20px 30px 30px 30px;
   opacity: 85%;

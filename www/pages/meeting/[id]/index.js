@@ -103,7 +103,7 @@ const Meeting = props => {
         setParticipants={setParticipants}
       />
       <Button
-        varient='secondary'
+        variant='outlined'
         customClass={styles.meetingButton}
         onClick={handleSubmit}
         text='save'

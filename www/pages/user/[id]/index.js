@@ -32,7 +32,7 @@ const User = () => {
   } else {
     return (
       <>
-        <LoadingIcon size="large" />;
+        <LoadingIcon size="large" />
       </>
     );
   }

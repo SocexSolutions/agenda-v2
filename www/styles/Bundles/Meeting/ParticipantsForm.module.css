@@ -1,6 +1,6 @@
 .container {
   color: var(--textBlue);
-  background-color: var(--menuColor);
+  background-color: var(--backgroundTwo);
   border: 1px solid var(--agendaThree);
   margin-left: 3rem;
   margin-right: 3rem;

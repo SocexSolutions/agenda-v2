@@ -23,14 +23,14 @@ const DropDown = () => {
     <div className={styles.container}>
       <Button
         icon={<AccountCircleIcon />}
-        varient="menu"
+        variant="menu"
         stretch="wide"
         text="Profile"
         onClick={() => ( window.location = `/user/${ user_id }` )}
       />
       <Button
         icon={<LogoutIcon />}
-        varient="menu"
+        variant="menu"
         stretch="wide"
         text="Logout"
         onClick={() => logout()}
