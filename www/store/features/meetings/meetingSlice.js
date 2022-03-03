@@ -54,8 +54,6 @@ export const fetchMeeting = ( meeting_id ) => {
 
 export const saveMeeting = ( meeting ) => {
   return async function MeetingSave( dispatch, getState ) {
-
-    try {
       await client.post(
         'meeting',
         meeting
@@ -68,10 +66,6 @@ export const saveMeeting = ( meeting ) => {
         }
       });
 
-    } catch ( error ) {
-
-      console.error( error.message );
-    }
   };
 };
 

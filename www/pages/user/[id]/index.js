@@ -23,10 +23,14 @@ const User = () => {
 
   const loaded = ownedMeetings.length || participantMeetings.length;
 
+  //TODO filter and sort for inbox
+
   if ( loaded ) {
     return (
       <>
-        <Inbox meetings={ ownedMeetings }/>
+        <Inbox
+          meetings={ ownedMeetings }
+        />
       </>
     );
   } else {

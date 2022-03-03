@@ -18,13 +18,15 @@ import styles from '../../../styles/MeetingPage.module.css';
 const Meeting = props => {
   const [ loading, setLoading ] = useState( true );
 
-  const [ name, setName ] = useState('');
+  const [ name, setName ]                 = useState('');
   const [ participants, setParticipants ] = useState([]);
-  const [ topics, setTopics ] = useState([]);
-  const [ snackbarOpen, setSnackbarOpen ] = useState( false );
+  const [ topics, setTopics ]             = useState([]);
+  const [ saving, setSaving ]             = useState( false );
 
-  const user = useSelector( state => state.user );
+  const user    = useSelector( state => state.user );
   const meeting = useSelector( state => state.meetings.openMeeting );
+
+  //update store every change
 
   const clearPage = () => {
     setName('');
@@ -57,27 +59,33 @@ const Meeting = props => {
     loadMeeting();
   }, [ user, props.store ] );
 
+  useEffect( () => {
+    const save = async() => {
+      try {
+        await props.store.dispatch(
+          saveMeeting({
+            name,
+            owner_id: user._id,
+            meeting_id: meeting._id || undefined,
+            date: new Date,
+            participants,
+            topics
+          })
+        );
 
-  const save = () => {
-    props.store.dispatch(
-      saveMeeting({
-        name,
-        owner_id: user._id,
-        meeting_id: meeting._id || undefined,
-        date: new Date,
-        participants,
-        topics
-      })
-    );
-  };
+        setSaving( false );
+        props.notify( 'Save Successful', 'success' );
+      } catch ( err ) {
+        setSaving( false );
+        props.notify( 'Save Successful', 'danger' );
+      }
+    };
 
-  const handleSubmit = () => {
-    save();
-
-    if ( String( window.location.pathname ).split('/').pop().length === 24 ) {
-      setSnackbarOpen( true );
+    if ( saving ) {
+      save();
     }
-  };
+
+  }, [ saving ] );
 
   const setNameHandler = ( event ) => {
     setName( event.target.value );
@@ -105,14 +113,8 @@ const Meeting = props => {
       <Button
         variant='outlined'
         customClass={styles.meetingButton}
-        onClick={handleSubmit}
+        onClick={() => setSaving( true )}
         text='save'
-      />
-      <Snackbar
-        message='Save Successful'
-        type='success'
-        open={snackbarOpen}
-        setOpen={setSnackbarOpen}
       />
     </div>
   );

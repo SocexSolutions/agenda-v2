@@ -16,20 +16,6 @@ const Snackbar = ( props ) => {
   clNames = props.type ? clNames + ' ' + styles[ props.type ] : clNames;
   clNames = props.open ? clNames + ' ' + styles.open : clNames;
 
-  useEffect( () => {
-    const timeout = props.timeout || 3000;
-
-    const startCloseTimer = async() => {
-      return setTimeout( () => {
-        props.setOpen( false );
-      }, timeout );
-    };
-
-    if ( props.open ) {
-      startCloseTimer();
-    }
-  }, [ props ] );
-
   return (
     <div className={clNames}>
       <p>{ props.message }</p>
