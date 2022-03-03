@@ -1,8 +1,11 @@
 import styles from '../styles/Register.module.css';
 import Button from '../components/Button';
-import Input from '../components/Input';
-import { userLogin } from '../store/features/user/userSlice';
-import { useState } from 'react';
+import Input  from '../components/Input';
+
+import { userLogin }   from '../store/features/user/userSlice';
+import { useState }    from 'react';
+import { useEffect }   from 'react';
+import { useSelector } from 'react-redux';
 
 const initialState = {
   username: '',
@@ -10,20 +13,37 @@ const initialState = {
 };
 
 const Login = props => {
-  const [ fields, setFields ] = useState( initialState );
+  const [ fields, setFields ]       = useState( initialState );
+  const [ loggingIn, setLoggingIn ] = useState( false );
+
+  const user = useSelector( state => state.user );
+
+  useEffect( () => {
+    const login = async() => {
+      await props.store.dispatch(
+        userLogin( fields )
+      );
+
+      await props.notify({ ms: 1500 });
+
+      setFields( initialState );
+      setLoggingIn( false );
+
+      window.location = `user/${ user._id }`;
+    };
+
+    if ( loggingIn ) {
+      login();
+    }
+  }, [ loggingIn ] );
+
+  const handleSubmit = ( event ) => {
+    event.preventDefault();
+    setLoggingIn( true );
+  };
 
   const handleChange = ( event ) => {
     setFields({ ...fields, [ event.target.name ]: event.target.value });
-  };
-
-  const handleSubmit = ( event ) => {
-    props.store.dispatch(
-      userLogin( fields )
-    );
-
-    setFields( initialState );
-
-    event.preventDefault();
   };
 
   return (

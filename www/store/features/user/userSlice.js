@@ -93,8 +93,6 @@ export const userLogin = ({ username, password }) => {
         }
       });
 
-      window.location = `user/${ data.user._id }`;
-
     } catch ( error ) {
       console.error( error.message );
     }
