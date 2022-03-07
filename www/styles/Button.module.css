@@ -91,7 +91,7 @@
 .outlined {
   background-color: inherit;
   border: 1px solid var(--agendaSecondary);
-  color: var(--textBlue);
+  color: var(--agendaText);
 }
 
 .outlined:hover {

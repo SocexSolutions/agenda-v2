@@ -12,8 +12,8 @@
   margin: 0 30px;
   flex-direction: column;
   align-items: center;
-  border-left: 2px solid var(--agendaPrimary);
-  border-right: 2px solid var(--agendaPrimary);
+  border-left: 2px solid var(--agenda);
+  border-right: 2px solid var(--agenda);
   padding: 1rem;
   box-shadow: inset -15px 0 10px -15px var(--backgroundShadow) , inset 15px 0 15px -15px var(--backgroundShadow);
 }

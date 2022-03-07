@@ -1,7 +1,7 @@
 .nav {
   height: 5.5rem;
   padding: 0rem .5rem 0rem .5rem;
-  color: var(--textBlue);
+  color: var(--agendaText);
   display: flex;
   align-items: center;
   margin-left: 1rem;
@@ -14,7 +14,7 @@
 .login {
   height: 4rem;
   padding: 1rem;
-  color: var(--textBlue);
+  color: var(--agendaText);
   display: flex;
   align-items: center;
   margin-left: auto;
@@ -30,7 +30,7 @@
   justify-content: space-between;
   align-items: center;
   width: 140px;
-  color: var(--textBlue);
+  color: var(--agendaText);
 }
 
 .agenda h1 {
@@ -47,10 +47,6 @@
 
 .navLoggedIn ul li a {
   margin: .5rem 1.5rem;
-}
-
-.navLoggedIn Button {
-  margin: 4.5rem 0px;
 }
 
 .navButton {
