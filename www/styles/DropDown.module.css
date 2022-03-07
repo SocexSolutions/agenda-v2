@@ -2,15 +2,15 @@
   width: 200px;
   height: fit-content;
   right: 5%;
-  background-color: var(--agendaThree);
+  background-color: var(--backgroundTwo);
   justify-content: center;
   position: absolute;
   border-radius: 10px;
-  border: 1px solid var(--agendaThree);
+  border: 1px solid var(--agendaSecondary);
 }
 
 .container Button {
   justify-content: left;
-  margin-left: 10px;
+  margin: 0 0 0 10px;
   padding: 0;
 }

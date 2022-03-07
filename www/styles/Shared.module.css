@@ -1,7 +1,7 @@
 .card {
-  color: var(--textBlue);
+  color: var(--agendaText);
   background-color: var(--backgroundTwo);
-  border: 1px solid var(--agendaThree);
+  border: 1px solid var(--agendaSecondary);
   width: 90%;
   min-width: 177px;
   min-height: 30px;

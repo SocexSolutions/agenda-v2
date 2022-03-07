@@ -1,7 +1,7 @@
 .default {
   height: 1.5rem;
   background-color: inherit;
-  color: var(--textBlue);
+  color: var(--agendaText);
   border: 0;
   border-bottom: 1px solid var(--agendaSecondary);
   padding: 0.5rem;

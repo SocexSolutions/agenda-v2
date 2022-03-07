@@ -7,10 +7,10 @@
   left: 50vw;
   padding: 7px 17px 0px 17px;
   margin: 20px;
-  background-color: var(--agendaThree);
+  background-color: var(--agendaSecondary);
   box-shadow: 3px 3px 5px var(--backgroundShadow);
   animation: notificationPopout ease 1s, fadeOut 1s forwards 5s;
-  z-index: 1; 
+  z-index: 1;
 }
 
 .container h1{
@@ -25,7 +25,7 @@
   position: absolute;
   bottom: -18px;
   left: 5px;
-  color: var(--agendaThree);
+  color: var(--agendaSecondary);
   cursor: pointer;
 }
 

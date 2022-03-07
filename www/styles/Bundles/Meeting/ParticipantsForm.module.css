@@ -1,7 +1,7 @@
 .container {
-  color: var(--textBlue);
+  color: var(--agendaText);
   background-color: var(--backgroundTwo);
-  border: 1px solid var(--agendaThree);
+  border: 1px solid var(--agendaSecondary);
   margin-left: 3rem;
   margin-right: 3rem;
   margin-bottom: 2rem;

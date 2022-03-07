@@ -1,5 +1,5 @@
 .container {
-  border: 2px solid var(--agendaThree);
+  border: 1px solid var(--agendaSecondary);
   border-radius: 7px;
   display: flex;
   flex-direction: row;
@@ -7,13 +7,14 @@
   align-items: center;
   width: fit-content;
   margin: .25rem;
+  margin-top: .5rem;
   font-weight: 200;
 }
 
 .container p {
   font-size: 1rem;
   margin: .5rem;
-  color: var(--textBlue)
+  color: var(--agendaText)
 }
 
 .deleteIcon {
@@ -28,7 +29,7 @@
 }
 
 .icons {
-  color: var(--textBlue);
+  color: var(--agendaText);
   display: inline-block;
   margin-left: .5rem;
 }

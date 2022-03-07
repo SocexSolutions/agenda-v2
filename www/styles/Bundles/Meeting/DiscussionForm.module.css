@@ -1,7 +1,7 @@
 .container {
-  color: var(--textBlue);
+  color: var(--agendaText);
   background-color: var(--backgroundTwo);
-  border: 1px solid var(--agendaThree);
+  border: 1px solid var(--agendaSecondary);
   width: 100%;
   margin:15px 0px;
   text-align: center;
@@ -15,14 +15,10 @@
   align-items: center;
 }
 
-.title {
-
-}
-
 .takeAwayContainer  {
-  color: var(--textBlue);
+  color: var(--agendaText);
   background-color: var(--backgroundTwo);
-  border: 1px solid var(--agendaThree);
+  border: 1px solid var(--agendaSecondary);
   width: 100%;
   margin:15px 0px;
   border-radius: 10px;

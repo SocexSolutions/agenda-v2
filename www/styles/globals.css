@@ -4,10 +4,10 @@
 }
 
 :root {
-  --agendaPrimary: #244a93;
+  --agenda: #244a93;
   --agendaSecondary: #9dbeff;
-  --textBlue: #c6d7f6;
   --agendaThree: #2254af ;
+  --agendaText: #c6d7f6;
   --background: #082050;
   --backgroundTwo: #0e2d68;
   --backgroundShadow: #041435;
@@ -54,7 +54,7 @@ h3 {
 }
 
 .card {
-  color: var(--textBlue);
+  color: var(--agendaText);
   background-color: var(--backgroundTwo);
   border: 1px solid var(--agendaThree);
   width: 90%;

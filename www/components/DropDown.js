@@ -24,14 +24,12 @@ const DropDown = () => {
       <Button
         icon={<AccountCircleIcon />}
         variant="menu"
-        stretch="wide"
         text="Profile"
         onClick={() => ( window.location = `/user/${ user_id }` )}
       />
       <Button
         icon={<LogoutIcon />}
         variant="menu"
-        stretch="wide"
         text="Logout"
         onClick={() => logout()}
       />
