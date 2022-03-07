@@ -10,6 +10,8 @@ client.interceptors.request.use( config => {
   config.headers['authorization'] = token;
 
   return config;
+
+  console.log('bacon');
 });
 
 export default client;
