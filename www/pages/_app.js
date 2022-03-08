@@ -4,7 +4,7 @@ import { useStore }     from '../store/store';
 import { useEffect }    from 'react';
 import { useState }     from 'react';
 import { userRefresh }  from '../store/features/user/userSlice';
-import { changeTheme }  from '../utils/theme';
+import { refreshTheme }  from '../store/features/ui/uiSlice';
 
 import Snackbar         from '../components/Snackbar';
 
@@ -39,6 +39,9 @@ const App = props => {
   useEffect( () => {
     store.dispatch(
       userRefresh()
+    );
+    store.dispatch(
+      refreshTheme()
     );
   });
 

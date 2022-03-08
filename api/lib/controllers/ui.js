@@ -6,7 +6,7 @@ module.exports = {
   get: async( req, res ) => {
     try {
       const { user_id } = req.params;
-      const ui = Ui.find({ user_id });
+      const ui = await Ui.findOne({ user_id });
 
       res.status( 200 ).send( ui );
     } catch ( err ) {
@@ -18,10 +18,9 @@ module.exports = {
     const theme = req.body.theme;
     const user_id = req.body.user_id;
 
-    const theme_id = req.body.theme_id || new ObjectID();
     try {
-      const ui = Ui.findOneAndUpdate(
-        { _id: theme_id },
+      const ui = await Ui.findOneAndUpdate(
+        { user_id },
         { theme, user_id },
         {
           upsert: true,

@@ -16,6 +16,9 @@ export default ( state = initialState, action ) => {
     case 'ui/pickTheme':
       return { state, theme: action.payload };
 
+    case 'ui/refreshTheme':
+      return { state, theme: action.payload };
+
     default:
       return state;
   }
@@ -32,17 +35,50 @@ export const toggleDrawer = () => {
 
 export const pickTheme = ( theme ) => {
   return async function themePick( dispatch, getState ) {
-
     const state = getState();
     const user_id = state.user._id;
 
-    await client.post(
-      '/ui',
-      { theme, user_id }
-    );
+    try {
+      await client.post(
+        '/ui',
+        { theme, user_id }
+      );
 
-    dispatch({ type: 'ui/pickTheme', payload: { theme } });
+      dispatch({ type: 'ui/pickTheme', payload: { theme } });
 
-    changeTheme( theme );
+      changeTheme( theme );
+    } catch ( err ) {
+      console.log( err );
+    }
   };
 };
+
+export const refreshTheme = () => {
+  return async function themeRefresh( dispatch, getState ) {
+    const token = sessionStorage.getItem('agenda-auth');
+    const state = getState();
+    const user_id = state.user._id;
+
+    try {
+      if ( user_id ) {
+        const { data } = await client.get( `ui/${ user_id }`,
+          {
+            headers: { 'authorization': token }
+          }
+        );
+
+        dispatch({ type: 'ui/refreshTheme', payload: { theme: data.theme } });
+
+        changeTheme( data.theme );
+      }
+
+
+
+    } catch ( err ) {
+      console.log( err );
+    }
+  };
+
+
+};
+

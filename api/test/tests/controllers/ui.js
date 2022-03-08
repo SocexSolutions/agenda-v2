@@ -46,7 +46,7 @@ describe( 'controllers/ui', () => {
     it( 'should get a ui theme', async() => {
       await Ui.create({ user_id, theme: 'dark' });
 
-      const res = await client.get( path + '?user_id=' + user_id );
+      const res = await client.get( `ui/${ user_id }` );
 
       assert.strictEqual( res.status, 200 );
       assert.strictEqual( res.data.theme, 'dark' );
@@ -61,7 +61,7 @@ describe( 'controllers/ui', () => {
 
       assert.strictEqual( res.status, 201 );
 
-      const inserted = await Ui.find({ user_id });
+      const inserted = await Ui.findOne({ user_id });
 
       assert.strictEqual( inserted.theme, 'pattern' );
     });
@@ -73,7 +73,7 @@ describe( 'controllers/ui', () => {
 
       assert.strictEqual( res.status, 201 );
 
-      const updated = await Ui.find({ user_id });
+      const updated = await Ui.findOne({ user_id });
 
       assert.strictEqual( updated.theme, 'pattern2' );
     });
