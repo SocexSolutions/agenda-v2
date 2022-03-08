@@ -5,8 +5,9 @@ const ObjectID = require('mongoose').Types.ObjectId;
 module.exports = {
   get: async( req, res ) => {
     try {
-      const { user_id } = req.params;
-      const ui = Ui.find({ user_id });
+      const { user_id } = req.query;
+
+      const ui = await Ui.findOne({ user_id });
 
       res.status( 200 ).send( ui );
     } catch ( err ) {
@@ -20,7 +21,7 @@ module.exports = {
 
     const theme_id = req.body.theme_id || new ObjectID();
     try {
-      const ui = Ui.findOneAndUpdate(
+      const ui = await Ui.findOneAndUpdate(
         { _id: theme_id },
         { theme, user_id },
         {

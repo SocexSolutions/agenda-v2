@@ -61,7 +61,7 @@ describe( 'controllers/ui', () => {
 
       assert.strictEqual( res.status, 201 );
 
-      const inserted = await Ui.find({ user_id });
+      const [ inserted ] = await Ui.find({ user_id });
 
       assert.strictEqual( inserted.theme, 'pattern' );
     });
@@ -73,7 +73,7 @@ describe( 'controllers/ui', () => {
 
       assert.strictEqual( res.status, 201 );
 
-      const updated = await Ui.find({ user_id });
+      const [ updated ] = await Ui.find({ user_id });
 
       assert.strictEqual( updated.theme, 'pattern2' );
     });
