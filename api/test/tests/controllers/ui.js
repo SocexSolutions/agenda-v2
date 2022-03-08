@@ -2,7 +2,6 @@ const { assert } = require('chai');
 const dbUtils    = require('../../utils/db');
 const db         = require('../../../lib/db');
 const api        = require('../../utils/api');
-const ObjectID   = require('mongoose').Types.ObjectId;
 const client     = require('../../utils/client');
 const themeFaker = require('../../fakes/theme');
 const Ui         = require('../../../lib/models/ui');
