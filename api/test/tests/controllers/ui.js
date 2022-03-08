@@ -43,7 +43,7 @@ describe( 'controllers/ui', () => {
 
   describe( '#get', () => {
 
-    it.only( 'should get a ui theme', async() => {
+    it( 'should get a ui theme', async() => {
       await Ui.create({ user_id, theme: 'dark' });
 
       const res = await client.get( path + '?user_id=' + user_id );
