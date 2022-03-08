@@ -54,17 +54,17 @@ export const fetchMeeting = ( meeting_id ) => {
 
 export const saveMeeting = ( meeting ) => {
   return async function MeetingSave( dispatch, getState ) {
-      await client.post(
-        'meeting',
-        meeting
-      );
+    await client.post(
+      'meeting',
+      meeting
+    );
 
-      dispatch({
-        type: 'meeting/save',
-        payload: {
-          meeting
-        }
-      });
+    dispatch({
+      type: 'meeting/save',
+      payload: {
+        meeting
+      }
+    });
 
   };
 };

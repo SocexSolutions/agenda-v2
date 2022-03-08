@@ -3,23 +3,6 @@
   src: url('../public/font/OpenSans-Regular.ttf');
 }
 
-:root {
-  --agenda: #244a93;
-  --agendaSecondary: #9dbeff;
-  --agendaThree: #2254af ;
-  --agendaText: #c6d7f6;
-  --background: #082050;
-  --backgroundTwo: #0e2d68;
-  --backgroundShadow: #041435;
-  --agendaPurple: #5d5fef;
-  --danger: #df1405;
-  --dangerText: #dcaca9;
-  --dangerBg: #940c03;
-  --success: #9bc333;
-  --successText: #dae8aa;
-  --successBg: #5d8700;
-}
-
 html,
 body {
   height: 100%;
@@ -34,7 +17,6 @@ body {
 a {
   color: inherit;
   text-decoration: none;
-
 }
 
 * {
@@ -72,4 +54,54 @@ h3 {
   .card {
     min-width: 90px;
   }
+}
+
+:root {
+  --agenda: #244a93;
+  --agendaSecondary: #9dbeff;
+  --agendaThree: #2254af ;
+  --agendaText: #c6d7f6;
+  --background: #082050;
+  --backgroundTwo: #0e2d68;
+  --backgroundShadow: #041435;
+  --agendaPurple: #5d5fef;
+  --danger: #df1405;
+  --dangerText: #dcaca9;
+  --dangerBg: #940c03;
+  --success: #9bc333;
+  --successText: #dae8aa;
+  --successBg: #5d8700;
+}
+
+[data-theme='default'] {
+  --agenda: #244a93;
+  --agendaSecondary: #9dbeff;
+  --agendaThree: #2254af ;
+  --agendaText: #c6d7f6;
+  --background: #082050;
+  --backgroundTwo: #0e2d68;
+  --backgroundShadow: #041435;
+  --agendaPurple: #5d5fef;
+  --danger: #df1405;
+  --dangerText: #dcaca9;
+  --dangerBg: #940c03;
+  --success: #9bc333;
+  --successText: #dae8aa;
+  --successBg: #5d8700;
+}
+
+[data-theme='dark']{
+  --agenda: #444444;
+  --agendaSecondary: #878683;
+  --agendaText: #bebebe;
+  --background: #121212;
+  --backgroundTwo: #242424;
+  --backgroundShadow: #041435;
+  --agendaPurple: #533c55;
+  --danger: #B00020;
+  --dangerText: #cf6697;
+  --dangerBg: #940c03;
+  --success: #9bc333;
+  --successText: #dae8aa;
+  --successBg: #5d8700;
 }

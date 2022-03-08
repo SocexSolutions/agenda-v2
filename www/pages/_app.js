@@ -1,11 +1,12 @@
-import Layout          from '../components/Layout';
-import { Provider }    from 'react-redux';
-import { useStore }    from '../store/store';
-import { useEffect }   from 'react';
-import { useState }    from 'react';
-import { userRefresh } from '../store/features/user/userSlice';
+import Layout           from '../components/Layout';
+import { Provider }     from 'react-redux';
+import { useStore }     from '../store/store';
+import { useEffect }    from 'react';
+import { useState }     from 'react';
+import { userRefresh }  from '../store/features/user/userSlice';
+import { changeTheme }  from '../utils/theme';
 
-import Snackbar        from '../components/Snackbar';
+import Snackbar         from '../components/Snackbar';
 
 import '../styles/globals.css';
 
