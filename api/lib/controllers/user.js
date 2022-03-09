@@ -162,14 +162,14 @@ module.exports = {
       const existingUser = await User.findOne({ username });
 
       if ( existingUser ) {
-        res.status( 303 ).send(
+        res.status( 409 ).send(
           new Error('Username already exists')
         );
 
       } else { res.status( 200 ).send(); }
 
     } catch ( err ) {
-      logger.error( err.message );
+      log.error( err.message );
     }
   },
 
@@ -180,14 +180,14 @@ module.exports = {
       const existingUser = await User.findOne({ email });
 
       if ( existingUser ) {
-        res.status( 303 ).send(
+        res.status( 409 ).send(
           new Error('Email already exists')
         );
 
       } else { res.status( 200 ).send(); }
 
     } catch ( err ) {
-      logger.error( err.message );
+      log.error( err.message );
     }
   }
 };
