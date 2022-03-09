@@ -8,7 +8,6 @@ import { userRegister } from '../store/features/user/userSlice';
 import { useSelector }  from 'react-redux';
 
 import client from '../store/client';
-import { checkExistingEmail } from '../../api/lib/controllers/user';
 
 
 const initialState = {
@@ -21,8 +20,6 @@ const Register = props => {
   const [ fields, setFields ]               = useState( initialState );
   const [ emailError, setEmailError ]       = useState( false );
   const [ usernameError, setUsernameError ] = useState( false );
-
-  const user_id = useSelector( state => state.user._id );j
 
   const handleChange = ( event ) => {
     setFields({ ...fields, [ event.target.name ]: event.target.value });
@@ -39,31 +36,44 @@ const Register = props => {
   };
 
   useEffect( () => {
-    checkEmail = async() => {
-      try{
+    const checkEmail = async() => {
+      try {
         await client.post(
-          '/checkexistingemail',
-          { user_id }
-        )
-        } catch {
-          setEmailError(true)
+          'user/checkexistingemail',
+          { email: fields.email }
+        );
+
+        if ( emailError ) {
+          setEmailError( false );
         }
-    }
+
+      } catch ( err ) {
+        if ( err.response.status === 409 ) {
+          setEmailError( 'username already in use' );
+        }
+      }
+    };
 
     checkEmail();
   }, [ fields.email ] );
 
   useEffect( () => {
-    checkUsername = async() => {
+    const checkUsername = async() => {
       try {
         await client.post(
-          '/checkexistingusername',
-          { user_id }
-        )
+          'user/checkexistingusername',
+          { username: fields.username }
+        );
+
+        if ( usernameError ) {
+          setEmailError( false );
+        }
       } catch ( err ) {
-        setUsernameError( true );
+        if ( err.response.status === 409 ) {
+          setUsernameError( 'username already in use' );
+        }
       }
-    }
+    };
     checkUsername();
   }, [ fields.username ] );
 
@@ -81,8 +91,8 @@ const Register = props => {
           size='medium'
           value={fields.email}
           onChange={handleChange}
+          errorMessage={emailError}
         />
-        {emailError && <p>THE EMAIL EXISTS</p>}
         <Input
           name='username'
           type='text'
@@ -91,8 +101,8 @@ const Register = props => {
           size='medium'
           value={fields.username}
           onChange={handleChange}
+          errorMessage={usernameError}
         />
-        {usernameError && <p>THE Username EXISTS</p>}
         <Input
           name='password'
           type='password'

@@ -13,7 +13,8 @@ const Input = ({
   required,
   variant,
   onKeyPress,
-  type
+  type,
+  errorMessage
 }) => {
 
   let classNames = '';
@@ -74,6 +75,9 @@ const Input = ({
         className={classNames}
         onKeyPress={onKeyPress}
       />
+      { errorMessage &&
+        <p>{errorMessage}</p>
+      }
     </div>
   );
 };
