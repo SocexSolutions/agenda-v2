@@ -5,6 +5,10 @@ router.post( '/register', userController.register );
 
 router.post( '/login', userController.login );
 
+router.post( '/checkexistingusername', userController.checkExistingUsername );
+
+router.post( '/checkexistingemail', userController.checkExistingEmail );
+
 router.get( '/refresh', userController.refresh );
 
 router.get( '/meetings/:_id', userController.getOwnedMeetings );
