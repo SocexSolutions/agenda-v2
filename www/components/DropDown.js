@@ -6,11 +6,9 @@ import LogoutIcon from '@material-ui/icons/ExitToApp';
 import ThemeIcon from '@material-ui/icons/ColorLens';
 
 import { pickTheme } from '../store/features/ui/uiSlice';
-import { changeTheme } from '../utils/theme';
 import { userLogout } from '../store/features/user/userSlice';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { useState } from 'react';
 
 const selectUser = ( state ) => state.user;
 
@@ -18,7 +16,6 @@ const DropDown = () => {
   const dispatch = useDispatch();
   const user     = useSelector( selectUser );
   const user_id  = user._id || '';
-  const [ theme, setTheme ] = useState('default');
 
   const themeSwitch = () => {
     dispatch( pickTheme('dark') );
