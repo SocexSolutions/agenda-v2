@@ -15,10 +15,10 @@ module.exports = {
   },
 
   save: async( req, res ) => {
-    const theme = req.body.theme;
-    const user_id = req.body.user_id;
-
     try {
+      const theme = req.body.theme;
+      const user_id = req.body.user_id;
+
       const ui = await Ui.findOneAndUpdate(
         { user_id },
         { theme, user_id },
