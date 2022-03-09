@@ -1,3 +1,9 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .default {
   height: 1.5rem;
   background-color: inherit;
@@ -11,6 +17,10 @@
   font-size: 1rem;
 }
 
+.default:focus {
+  outline: none;
+}
+
 .outlined {
   border-color: var(--agendaSecondary);
   background-color: inherit;
@@ -21,4 +31,12 @@
 
 .wrapper input::placeholder {
   color: var(--agendaSecondary);
+}
+
+.wrapper p {
+  font-size: 15px;
+  padding-top: 0;
+  margin-top: -15px;
+  color: var(--danger);
+  opacity: .8;
 }
