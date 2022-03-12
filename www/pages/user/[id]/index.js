@@ -21,7 +21,7 @@ const User = () => {
     }
   }, [ user ] );
 
-  const loaded = ownedMeetings.length >= 0 || participantMeetings >= 0;
+  const loaded = ownedMeetings.length >= 0 || participantMeetings.length >= 0;
 
   //TODO filter and sort for inbox
 
