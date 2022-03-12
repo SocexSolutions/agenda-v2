@@ -78,7 +78,7 @@ module.exports = {
     try {
       const name       = req.body.name;
       const date       = req.body.date;
-      const owner_id   = req.body.ownerId;
+      const owner_id   = req.body.owner_id;
       const meeting_id = req.body.meeting_id || new ObjectID();
 
       let topics       = req.body.topics || null;
@@ -92,7 +92,7 @@ module.exports = {
 
         meeting = await Meeting.findOneAndUpdate(
           { _id: meeting_id },
-          { name, date, owner_id },
+          { name, owner_id, date },
           {
             upsert: true,
             new: true
