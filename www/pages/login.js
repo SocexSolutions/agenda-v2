@@ -20,11 +20,23 @@ const Login = props => {
 
   useEffect( () => {
     const login = async() => {
-      await props.store.dispatch(
-        userLogin( fields )
-      );
+      try {
+        await props.store.dispatch(
+          userLogin( fields )
+        );
 
-      await props.notify({ ms: 1500 });
+        await props.notify({
+          message: 'Login Successful',
+          ms: 1500
+        });
+
+      } catch ( err ) {
+        await props.notify({
+          message: 'Login Failed: ' + err.message,
+          success: false,
+          ms: 3000
+        });
+      }
 
       setFields( initialState );
       setLoggingIn( false );

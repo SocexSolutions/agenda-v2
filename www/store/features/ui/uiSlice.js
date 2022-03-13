@@ -1,5 +1,4 @@
 import client from '../../client';
-import { changeTheme } from '../../../utils/theme';
 
 const initialState = {
   drawerOpen: false,
@@ -46,7 +45,8 @@ export const pickTheme = ( theme ) => {
 
       dispatch({ type: 'ui/pickTheme', payload: { theme } });
 
-      changeTheme( theme );
+      document.documentElement.setAttribute( 'data-theme', theme.theme );
+
     } catch ( err ) {
       console.log( err );
     }
@@ -68,10 +68,7 @@ export const refreshTheme = () => {
         );
 
         dispatch({ type: 'ui/refreshTheme', payload: { theme: data.theme } });
-
-        changeTheme( data.theme );
       }
-
 
 
     } catch ( err ) {

@@ -17,8 +17,8 @@ const DropDown = () => {
   const user     = useSelector( selectUser );
   const user_id  = user._id || '';
 
-  const themeSwitch = () => {
-    dispatch( pickTheme('dark') );
+  const themeSwitch = async() => {
+    await dispatch( pickTheme('dark') );
   };
 
   const logout = () => {

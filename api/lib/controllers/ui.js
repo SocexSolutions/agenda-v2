@@ -28,7 +28,6 @@ module.exports = {
         }
       );
 
-      console.log('test');
       res.status( 201 ).send( ui );
     } catch ( err ) {
       log.error( 'Error creating ui: ' + err.message );

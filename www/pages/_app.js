@@ -4,7 +4,7 @@ import { useStore }     from '../store/store';
 import { useEffect }    from 'react';
 import { useState }     from 'react';
 import { userRefresh }  from '../store/features/user/userSlice';
-import { refreshTheme }  from '../store/features/ui/uiSlice';
+import { refreshTheme } from '../store/features/ui/uiSlice';
 
 import Snackbar         from '../components/Snackbar';
 
@@ -18,7 +18,8 @@ const wait = ( ms, fn ) => {
 };
 
 const App = props => {
-  const store  = useStore({});
+  const store = useStore({});
+  const state = store.getState();
 
   const [ snackMessage, setSnackMessage ] = useState('');
   const [ snackType, setSnackType ]       = useState('');
@@ -36,13 +37,30 @@ const App = props => {
     return wait( ms, () => setSnackOpen( false ) );
   };
 
+  const theme = state.ui.theme;
+  const user  = state.user;
+
+  console.log( theme );
+
   useEffect( () => {
-    store.dispatch(
-      userRefresh()
-    );
-    store.dispatch(
-      refreshTheme()
-    );
+    async function refresh() {
+      // if ( !user ) {
+      await store.dispatch(
+        userRefresh()
+      );
+      // }
+    }
+
+    refresh();
+  });
+
+  useEffect( () => {
+    async function refresh() {
+      await store.dispatch(
+        refreshTheme()
+      );
+    }
+    refresh();
   });
 
   const Component = props.Component;

@@ -13,7 +13,7 @@ import { toggleDrawer } from '../store/features/ui/uiSlice';
 const selectDrawer = state => state.ui.drawerOpen;
 
 const Drawer = () => {
-  const dispatch = useDispatch();
+  const dispatch   = useDispatch();
   const drawerOpen = useSelector( selectDrawer );
 
   return (

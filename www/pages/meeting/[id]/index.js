@@ -74,10 +74,16 @@ const Meeting = props => {
         );
 
         setSaving( false );
-        props.notify( 'Save Successful', 'success' );
+        props.notify({
+          message: 'Save Successful'
+        });
       } catch ( err ) {
         setSaving( false );
-        props.notify( 'Save Successful', 'danger' );
+        props.notify({
+          message: 'Save Failed',
+          type: 'danger',
+          success: false
+        });
       }
     };
 
