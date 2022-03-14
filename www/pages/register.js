@@ -1,13 +1,15 @@
-import styles from '../styles/Register.module.css';
-
 import Input  from '../components/Input';
 import Button from '../components/Button';
 
-import { useState }    from 'react';
-import { useEffect }   from 'react';
-import { useSelector } from 'react-redux';
+import { useState }  from 'react';
+import { useEffect } from 'react';
+
+import { useRouter } from 'next/router';
 
 import { userRegister } from '../store/features/user/userSlice';
+import { notify }       from '../store/features/snackbar/snackbarSlice';
+
+import styles from '../styles/Register.module.css';
 
 const initialState = {
   email:    '',
@@ -19,49 +21,52 @@ const Register = props => {
   const [ fields, setFields ]           = useState( initialState );
   const [ registering, setRegistering ] = useState( false );
 
-  const user = useSelector( state => state.user );
+  const router = useRouter();
 
   const handleChange = ( event ) => {
     setFields({ ...fields, [ event.target.name ]: event.target.value });
   };
 
   useEffect( () => {
-    const login = async() => {
+    const register = async() => {
       try {
         await props.store.dispatch(
           userRegister( fields )
         );
 
-        await props.notify({
-          message: 'Registration Successful',
-          ms: 1500
-        });
+        await props.store.dispatch(
+          notify({
+            message: 'Registration Successful',
+            ms: 1500
+          })
+        );
+
+        const user = props.store.getState().user;
+
+        router.push( `/user/${ user._id }` );
 
       } catch ( err ) {
-        await props.notify({
-          message: 'Registration Failed: ' + err.message,
-          success: false,
-          ms: 3000
-        });
+        await props.store.dispatch(
+          notify({
+            message: 'Registration Failed: ' + err.message,
+            type: 'danger',
+            ms: 3000
+          })
+        );
       }
 
       setFields( initialState );
       setRegistering( false );
-
-      window.location = `user/${ user._id }`;
     };
 
     if ( registering ) {
-      login();
+      register();
     }
   }, [ registering ] );
 
   const handleSubmit = ( event ) => {
-    setRegistering( true );
-
-    setFields( initialState );
-
     event.preventDefault();
+    setRegistering( true );
   };
 
   return (

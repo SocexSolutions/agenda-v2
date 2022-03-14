@@ -36,31 +36,26 @@ const reducer = ( state = initialState, action ) => {
  */
 export const userRegister = ({ email, username, password }) => {
   return async function registerUser( dispatch, getState ) {
-    try {
-      const { data } = await client.post(
-        '/user/register',
-        {
-          email,
-          username,
-          password
-        }
-      );
+    const { data } = await client.post(
+      '/user/register',
+      {
+        email,
+        username,
+        password
+      }
+    );
 
-      window.sessionStorage.setItem( 'agenda-auth', data.token );
+    window.sessionStorage.setItem( 'agenda-auth', data.token );
 
-      dispatch({
-        type: 'user/register',
-        payload: {
-          token:    data.token,
-          _id:      data.user._id,
-          username: data.user.username,
-          email:    data.user.email
-        }
-      });
-
-    } catch ( error ) {
-      console.error( error.message );
-    }
+    dispatch({
+      type: 'user/register',
+      payload: {
+        token:    data.token,
+        _id:      data.user._id,
+        username: data.user.username,
+        email:    data.user.email
+      }
+    });
   };
 };
 
@@ -72,30 +67,25 @@ export const userRegister = ({ email, username, password }) => {
  */
 export const userLogin = ({ username, password }) => {
   return async function loginUser( dispatch, getState ) {
-    try {
-      const { data } = await client.post(
-        '/user/login',
-        {
-          username,
-          password
-        }
-      );
+    const { data } = await client.post(
+      '/user/login',
+      {
+        username,
+        password
+      }
+    );
 
-      window.sessionStorage.setItem( 'agenda-auth', data.token );
+    window.sessionStorage.setItem( 'agenda-auth', data.token );
 
-      dispatch({
-        type: 'user/login',
-        payload: {
-          token:    data.token,
-          _id:      data.user._id,
-          username: data.user.username,
-          email:    data.user.email
-        }
-      });
-
-    } catch ( error ) {
-      console.error( error.message );
-    }
+    dispatch({
+      type: 'user/login',
+      payload: {
+        token:    data.token,
+        _id:      data.user._id,
+        username: data.user.username,
+        email:    data.user.email
+      }
+    });
   };
 };
 

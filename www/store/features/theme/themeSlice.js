@@ -23,19 +23,12 @@ export default ( state = initialState, action ) => {
   }
 };
 
-/**
- * Open or close the drawer
- */
-export const toggleDrawer = () => {
-  return function toggleDrawer( dispatch, getState ) {
-    dispatch({ type: 'ui/toggleDrawer', payload: {} });
-  };
-};
-
 export const pickTheme = ( theme ) => {
   return async function themePick( dispatch, getState ) {
     const state = getState();
     const user_id = state.user._id;
+
+    window.localStorage.setItem( 'theme', theme );
 
     try {
       await client.post(
@@ -55,27 +48,20 @@ export const pickTheme = ( theme ) => {
 
 export const refreshTheme = () => {
   return async function themeRefresh( dispatch, getState ) {
-    const token = sessionStorage.getItem('agenda-auth');
-    const state = getState();
+    const state   = getState();
     const user_id = state.user._id;
 
     try {
+      console.log( user_id );
+
       if ( user_id ) {
-        const { data } = await client.get( `ui/${ user_id }`,
-          {
-            headers: { 'authorization': token }
-          }
-        );
+        const { data } = await client.get( `ui/${ user_id }` );
 
         dispatch({ type: 'ui/refreshTheme', payload: { theme: data.theme } });
       }
-
 
     } catch ( err ) {
       console.log( err );
     }
   };
-
-
 };
-

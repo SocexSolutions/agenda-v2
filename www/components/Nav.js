@@ -1,16 +1,20 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleDrawer } from '../store/features/ui/uiSlice';
-import Link from 'next/link';
-import Button from './Button';
-import DropDown from './DropDown';
-import styles from '../styles/Nav.module.css';
-import AgendaIcon from './AgendaIcon';
-import classNames from 'classNames';
-import MenuIcon from '@material-ui/icons/Menu';
-import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
-import AddToPhotosOutlinedIcon from '@material-ui/icons/AddToPhotosOutlined';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
+import { toggleDrawer } from '../store/features/drawer/drawerSlice';
+
+import classNames from 'classNames';
+import Link       from 'next/link';
+
+import Button     from './Button';
+import DropDown   from './DropDown';
+import AgendaIcon from './AgendaIcon';
+
+import MenuIcon                from '@material-ui/icons/Menu';
+import HomeOutlinedIcon        from '@material-ui/icons/HomeOutlined';
+import AddToPhotosOutlinedIcon from '@material-ui/icons/AddToPhotosOutlined';
+import AccountCircleIcon       from '@material-ui/icons/AccountCircle';
+
+import styles from '../styles/Nav.module.css';
 
 const selectUser = state => state.user;
 

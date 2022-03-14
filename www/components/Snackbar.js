@@ -1,24 +1,23 @@
 import styles from '../styles/Snackbar.module.css';
 
-import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 /**
  * Snackbar used for displaying notifications to the user
- * @param {String} message - message to display
- * @param {String} type - type of message ['success' | 'danger']
- * @param {Boolean} open - if snackbar is open
- * @param {Number} timeout - how long till the snackbar closes
- * @param {Function} setOpen - set open
  */
-const Snackbar = ( props ) => {
+const Snackbar = () => {
+  const type    = useSelector( state => state.snackbar.type );
+  const message = useSelector( state => state.snackbar.message );
+  const open    = useSelector( state => state.snackbar.open );
+
   let clNames = styles.snackbar;
 
-  clNames = props.type ? clNames + ' ' + styles[ props.type ] : clNames;
-  clNames = props.open ? clNames + ' ' + styles.open : clNames;
+  clNames = type ? clNames + ' ' + styles[ type ] : clNames;
+  clNames = open ? clNames + ' ' + styles.open : clNames;
 
   return (
     <div className={clNames}>
-      <p>{ props.message }</p>
+      <p>{ message }</p>
     </div>
   );
 };

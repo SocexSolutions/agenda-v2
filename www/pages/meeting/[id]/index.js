@@ -1,17 +1,19 @@
-import HeaderForm from '../../../components/Bundles/Meeting/HeaderForm';
-import TopicsForm from '../../../components/Bundles/Meeting/TopicsForm';
+import HeaderForm       from '../../../components/Bundles/Meeting/HeaderForm';
+import TopicsForm       from '../../../components/Bundles/Meeting/TopicsForm';
 import ParticipantsForm from '../../../components/Bundles/Meeting/ParticipantsForm';
-import LoadingIcon from '../../../components/LoadingIcon';
-import Button from '../../../components/Button';
-import Snackbar from '../../../components/Snackbar';
+import LoadingIcon      from '../../../components/LoadingIcon';
+import Button           from '../../../components/Button';
 
+import { useRouter }           from 'next/router';
 import { useEffect, useState } from 'react';
+import { useSelector }         from 'react-redux';
+
 import {
   saveMeeting,
   fetchMeeting
 } from '../../../store/features/meetings/meetingSlice';
 
-import { useSelector } from 'react-redux';
+import { notify } from '../../../store/features/snackbar/snackbarSlice';
 
 import styles from '../../../styles/MeetingPage.module.css';
 
@@ -26,7 +28,7 @@ const Meeting = props => {
   const user    = useSelector( state => state.user );
   const meeting = useSelector( state => state.meetings.openMeeting );
 
-  //update store every change
+  const router = useRouter();
 
   const clearPage = () => {
     setName('');
@@ -36,19 +38,31 @@ const Meeting = props => {
 
   useEffect( () => {
     const loadMeeting = async() => {
-      const meeting_id = String( window.location.pathname ).split('/').pop();
+      const meeting_id    = router.query.id;
       const realMeetingId = meeting_id.length === 24;
 
       if ( realMeetingId ) {
-        await props.store.dispatch(
-          fetchMeeting( meeting_id )
-        );
 
-        const { meetings } = props.store.getState();
+        try {
+          await props.store.dispatch(
+            fetchMeeting( meeting_id )
+          );
 
-        setName( meetings.openMeeting.name );
-        setParticipants( meetings.openMeeting.participants );
-        setTopics( meetings.openMeeting.topics );
+          const { meetings } = props.store.getState();
+
+          setName( meetings.openMeeting.name );
+          setParticipants( meetings.openMeeting.participants );
+          setTopics( meetings.openMeeting.topics );
+
+        } catch ( err ) {
+          props.store.dispatch(
+            notify({
+              message: 'Failed to fetch meeting: ' + err.message,
+              type: 'Danger'
+            })
+          );
+        }
+
       } else {
         clearPage();
       }
@@ -57,7 +71,7 @@ const Meeting = props => {
     };
 
     loadMeeting();
-  }, [ user, props.store ] );
+  }, [ user, props.store, router.query ] );
 
   useEffect( () => {
     const save = async() => {
@@ -74,16 +88,20 @@ const Meeting = props => {
         );
 
         setSaving( false );
-        props.notify({
-          message: 'Save Successful'
-        });
+        props.store.dispatch(
+          notify({
+            message: 'Save Successful'
+          })
+        );
       } catch ( err ) {
         setSaving( false );
-        props.notify({
-          message: 'Save Failed',
-          type: 'danger',
-          success: false
-        });
+        props.store.dispatch(
+          notify({
+            message: 'Save Failed: ' + err.message,
+            type: 'danger',
+            success: false
+          })
+        );
       }
     };
 
