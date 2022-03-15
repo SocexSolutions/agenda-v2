@@ -35,6 +35,7 @@ const Meeting = props => {
     setParticipants([]);
     setTopics([]);
   };
+  console.log( router.pathname );
 
   useEffect( () => {
     const loadMeeting = async() => {

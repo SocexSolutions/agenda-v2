@@ -14,16 +14,17 @@ const pagesWithoutDrawer = new Set([
 ]);
 
 const Layout = ({ children }) => {
-  const drawerOpen = useSelector( ( state ) => state.drawer.open );
+  const drawerOpen = useSelector( ( state ) => state.drawer );
   const storeTheme = useSelector( ( state ) => state.theme );
 
   const router = useRouter();
 
   const page       = router.pathname.split('/').pop();
   const showDrawer = !pagesWithoutDrawer.has( page );
+  console.log( storeTheme );
 
   useEffect( () => {
-    document.documentElement.setAttribute( 'data-theme', storeTheme.theme );
+    document.documentElement.setAttribute( 'data-theme', storeTheme.theme.theme );
   }, [ storeTheme ] );
 
   return (

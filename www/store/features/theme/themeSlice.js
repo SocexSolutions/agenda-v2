@@ -1,17 +1,12 @@
 import client from '../../client';
 
 const initialState = {
-  drawerOpen: false,
   theme: 'default'
 };
 
 export default ( state = initialState, action ) => {
 
   switch ( action.type ) {
-
-    case 'ui/toggleDrawer':
-      return { state, drawerOpen: !state.drawerOpen };
-
     case 'ui/pickTheme':
       return { state, theme: action.payload };
 
@@ -38,8 +33,9 @@ export const pickTheme = ( theme ) => {
 
       dispatch({ type: 'ui/pickTheme', payload: { theme } });
 
-      document.documentElement.setAttribute( 'data-theme', theme.theme );
 
+      //document.documentElement.setAttribute( 'data-theme',  theme );
+      console.log( theme );
     } catch ( err ) {
       console.log( err );
     }

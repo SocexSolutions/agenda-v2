@@ -1,6 +1,5 @@
 const initialState = {
-  open: false,
-  theme: 'default'
+  open: false
 };
 
 export default ( state = initialState, action ) => {

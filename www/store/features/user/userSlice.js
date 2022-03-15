@@ -95,7 +95,7 @@ export const userLogin = ({ username, password }) => {
  */
 export const userRefresh = () => {
   return async function refreshUser( dispatch, getState ) {
-    const token = sessionStorage.getItem('agenda-auth');
+    const token = window.sessionStorage.getItem('agenda-auth');
 
     if ( token ) {
       try {
