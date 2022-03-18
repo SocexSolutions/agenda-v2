@@ -21,10 +21,11 @@ const Layout = ({ children }) => {
 
   const page       = router.pathname.split('/').pop();
   const showDrawer = !pagesWithoutDrawer.has( page );
-  console.log( storeTheme );
 
   useEffect( () => {
-    document.documentElement.setAttribute( 'data-theme', storeTheme.theme.theme );
+    document.documentElement.setAttribute(
+      'data-theme', storeTheme.theme.theme
+    );
   }, [ storeTheme ] );
 
   return (

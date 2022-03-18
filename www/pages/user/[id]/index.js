@@ -25,7 +25,7 @@ const User = ( props ) => {
       } catch ( err ) {
         props.notify({
           msg: 'Error loading meetings: ' + err.message,
-          type: 'Danger'
+          type: 'danger'
         });
       }
     }

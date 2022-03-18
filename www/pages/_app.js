@@ -9,18 +9,27 @@ import Layout   from '../components/Layout';
 
 import '../styles/globals.css';
 
-const App = props => {
+const App = ( props ) => {
   const store = useStore();
+
+  useEffect( () => {
+    async function refresh() {
+      await store.dispatch(
+        userRefresh()
+      );
+    }
+
+    if ( !store.getState().user._id ) {
+      refresh();
+    }
+  });
 
   const Component = props.Component;
 
   return (
     <Provider store={store}>
       <Layout>
-        <Component
-          store={store}
-          {...props.pageProps}
-        />
+        <Component store={store} {...props.pageProps} />
       </Layout>
       <Snackbar />
     </Provider>

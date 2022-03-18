@@ -1,4 +1,5 @@
 import client from '../../client';
+import parseCookie from '../../../utils/parseCookie';
 
 const initialState = {
   token: null,
@@ -45,7 +46,7 @@ export const userRegister = ({ email, username, password }) => {
       }
     );
 
-    window.sessionStorage.setItem( 'agenda-auth', data.token );
+    document.cookie = `agenda-auth=${ data.token }`;
 
     dispatch({
       type: 'user/register',
@@ -75,7 +76,7 @@ export const userLogin = ({ username, password }) => {
       }
     );
 
-    window.sessionStorage.setItem( 'agenda-auth', data.token );
+    document.cookie = `agenda-auth=${ data.token }`;
 
     dispatch({
       type: 'user/login',
@@ -95,7 +96,7 @@ export const userLogin = ({ username, password }) => {
  */
 export const userRefresh = () => {
   return async function refreshUser( dispatch, getState ) {
-    const token = window.sessionStorage.getItem('agenda-auth');
+    const token = parseCookie( document.cookie, 'agenda-auth' );
 
     if ( token ) {
       try {
@@ -129,7 +130,12 @@ export const userRefresh = () => {
  */
 export const userLogout = () => {
   return async function logoutUser( dispatch, getState ) {
-    window.sessionStorage.removeItem('agenda-auth');
+    const cookie = document.cookie
+    .match( new RegExp( '(^| )' + 'agenda-auth' + '=([^;]+)' ) );
+
+    if ( cookie ) {
+      document.cookie = `${ cookie }; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
+    }
 
     window.location.href = '/';
 

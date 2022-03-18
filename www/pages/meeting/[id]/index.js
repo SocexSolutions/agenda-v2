@@ -1,12 +1,12 @@
-import HeaderForm       from '../../../components/Bundles/Meeting/HeaderForm';
-import TopicsForm       from '../../../components/Bundles/Meeting/TopicsForm';
+import HeaderForm from '../../../components/Bundles/Meeting/HeaderForm';
+import TopicsForm from '../../../components/Bundles/Meeting/TopicsForm';
 import ParticipantsForm from '../../../components/Bundles/Meeting/ParticipantsForm';
-import LoadingIcon      from '../../../components/LoadingIcon';
-import Button           from '../../../components/Button';
+import LoadingIcon from '../../../components/LoadingIcon';
+import Button from '../../../components/Button';
 
-import { useRouter }           from 'next/router';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useSelector }         from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import {
   saveMeeting,
@@ -17,16 +17,16 @@ import { notify } from '../../../store/features/snackbar/snackbarSlice';
 
 import styles from '../../../styles/MeetingPage.module.css';
 
-const Meeting = props => {
+const Meeting = ( props ) => {
   const [ loading, setLoading ] = useState( true );
 
-  const [ name, setName ]                 = useState('');
+  const [ name, setName ] = useState('');
   const [ participants, setParticipants ] = useState([]);
-  const [ topics, setTopics ]             = useState([]);
-  const [ saving, setSaving ]             = useState( false );
+  const [ topics, setTopics ] = useState([]);
+  const [ saving, setSaving ] = useState( false );
 
-  const user    = useSelector( state => state.user );
-  const meeting = useSelector( state => state.meetings.openMeeting );
+  const user = useSelector( ( state ) => state.user );
+  const meeting = useSelector( ( state ) => state.meetings.openMeeting );
 
   const router = useRouter();
 
@@ -35,35 +35,29 @@ const Meeting = props => {
     setParticipants([]);
     setTopics([]);
   };
-  console.log( router.pathname );
 
   useEffect( () => {
     const loadMeeting = async() => {
-      const meeting_id    = router.query.id;
-      const realMeetingId = meeting_id.length === 24;
+      const meeting_id = router.query.id || '';
+      const real_id = meeting_id.length === 24;
 
-      if ( realMeetingId ) {
-
+      if ( real_id ) {
         try {
-          await props.store.dispatch(
-            fetchMeeting( meeting_id )
-          );
+          await props.store.dispatch( fetchMeeting( meeting_id ) );
 
           const { meetings } = props.store.getState();
 
           setName( meetings.openMeeting.name );
           setParticipants( meetings.openMeeting.participants );
           setTopics( meetings.openMeeting.topics );
-
         } catch ( err ) {
           props.store.dispatch(
             notify({
               message: 'Failed to fetch meeting: ' + err.message,
-              type: 'Danger'
+              type: 'danger'
             })
           );
         }
-
       } else {
         clearPage();
       }
@@ -82,7 +76,7 @@ const Meeting = props => {
             name,
             owner_id: user._id,
             meeting_id: meeting._id || undefined,
-            date: new Date,
+            date: new Date(),
             participants,
             topics
           })
@@ -109,7 +103,6 @@ const Meeting = props => {
     if ( saving ) {
       save();
     }
-
   }, [ saving ] );
 
   const setNameHandler = ( event ) => {
@@ -117,29 +110,23 @@ const Meeting = props => {
   };
 
   if ( loading ) {
-    return <LoadingIcon/>;
+    return <LoadingIcon />;
   }
 
   return (
     <div>
-      <HeaderForm
-        setMeetingName={setNameHandler}
-        meetingName={name}
-      />
-      <TopicsForm
-        topics={topics}
-        setTopics={setTopics}
-      />
+      <HeaderForm setMeetingName={setNameHandler} meetingName={name} />
+      <TopicsForm topics={topics} setTopics={setTopics} />
       <ParticipantsForm
         owner={user.email}
         participants={participants}
         setParticipants={setParticipants}
       />
       <Button
-        variant='outlined'
+        variant="outlined"
         customClass={styles.meetingButton}
         onClick={() => setSaving( true )}
-        text='save'
+        text="save"
       />
     </div>
   );
