@@ -153,5 +153,42 @@ module.exports = {
     } catch ( error ) {
       res.status( 500 ).send( error );
     }
+  },
+
+  async checkExistingUsername( req, res ) {
+    try {
+      const { username } = req.body;
+
+      const existingUser = await User.findOne({ username });
+
+      if ( existingUser ) {
+        res.status( 409 ).send(
+          new Error('Username already exists')
+        );
+
+      } else { res.status( 200 ).send(); }
+
+    } catch ( err ) {
+      log.error( err.message );
+    }
+  },
+
+  async checkExistingEmail( req, res ) {
+    try {
+      const { email } = req.body;
+
+      const existingUser = await User.findOne({ email });
+
+      if ( existingUser ) {
+        res.status( 409 ).send(
+          new Error('Email already exists')
+        );
+
+      } else { res.status( 200 ).send(); }
+
+    } catch ( err ) {
+      log.error( err.message );
+    }
   }
 };
+

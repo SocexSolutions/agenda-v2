@@ -6,10 +6,14 @@
 
 .list {
   display: flex;
-  margin-left: 5%;
-  margin-top: 0;
   flex-direction: column;
   margin: 3rem;
+  margin-top: 1rem;
+  width: 90%;
+  min-height: 90%;
+  background-color: var(--backgroundTwo);
+  outline: .5px solid var(--agendaSecondary);
+  border-radius: 0.5rem;
 }
 
 .item {
