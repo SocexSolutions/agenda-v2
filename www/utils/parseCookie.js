@@ -4,7 +4,7 @@
  * @param {string} key - key to search for
  * @return {string} - value of (if any) for given key in cookie
  */
-export default function( cookie, key ) {
+function parseCooke( cookie, key ) {
   const pair = cookie.split('; ').filter( str => {
     return key === str.split('=')[ 0 ];
   });
@@ -13,3 +13,5 @@ export default function( cookie, key ) {
     return pair[ 0 ].split('=')[ 1 ];
   }
 }
+
+export default parseCooke;

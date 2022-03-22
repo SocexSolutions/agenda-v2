@@ -1,12 +1,13 @@
-import styles      from '../../../styles/Meet.module.css';
-import sharedStyles from '../../../styles/Shared.module.css';
-
 import LoadingIcon    from '../../../components/LoadingIcon';
 import DiscussionForm from '../../../components/Bundles/Meeting/DiscussionForm';
 
 import { useEffect, useState } from 'react';
+import { useRouter }           from 'next/router';
 
 import { fetchMeeting } from '../../../store/features/meetings/meetingSlice';
+
+import styles       from '../../../styles/Meet.module.css';
+import sharedStyles from '../../../styles/Shared.module.css';
 
 const Meet = ( props ) => {
   const [ takeaways, setTakeaways ]     = useState([]);
@@ -14,9 +15,11 @@ const Meet = ( props ) => {
   const [ meeting, setMeeting ]         = useState({});
   const [ savingTopic, setSavingTopic ] = useState( false );
 
+  const router = useRouter();
+
   useEffect( () => {
     const loadMeeting = async() => {
-      const meeting_id = String( window.location.pathname ).split('/')[ 2 ];
+      const meeting_id = router.query.id;
 
       await props.store.dispatch( fetchMeeting( meeting_id ) );
 

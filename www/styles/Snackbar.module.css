@@ -1,10 +1,9 @@
-
 .snackbar {
   position: fixed;
   bottom: -150px;
-  width: 30vw;
-  left: calc( 50vw - 15vw );
-  height: 70px;
+  width: 40vw;
+  left: calc( 50vw - 20vw );
+  padding: 0rem 1.5rem;
   border-radius: 7px;
   transition: bottom .5s ease-in-out;
 }

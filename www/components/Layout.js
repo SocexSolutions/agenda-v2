@@ -1,31 +1,42 @@
-import styles from '../styles/Layout.module.css';
-import Nav from './Nav';
+import Nav    from './Nav';
 import Drawer from './Drawer';
-import { useState } from 'react';
+
+import { useEffect }   from 'react';
+import { useRouter }   from 'next/router';
+import { useSelector } from 'react-redux';
+
+import styles from '../styles/Layout.module.css';
 
 const pagesWithoutDrawer = new Set([
   'home',
-  'Login',
-  'Register'
+  'login',
+  'register'
 ]);
 
 const Layout = ({ children }) => {
+  const drawerOpen = useSelector( ( state ) => state.drawer );
+  const storeTheme = useSelector( ( state ) => state.theme );
 
-  const [ drawerOpen, setDrawerOpen ] = useState( true );
+  const router = useRouter();
 
-  const showDrawer = !pagesWithoutDrawer.has( children.type.name );
+  const page       = router.pathname.split('/').pop();
+  const showDrawer = !pagesWithoutDrawer.has( page );
+
+  useEffect( () => {
+    document.documentElement.setAttribute(
+      'data-theme', storeTheme.theme.theme
+    );
+  }, [ storeTheme ] );
 
   return (
     <>
       <Nav
         drawerOpen={drawerOpen}
-        setDrawerOpen={setDrawerOpen}
       />
       <div className={styles.container}>
         { showDrawer &&
           <Drawer
             drawerOpen={drawerOpen}
-            setDrawerOpen={setDrawerOpen}
           />
         }
         <main>

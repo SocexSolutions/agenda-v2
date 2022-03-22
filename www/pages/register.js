@@ -1,3 +1,7 @@
+import { useRouter } from 'next/router';
+
+import { notify } from '../store/features/snackbar/snackbarSlice';
+
 import styles from '../styles/Register.module.css';
 import Input  from '../components/Input';
 import Button from '../components/Button';
@@ -9,7 +13,6 @@ import { useSelector }  from 'react-redux';
 
 import client from '../store/client';
 
-
 const initialState = {
   email:    '',
   username: '',
@@ -17,6 +20,9 @@ const initialState = {
 };
 
 const Register = props => {
+  const [ registering, setRegistering ] = useState( false );
+
+  const router = useRouter();
   const [ fields, setFields ]               = useState( initialState );
   const [ emailError, setEmailError ]       = useState( false );
   const [ usernameError, setUsernameError ] = useState( false );
@@ -25,14 +31,46 @@ const Register = props => {
     setFields({ ...fields, [ event.target.name ]: event.target.value });
   };
 
+  useEffect( () => {
+    const register = async() => {
+      try {
+        await props.store.dispatch(
+          userRegister( fields )
+        );
+
+        await props.store.dispatch(
+          notify({
+            message: 'Registration Successful',
+            ms: 1500
+          })
+        );
+
+        const user = props.store.getState().user;
+
+        router.push( `/user/${ user._id }` );
+
+      } catch ( err ) {
+        await props.store.dispatch(
+          notify({
+            message: 'Registration Failed: ' + err.message,
+            type: 'danger',
+            ms: 3000
+          })
+        );
+      }
+
+      setFields( initialState );
+      setRegistering( false );
+    };
+
+    if ( registering ) {
+      register();
+    }
+  }, [ registering ] );
+
   const handleSubmit = ( event ) => {
-    props.store.dispatch(
-      userRegister( fields )
-    );
-
-    setFields( initialState );
-
     event.preventDefault();
+    setRegistering( true );
   };
 
   useEffect( () => {

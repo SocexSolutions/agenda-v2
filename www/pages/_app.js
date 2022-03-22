@@ -1,44 +1,27 @@
-import Layout          from '../components/Layout';
-import { Provider }    from 'react-redux';
+import { useEffect } from 'react';
+import { Provider }  from 'react-redux';
+
 import { useStore }    from '../store/store';
-import { useEffect }   from 'react';
-import { useState }    from 'react';
 import { userRefresh } from '../store/features/user/userSlice';
 
-import Snackbar        from '../components/Snackbar';
+import Snackbar from '../components/Snackbar';
+import Layout   from '../components/Layout';
 
 import '../styles/globals.css';
 
-const wait = ( ms, fn ) => {
-  return new Promise( res => setTimeout( () => {
-    fn();
-    res();
-  }, ms ) );
-};
-
-const App = props => {
-  const store  = useStore({});
-
-  const [ snackMessage, setSnackMessage ] = useState('');
-  const [ snackType, setSnackType ]       = useState('');
-  const [ snackOpen, setSnackOpen ]       = useState( false );
-
-  const notify = async({
-    message = 'Congradalashun',
-    type = 'success',
-    ms = 3000
-  }) => {
-    setSnackMessage( message );
-    setSnackType( type );
-    setSnackOpen( true );
-
-    return wait( ms, () => setSnackOpen( false ) );
-  };
+const App = ( props ) => {
+  const store = useStore();
 
   useEffect( () => {
-    store.dispatch(
-      userRefresh()
-    );
+    async function refresh() {
+      await store.dispatch(
+        userRefresh()
+      );
+    }
+
+    if ( !store.getState().user._id ) {
+      refresh();
+    }
   });
 
   const Component = props.Component;
@@ -46,18 +29,9 @@ const App = props => {
   return (
     <Provider store={store}>
       <Layout>
-        <Component
-          store={store}
-          notify={notify}
-          {...props.pageProps}
-        />
+        <Component store={store} {...props.pageProps} />
       </Layout>
-      <Snackbar
-        message={snackMessage}
-        type={snackType}
-        open={snackOpen}
-        setOpen={setSnackOpen}
-      />
+      <Snackbar />
     </Provider>
   );
 };

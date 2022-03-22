@@ -1,35 +1,57 @@
-import styles from '../styles/Register.module.css';
 import Button from '../components/Button';
 import Input  from '../components/Input';
 
-import { userLogin }   from '../store/features/user/userSlice';
-import { useState }    from 'react';
-import { useEffect }   from 'react';
-import { useSelector } from 'react-redux';
+import { useState }  from 'react';
+import { useEffect } from 'react';
+
+import { useRouter } from 'next/router';
+
+import { userLogin } from '../store/features/user/userSlice';
+import { notify }    from '../store/features/snackbar/snackbarSlice';
+
+import styles from '../styles/Register.module.css';
 
 const initialState = {
   username: '',
   password: ''
 };
 
-const Login = props => {
+const Login = ( props ) => {
   const [ fields, setFields ]       = useState( initialState );
   const [ loggingIn, setLoggingIn ] = useState( false );
 
-  const user = useSelector( state => state.user );
+  const router = useRouter();
 
   useEffect( () => {
     const login = async() => {
-      await props.store.dispatch(
-        userLogin( fields )
-      );
+      try {
+        await props.store.dispatch(
+          userLogin( fields )
+        );
 
-      await props.notify({ ms: 1500 });
+        await props.store.dispatch(
+          notify({
+            message: 'Login Successful',
+            ms: 1500
+          })
+        );
 
-      setFields( initialState );
+        const user = props.store.getState().user;
+
+        router.push( `/user/${ user._id }` );
+
+      } catch ( err ) {
+        await props.store.dispatch(
+          notify({
+            message: 'Login Failed: ' + err.message,
+            type: 'danger',
+            ms: 3000
+          })
+        );
+      }
+
       setLoggingIn( false );
-
-      window.location = `user/${ user._id }`;
+      setFields( initialState );
     };
 
     if ( loggingIn ) {

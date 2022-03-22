@@ -1,45 +1,57 @@
-import Inbox from '../../../components/Inbox';
-import LoadingIcon from '../../../components/LoadingIcon';
 import { getInbox } from '../../../store/features/meetings/meetingSlice';
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 
-const selectUser = state => state.user;
-const selectOwnedMeetings = state => state.meetings.ownedMeetings;
+import { useEffect, useState } from 'react';
+import { useSelector }         from 'react-redux';
+
+import Inbox       from '../../../components/Inbox';
+import LoadingIcon from '../../../components/LoadingIcon';
+
+const selectUser                = state => state.user;
+const selectOwnedMeetings       = state => state.meetings.ownedMeetings;
 const selectParticipantMeetings = state => state.meetings.participantMeetings;
 
-const User = () => {
-  const dispatch = useDispatch();
+const User = ( props ) => {
+  const [ loading, setLoading ] = useState( true );
 
-  const user = useSelector( selectUser );
-  const ownedMeetings = useSelector( selectOwnedMeetings );
+  const user                = useSelector( selectUser );
+  const ownedMeetings       = useSelector( selectOwnedMeetings );
   const participantMeetings = useSelector( selectParticipantMeetings );
 
   useEffect( () => {
+    async function load() {
+      try {
+        await props.store.dispatch( getInbox() );
+        setLoading( false );
+      } catch ( err ) {
+        props.notify({
+          msg: 'Error loading meetings: ' + err.message,
+          type: 'danger'
+        });
+      }
+    }
+
     if ( user._id ) {
-      dispatch( getInbox() );
+      load();
     }
   }, [ user ] );
 
-  const loaded = ownedMeetings.length >= 0 || participantMeetings.length >= 0;
-
-  //TODO filter and sort for inbox
-
-  if ( loaded ) {
-    return (
-      <>
-        <Inbox
-          meetings={ ownedMeetings }
-        />
-      </>
-    );
-  } else {
+  if ( loading ) {
     return (
       <>
         <LoadingIcon size="large" />
       </>
     );
   }
+
+  const meetings = ownedMeetings.concat( participantMeetings );
+
+  return (
+    <>
+      <Inbox
+        meetings={ meetings }
+      />
+    </>
+  );
 };
 
 export default User;

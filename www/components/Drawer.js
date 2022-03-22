@@ -1,24 +1,25 @@
-import styles from '../styles/Drawer.module.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleDrawer }             from '../store/features/drawer/drawerSlice';
 
 import Button from '../components/Button';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIosTwoTone';
-import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
+
+import ArrowForwardIosIcon  from '@material-ui/icons/ArrowForwardIosTwoTone';
+import DoubleArrowIcon      from '@material-ui/icons/DoubleArrow';
 import CheckBoxOutlinedIcon from '@material-ui/icons/Checkboxoutlined';
-import CancelOutlinedIcon from '@material-ui/icons/CancelOutlined';
+import CancelOutlinedIcon   from '@material-ui/icons/CancelOutlined';
 
-import { useSelector, useDispatch } from 'react-redux';
-import { toggleDrawer } from '../store/features/ui/uiSlice';
+import styles from '../styles/Drawer.module.css';
 
 
-const selectDrawer = state => state.ui.drawerOpen;
+const selectDrawer = state => state.drawer;
 
 const Drawer = () => {
   const dispatch = useDispatch();
-  const drawerOpen = useSelector( selectDrawer );
+  const open     = useSelector( selectDrawer ).open;
 
   return (
     <div className={styles.godContainer}>
-      <div className={`${ styles.container } ${ !drawerOpen && styles.closed }`}>
+      <div className={`${ styles.container } ${ !open && styles.closed }`}>
         <h2>Socnet</h2>
         <Button
           text="Upcoming"
@@ -49,7 +50,7 @@ const Drawer = () => {
         onClick={() => dispatch( toggleDrawer() )}
       >
         <div className={styles.arrow}>
-          <div className={drawerOpen ? styles.arrowClose : styles.arrowOpen}>
+          <div className={open ? styles.arrowClose : styles.arrowOpen}>
             <ArrowForwardIosIcon />
           </div>
         </div>
