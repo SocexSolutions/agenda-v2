@@ -1,5 +1,5 @@
 import client from '../../client';
-import parseCookie from '../../../utils/parseCookie';
+import { getCookie, deleteCookie, setCookie } from '../../../utils/cookie';
 
 const initialState = {
   token: null,
@@ -36,7 +36,7 @@ const reducer = ( state = initialState, action ) => {
  * @returns {Promise<undefined>}
  */
 export const userRegister = ({ email, username, password }) => {
-  return async function registerUser( dispatch, getState ) {
+  return async function registerUser( dispatch, getState ) { // eslint-disable-line
     const { data } = await client.post(
       '/user/register',
       {
@@ -46,7 +46,7 @@ export const userRegister = ({ email, username, password }) => {
       }
     );
 
-    document.cookie = `agenda-auth=${ data.token }`;
+    setCookie( 'agenda-auth', data.token );
 
     dispatch({
       type: 'user/register',
@@ -67,7 +67,7 @@ export const userRegister = ({ email, username, password }) => {
  * @returns {Promise<undefined>}
  */
 export const userLogin = ({ username, password }) => {
-  return async function loginUser( dispatch, getState ) {
+  return async function loginUser( dispatch, getState ) { // eslint-disable-line
     const { data } = await client.post(
       '/user/login',
       {
@@ -76,7 +76,7 @@ export const userLogin = ({ username, password }) => {
       }
     );
 
-    document.cookie = `agenda-auth=${ data.token }`;
+    setCookie( 'agenda-auth', data.token );
 
     dispatch({
       type: 'user/login',
@@ -95,8 +95,8 @@ export const userLogin = ({ username, password }) => {
  * @returns {Promise<undefined>}
  */
 export const userRefresh = () => {
-  return async function refreshUser( dispatch, getState ) {
-    const token = parseCookie( document.cookie, 'agenda-auth' );
+  return async function refreshUser( dispatch, getState ) { // eslint-disable-line
+    const token = getCookie('agenda-auth');
 
     if ( token ) {
       try {
@@ -129,13 +129,8 @@ export const userRefresh = () => {
  * @returns {Promise<undefined>}
  */
 export const userLogout = () => {
-  return async function logoutUser( dispatch, getState ) {
-    const cookie = document.cookie
-    .match( new RegExp( '(^| )' + 'agenda-auth' + '=([^;]+)' ) );
-
-    if ( cookie ) {
-      document.cookie = `${ cookie }; expires=Thu, 01 Jan 1970 00:00:00 UTC`;
-    }
+  return async function logoutUser( dispatch, getState ) { // eslint-disable-line
+    deleteCookie('agenda-auth');
 
     window.location.href = '/';
 

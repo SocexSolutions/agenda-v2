@@ -1,5 +1,5 @@
 import axios from 'axios';
-import parseCookie from '../utils/parseCookie';
+import { getCookie } from '../utils/cookie';
 
 const client = axios.create({
   baseURL: 'http://localhost:4000',
@@ -7,9 +7,7 @@ const client = axios.create({
 });
 
 client.interceptors.request.use( ( config ) => {
-  config.headers['authorization'] = parseCookie(
-    document.cookie, 'agenda-auth'
-  );
+  config.headers['authorization'] = getCookie('agenda-auth');
 
   return config;
 });
