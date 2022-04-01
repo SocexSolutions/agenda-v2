@@ -4,6 +4,7 @@ const db       = require('../../../lib/db');
 const api      = require('../../utils/api');
 const client   = require('../../utils/client');
 const ObjectID = require('mongoose').Types.ObjectId;
+const Topic    = require('../../../lib/models/topic');
 
 const topic = {
   name: 'topic name',
@@ -46,6 +47,7 @@ describe( 'api/lib/controllers/topic', () => {
         res.data.name === topic.name,
         'created topic with incorrect name: ' + res.data.name
       );
+
     });
 
     it( 'should create topic without likes', async() => {
