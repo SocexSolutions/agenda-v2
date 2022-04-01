@@ -113,4 +113,4 @@ const Meet = ( props ) => {
   );
 };
 
-module.exports = Meet;
+export default Meet;

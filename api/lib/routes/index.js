@@ -7,11 +7,13 @@ const meeting     = require('./meeting');
 const topic       = require('./topic');
 const ui          = require('./ui');
 const participant = require('./participant');
+const takeaway    = require('./takeaway');
 
 router.use( '/health', health );
 router.use( '/user', reqLogger, user );
 router.use( '/meeting', reqLogger, auth, meeting );
 router.use( '/topic', reqLogger, auth, topic );
+router.use( '/takeaway', reqLogger, auth, takeaway );
 router.use( '/participant', reqLogger, auth, participant );
 router.use( '/ui', reqLogger, auth, ui );
 
