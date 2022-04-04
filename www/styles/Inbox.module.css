@@ -50,3 +50,18 @@
 .item:hover > p {
   opacity: 70%;
 }
+
+.noMeetings {
+  margin: auto;
+  font-size: large;
+  color: var(--agendaText);
+  text-align: center;
+}
+
+.noMeetings a {
+  color: var(--agendaSecondary);
+}
+
+.noMeetings a:hover {
+  opacity: 70%;
+}

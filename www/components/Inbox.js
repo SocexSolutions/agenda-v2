@@ -28,9 +28,13 @@ const Inbox = ({ meetings }) => {
     );
   });
 
+
   return (
     <div className={styles.list}>
-      {lineItems}
+      {
+        lineItems.length ? lineItems :
+          <div className={styles.noMeetings}>No Meetings :( <br></br> <a><Link href="/meeting/new">Get Started</Link></a> </div>
+      }
     </div>
   );
 };
