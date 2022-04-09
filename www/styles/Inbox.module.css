@@ -35,11 +35,14 @@
 }
 
 .item :nth-child(3){
-  margin-left: 2rem;
+  margin-left: 1rem;
+}
+
+.item :nth-child(4){
+  margin-left: 1rem;
 }
 
 .item:hover {
-  cursor: pointer;
   background-color: var(---agendaSecondary);
 }
 

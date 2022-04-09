@@ -13,7 +13,14 @@ const Inbox = ({ meetings }) => {
           <Button
             text='edit'
             size='medium'
-            type='success'
+            type='danger'
+            variant='outlined'
+          />
+        </Link>
+        <Link  href={ `/meeting/${ meeting._id }/voting`}>
+          <Button
+            text='vote'
+            size='medium'
             variant='outlined'
           />
         </Link>
@@ -21,6 +28,7 @@ const Inbox = ({ meetings }) => {
           <Button
             text='meet'
             size='medium'
+            type='success'
             variant='outlined'
           />
         </Link>

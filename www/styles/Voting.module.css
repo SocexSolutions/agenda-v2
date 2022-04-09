@@ -1,0 +1,41 @@
+.container{
+ width: 100%;
+}
+
+.topic {
+  display: flex;
+  flex-direction: column;
+  margin: 2rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  width: 90%;
+  min-height: 90%;
+  background-color: var(--backgroundTwo);
+  outline: .5px solid var(--agendaSecondary);
+  border-radius: 0.5rem;
+}
+
+.like {
+  margin-left: auto;
+  padding: .5rem;
+  margin-right: 1rem;
+  overflow: visible;
+  height: 2rem;
+  width: 2rem;
+  border-radius: .5rem;
+  cursor: pointer;
+  color: var(--agendaSecondary);
+}
+
+.dislike {
+  margin-left: auto;
+  padding: .5rem;
+  margin-right: 1rem;
+  overflow: visible;
+  height: 2rem;
+  width: 2rem;
+  border-radius: .5rem;
+  cursor: pointer;
+  color: var(--success);
+  background-color: var(--agendaThree);
+}

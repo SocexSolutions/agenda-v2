@@ -12,7 +12,7 @@ import sharedStyles from '../../../styles/Shared.module.css';
 const Meet = ( props ) => {
   const [ takeaways, setTakeaways ]     = useState([]);
   const [ loading, setLoading ]         = useState( true );
-  const [ meeting, setMeeting ]         = useState({});
+  const [ meeting, setMeeting ]         = useState( null );
   const [ savingTopic, setSavingTopic ] = useState( false );
 
   const router = useRouter();
@@ -55,7 +55,7 @@ const Meet = ( props ) => {
     setTakeaways([ ...takeaways, takeaway ]);
   };
 
-  if ( loading ) {
+  if ( !meeting ) {
     return (
       <div className={styles.loadingContainer}>
         <LoadingIcon />

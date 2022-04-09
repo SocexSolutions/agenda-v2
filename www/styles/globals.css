@@ -93,6 +93,7 @@ h3 {
 [data-theme='dark']{
   --agenda: #444444;
   --agendaSecondary: #878683;
+  --agendaThree: #4e4e4e ;
   --agendaText: #bebebe;
   --background: #121212;
   --backgroundTwo: #242424;
