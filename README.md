@@ -38,8 +38,9 @@ npm run test
 # Info
 More information specific to the api and server containers can be found in the README.md files for the `api` and `www` directories.
 
-# Tickets
-The project Kanban can be found [here](https://thomashudsonnotes.notion.site/a1f3e7cd3bf74c62b06dbda78b2c9c7c?v=43d3f2b9730045f691cd254967c6949d)
+# Useful Links
+- [Project Kanban](https://thomashudsonnotes.notion.site/a1f3e7cd3bf74c62b06dbda78b2c9c7c?v=43d3f2b9730045f691cd254967c6949d)
+- [Icons](https://v4.mui.com/components/material-icons/)
 
 # Technical Decisions
 
