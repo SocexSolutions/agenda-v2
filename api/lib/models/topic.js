@@ -12,10 +12,7 @@ const topicSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId, ref: 'Meeting',
       required: true
     },
-    likes: [ {
-      type: Schema.Types.ObjectId,
-      ref: 'Participant'
-    } ]
+    likes: [ String ]
   },
   {
     timestamp: true
