@@ -1,10 +1,11 @@
-const assert   = require('assert');
-const dbUtils  = require('../../utils/db');
-const db       = require('../../../lib/db');
-const api      = require('../../utils/api');
-const client   = require('../../utils/client');
-const ObjectID = require('mongoose').Types.ObjectId;
-const Topic    = require('../../../lib/models/topic');
+const { assert } = require('chai');
+const dbUtils    = require('../../utils/db');
+const db         = require('../../../lib/db');
+const api        = require('../../utils/api');
+const client     = require('../../utils/client');
+const ObjectID   = require('mongoose').Types.ObjectId;
+const Topic      = require('../../../lib/models/topic');
+const topicFake  = require('../../fakes/topic');
 
 const topic = {
   name: 'topic name',
@@ -47,7 +48,6 @@ describe( 'api/lib/controllers/topic', () => {
         res.data.name === topic.name,
         'created topic with incorrect name: ' + res.data.name
       );
-
     });
 
     it( 'should create topic without likes', async() => {
@@ -93,6 +93,34 @@ describe( 'api/lib/controllers/topic', () => {
           'failed to create topic for wrong reason: ' + err.response.data
         );
       }
+    });
+
+  });
+
+  describe( '#like', () => {
+
+    beforeEach( async() => {
+      this.topic = await Topic.create( topicFake() );
+    });
+
+    it( 'should add a topic like', async() => {
+      const res = await client.patch(
+        '/topic/' + this.topic._id + '/like',
+        { email: 'thudson@agenda.com' }
+      );
+
+      assert.strictEqual( res.status, 200 );
+      assert.isTrue( res.data.likes.includes('thudson@agenda.com') );
+    });
+
+    it( 'should remove a topic like', async() => {
+      const res = await client.patch(
+        '/topic/' + this.topic._id + '/like',
+        { email: 'bryan@bacon.com' }
+      );
+
+      assert.strictEqual( res.status, 200 );
+      assert.isTrue( !res.data.likes.includes('bryan@bacon.com') );
     });
 
   });

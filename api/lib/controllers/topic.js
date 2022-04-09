@@ -13,5 +13,35 @@ module.exports = {
       log.error( 'Error creating topic: ' + error.message );
       res.status( 500 ).send( error.message );
     }
+  },
+
+  like: async( request, response ) => {
+    const { _id } = request.params;
+    const { email } = request.body;
+
+    try {
+      const topic = await Topic.findOne({ _id });
+
+      //like and unlike
+      if ( !topic.likes.includes( email ) ) {
+        topic.likes.push( email );
+      } else {
+        topic.likes = topic.likes.filter( email => {
+          return email !== email;
+        });
+      }
+
+      //update topic in db
+      const res = await Topic.findOneAndUpdate(
+        { _id },
+        { likes: topic.likes },
+        { new: true }
+      );
+
+      response.status( 200 ).send( res );
+
+    } catch ( error ) {
+      response.status( 500 ).send( error );
+    }
   }
 };
