@@ -1,13 +1,16 @@
-const chai        = require('chai');
-const chaiSubset  = require('chai-subset');
-const dbUtils     = require('../../utils/db');
-const db          = require('../../../lib/db');
-const api         = require('../../utils/api');
-const client      = require('../../utils/client');
-const ObjectID    = require('mongoose').Types.ObjectId;
-const Meeting     = require('../../../lib/models/meeting');
-const Participant = require('../../../lib/models/participant');
-const Topic       = require('../../../lib/models/topic');
+const chai            = require('chai');
+const chaiSubset      = require('chai-subset');
+const dbUtils         = require('../../utils/db');
+const db              = require('../../../lib/db');
+const api             = require('../../utils/api');
+const client          = require('../../utils/client');
+const ObjectID        = require('mongoose').Types.ObjectId;
+const Meeting         = require('../../../lib/models/meeting');
+const Participant     = require('../../../lib/models/participant');
+const Topic           = require('../../../lib/models/topic');
+const topicFake       = require('../../fakes/topic');
+const participantFake = require('../../fakes/participant');
+const meetingFake     = require('../../fakes/meeting');
 
 chai.use( chaiSubset );
 
@@ -16,19 +19,13 @@ const assert = chai.assert;
 const meeting_id = new ObjectID();
 const owner_id   = new ObjectID();
 
-const topic1 = { name: 'topic 1', meeting_id };
-const topic2 = { name: 'topic 2', meeting_id };
-const participant1  = { email: 'zbarnz@zbarnz.zbarnz', meeting_id };
-const participant2  = { email: 'thudson@thudson.thudson', meeting_id };
+const topic1 = topicFake({ meeting_id });
+const topic2 = topicFake({ meeting_id });
 
+const participant1  = participantFake({ meeting_id });
+const participant2  = participantFake({ meeting_id });
 
-const meeting = {
-  name: 'Meeting 1',
-  owner_id,
-  date: new Date(),
-  topics: [  topic1, topic2 ],
-  participants: [ participant1, participant2 ]
-};
+const meeting = meetingFake({ owner_id });
 
 describe( 'controllers/meeting', () => {
 
@@ -119,10 +116,16 @@ describe( 'controllers/meeting', () => {
 
   describe( '#save', () => {
 
+    const payload = {
+      ...meeting,
+      participants: [ participant1, participant2 ],
+      topics: [ topic1, topic2 ]
+    };
+
     it( 'should create meeting', async() => {
       const { data } = await client.post(
         '/meeting',
-        meeting
+        payload
       );
 
       const createdMeeting = await Meeting.findById( data._id );
@@ -130,8 +133,8 @@ describe( 'controllers/meeting', () => {
       assert.containSubset(
         createdMeeting,
         {
-          name: meeting.name,
-          date: meeting.date.toISOString()
+          name: payload.name,
+          date: payload.date.toISOString()
         }
       );
     });
@@ -139,7 +142,7 @@ describe( 'controllers/meeting', () => {
     it( 'should create meeting with participants', async() => {
       const { data } = await client.post(
         '/meeting',
-        meeting
+        payload
       );
 
       const createdParticipants = await Participant.find({
@@ -160,7 +163,7 @@ describe( 'controllers/meeting', () => {
     it( 'should create meeting with topics', async() => {
       const { data } = await client.post(
         '/meeting',
-        meeting
+        payload
       );
 
       const createdTopics = await Topic.find({
@@ -181,7 +184,7 @@ describe( 'controllers/meeting', () => {
     it( 'should update a meeting', async() => {
       const { _id } = await Meeting.create( meeting );
 
-      const payload = {
+      const update = {
         meeting_id: _id.toString(),
         name: 'meeting 2',
         date: new Date().toISOString()
@@ -189,18 +192,18 @@ describe( 'controllers/meeting', () => {
 
       const { data } = await client.post(
         '/meeting',
-        payload
+        update
       );
 
-      assert.containSubset(
-        data,
-        {
-          ...payload,
-          meeting_id: undefined,
-          _id: payload.meeting_id,
-          owner_id: owner_id.toString()
-        }
-      );
+      assert.strictEqual( data.name, update.name );
+      assert.strictEqual( data.date, update.date );
+      assert.strictEqual( data._id, update.meeting_id );
+
+      const [ updated ] = await Meeting.find({ _id });
+
+      assert.strictEqual( owner_id.toString(), updated.owner_id.toString() );
+      assert.strictEqual( update.name, updated.name );
+      assert.strictEqual( update.date, updated.date );
     });
 
     it( 'should update a meetings topics', async() => {
@@ -230,6 +233,10 @@ describe( 'controllers/meeting', () => {
         data.topics[ 0 ],
         topic
       );
+
+      const [ updated ] = await Topic.find({ meeting_id: _id.toString() });
+
+      assert.strictEqual( updated.name, 'new topic name' );
     });
 
     it( 'should delete old meeting topics', async() => {
@@ -253,6 +260,10 @@ describe( 'controllers/meeting', () => {
       );
 
       assert.strictEqual( data.topics.length, 0 );
+
+      const deleted = await Topic.find({ meeting_id: _id });
+
+      assert.strictEqual( deleted.length, 0 );
     });
 
     it( 'should delete old meeting participants', async() => {
@@ -276,6 +287,10 @@ describe( 'controllers/meeting', () => {
       );
 
       assert.strictEqual( data.participants.length, 0 );
+
+      const deleted = await Participant.find({ meeting_id: _id });
+
+      assert.strictEqual( deleted.length, 0 );
     });
 
   });
