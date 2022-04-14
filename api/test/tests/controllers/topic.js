@@ -3,15 +3,8 @@ const dbUtils    = require('../../utils/db');
 const db         = require('../../../lib/db');
 const api        = require('../../utils/api');
 const client     = require('../../utils/client');
-const ObjectID   = require('mongoose').Types.ObjectId;
 const Topic      = require('../../../lib/models/topic');
-const topicFake  = require('../../fakes/topic');
-
-const topic = {
-  name: 'topic name',
-  meeting_id: new ObjectID(),
-  likes: [ new ObjectID(), new ObjectID() ]
-};
+const topicFaker = require('../../fakes/topic');
 
 describe( 'api/lib/controllers/topic', () => {
 
@@ -20,8 +13,7 @@ describe( 'api/lib/controllers/topic', () => {
     await db.connect();
 
     const res = await client.post(
-      '/user/register',
-      { username: 'user', password: 'pass', email: 'email' }
+      '/user/register', { username: 'user', password: 'pass', email: 'email' }
     );
 
     client.defaults.headers.common['Authorization'] = res.data.token;
@@ -40,6 +32,8 @@ describe( 'api/lib/controllers/topic', () => {
     const path = '/topic';
 
     it( 'should create topic with valid inputs', async() => {
+      const topic = topicFaker();
+
       const res = await client.post( path, topic );
 
       assert( res.status === 201, 'failed to create topic with valid inputs' );
@@ -48,12 +42,19 @@ describe( 'api/lib/controllers/topic', () => {
         res.data.name === topic.name,
         'created topic with incorrect name: ' + res.data.name
       );
+
+      const created = await Topic.find({});
+
+      assert.strictEqual( created.length, 1 );
+      assert.strictEqual( created[ 0 ].name, topic.name );
+      assert.strictEqual( created[ 0 ].likes[ 0 ], topic.likes[ 0 ] );
+      assert.deepEqual( created[ 0 ].meeting_id, topic.meeting_id );
     });
 
     it( 'should create topic without likes', async() => {
-      const topicWithoutParticipants = { ...topic, likes: [] };
+      const topic = topicFaker({ likes: [] });
 
-      const res = await client.post( path, topicWithoutParticipants );
+      const res = await client.post( path, topic );
 
       assert( res.status === 201, 'failed to create topic without likes' );
 
@@ -61,10 +62,17 @@ describe( 'api/lib/controllers/topic', () => {
         res.data.likes.length === 0,
         'created topic with incorrect likes: ' + res.data.likes
       );
+
+      const created = await Topic.find({});
+
+      assert.strictEqual( created.length, 1 );
+      assert.strictEqual( created[ 0 ].name, topic.name );
+      assert.strictEqual( created[ 0 ].likes.length, 0 );
+      assert.deepEqual( created[ 0 ].meeting_id, topic.meeting_id );
     });
 
     it( 'should not create topic without name', async() => {
-      const topicWithoutName = { ...topic, name: '' };
+      const topicWithoutName = topicFaker({ name: '' });
       const errorRegex = /^Topic validation failed: name/;
 
       try {
@@ -77,10 +85,14 @@ describe( 'api/lib/controllers/topic', () => {
           'failed to create topic for wrong reason: ' + err.response.data
         );
       }
+
+      const res = await Topic.find({});
+
+      assert.strictEqual( res.length, 0 );
     });
 
     it( 'should not create topic without meeting_id', async() => {
-      const topicWithoutMeetingId = { ...topic, meeting_id: '' };
+      const topicWithoutMeetingId = topicFaker({ meeting_id: '' });
       const errorRegex = /^Topic validation failed: meeting_id/;
 
       try {
@@ -93,6 +105,10 @@ describe( 'api/lib/controllers/topic', () => {
           'failed to create topic for wrong reason: ' + err.response.data
         );
       }
+
+      const res = await Topic.find({});
+
+      assert.strictEqual( res.length, 0 );
     });
 
   });
@@ -100,7 +116,7 @@ describe( 'api/lib/controllers/topic', () => {
   describe( '#like', () => {
 
     beforeEach( async() => {
-      this.topic = await Topic.create( topicFake() );
+      this.topic = await Topic.create( topicFaker() );
     });
 
     it( 'should add a topic like', async() => {
@@ -111,6 +127,10 @@ describe( 'api/lib/controllers/topic', () => {
 
       assert.strictEqual( res.status, 200 );
       assert.isTrue( res.data.likes.includes('thudson@agenda.com') );
+
+      const [ topic ] = await Topic.find({});
+
+      assert.isTrue( topic.likes.includes('thudson@agenda.com') );
     });
 
     it( 'should remove a topic like', async() => {
@@ -120,7 +140,11 @@ describe( 'api/lib/controllers/topic', () => {
       );
 
       assert.strictEqual( res.status, 200 );
-      assert.isTrue( !res.data.likes.includes('bryan@bacon.com') );
+      assert.isFalse( res.data.likes.includes('bryan@bacon.com') );
+
+      const [ topic ] = await Topic.find({});
+
+      assert.isFalse( topic.likes.includes('bryan@bacon.com') );
     });
 
   });
