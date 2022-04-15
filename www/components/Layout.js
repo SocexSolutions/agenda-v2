@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import styles from '../styles/Layout.module.css';
 
 const pagesWithoutDrawer = new Set([
-  'home',
+  '',
   'login',
   'register'
 ]);
