@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import Button from '../components/Button';
 
-const Inbox = ({ meetings }) => {
+const Inbox = ({ meetings, emptyMessage }) => {
   const lineItems = meetings.map( meeting => {
     return (
       <div className={styles.item} key={meeting._id} >
@@ -33,10 +33,17 @@ const Inbox = ({ meetings }) => {
     <div className={styles.list}>
       {
         lineItems.length ? lineItems :
-          <div className={styles.noMeetings}>No Meetings :( <br></br> <a><Link href="/meeting/new">Get Started</Link></a> </div>
+          <div className={styles.noMeetings}>{emptyMessage}</div> //No Meetings :( <br></br> <a><Link href="/meeting/new">Get Started</Link></a>
       }
     </div>
   );
+};
+
+Inbox.defaultProps = {
+  emptyMessage: <>
+    <h2 style={{ margin: '0' }}>No Meetings :(</h2><br />
+    <a><Link href="/meeting/new">Get Started</Link></a>
+  </>
 };
 
 export default Inbox;
