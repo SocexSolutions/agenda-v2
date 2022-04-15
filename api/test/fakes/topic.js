@@ -6,6 +6,7 @@ const topic = ( opts ) => {
     name: faker.commerce.productName(),
     meeting_id: new ObjectId,
     likes: [ 'bryan@bacon.com' ],
+    status: 'open',
     ...opts
   };
 };

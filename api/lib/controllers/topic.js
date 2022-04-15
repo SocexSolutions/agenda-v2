@@ -43,5 +43,22 @@ module.exports = {
     } catch ( error ) {
       response.status( 500 ).send( error );
     }
+  },
+
+  status: async( request, response ) => {
+    try {
+      const { _id }    = request.params;
+      const { status } = request.body;
+
+      const res = await Topic.findOneAndUpdate(
+        { _id },
+        { status },
+        { new: true }
+      );
+
+      response.status( 200 ).send( res );
+    } catch ( err ) {
+      response.status( 500 ).send( err );
+    }
   }
 };

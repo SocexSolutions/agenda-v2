@@ -149,4 +149,26 @@ describe( 'api/lib/controllers/topic', () => {
 
   });
 
+  describe( '#status', () => {
+
+    beforeEach( async() => {
+      this.topic = await Topic.create( topicFaker() );
+    });
+
+    it( 'should set the topics status', async() => {
+      const res = await client.patch(
+        '/topic/' + this.topic._id + '/status',
+        { status: 'discussed' }
+      );
+
+      assert.strictEqual( res.status, 200 );
+      assert.strictEqual( res.data.status, 'discussed' );
+
+      const [ topic ] = await Topic.find({});
+
+      assert.strictEqual( topic.status, 'discussed' );
+      assert.strictEqual( topic.name, this.topic.name );
+    });
+  });
+
 });
