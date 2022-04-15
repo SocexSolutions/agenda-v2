@@ -3,15 +3,33 @@ const Topic = require('../models/topic');
 
 module.exports = {
   create: async( req, res ) => {
-    const { name, meeting_id, likes } = req.body;
+    const newTopic = req.body;
 
     try {
-      const topic = await Topic.create({ name, meeting_id, likes });
+      const topic = await Topic.create( newTopic );
 
       res.status( 201 ).send( topic );
     } catch ( error ) {
       log.error( 'Error creating topic: ' + error.message );
       res.status( 500 ).send( error.message );
+    }
+  },
+
+  update: async( request, response ) => {
+    const updates = request.body;
+    const _id     = request.params;
+
+    try {
+      const topic = await Topic.findOneAndUpdate(
+        { _id },
+        updates,
+        { new: true }
+      );
+
+      response.status( 200 ).send( topic );
+
+    } catch ( error ) {
+      response.status( 500 ).send( error.message );
     }
   },
 

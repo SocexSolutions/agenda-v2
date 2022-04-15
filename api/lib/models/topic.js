@@ -8,6 +8,10 @@ const topicSchema = new mongoose.Schema(
       type: String,
       required: true
     },
+    description: {
+      type: String,
+      required: true
+    },
     meeting_id: {
       type: Schema.Types.ObjectId, ref: 'Meeting',
       required: true
@@ -15,7 +19,8 @@ const topicSchema = new mongoose.Schema(
     likes: [ String ],
     status: {
       type: String,
-      default: 'open'
+      default: 'open',
+      required: true
     }
   },
   {
@@ -57,6 +62,7 @@ async function saveMeetingTopics({ meeting_id, savedTopics }) {
     return {
       _id: topic._id || undefined,
       name: topic.name,
+      description: topic.description,
       meeting_id,
       likes: topic.likes || []
     };
