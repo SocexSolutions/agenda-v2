@@ -1,8 +1,10 @@
-import Chip from './Chip';
-import Input from './Input';
-import Button from './Button';
-import { useState } from 'react';
 import styles from '../styles/ChipForm.module.css';
+
+import Chip   from './Chip';
+import Input  from './Input';
+import Button from './Button';
+
+import { useState } from 'react';
 
 /**
  * Form for editing chip arrays
@@ -70,7 +72,6 @@ function ChipForm( props ) {
       <div className={styles.chipContainer}>
         {chips}
       </div>
-      <p>Add {props.itemName}</p>
       <div className={styles.inputContainer}>
         <Input
           placeholder={props.itemKey}

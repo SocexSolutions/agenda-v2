@@ -15,7 +15,10 @@ const Input = ({
   onKeyPress,
   type,
   errorMessage,
-  multiLine
+  multiLine,
+  customClass,
+  rows,
+  cols
 }) => {
 
   let classNames = '';
@@ -59,15 +62,11 @@ const Input = ({
       break;
   }
 
-  switch ( multiLine ) {
-    case true:
-      classNames += ' ' + styles.multiLine;
-      break;
-    case false:
-      break;
+  if ( customClass ) {
+    classNames += ' ' + customClass;
   }
 
-  if ( multiLine === false ) {
+  if ( !multiLine ) {
     return (
       <div className={styles.wrapper}>
         <label>
@@ -90,30 +89,40 @@ const Input = ({
         }
       </div>
     );
-  } else {
-    return (
-      <div className={styles.wrapper}>
-        <label>
-          {label}
-          {required}
-        </label>
-        <textarea
-          type={type}
-          placeholder={placeholder}
-          value={value}
-          name={name}
-          id={id}
-          onChange={onChange}
-          size={size}
-          className={classNames}
-          onKeyPress={onKeyPress}
-        />
-        { errorMessage &&
-        <p>{errorMessage}</p>
-        }
-      </div>
-    );
   }
+
+  switch ( multiLine ) {
+    case true:
+      classNames += ' ' + styles.multiLine;
+      break;
+    case false:
+      break;
+  }
+
+  return (
+    <div className={styles.wrapper}>
+      <label>
+        {label}
+        {required}
+      </label>
+      <textarea
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        name={name}
+        id={id}
+        onChange={onChange}
+        size={size}
+        className={classNames}
+        onKeyPress={onKeyPress}
+        rows={rows}
+        cols={cols}
+      />
+      { errorMessage &&
+        <p>{errorMessage}</p>
+      }
+    </div>
+  );
 };
 
 Input.propTypes = {

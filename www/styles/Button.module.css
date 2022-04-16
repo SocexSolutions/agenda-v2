@@ -15,17 +15,17 @@
 }
 
 .large {
-  padding: 0.70rem;
+  padding: 0.6rem 1rem;
   font-size: 1.5rem;
 }
 
 .medium {
-  padding: .5rem 1.5rem .5rem 1.5rem;
+  padding: .4rem 1rem;
   font-size: 1.05rem;
 }
 
 .small {
-  padding-top: .25rem;
+  padding: .4rem;
   font-size: .8rem;
 }
 

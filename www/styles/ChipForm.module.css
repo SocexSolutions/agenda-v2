@@ -17,11 +17,11 @@
 }
 
 .inputContainer {
+  margin-top: 1rem;
   display: flex;
   align-items: flex-start;
 }
 
 .addButton {
-  margin-left: 1.5rem;
-  margin-top: -.4rem;
+  margin-left: 1rem;
 }
