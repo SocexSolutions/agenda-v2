@@ -13,7 +13,6 @@ import { useRouter }    from 'next/router';
 
 const selectUser = state => state.user;
 
-// TODO get meeting id based on route
 const Voting = ( props ) => {
   const [ liking, setLiking ]   = useState('');
   const [ loading, setLoading ] = useState( true );
@@ -26,29 +25,31 @@ const Voting = ( props ) => {
     const loadMeeting = async() => {
       const meeting_id = router.query.id;
 
-      await props.store.dispatch( fetchMeeting( meeting_id ) );
+      if ( meeting_id ) {
+        console.log( meeting_id );
+        await props.store.dispatch( fetchMeeting( meeting_id ) );
 
-      const { meetings: { openMeeting } } = props.store.getState();
+        const { meetings: { openMeeting } } = props.store.getState();
 
-      setMeeting({
-        ...openMeeting,
-        topics: openMeeting.topics.map( topic => {
-          const userLiked = topic.likes.includes( user.email );
+        setMeeting({
+          ...openMeeting,
+          topics: openMeeting.topics.map( topic => {
+            const userLiked = topic.likes.includes( user.email );
 
-          return {
-            ...topic,
-            discussed: false,
-            userLiked
-          };
-        })
-      });
+            return {
+              ...topic,
+              discussed: false,
+              userLiked
+            };
+          })
+        });
 
-      setLoading( false );
+        setLoading( false );
+      }
     };
 
     loadMeeting();
-  }, [ loading ] );
-
+  }, [ loading, router.query.id, props.store, user.email ] );
 
   useEffect( () => {
     const likeTopic = async() => {
@@ -58,14 +59,12 @@ const Voting = ( props ) => {
       );
 
       setLiking( false );
-      setLoading( true );
     };
 
     if ( liking.length ) {
       likeTopic();
     }
-  }, [ liking ] );
-
+  }, [ liking, user.email ] );
 
   const onLike = ( topic_id ) => {
     meeting.topics = meeting.topics.map( t => {
@@ -79,7 +78,7 @@ const Voting = ( props ) => {
     setLiking( topic_id );
   };
 
-  if ( !meeting ) {
+  if ( loading ) {
     return (
       <div className={styles.loadingContainer}>
         <LoadingIcon />
@@ -104,7 +103,6 @@ const Voting = ( props ) => {
     );
   });
 
-  // dynamically generate topics cards
   return (
     <div className={styles.container}>
       { topicCards }

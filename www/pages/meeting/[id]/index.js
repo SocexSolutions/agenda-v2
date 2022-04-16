@@ -66,7 +66,7 @@ const Meeting = ( props ) => {
     };
 
     loadMeeting();
-  }, [ user, props.store, router.query ] );
+  }, [ user, props.store, router.query.id ] );
 
   useEffect( () => {
     const save = async() => {
