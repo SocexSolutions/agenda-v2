@@ -33,12 +33,7 @@ export const pickTheme = ( theme ) => {
 
       dispatch({ type: 'ui/pickTheme', payload: { theme } });
 
-
-      //document.documentElement.setAttribute( 'data-theme',  theme );
-      console.log( theme );
-    } catch ( err ) {
-      console.log( err );
-    }
+    } catch ( err ) {}
   };
 };
 
@@ -48,16 +43,12 @@ export const refreshTheme = () => {
     const user_id = state.user._id;
 
     try {
-      console.log( user_id );
-
       if ( user_id ) {
         const { data } = await client.get( `ui/${ user_id }` );
 
         dispatch({ type: 'ui/refreshTheme', payload: { theme: data.theme } });
       }
 
-    } catch ( err ) {
-      console.log( err );
-    }
+    } catch ( err ) {}
   };
 };

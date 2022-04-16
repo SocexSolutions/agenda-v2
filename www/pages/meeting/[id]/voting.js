@@ -26,7 +26,6 @@ const Voting = ( props ) => {
       const meeting_id = router.query.id;
 
       if ( meeting_id ) {
-        console.log( meeting_id );
         await props.store.dispatch( fetchMeeting( meeting_id ) );
 
         const { meetings: { openMeeting } } = props.store.getState();
