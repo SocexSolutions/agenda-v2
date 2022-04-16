@@ -14,7 +14,8 @@ const Input = ({
   variant,
   onKeyPress,
   type,
-  errorMessage
+  errorMessage,
+  multiLine
 }) => {
 
   let classNames = '';
@@ -58,28 +59,61 @@ const Input = ({
       break;
   }
 
-  return (
-    <div className={styles.wrapper}>
-      <label>
-        {label}
-        {required}
-      </label>
-      <input
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        name={name}
-        id={id}
-        onChange={onChange}
-        size={size}
-        className={classNames}
-        onKeyPress={onKeyPress}
-      />
-      { errorMessage &&
+  switch ( multiLine ) {
+    case true:
+      classNames += ' ' + styles.multiLine;
+      break;
+    case false:
+      break;
+  }
+
+  if ( multiLine === false ) {
+    return (
+      <div className={styles.wrapper}>
+        <label>
+          {label}
+          {required}
+        </label>
+        <input
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          name={name}
+          id={id}
+          onChange={onChange}
+          size={size}
+          className={classNames}
+          onKeyPress={onKeyPress}
+        />
+        { errorMessage &&
         <p>{errorMessage}</p>
-      }
-    </div>
-  );
+        }
+      </div>
+    );
+  } else {
+    return (
+      <div className={styles.wrapper}>
+        <label>
+          {label}
+          {required}
+        </label>
+        <textarea
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          name={name}
+          id={id}
+          onChange={onChange}
+          size={size}
+          className={classNames}
+          onKeyPress={onKeyPress}
+        />
+        { errorMessage &&
+        <p>{errorMessage}</p>
+        }
+      </div>
+    );
+  }
 };
 
 Input.propTypes = {
@@ -90,7 +124,8 @@ Input.propTypes = {
   size: PropTypes.string,
   required: PropTypes.bool,
   variant: PropTypes.string,
-  type: PropTypes.string
+  type: PropTypes.string,
+  multiLine: PropTypes.bool
 };
 
 Input.defaultProps = {
@@ -98,7 +133,8 @@ Input.defaultProps = {
   label: '',
   placeholder: '',
   size: '20',
-  variant: 'default'
+  variant: 'default',
+  multiLine: false
 };
 
 export default Input;
