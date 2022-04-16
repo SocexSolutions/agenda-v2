@@ -73,6 +73,7 @@ describe( 'api/lib/controllers/topic', () => {
 
     it( 'should not create topic without name', async() => {
       const topicWithoutName = topicFaker({ name: '' });
+
       const errorRegex = /^Topic validation failed: name/;
 
       try {
@@ -113,6 +114,46 @@ describe( 'api/lib/controllers/topic', () => {
 
   });
 
+  describe( '#update', () => {
+
+    beforeEach( async() => {
+      this.topic = await Topic.create( topicFaker() );
+    });
+
+    it( 'should update topic name', async() => {
+      const res = await client.post(
+        '/topic/' + this.topic._id,
+        { ...this.topic._doc, name: 'new name' }
+      );
+
+      assert.strictEqual( res.status, 200 );
+      assert.strictEqual( res.data.name, 'new name' );
+
+      const [ topic ] = await Topic.find({ _id: this.topic._id });
+
+      assert.strictEqual( topic.name, 'new name' );
+      assert.strictEqual( topic.status, this.topic.status );
+      assert.deepEqual( topic.likes, this.topic.likes );
+    });
+
+    it( 'should update topic description', async() => {
+      const res = await client.post(
+        '/topic/' + this.topic._id,
+        { ...this.topic._doc, description: 'new description' }
+      );
+
+      assert.strictEqual( res.status, 200 );
+      assert.strictEqual( res.data.description, 'new description' );
+
+      const [ topic ] = await Topic.find({ _id: this.topic._id });
+
+      assert.strictEqual( topic.description, 'new description' );
+      assert.strictEqual( topic.status, this.topic.status );
+      assert.deepEqual( topic.likes, this.topic.likes );
+    });
+
+  });
+
   describe( '#like', () => {
 
     beforeEach( async() => {
@@ -147,6 +188,28 @@ describe( 'api/lib/controllers/topic', () => {
       assert.isFalse( topic.likes.includes('bryan@bacon.com') );
     });
 
+  });
+
+  describe( '#status', () => {
+
+    beforeEach( async() => {
+      this.topic = await Topic.create( topicFaker() );
+    });
+
+    it( 'should set the topics status', async() => {
+      const res = await client.patch(
+        '/topic/' + this.topic._id + '/status',
+        { status: 'discussed' }
+      );
+
+      assert.strictEqual( res.status, 200 );
+      assert.strictEqual( res.data.status, 'discussed' );
+
+      const [ topic ] = await Topic.find({});
+
+      assert.strictEqual( topic.status, 'discussed' );
+      assert.strictEqual( topic.name, this.topic.name );
+    });
   });
 
 });
