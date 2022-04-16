@@ -3,10 +3,10 @@ import { toggleDrawer }             from '../store/features/drawer/drawerSlice';
 
 import Button from '../components/Button';
 
-import ArrowForwardIosIcon  from '@material-ui/icons/ArrowForwardIosTwoTone';
-import DoubleArrowIcon      from '@material-ui/icons/DoubleArrow';
-import CheckBoxOutlinedIcon from '@material-ui/icons/Checkboxoutlined';
-import CancelOutlinedIcon   from '@material-ui/icons/CancelOutlined';
+import ArrowForwardIosIcon  from '@mui/icons-material/ArrowForwardIosTwoTone';
+import DoubleArrowIcon      from '@mui/icons-material/DoubleArrow';
+import CheckBoxOutlinedIcon from '@mui/icons-material/Checkboxoutlined';
+import CancelOutlinedIcon   from '@mui/icons-material/CancelOutlined';
 
 import styles from '../styles/Drawer.module.css';
 

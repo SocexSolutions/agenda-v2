@@ -1,9 +1,10 @@
 import styles from '../styles/DropDown.module.css';
 
 import Button from '../components/Button';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import LogoutIcon from '@material-ui/icons/ExitToApp';
-import ThemeIcon from '@material-ui/icons/ColorLens';
+
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LogoutIcon        from '@mui/icons-material/ExitToApp';
+import ThemeIcon         from '@mui/icons-material/ColorLens';
 
 import { useRouter } from 'next/router';
 
