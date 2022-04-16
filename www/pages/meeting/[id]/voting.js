@@ -1,5 +1,6 @@
-import LoadingIcon    from '../../../components/LoadingIcon';
-import ArrowCircleUp from '@material-ui/icons/ThumbUp';
+import LoadingIcon from '../../../components/LoadingIcon';
+
+import ArrowCircleUp from '@mui/icons-material/ThumbUp';
 
 import styles from '../../../styles/Voting.module.css';
 

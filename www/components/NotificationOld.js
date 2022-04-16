@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import { useState } from 'react';
 
-import CancelPresentationIcon from '@material-ui/icons/CancelPresentation';
+import CancelPresentationIcon from '@mui/icons-material/CancelPresentation';
 
 const Notification = ({ message, error }) => {
   const [ close, setClose ] = useState( false );

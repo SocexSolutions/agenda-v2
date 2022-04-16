@@ -1,6 +1,7 @@
 import styles from '../styles/Chip.module.css';
-import CancelOutlined from '@material-ui/icons/CancelOutlined';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+
+import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
+import AccountCircleIcon       from '@mui/icons-material/AccountCircle';
 
 const Chip = ({ text, editing, deleteFunc, icon }) => {
 
@@ -13,7 +14,7 @@ const Chip = ({ text, editing, deleteFunc, icon }) => {
       {icon}
       <p>{text}</p>
       { editing &&
-        <CancelOutlined
+        <HighlightOffRoundedIcon
           className={styles.deleteIcon}
           onClick={deleteFunc}
         />

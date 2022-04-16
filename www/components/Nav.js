@@ -9,10 +9,10 @@ import Button     from './Button';
 import DropDown   from './DropDown';
 import AgendaIcon from './AgendaIcon';
 
-import MenuIcon                from '@material-ui/icons/Menu';
-import HomeOutlinedIcon        from '@material-ui/icons/HomeOutlined';
-import AddToPhotosOutlinedIcon from '@material-ui/icons/AddToPhotosOutlined';
-import AccountCircleIcon       from '@material-ui/icons/AccountCircle';
+import MenuIcon                from '@mui/icons-material/Menu';
+import HomeOutlinedIcon        from '@mui/icons-material/HomeOutlined';
+import AddToPhotosOutlinedIcon from '@mui/icons-material/AddToPhotosOutlined';
+import AccountCircleIcon       from '@mui/icons-material/AccountCircle';
 
 import styles from '../styles/Nav.module.css';
 
