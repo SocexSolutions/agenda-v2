@@ -18,7 +18,6 @@ function TopicsForm( props ) {
 
   const addTopic = () => {
     const updatedTopics = [ ...props.topics ];
-
     updatedTopics.unshift({ name, description });
 
     props.setTopics( updatedTopics );
@@ -28,17 +27,13 @@ function TopicsForm( props ) {
 
   const updateTopic = ( index, updated ) => {
     const updatedTopics = [ ...props.topics ];
-
     updatedTopics.splice( index, 1, updated );
-
-    props.setTopics( updatedTopics );
 
     props.setTopics( updatedTopics );
   };
 
   const deleteTopic = ( index ) => {
     const updatedTopics = [ ...props.topics ];
-
     updatedTopics.splice( index, 1 );
 
     props.setTopics( updatedTopics );
