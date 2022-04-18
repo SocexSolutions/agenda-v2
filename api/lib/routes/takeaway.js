@@ -1,7 +1,7 @@
-const router          = require('express').Router();
-const topicController = require('../controllers/takeaway');
+const router             = require('express').Router();
+const takeawayController = require('../controllers/takeaway');
 
-router.post( '/', topicController.create );
-router.delete( '/:id', topicController.delete );
+router.post( '/', takeawayController.create );
+router.delete( '/:id', takeawayController.delete );
 
 module.exports = router;
