@@ -1,35 +1,46 @@
-import Chip from './Chip';
-import Input from './Input';
-import Button from './Button';
-import { useState } from 'react';
+
 import styles from '../styles/ChipForm.module.css';
+
+import Chip   from './Chip';
+import Input  from './Input';
+import Button from './Button';
+
+import { useState } from 'react';
 
 /**
  * Form for editing chip arrays
  * @param {Object} props.items - array of objects displayed in chips
- * @param {string} props.itemKey - key unique among chips (will be displayed)
- * @param {string} props.itemName - name of chips (tags, participants... )
+ * @param {String} props.itemKey - key unique among chips (will be displayed)
+ * @param {String} props.itemName - name of chips (tags, participants... )
  * @param {Function} props.setItems - function to overwrite parent's item array
  */
 function ChipForm( props ) {
   const [ input, setInput ] = useState('');
 
   function addChip( chip ) {
-    const keys = props.items.forEach( chip => chip[ props.itemKey ] );
-
-    if ( keys && keys.includes( chip[ props.itemKey ] ) ) {
-      throw new Error( `${ props.itemName } is not unique` );
-    }
-
-    props.setItems([ ...props.items, { [ props.itemKey ]: chip } ]);
-  }
-
-  function deleteChip( chipKey ) {
-    const updatedChips = props.items.filter( item => {
-      return chipKey !== item[ props.itemKey ];
+    const duplicates = props.items.filter( item => {
+      return item[ props.itemKey ] === chip;
     });
 
-    props.setItems( updatedChips );
+    if ( duplicates.length ) {
+      const msg = `${ props.itemName } with name ${ chip } already exists, ` +
+        `do you still want to add ${ chip }?`;
+
+      // todo swap with something sexier
+      if ( !window.confirm( msg ) ) {
+        return;
+      }
+    }
+
+    props.items.unshift({ [ props.itemKey ]: chip });
+
+    props.setItems([ ...props.items ]);
+  }
+
+  function deleteChip( index ) {
+    props.items.splice( index, 1 );
+
+    props.setItems([ ...props.items ]);
   }
 
   function handleChange( event ) {
@@ -51,18 +62,21 @@ function ChipForm( props ) {
 
   const chips = [];
 
-  props.items.forEach( ( chip ) => {
-    const chipKey = chip[ props.itemKey ];
+  if ( props.items ) {
+    for ( let i = 0; i < props.items.length; i++ ) {
+      const item = props.items[ i ];
 
-    chips.push(
-      <Chip
-        editing={true}
-        text={chipKey}
-        key={chipKey}
-        deleteFunc={() => deleteChip( chipKey )}
-      />
-    );
-  });
+      chips.push(
+        <Chip
+          index={i}
+          editing={true}
+          text={item[ props.itemKey ]}
+          key={item[ props.itemKey ]}
+          deleteFunc={() => deleteChip( i )}
+        />
+      );
+    }
+  }
 
   return (
     <div className={styles.chipForm}>
