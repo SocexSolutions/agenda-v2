@@ -122,6 +122,7 @@ const Meeting = ( props ) => {
         setParticipants={setParticipants}
       />
       <TopicsForm
+        store={props.store}
         topics={topics}
         setTopics={setTopics}
       />

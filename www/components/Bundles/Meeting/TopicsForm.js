@@ -5,8 +5,16 @@ import { useState } from 'react';
 import Input  from '../../Input';
 import Button from '../../Button';
 
+import { notify } from '../../../store/features/snackbar/snackbarSlice';
+
 import TopicCard from './TopicCard';
 
+/**
+ * Component for listing, adding, updating, and deleting topics
+ * @param {Object} props.store - redux store reference
+ * @param {Object[]} props.topics - array of meeting topics
+ * @param {Function} props.setTopics - method to set the meeting topics
+ */
 function TopicsForm( props ) {
   const [ name, setName ]               = useState('');
   const [ description, setDescription ] = useState('');
@@ -17,6 +25,22 @@ function TopicsForm( props ) {
   };
 
   const addTopic = () => {
+    const duplicates = props.topics.filter( t => {
+      return t.name === name;
+    });
+
+    if ( duplicates.length ) {
+      props.store.dispatch(
+        notify({
+          message: 'Cannot create multiple topics with the same name.',
+          type: 'danger',
+          ms: 4000
+        })
+      );
+
+      return;
+    }
+
     const updatedTopics = [ ...props.topics ];
     updatedTopics.unshift({ name, description });
 
@@ -26,6 +50,22 @@ function TopicsForm( props ) {
   };
 
   const updateTopic = ( index, updated ) => {
+    const duplicates = props.topics.filter( t => {
+      return t.name === name;
+    });
+
+    if ( duplicates.length ) {
+      props.store.dispatch(
+        notify({
+          message: 'Cannot create multiple topics with the same name.',
+          type: 'danger',
+          ms: 4000
+        })
+      );
+
+      return;
+    }
+
     const updatedTopics = [ ...props.topics ];
     updatedTopics.splice( index, 1, updated );
 
@@ -44,9 +84,10 @@ function TopicsForm( props ) {
   if ( props.topics ) {
     for ( let i = 0; i < props.topics.length; i++ ) {
       const topic = props.topics[ i ];
+
       topicCards.push(
         <TopicCard
-          key={topic.name + ' ' + topic.description}
+          key={topic.name}
           index={i}
           topic={topic}
           updateTopic={updateTopic}

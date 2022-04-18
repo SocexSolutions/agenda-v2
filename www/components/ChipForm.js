@@ -22,13 +22,12 @@ function ChipForm( props ) {
     });
 
     if ( duplicates.length ) {
-      const msg = `${ props.itemName } with name ${ chip } already exists, ` +
-        `do you still want to add ${ chip }?`;
+      const msg = `Cannot create multiple ${ props.itemName }s with the same name`;
 
-      // todo swap with something sexier
-      if ( !window.confirm( msg ) ) {
-        return;
-      }
+      // TODO swap with something sexier
+      window.alert( msg );
+
+      return;
     }
 
     props.items.unshift({ [ props.itemKey ]: chip });
