@@ -1,4 +1,3 @@
-
 import styles from '../styles/ChipForm.module.css';
 
 import Chip   from './Chip';
@@ -84,7 +83,6 @@ function ChipForm( props ) {
       <div className={styles.chipContainer}>
         {chips}
       </div>
-      <p>Add {props.itemName}</p>
       <div className={styles.inputContainer}>
         <Input
           placeholder={props.itemKey}

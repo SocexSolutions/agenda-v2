@@ -26,3 +26,12 @@
   margin-top: 1rem;
   margin-left: auto;
 }
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.buttonContainer button {
+  margin-left: .25rem;
+}

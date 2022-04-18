@@ -18,17 +18,17 @@ import { notify } from '../../../store/features/snackbar/snackbarSlice';
 import styles from '../../../styles/MeetingPage.module.css';
 
 const Meeting = ( props ) => {
-  const [ loading, setLoading ] = useState( true );
+  const router = useRouter();
 
-  const [ name, setName ] = useState('');
+  const [ loading, setLoading ] = useState( true );
+  const [ saving, setSaving ]   = useState( false );
+
+  const [ name, setName ]                 = useState('');
   const [ participants, setParticipants ] = useState([]);
-  const [ topics, setTopics ] = useState([]);
-  const [ saving, setSaving ] = useState( false );
+  const [ topics, setTopics ]             = useState([]);
 
   const user = useSelector( ( state ) => state.user );
   const meeting = useSelector( ( state ) => state.meetings.openMeeting );
-
-  const router = useRouter();
 
   const clearPage = () => {
     setName('');
@@ -103,7 +103,7 @@ const Meeting = ( props ) => {
     if ( saving ) {
       save();
     }
-  }, [ saving ] );
+  });
 
   const setNameHandler = ( event ) => {
     setName( event.target.value );
@@ -116,14 +116,17 @@ const Meeting = ( props ) => {
   return (
     <div>
       <HeaderForm setMeetingName={setNameHandler} meetingName={name} />
-      <TopicsForm topics={topics} setTopics={setTopics} />
       <ParticipantsForm
         owner={user.email}
         participants={participants}
         setParticipants={setParticipants}
       />
+      <TopicsForm
+        topics={topics}
+        setTopics={setTopics}
+      />
       <Button
-        variant="outlined"
+        size='large'
         customClass={styles.meetingButton}
         onClick={() => setSaving( true )}
         text="save"

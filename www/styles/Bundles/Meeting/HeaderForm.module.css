@@ -1,14 +1,10 @@
 .meetingBar {
   display: flex;
-  margin: 2rem;
+  margin: 1rem;
   margin-left: 3rem;
 }
 
 .form {
   width: 100%;
   display: flex;
-}
-
-.date {
-  margin-left: auto;
 }
