@@ -5,12 +5,12 @@ const path         = require('path');
 const pathToPrivKey = path.join( __dirname, '../../keys/id_rsa_priv.pem' );
 const pathToPubKey  = path.join( __dirname, '../../keys/id_rsa_pub.pem' );
 
-const PRIV_KEY  = fs.readFileSync( pathToPrivKey, 'utf8' );
-const PUB_KEY   = fs.readFileSync( pathToPubKey, 'utf8' );
+const PRIV_KEY = fs.readFileSync( pathToPrivKey, 'utf8' );
+const PUB_KEY  = fs.readFileSync( pathToPubKey, 'utf8' );
 
 module.exports = {
   /**
-	 * Create a JWT (json web token) for a succesfully authenticated user
+	 * Create a JWT (json web token) for a successfully authenticated user
 	 *
 	 * @param {Object} user - user doc from db
 	 * @return {Object} object containing new JWT (token) and expires date
@@ -38,14 +38,28 @@ module.exports = {
     };
   },
 
-  verifyJwt( signedToken ) {
-    const token = signedToken.split(' ')[ 1 ];
+  /**
+   * Verify that an authorization header is JWT and is valid, will throw an
+   * if invalid or expired token
+   * @param {String} authorization - request authorization header
+   * @returns decrypted jwt
+   */
+  verifyJwt( authorization ) {
+    const [ bearer, token ] = authorization.split(' ');
+
+    if ( !bearer === 'Bearer' || !token.match( /\S*\.\S*\.\S*/ ) ) {
+      throw new Error('unauthorized');
+    }
 
     const decoded = JsonWebToken.verify(
       token,
       PUB_KEY,
       { algorithms: [ 'RS256' ] }
     );
+
+    if ( decoded.exp <= Date.now() ) {
+      throw new Error('unauthorized');
+    }
 
     return decoded;
   }

@@ -1,7 +1,7 @@
-const jsonwebtoken = require('jsonwebtoken');
-const fs           = require('fs');
-const path         = require('path');
-const jobi         = require('@starryinternet/jobi');
+const JWTUtils = require('../utils/jwt');
+const fs       = require('fs');
+const path     = require('path');
+const jobi     = require('@starryinternet/jobi');
 
 const pathToKey = path.join( __dirname, '../../keys/id_rsa_pub.pem' );
 const PUB_KEY   = fs.readFileSync( pathToKey, 'utf8' );
@@ -10,19 +10,17 @@ const authenticate = ( req, res, next ) => {
   jobi.trace('authenticating');
 
   try {
-    const [ bearer, token ] = req.headers.authorization.split(' ');
+    const auth = req.headers.authorization;
 
-    if ( !bearer === 'Bearer' || !token.match( /\S*\.\S*\.\S*/ ) ) {
-      return res.status( 401 ).json({ success: false, msg: 'Forbidden' });
-    }
-
-    req.jwt = jsonwebtoken.verify(
-      token,
+    const decoded = JWTUtils.verifyJwt(
+      auth,
       PUB_KEY,
       {
         algorithms: [ 'RS256' ]
       }
     );
+
+    req.credentials = decoded;
 
     next();
 
