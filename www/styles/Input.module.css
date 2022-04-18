@@ -19,6 +19,7 @@
 
 .default:focus {
   outline: none;
+  border-bottom: 1px solid var(--agendaText);
 }
 
 .outlined {
@@ -26,7 +27,29 @@
   background-color: inherit;
   border-width: 2px;
   padding: 0.5rem;
+  font-size: 1rem;
   border-radius: 5px;
+  color: var(--agendaText);
+}
+
+.outlined:focus {
+  outline: none;
+  border-color: var(--agendaText);
+}
+
+.outlinedError {
+  border-color: var(--dangerBg);
+  background-color: inherit;
+  border-width: 2px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  color: var(--agendaText);
+}
+
+.outlinedError:focus {
+  outline: none;
+  border-color: var(--danger);
 }
 
 .wrapper input::placeholder {
@@ -35,7 +58,7 @@
 
 .wrapper p {
   font-size: 15px;
-  padding-top: 0;
+  padding-top: 5px;
   margin-top: -15px;
   color: var(--danger);
   opacity: .8;
