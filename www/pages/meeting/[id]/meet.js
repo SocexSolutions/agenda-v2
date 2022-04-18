@@ -21,25 +21,27 @@ const Meet = ( props ) => {
     const loadMeeting = async() => {
       const meeting_id = router.query.id;
 
-      await props.store.dispatch( fetchMeeting( meeting_id ) );
+      if ( meeting_id ) {
+        await props.store.dispatch( fetchMeeting( meeting_id ) );
 
-      const { meetings: { openMeeting } } = props.store.getState();
+        const { meetings: { openMeeting } } = props.store.getState();
 
-      setMeeting({
-        ...openMeeting,
-        topics: openMeeting.topics.map( topic => {
-          return {
-            ...topic,
-            discussed: false
-          };
-        })
-      });
+        setMeeting({
+          ...openMeeting,
+          topics: openMeeting.topics.map( topic => {
+            return {
+              ...topic,
+              discussed: false
+            };
+          })
+        });
 
-      setLoading( false );
+        setLoading( false );
+      }
     };
 
     loadMeeting();
-  }, [ props.store ] );
+  }, [ router.query.id, props.store ] );
 
   useEffect( () => {
     const saveTopic = async() => {
@@ -55,7 +57,7 @@ const Meet = ( props ) => {
     setTakeaways([ ...takeaways, takeaway ]);
   };
 
-  if ( !meeting ) {
+  if ( loading ) {
     return (
       <div className={styles.loadingContainer}>
         <LoadingIcon />
