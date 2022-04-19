@@ -54,10 +54,8 @@ const Input = ({
 
   //variant cases
   switch ( variant ) {
-    case 'default':           //multi-conditional case statement
-      if ( !errorMessage ) {
-        classNames += ' ' + styles.default;
-      }
+    case 'default':
+      classNames += ' ' + styles.default;
       break;
     case 'outlined':
       classNames += ' ' + styles.outlined;
@@ -65,7 +63,7 @@ const Input = ({
   }
 
   if ( errorMessage ) {
-    classNames += ' ' + styles.outlinedError;
+    classNames += ' ' + styles.error;
   }
 
   if ( customClass ) {

@@ -37,17 +37,11 @@
   border-color: var(--agendaText);
 }
 
-.outlinedError {
+.error {
   border-color: var(--dangerBg);
-  background-color: inherit;
-  border-width: 2px;
-  padding: 0.5rem;
-  font-size: 1rem;
-  border-radius: 5px;
-  color: var(--agendaText);
 }
 
-.outlinedError:focus {
+.error:focus {
   outline: none;
   border-color: var(--danger);
 }
