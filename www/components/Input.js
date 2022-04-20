@@ -62,6 +62,10 @@ const Input = ({
       break;
   }
 
+  if ( errorMessage ) {
+    classNames += ' ' + styles.error;
+  }
+
   if ( customClass ) {
     classNames += ' ' + customClass;
   }
