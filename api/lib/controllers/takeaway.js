@@ -3,7 +3,8 @@ const Takeaway = require('../models/takeaway');
 module.exports = {
   create: async( req, res ) => {
     try {
-      const { content, topic_id, owner_id } = req.body;
+      const { content, topic_id } = req.body;
+      const owner_id = req.credentials.sub;
 
       const takeaway = await Takeaway.create({
         content,

@@ -4,9 +4,10 @@ const Topic = require('../models/topic');
 module.exports = {
   create: async( req, res ) => {
     const newTopic = req.body;
+    const owner_id = req.credentials.sub;
 
     try {
-      const topic = await Topic.create( newTopic );
+      const topic = await Topic.create( newTopic, owner_id );
 
       res.status( 201 ).send( topic );
     } catch ( error ) {
