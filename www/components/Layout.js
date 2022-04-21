@@ -41,7 +41,7 @@ const Layout = ({ children }) => {
     if ( !user._id && blockPage ) {
       router.push('/login');
     }
-  }, [ storeTheme ] );
+  }, [ storeTheme, router ] );
 
   return (
     <>
