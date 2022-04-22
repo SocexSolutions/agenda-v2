@@ -80,6 +80,7 @@ module.exports = {
       const date       = req.body.date;
       const owner_id   = req.body.owner_id;
       const meeting_id = req.body.meeting_id || new ObjectID();
+      const subject_id = req.credentials.sub;
 
       let topics       = req.body.topics || null;
       let participants = req.body.participants || null;
@@ -102,7 +103,8 @@ module.exports = {
         if ( topics ) {
           topics = await Topic.saveMeetingTopics({
             meeting_id: meeting._id,
-            savedTopics: topics
+            savedTopics: topics,
+            subject_id
           });
         } else {
           await Topic.deleteMany({ meeting_id: meeting._id });

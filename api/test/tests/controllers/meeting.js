@@ -1,16 +1,16 @@
-const chai            = require('chai');
-const chaiSubset      = require('chai-subset');
-const dbUtils         = require('../../utils/db');
-const db              = require('../../../lib/db');
-const api             = require('../../utils/api');
-const client          = require('../../utils/client');
-const ObjectID        = require('mongoose').Types.ObjectId;
-const Meeting         = require('../../../lib/models/meeting');
-const Participant     = require('../../../lib/models/participant');
-const Topic           = require('../../../lib/models/topic');
-const topicFake       = require('../../fakes/topic');
-const participantFake = require('../../fakes/participant');
-const meetingFake     = require('../../fakes/meeting');
+const chai             = require('chai');
+const chaiSubset       = require('chai-subset');
+const dbUtils          = require('../../utils/db');
+const db               = require('../../../lib/db');
+const api              = require('../../utils/api');
+const client           = require('../../utils/client');
+const ObjectID         = require('mongoose').Types.ObjectId;
+const Meeting          = require('../../../lib/models/meeting');
+const Participant      = require('../../../lib/models/participant');
+const Topic            = require('../../../lib/models/topic');
+const topicFaker       = require('../../fakes/topic');
+const participantFaker = require('../../fakes/participant');
+const meetingFaker     = require('../../fakes/meeting');
 
 chai.use( chaiSubset );
 
@@ -19,13 +19,13 @@ const assert = chai.assert;
 const meeting_id = new ObjectID();
 const owner_id   = new ObjectID();
 
-const topic1 = topicFake({ meeting_id });
-const topic2 = topicFake({ meeting_id });
+const topic1 = topicFaker({ meeting_id });
+const topic2 = topicFaker({ meeting_id });
 
-const participant1  = participantFake({ meeting_id });
-const participant2  = participantFake({ meeting_id });
+const participant1  = participantFaker({ meeting_id });
+const participant2  = participantFaker({ meeting_id });
 
-const meeting = meetingFake({ owner_id });
+const meeting = meetingFaker({ owner_id });
 
 describe( 'controllers/meeting', () => {
 
@@ -86,9 +86,8 @@ describe( 'controllers/meeting', () => {
     it( 'should fetch meeting with participants and topics', async() => {
       const { _id } = await Meeting.create({ ...meeting, _id: meeting_id });
 
-
       const newTopic = await Topic.create(
-        topicFake({ owner_id: this.user._id, meeting_id })
+        topicFaker({ owner_id: this.user._id, meeting_id })
       )._doc;
 
       await Participant.create(
@@ -127,7 +126,7 @@ describe( 'controllers/meeting', () => {
     const payload = {
       ...meeting,
       participants: [ participant1, participant2 ],
-      topics: [ topic1, topic2 ]
+      topics: [ topic1, { ...topic2, owner_id: undefined } ]
     };
 
     it( 'should create meeting', async() => {
@@ -218,7 +217,7 @@ describe( 'controllers/meeting', () => {
       const { _id } = await Meeting.create( meeting );
 
       const newTopic = ( await Topic.create(
-        topicFake({ owner_id: this.user._id, meeting_id: _id })
+        topicFaker({ owner_id: this.user._id, meeting_id: _id })
       ) )._doc;
 
       const topic = { ...newTopic };
