@@ -8,18 +8,27 @@ const topicFaker = require('../../fakes/topic');
 
 describe( 'api/lib/controllers/topic', () => {
 
+  let user;
+  let user2;
+
   before( async() => {
     await api.start();
     await db.connect();
+    await dbUtils.clean();
 
-    const res = await client.post(
-      '/user/register', { username: 'user', password: 'pass', email: 'email' }
-    );
+    user = ( await client.post(
+      '/user/register',
+      { username: 'user3', password: 'pass', email: 'email3' }
+    ) ).data;
 
-    client.defaults.headers.common['Authorization'] = res.data.token;
+    user2 = ( await client.post(
+      '/user/register',
+      { username: 'user2', password: 'pass', email: 'email2' }
+    ) ).data;
   });
 
   beforeEach( async() => {
+    client.defaults.headers.common['Authorization'] = user.token;
     await dbUtils.clean();
   });
 
@@ -117,7 +126,9 @@ describe( 'api/lib/controllers/topic', () => {
   describe( '#update', () => {
 
     beforeEach( async() => {
-      this.topic = await Topic.create( topicFaker() );
+      this.topic = await Topic.create(
+        topicFaker({ owner_id: user.user._id })
+      );
     });
 
     it( 'should update topic name', async() => {
@@ -150,6 +161,20 @@ describe( 'api/lib/controllers/topic', () => {
       assert.strictEqual( topic.description, 'new description' );
       assert.strictEqual( topic.status, this.topic.status );
       assert.deepEqual( topic.likes, this.topic.likes );
+    });
+
+    it( 'should 403 with incorrect subject identity', async() => {
+      client.defaults.headers.common['Authorization'] = user2.token;
+
+      try {
+        await client.post(
+          '/topic/' + this.topic._id,
+          {}
+        );
+      } catch ( err ) {
+        assert.strictEqual( err.response.status, 403 );
+        assert.strictEqual( err.response.data, 'unauthorized' );
+      }
     });
 
   });

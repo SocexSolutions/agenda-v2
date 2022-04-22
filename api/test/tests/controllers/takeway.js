@@ -7,7 +7,7 @@ const takeawayFaker = require('../../fakes/takeaway');
 const topicFaker    = require('../../fakes/topic');
 const Takeaway      = require('../../../lib/models/takeaway');
 
-describe( 'api/lib/controllers/topic', () => {
+describe( 'api/lib/controllers/takeaway', () => {
 
   before( async() => {
     await api.start();
@@ -42,8 +42,11 @@ describe( 'api/lib/controllers/topic', () => {
   describe( '#create', () => {
     const path = '/takeaway';
 
-    it( 'should create topic with valid topic', async() => {
-      const takeaway = takeawayFaker({ topic_id: this.topic._id });
+    it( 'should create takeaway with valid topic', async() => {
+      const takeaway = takeawayFaker({
+        topic_id: this.topic._id,
+        owner_id: this.user.user._id
+      });
 
       const res = await client.post( path, takeaway );
 

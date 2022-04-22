@@ -76,10 +76,9 @@ module.exports = {
     let session;
 
     try {
-
       const name       = req.body.name;
       const date       = req.body.date;
-      const owner_id   = req.credentials.sub;
+      const owner_id   = req.body.owner_id;
       const meeting_id = req.body.meeting_id || new ObjectID();
 
       let topics       = req.body.topics || null;
@@ -88,9 +87,6 @@ module.exports = {
       let meeting;
 
       session = await mongoose.connection.startSession();
-
-      console.log('test1');
-      console.log( owner_id );
 
       await session.withTransaction( async() => {
 
@@ -102,12 +98,10 @@ module.exports = {
             new: true
           }
         );
-        console.log('test4');
 
         if ( topics ) {
           topics = await Topic.saveMeetingTopics({
             meeting_id: meeting._id,
-            owner_id,
             savedTopics: topics
           });
         } else {
@@ -115,7 +109,6 @@ module.exports = {
 
           topics = [];
         }
-        console.log('test3');
 
         await Participant.deleteMany({ meeting_id: meeting._id });
 
@@ -132,8 +125,6 @@ module.exports = {
 
         participants = await Participant.find({ meeting_id: meeting._id });
       });
-
-      console.log('test2');
 
       res.status( 201 ).send({
         _id: meeting._id,
