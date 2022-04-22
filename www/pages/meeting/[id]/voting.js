@@ -93,7 +93,8 @@ const Voting = ( props ) => {
 
     return (
       <div className={styles.topic} key={t.name}>
-        <h2>{t.name}</h2>
+        <h3>{t.name}</h3>
+        <p>{t.description}</p>
         <ArrowCircleUp
           fontSize='large'
           className={classNames}

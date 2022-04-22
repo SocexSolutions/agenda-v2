@@ -28,7 +28,7 @@ module.exports = {
     const signedToken = JsonWebToken.sign(
       payload,
       PRIV_KEY,
-      { expiresIn, algorithm: 'RS256' }
+      { algorithm: 'RS256' }
     );
 
     // Bearer is the name of the JWT auth strategy
@@ -57,7 +57,9 @@ module.exports = {
       { algorithms: [ 'RS256' ] }
     );
 
-    if ( decoded.exp <= Date.now() ) {
+    const oneDayMs = 1e3 * 24 * 60 * 60;
+
+    if ( ( decoded.iat + oneDayMs ) <= Date.now() ) {
       throw new Error('unauthorized');
     }
 
