@@ -38,6 +38,8 @@ describe( 'controllers/meeting', () => {
       { username: 'user', password: 'pass', email: 'email' }
     );
 
+    this.user = res.data.user;
+
     client.defaults.headers.common['Authorization'] = res.data.token;
   });
 
@@ -84,8 +86,14 @@ describe( 'controllers/meeting', () => {
     it( 'should fetch meeting with participants and topics', async() => {
       const { _id } = await Meeting.create({ ...meeting, _id: meeting_id });
 
-      await Participant.create( participant1 );
-      await Topic.create( topic1 );
+
+      const newTopic = await Topic.create(
+        topicFake({ owner_id: this.user._id, meeting_id })
+      )._doc;
+
+      await Participant.create(
+        participant1
+      );
 
       const { data } = await client.get( `/meeting/${ _id }` );
 
@@ -106,7 +114,7 @@ describe( 'controllers/meeting', () => {
       assert.containSubset(
         data[ 0 ].topics[ 0 ],
         {
-          ...topic1,
+          ...newTopic,
           meeting_id: meeting_id.toString()
         }
       );
@@ -209,12 +217,11 @@ describe( 'controllers/meeting', () => {
     it( 'should update a meetings topics', async() => {
       const { _id } = await Meeting.create( meeting );
 
-      const topic = {
-        ...topic1,
-        meeting_id: _id.toString()
-      };
+      const newTopic = ( await Topic.create(
+        topicFake({ owner_id: this.user._id, meeting_id: _id })
+      ) )._doc;
 
-      await Topic.create( topic );
+      const topic = { ...newTopic };
 
       topic.name  = 'new topic name';
       topic.likes = [ owner_id.toString() ];
@@ -224,15 +231,15 @@ describe( 'controllers/meeting', () => {
         topics: [ topic ]
       };
 
-      const { data } = await client.post(
+      const { data: { topics: [ doc ] } } = await client.post(
         '/meeting',
         payload
       );
 
-      assert.containSubset(
-        data.topics[ 0 ],
-        topic
-      );
+      assert.strictEqual( doc._id, topic._id.toString() );
+      assert.strictEqual( doc.meeting_id, topic.meeting_id.toString() );
+      assert.strictEqual( doc.name, topic.name );
+      assert.strictEqual( doc.description, topic.description );
 
       const [ updated ] = await Topic.find({ meeting_id: _id.toString() });
 

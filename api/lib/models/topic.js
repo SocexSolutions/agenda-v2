@@ -16,6 +16,10 @@ const topicSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId, ref: 'Meeting',
       required: true
     },
+    owner_id: {
+      type: Schema.Types.ObjectId, ref: 'User',
+      required: true
+    },
     likes: [ String ],
     status: {
       type: String,
@@ -63,6 +67,7 @@ async function saveMeetingTopics({ meeting_id, savedTopics }) {
       _id: topic._id || undefined,
       name: topic.name,
       description: topic.description,
+      owner_id: topic.owner_id,
       meeting_id,
       likes: topic.likes || []
     };

@@ -4,9 +4,10 @@ const Topic = require('../models/topic');
 module.exports = {
   create: async( req, res ) => {
     const newTopic = req.body;
+    const sub_id = req.credentials.sub;
 
     try {
-      const topic = await Topic.create( newTopic );
+      const topic = await Topic.create({ ...newTopic, sub_id });
 
       res.status( 201 ).send( topic );
     } catch ( error ) {
@@ -17,18 +18,27 @@ module.exports = {
 
   update: async( request, response ) => {
     const updates = request.body;
-    const _id     = request.params;
+    const { _id } = request.params;
+
+    const sub_id = request.credentials.sub;
 
     try {
-      const topic = await Topic.findOneAndUpdate(
+      const topic = await Topic.findOne({ _id });
+
+      if ( sub_id !== topic.owner_id.toString() ) {
+        return response.status( 403 ).send('unauthorized');
+      }
+
+      const topicUpdated = await Topic.findOneAndUpdate(
         { _id },
-        updates,
+        { ...updates, owner_id: sub_id },
         { new: true }
       );
 
-      response.status( 200 ).send( topic );
+      response.status( 200 ).send( topicUpdated );
 
     } catch ( error ) {
+      log.error( error );
       response.status( 500 ).send( error.message );
     }
   },
