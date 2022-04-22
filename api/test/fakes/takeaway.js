@@ -1,4 +1,3 @@
-const faker    = require('faker');
 const ObjectId = require('mongoose').Types.ObjectId;
 
 const takeaway = ( overrides ) => {
@@ -6,7 +5,8 @@ const takeaway = ( overrides ) => {
   const owner_id = new ObjectId();
 
   return {
-    content: faker.random.words( Math.floor( Math.random() * 20 ) ),
+    name: 'we need to do something',
+    description: 'we need to do something and we need to do it now',
     reactions: [],
     topic_id: topic_id.toString(),
     owner_id: owner_id.toString(),

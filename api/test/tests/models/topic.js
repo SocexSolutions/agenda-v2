@@ -14,6 +14,7 @@ describe( 'lib/models/topic', () => {
 
   before( async() => {
     await db.connect();
+    await dbUtils.clean();
   });
 
   beforeEach( async() => {

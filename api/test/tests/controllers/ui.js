@@ -14,6 +14,7 @@ describe( 'controllers/ui', () => {
   before( async() => {
     await api.start();
     await db.connect();
+    await dbUtils.clean();
 
     const res = await client.post(
       '/user/register',

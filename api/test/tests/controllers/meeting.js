@@ -32,6 +32,7 @@ describe( 'controllers/meeting', () => {
   before( async() => {
     await api.start();
     await db.connect();
+    await dbUtils.clean();
 
     const res = await client.post(
       '/user/register',
