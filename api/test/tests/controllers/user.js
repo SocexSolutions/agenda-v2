@@ -20,6 +20,7 @@ describe( 'api/lib/controllers/user.js', () => {
   before( async() => {
     await api.start();
     await db.connect();
+    await dbUtils.clean();
   });
 
   beforeEach( async() => {

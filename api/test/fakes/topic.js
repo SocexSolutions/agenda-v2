@@ -1,10 +1,9 @@
-const faker    = require('faker');
 const ObjectId = require('mongoose').Types.ObjectId;
 
 const topic = ( opts ) => {
   return {
-    name: faker.commerce.productName(),
-    description: faker.company.bs(),
+    name: 'some topic name',
+    description: 'some topic description',
     meeting_id: new ObjectId,
     owner_id: new ObjectId,
     likes: [ 'bryan@bacon.com' ],

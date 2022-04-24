@@ -12,26 +12,30 @@ describe( 'api/lib/controllers/takeaway', () => {
   before( async() => {
     await api.start();
     await db.connect();
+    await dbUtils.clean();
 
-    const res = await client.post(
+    this.user = ( await client.post(
       '/user/register',
       { username: 'user', password: 'pass', email: 'email' }
-    );
+    ) ).data;
 
-    this.user = res.data;
-
-    client.defaults.headers.common['Authorization'] = res.data.token;
+    this.user2 = ( await client.post(
+      '/user/register',
+      { username: 'user2', password: 'pass2', email: 'email2' }
+    ) ).data;
   });
 
   beforeEach( async() => {
+    client.defaults.headers.common['Authorization'] = this.user.token;
+
     await dbUtils.clean();
 
-    const res = await client.post(
-      '/topic',
-      topicFaker()
-    );
+    const fake = topicFaker();
 
-    this.topic = res.data;
+    this.topic = ( await client.post(
+      '/topic',
+      fake
+    ) ).data;
   });
 
   after( async() => {
@@ -62,14 +66,71 @@ describe( 'api/lib/controllers/takeaway', () => {
       assert.deepInclude(
         created[ 0 ],
         {
-          content: takeaway.content,
+          name: takeaway.name,
+          description: takeaway.description,
           reactions: []
         }
       );
     });
+
   });
 
-  describe( '#delete', async() => {
+  describe( '#update', () => {
+
+    const path = '/takeaway';
+
+    beforeEach( async() => {
+      const fake = takeawayFaker();
+
+      this.takeaway = ( await client.post(
+        path, fake )
+      ).data;
+    });
+
+    it( 'should update a takeaway', async() => {
+      const updates = { description: 'new description', name: 'new name' };
+
+      const { status, data } = await client.patch(
+        path + '/' +  this.takeaway._id,
+        updates
+      );
+
+      assert.strictEqual( status, 200 );
+      assert.strictEqual( data.name, 'new name' );
+      assert.strictEqual( data.description, 'new description' );
+      assert.strictEqual( data.topic_id, this.takeaway.topic_id );
+
+      const found = await Takeaway.findOne({ _id: data._id });
+
+      assert.strictEqual( found.name, 'new name' );
+      assert.strictEqual( found.description, 'new description' );
+      assert.strictEqual( found.topic_id.toString(), this.takeaway.topic_id );
+    });
+
+    it( 'should 403 if not takeaway owner', async() => {
+      client.defaults.headers.common['Authorization'] = this.user2.token;
+
+      try {
+        await client.patch(
+          path + '/' +  this.takeaway._id,
+          {}
+        );
+
+        assert.fail('Accepted wrong owner');
+      } catch ( err ) {
+        assert.strictEqual( err.response.status, 403 );
+        assert.strictEqual( err.response.data, 'unauthorized' );
+      }
+
+      const found = await Takeaway.find({});
+
+      assert.strictEqual( found.length, 1 );
+    });
+
+  });
+
+  describe( '#delete', () => {
+
     const path = '/takeaway';
 
     it( 'should delete takeaway', async() => {
@@ -78,15 +139,37 @@ describe( 'api/lib/controllers/takeaway', () => {
 
       const res = await client.delete( path + '/' + resTakeaway.data._id );
 
-      const res2 = await Takeaway.findOne({ _id: resTakeaway.data._id });
-
       assert.strictEqual( res.status, 200 );
       assert.deepStrictEqual(
         res.data,
         { acknowledged: true, deletedCount: 1 }
       );
-      assert.strictEqual( res2, null );
+
+      const found = await Takeaway.findOne({ _id: resTakeaway.data._id });
+
+      assert.strictEqual( found, null );
+    });
+
+    it( 'should 403 if not takeaway owner', async() => {
+      const takeaway = takeawayFaker({ topic_id: this.topic._id });
+      const resTakeaway = await client.post( path, takeaway );
+
+      client.defaults.headers.common['Authorization'] = this.user2.token;
+
+      try {
+        await client.delete( path + '/' + resTakeaway.data._id );
+
+        assert.fail('Accepted wrong owner');
+      } catch ( err ) {
+        assert.strictEqual( err.response.status, 403 );
+        assert.strictEqual( err.response.data, 'unauthorized' );
+      }
+
+      const found = await Takeaway.find({});
+
+      assert.strictEqual( found.length, 1 );
     });
 
   });
+
 });

@@ -1,10 +1,8 @@
-
-const faker    = require('faker');
 const ObjectId = require('mongoose').Types.ObjectId;
 
 const meeting = ( opts ) => {
   return {
-    name: faker.company.bs(),
+    name: 'meeting about something',
     owner_id: new ObjectId,
     date: new Date(),
     ...opts
