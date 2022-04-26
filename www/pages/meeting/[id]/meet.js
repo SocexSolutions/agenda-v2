@@ -65,16 +65,11 @@ const Meet = ( props ) => {
     );
   }
 
-  const sorted = meeting.topics.sort( ( a, b ) => {
-    return a.name[ 0 ].toLowerCase() - b.name[ 0 ].toLowerCase();
-  });
+  const liveTopic = meeting.topics.filter( topic => topic.status === 'live' );
 
-
-  const splitIndex = sorted.findIndex( topic => {
-    return topic.discussed === false;
-  });
-
-  const discussedTopics = sorted.slice( 0, splitIndex ).map( topic => {
+  const openTopics = meeting.topics.filter(
+    topic => topic.status === 'open'
+  ).map( topic => {
     return (
       <div className={sharedStyles.card} key={ topic.name }>
         {topic.name}
@@ -82,34 +77,33 @@ const Meet = ( props ) => {
     );
   });
 
-  const unDiscussedTopics = sorted.slice( splitIndex + 1 ).map( topic => {
+  const closedTopics = meeting.topics.filter(
+    topic => topic.status === 'closed'
+  ).map( topic => {
     return (
       <div className={sharedStyles.card} key={ topic.name }>
         {topic.name}
       </div>
     );
   });
+
 
   const discussionForm = <DiscussionForm
-    title={sorted[ splitIndex ].name}
+    title={liveTopic.name}
     addTakeaway={addTakeaway}
+    close={closeTopic}
   />;
-
-  const takeawayCards = takeaways.map( chip =>
-    <div className={sharedStyles.card} key={chip}>{chip}</div>
-  );
 
   return (
     <div className={styles.container}>
       <div className={styles.sideContainer}>
-        { unDiscussedTopics }
+        { openTopics }
       </div>
       <div className={styles.mainContainer}>
         { discussionForm }
-        { takeawayCards }
       </div>
       <div className={styles.sideContainer}>
-        { discussedTopics }
+        { closedTopics }
       </div>
     </div>
   );
