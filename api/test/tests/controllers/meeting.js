@@ -334,10 +334,14 @@ describe( 'controllers/meeting', () => {
     });
 
     it( 'should 403 if not meeting owner', async() => {
+      client.defaults.headers.common['Authorization'] = this.user2Token;
+
       try {
         await client.get(
           `/meeting/${ this.meeting._id }/topics`
         );
+
+        assert.fail('should have 403d');
       } catch ( err ) {
         assert.strictEqual( err.response.status, 403 );
         assert.strictEqual( err.response.data, 'unauthorized' );
@@ -369,16 +373,20 @@ describe( 'controllers/meeting', () => {
     });
 
     it( 'should 403 if not meeting owner', async() => {
+      client.defaults.headers.common['Authorization'] = this.user2Token;
+
       try {
         await client.get(
           `/meeting/${ this.meeting._id }/topics`
         );
+
+        assert.fail('should have 403d');
       } catch ( err ) {
         assert.strictEqual( err.response.status, 403 );
         assert.strictEqual( err.response.data, 'unauthorized' );
       }
     });
 
-  })
+  });
 
 });
