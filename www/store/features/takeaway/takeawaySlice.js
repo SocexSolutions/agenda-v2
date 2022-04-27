@@ -6,6 +6,8 @@ const initialState = {
 
 const reducer = ( state = initialState, action ) => {
 
+  console.log( action );
+
   switch ( action.type ) {
 
     case 'takeaway/save':
@@ -17,19 +19,23 @@ const reducer = ( state = initialState, action ) => {
 };
 
 export const saveTakeaway = ( takeaway ) => {
-  return async function TakeawaySave( dispatch, getState ) {
-    await client.post(
-      'takeaway',
-      takeaway
-    );
-
-    dispatch({
-      type: 'takeaway/save',
-      payload: {
+  return async function takeawaySave( dispatch, getState ) {
+    console.log('hi');
+    try {
+      const res = await client.post(
+        'takeaway',
         takeaway
-      }
-    });
+      );
 
+      dispatch({
+        type: 'takeaway/save',
+        payload: {
+          takeaway
+        }
+      });
+    } catch ( error ) {
+      console.log( error );
+    }
   };
 };
 

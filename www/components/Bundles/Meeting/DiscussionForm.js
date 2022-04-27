@@ -1,7 +1,7 @@
 import styles from '../../../styles/Bundles/Meeting/DiscussionForm.module.css';
 import Input from '../../../components/Input.js';
 import Button from '../../../components/Button.js';
-import saveTakeaway from '../../../store/features/takeaway/takeawaySlice';
+import { saveTakeaway } from '../../../store/features/takeaway/takeawaySlice';
 import { notify } from '../../../store/features/snackbar/snackbarSlice';
 
 import { useEffect, useState } from 'react';
@@ -18,13 +18,15 @@ const DiscussionForm = ( props ) => {
       try {
         await props.store.dispatch(
           saveTakeaway({
-            title: props.takeawayTitle,
-            description: props.takeawayDescription,
-            topicId: props.topicId
+            title: takeawayTitle,
+            description: takeawayDescription,
+            _id: props.topicId
           })
         );
 
-
+        setTakeawayTitle('');
+        setTakeawayDescription('');
+        setSaving( false );
       } catch ( err ) {
         props.store.dispatch(
           notify({
@@ -39,22 +41,14 @@ const DiscussionForm = ( props ) => {
     if ( saving ) {
       save();
     }
-
-    setSaving( false );
   }, [ saving ] );
 
   function handleEnter( e ) {
-    if ( e.key === 'Enter' && e.target.value ) {
-      addTakeaway( e.target.value );
-      setTakeawayTitle('');
-      setTakeawayDescription('');
-    }
+    if ( e.key === 'Enter' && e.target.value ) {}
   }
 
-  function handleSubmit( e ) {
+  function handleSubmit() {
     if ( takeawayTitle ) {
-      setTakeawayTitle('');
-      setTakeawayDescription('');
       setSaving( true );
     }
   }
