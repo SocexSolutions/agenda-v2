@@ -18,9 +18,9 @@ const DiscussionForm = ( props ) => {
       try {
         await props.store.dispatch(
           saveTakeaway({
-            title: takeawayTitle,
+            name: takeawayTitle,
             description: takeawayDescription,
-            _id: props.topicId
+            topic_id: props.topicId
           })
         );
 
