@@ -28,15 +28,17 @@ export const fetchMeetingTopics = ( meeting_id ) => {
     try {
       const { data } = await client.get( `/meeting/${ meeting_id }/topics` );
 
-      const currentTopics = getState().topics;
-
-      currentTopics[ data._id ] = data;
+      const topics = data.reduce(
+        ( prev, cur ) => {
+          prev[ cur._id ] = cur;
+          return prev;
+        },
+        {}
+      );
 
       dispatch({
         type: 'topic/updateStatus',
-        payload: {
-          topics: currentTopics
-        }
+        payload: topics
       });
     } catch ( err ) {}
   };
@@ -61,9 +63,7 @@ export const updateTopicStatus = ( topic_id, status ) => {
 
       dispatch({
         type: 'topic/updateStatus',
-        payload: {
-          topics: currentTopics
-        }
+        payload: currentTopics
       });
     } catch ( err ) {}
   };
