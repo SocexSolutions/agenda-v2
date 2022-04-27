@@ -9,6 +9,10 @@
   padding: 5px;
 }
 
+.container Input {
+  margin-bottom: 1rem;
+}
+
 .inputContainer {
  display: flex;
   flex-direction: row;

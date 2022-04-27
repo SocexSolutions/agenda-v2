@@ -13,6 +13,20 @@
   font-weight: 600;
 }
 
+/* Styles for takeaway cards: */
+
+.card h3 {
+  text-align: left;
+  padding-left: 1rem;
+}
+
+.card p {
+  text-align: left;
+  font-weight: 100;
+  font-size: small;
+  padding-left: 1rem;
+}
+
 @media only screen and (max-width: 600px) {
   .card {
     min-width: 90px;

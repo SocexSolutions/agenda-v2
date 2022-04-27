@@ -36,8 +36,11 @@ const Meet = ( props ) => {
           })
         });
 
+
         setLoading( false );
       }
+
+
     };
 
     loadMeeting();
@@ -53,8 +56,14 @@ const Meet = ( props ) => {
     }
   });
 
-  const addTakeaway = ( takeaway ) => {
+  const addTakeaway = ( takeawayTitle, takeawayDescription ) => {
+    const takeaway = {
+      name: takeawayTitle,
+      description: takeawayDescription
+    };
+
     setTakeaways([ ...takeaways, takeaway ]);
+    console.log( takeaway );
   };
 
   if ( loading ) {
@@ -93,10 +102,12 @@ const Meet = ( props ) => {
   const discussionForm = <DiscussionForm
     title={sorted[ splitIndex ].name}
     addTakeaway={addTakeaway}
+    topicId={sorted[ splitIndex ]._id}
+    store={props.store}
   />;
 
   const takeawayCards = takeaways.map( chip =>
-    <div className={sharedStyles.card} key={chip}>{chip}</div>
+    <div className={sharedStyles.card} key={chip}><h3>{chip.name}</h3><p>{chip.description}</p></div>
   );
 
   return (
