@@ -39,6 +39,10 @@ export const fetchMeeting = ( meeting_id ) => {
         `meeting/${ meeting_id }`
       );
 
+      const state = getState();
+
+      console.log( state );
+
       dispatch({
         type: 'meeting/fetch',
         payload: {
@@ -65,7 +69,6 @@ export const saveMeeting = ( meeting ) => {
         meeting
       }
     });
-
   };
 };
 

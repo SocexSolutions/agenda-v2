@@ -144,6 +144,46 @@ module.exports = {
     } finally {
       session.endSession();
     }
+  },
+
+  async getTopics( req, res ) {
+    try {
+      const { _id }    = req.params;
+      const subject_id = req.credentials.sub;
+
+      const meeting = await Meeting.findOne({ _id });
+
+      if ( subject_id !== meeting.owner_id.toString() ) {
+        return res.status( 403 ).send('unauthorized');
+      }
+
+      const topics = await Topic.find({ meeting_id: _id });
+
+      return res.status( 200 ).send( topics );
+    } catch ( err ) {
+      log.error( err );
+      res.status( 500 ).send( err.message );
+    }
+  },
+
+  async getParticipants( req, res ) {
+    try {
+      const { meeting_id } = req.params;
+      const subject_id     = req.credentials.sub;
+
+      const meeting = await Meeting.findOne({ meeting_id });
+
+      if ( subject_id !== meeting.owner_id.toString() ) {
+        return res.status( 403 ).send('unauthorized');
+      }
+
+      const participants = await Participant.find({ meeting_id });
+
+      return res.status( 200 ).send( participants );
+    } catch ( err ) {
+      log.error( err );
+      res.status( 500 ).send( err.message );
+    }
   }
 
 };

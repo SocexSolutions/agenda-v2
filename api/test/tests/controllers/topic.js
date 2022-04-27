@@ -45,9 +45,7 @@ describe( 'api/lib/controllers/topic', () => {
 
       const res = await client.post( path, topic );
 
-      assert( res.status === 201, 'failed to create topic with valid inputs' );
-
-      assert(
+      assert( res.status === 201, 'failed to create topic with valid inputs' ); assert(
         res.data.name === topic.name,
         'created topic with incorrect name: ' + res.data.name
       );

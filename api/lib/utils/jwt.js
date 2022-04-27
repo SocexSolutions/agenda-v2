@@ -16,7 +16,7 @@ module.exports = {
 	 * @return {Object} object containing new JWT (token) and expires date
 	 */
   issueJWT( user ) {
-    const _id = user._id;
+    const _id   = user._id;
 
     const expiresIn = '1d';
 

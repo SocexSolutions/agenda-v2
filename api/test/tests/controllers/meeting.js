@@ -39,12 +39,21 @@ describe( 'controllers/meeting', () => {
       { username: 'user', password: 'pass', email: 'email' }
     );
 
-    this.user = res.data.user;
+    const res2 = await client.post(
+      '/user/register',
+      { username: 'user2', password: 'pass2', email: 'email2' }
+    );
 
-    client.defaults.headers.common['Authorization'] = res.data.token;
+    this.user = res.data.user;
+    this.userToken = res.data.token;
+
+    this.user2 = res2.data.user;
+    this.user2Token = res2.data.token;
   });
 
   beforeEach( async() => {
+    client.defaults.headers.common['Authorization'] = this.userToken;
+
     await dbUtils.clean();
   });
 
@@ -56,8 +65,8 @@ describe( 'controllers/meeting', () => {
   describe( '#index', () => {
 
     it( 'should fetch all meetings', async() => {
-      Meeting.create( meeting );
-      Meeting.create( meeting );
+      await Meeting.create( meeting );
+      await Meeting.create( meeting );
 
       const meetings = await client.get('/meeting');
 
@@ -301,5 +310,75 @@ describe( 'controllers/meeting', () => {
     });
 
   });
+
+  describe( '#getTopics', () => {
+
+    beforeEach( async() => {
+      this.meeting = await Meeting.create(
+        meetingFaker({ owner_id: this.user._id })
+      );
+
+      await Topic.insertMany([
+        topicFaker({ meeting_id: this.meeting._id }),
+        topicFaker({ meeting_id: this.meeting._id }),
+        topicFaker()
+      ]);
+    });
+
+    it( 'should return meetings topics', async() => {
+      const { data } = await client.get(
+        `/meeting/${ this.meeting._id }/topics`
+      );
+
+      assert.strictEqual( data.length, 2 );
+    });
+
+    it( 'should 403 if not meeting owner', async() => {
+      try {
+        await client.get(
+          `/meeting/${ this.meeting._id }/topics`
+        );
+      } catch ( err ) {
+        assert.strictEqual( err.response.status, 403 );
+        assert.strictEqual( err.response.data, 'unauthorized' );
+      }
+    });
+
+  });
+
+  describe( '#getParticipants', () => {
+
+    beforeEach( async() => {
+      this.meeting = await Meeting.create(
+        meetingFaker({ owner_id: this.user._id })
+      );
+
+      await Participant.insertMany([
+        participantFaker({ meeting_id: this.meeting._id }),
+        participantFaker({ meeting_id: this.meeting._id }),
+        participantFaker()
+      ]);
+    });
+
+    it( 'should return meetings participants', async() => {
+      const { data } = await client.get(
+        `/meeting/${ this.meeting._id }/participants`
+      );
+
+      assert.strictEqual( data.length, 2 );
+    });
+
+    it( 'should 403 if not meeting owner', async() => {
+      try {
+        await client.get(
+          `/meeting/${ this.meeting._id }/topics`
+        );
+      } catch ( err ) {
+        assert.strictEqual( err.response.status, 403 );
+        assert.strictEqual( err.response.data, 'unauthorized' );
+      }
+    });
+
+  })
 
 });
