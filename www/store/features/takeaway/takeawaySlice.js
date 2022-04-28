@@ -22,15 +22,23 @@ export const saveTakeaway = ( takeaway ) => {
   return async function takeawaySave( dispatch, getState ) {
     console.log('hi');
     try {
-      const res = await client.post(
+      const { data } = await client.post(
         'takeaway',
         takeaway
+      );
+
+      const takeaways = data.reduce(
+        ( prev, cur ) => {
+          prev[ cur._id ] = cur;
+          return prev;
+        },
+        {}
       );
 
       dispatch({
         type: 'takeaway/save',
         payload: {
-          takeaway
+          takeaways
         }
       });
     } catch ( error ) {

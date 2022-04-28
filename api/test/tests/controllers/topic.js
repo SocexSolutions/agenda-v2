@@ -1,10 +1,11 @@
-const { assert } = require('chai');
-const dbUtils    = require('../../utils/db');
-const db         = require('../../../lib/db');
-const api        = require('../../utils/api');
-const client     = require('../../utils/client');
-const Topic      = require('../../../lib/models/topic');
-const topicFaker = require('../../fakes/topic');
+const { assert }    = require('chai');
+const dbUtils       = require('../../utils/db');
+const db            = require('../../../lib/db');
+const api           = require('../../utils/api');
+const client        = require('../../utils/client');
+const Topic         = require('../../../lib/models/topic');
+const topicFaker    = require('../../fakes/topic');
+const takeawayFaker = require('../../fakes/takeaway');
 
 describe( 'api/lib/controllers/topic', () => {
 
@@ -236,5 +237,36 @@ describe( 'api/lib/controllers/topic', () => {
       assert.strictEqual( topic.name, this.topic.name );
     });
   });
+
+  describe( '#getTakeaways', () => {
+    const path = '/takeaway';
+
+    it( 'should get topic\'s takeaways', async() => {
+      const topic = topicFaker();
+
+      const res = await client.post( '/topic', topic );
+
+      const takeaway = takeawayFaker({
+        topic_id: res.data._id,
+        owner_id: user.user._id
+      });
+
+      const res2 = await client.post( path, takeaway );
+
+      const { data } = await client.get(
+        '/topic/' + res.data._id + '/takeaways'
+      );
+
+      console.log( res.data );
+
+      assert.containSubset(
+        data[ 0 ], res2.data
+      );
+    });
+
+
+
+  });
+
 
 });

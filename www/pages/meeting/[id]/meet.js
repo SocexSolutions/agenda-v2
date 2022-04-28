@@ -107,7 +107,10 @@ const Meet = ( props ) => {
   />;
 
   const takeawayCards = takeaways.map( chip =>
-    <div className={sharedStyles.card} key={chip}><h3>{chip.name}</h3><p>{chip.description}</p></div>
+    <div className={sharedStyles.card} key={chip}>
+      <h3>{chip.name}</h3>
+      <p>{chip.description}</p>
+    </div>
   );
 
   return (

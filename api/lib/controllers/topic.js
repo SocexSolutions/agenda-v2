@@ -1,5 +1,6 @@
-const log   = require('@starryinternet/jobi');
-const Topic = require('../models/topic');
+const log      = require('@starryinternet/jobi');
+const Topic    = require('../models/topic');
+const Takeaway = require('../models/takeaway');
 
 module.exports = {
   create: async( req, res ) => {
@@ -87,6 +88,21 @@ module.exports = {
       response.status( 200 ).send( res );
     } catch ( err ) {
       response.status( 500 ).send( err );
+    }
+  },
+
+  getTakeaways: async( req, res ) => {
+    try {
+      const  topic_id = req.params.id;
+
+      const takeaways = await Takeaway.find({ topic_id });
+
+      console.log( takeaways );
+
+      res.status( 200 ).send( takeaways );
+    } catch ( err ) {
+      log.error( err );
+      res.status( 500 ).send( err );
     }
   }
 };
