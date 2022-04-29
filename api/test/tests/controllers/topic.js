@@ -1,10 +1,12 @@
-const { assert } = require('chai');
-const dbUtils    = require('../../utils/db');
-const db         = require('../../../lib/db');
-const api        = require('../../utils/api');
-const client     = require('../../utils/client');
-const Topic      = require('../../../lib/models/topic');
-const topicFaker = require('../../fakes/topic');
+const { assert }    = require('chai');
+const dbUtils       = require('../../utils/db');
+const db            = require('../../../lib/db');
+const api           = require('../../utils/api');
+const client        = require('../../utils/client');
+const Topic         = require('../../../lib/models/topic');
+const Takeaway      = require('../../../lib/models/takeaway');
+const topicFaker    = require('../../fakes/topic');
+const takeawayFaker = require('../../fakes/takeaway');
 
 describe( 'api/lib/controllers/topic', () => {
 
@@ -235,6 +237,32 @@ describe( 'api/lib/controllers/topic', () => {
       assert.strictEqual( topic.status, 'discussed' );
       assert.strictEqual( topic.name, this.topic.name );
     });
+  });
+
+  describe( '#getTakeaways', () => {
+
+    it( 'should get topic\'s takeaways', async() => {
+      const topic = topicFaker();
+
+      const insertedTopic = await Topic.create( topic );
+
+      const takeaway = takeawayFaker({
+        topic_id: insertedTopic._id.toString(),
+        owner_id: user.user._id
+      });
+
+      await Takeaway.create( takeaway );
+
+      const { data: [ foundTakeaway ] } = await client.get(
+        '/topic/' + insertedTopic._id + '/takeaways'
+      );
+
+      assert.strictEqual( takeaway.name, foundTakeaway.name );
+      assert.strictEqual( takeaway.description, foundTakeaway.description );
+      assert.strictEqual( takeaway.topic_id, foundTakeaway.topic_id );
+      assert.strictEqual( takeaway.owner_id, foundTakeaway.owner_id );
+    });
+
   });
 
 });

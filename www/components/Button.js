@@ -4,7 +4,14 @@ import { useRef, useState } from 'react';
 import useClickAway from '../utils/clickAway';
 import styles from '../styles/Button.module.css';
 
-
+/**
+ * @param {Icon} icon - icon for the button
+ * @param {String} text - text to be displayed in button
+ * @param {String} size - size of button
+ * @param {Function} onClick - click handler
+ * @param {String} variant - button variant [outlined, disabled, menu, icon]
+ * @param {String} type - success or danger
+ */
 const Button = ({
   icon,
   text,

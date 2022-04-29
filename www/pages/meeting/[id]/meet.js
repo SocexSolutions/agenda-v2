@@ -10,7 +10,6 @@ import styles       from '../../../styles/Meet.module.css';
 import sharedStyles from '../../../styles/Shared.module.css';
 
 const Meet = ( props ) => {
-  const [ takeaways, setTakeaways ]     = useState([]);
   const [ loading, setLoading ]         = useState( true );
   const [ meeting, setMeeting ]         = useState( null );
   const [ savingTopic, setSavingTopic ] = useState( false );
@@ -53,10 +52,6 @@ const Meet = ( props ) => {
     }
   });
 
-  const addTakeaway = ( takeaway ) => {
-    setTakeaways([ ...takeaways, takeaway ]);
-  };
-
   if ( loading ) {
     return (
       <div className={styles.loadingContainer}>
@@ -91,13 +86,8 @@ const Meet = ( props ) => {
   });
 
   const discussionForm = <DiscussionForm
-    title={sorted[ splitIndex ].name}
-    addTakeaway={addTakeaway}
+    topic_id={sorted[ splitIndex ]._id}
   />;
-
-  const takeawayCards = takeaways.map( chip =>
-    <div className={sharedStyles.card} key={chip}>{chip}</div>
-  );
 
   return (
     <div className={styles.container}>
@@ -105,8 +95,10 @@ const Meet = ( props ) => {
         { unDiscussedTopics }
       </div>
       <div className={styles.mainContainer}>
+        <div
+          style={{ border: '2px black dotted' }}
+        >{sorted[ splitIndex ].name}</div>
         { discussionForm }
-        { takeawayCards }
       </div>
       <div className={styles.sideContainer}>
         { discussedTopics }

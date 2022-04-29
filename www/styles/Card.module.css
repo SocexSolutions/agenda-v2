@@ -1,0 +1,41 @@
+.container {
+  font-size: 10px;
+  color: var(--agendaText);
+  background-color: var(--backgroundTwo);
+  border: 1px solid var(--agendaSecondary);
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 10px;
+  width: 90%;
+}
+
+.container h3 {
+  font-size: .9rem;
+  margin: 0;
+}
+
+.container input {
+  font-size: .9rem;
+  margin: .5rem 0rem;
+}
+
+.container textarea {
+  font-size: .75rem;
+  margin-top: .5rem;
+  width: 100%;
+}
+
+.container button {
+  margin-top: 1rem;
+  margin-left: auto;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.buttonContainer button {
+  margin-left: .25rem;
+  display: flex;
+}
