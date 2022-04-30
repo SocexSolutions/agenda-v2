@@ -60,16 +60,16 @@ h3 {
   --agenda: #244a93;
   --agendaSecondary: #578ffe;
   --agendaThree: #2254af ;
-  --agendaText: #c6d7f6;
+  --agendaText: #8eb3f9;
   --background: #082050;
   --backgroundTwo: #0e2d68;
   --backgroundShadow: #041435;
   --agendaPurple: #5d5fef;
   --danger: #df1405;
-  --dangerText: #dcaca9;
+  --dangerText: #e0918c;
   --dangerBg: #940c03;
   --success: #9bc333;
-  --successText: #dae8aa;
+  --successText: #d0e588;
   --successBg: #5d8700;
 }
 
@@ -77,16 +77,16 @@ h3 {
   --agenda: #244a93;
   --agendaSecondary: #578ffe;
   --agendaThree: #2254af ;
-  --agendaText: #c6d7f6;
+  --agendaText: #8eb3f9;
   --background: #082050;
   --backgroundTwo: #0e2d68;
   --backgroundShadow: #041435;
   --agendaPurple: #5d5fef;
   --danger: #df1405;
-  --dangerText: #dcaca9;
+  --dangerText: #e0918c;
   --dangerBg: #940c03;
   --success: #9bc333;
-  --successText: #dae8aa;
+  --successText: #d0e588;
   --successBg: #5d8700;
 }
 
@@ -109,7 +109,7 @@ h3 {
 
 /* use psuedoselector for scrollbar (not supported by all browsers) */
 body::-webkit-scrollbar {
-  width: 1rem;
+  width: .75rem;
 }
 
 body::-webkit-scrollbar-track {
@@ -118,6 +118,6 @@ body::-webkit-scrollbar-track {
 
 /* thumb refers to the bar on the slider */
 body::-webkit-scrollbar-thumb {
-  background-image: linear-gradient(var(--agendaSecondary), var(--agendaSecondary));
+  background-image: linear-gradient(var(--agendaSecondary), var(--agendaThree));
   border-radius: 25px;
 }
