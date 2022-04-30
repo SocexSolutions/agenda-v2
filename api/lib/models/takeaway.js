@@ -3,12 +3,10 @@ const Schema   = mongoose.Schema;
 
 const takeawaySchema = new Schema({
   name: {
-    type: String,
-    required: true
+    type: String
   },
   description: {
-    type: String,
-    required: true
+    type: String
   },
   topic_id: {
     type: Schema.Types.ObjectId, ref: 'Topic',
