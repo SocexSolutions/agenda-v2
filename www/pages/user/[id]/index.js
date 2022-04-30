@@ -1,32 +1,40 @@
-import { getInbox } from '../../../store/features/meetings/meetingSlice';
-
 import { useEffect, useState } from 'react';
 import { useSelector }         from 'react-redux';
 
 import Inbox       from '../../../components/Inbox';
 import LoadingIcon from '../../../components/LoadingIcon';
 
-const selectUser                = state => state.user;
-const selectOwnedMeetings       = state => state.meetings.ownedMeetings;
-const selectParticipantMeetings = state => state.meetings.participantMeetings;
+import client from '../../../store/client';
+
+import { notify } from '../../../store/features/snackbar/snackbarSlice';
+
 
 const User = ( props ) => {
-  const [ loading, setLoading ] = useState( true );
+  const [ loading, setLoading ]                    = useState( true );
+  const [ ownedMeetings, setOwnedMeetings ]        = useState([]);
+  const [ participantMeetings, setParticMeetings ] = useState([]);
 
-  const user                = useSelector( selectUser );
-  const ownedMeetings       = useSelector( selectOwnedMeetings );
-  const participantMeetings = useSelector( selectParticipantMeetings );
+  const user = useSelector( state => state.user );
 
   useEffect( () => {
     async function load() {
       try {
-        await props.store.dispatch( getInbox() );
+        const res = await Promise.all([
+          client.get( `participant/meetings/${ user.email }` ),
+          client.get( `user/meetings/${ user._id }` )
+        ]);
+
+        setParticMeetings( res[ 0 ].data );
+        setOwnedMeetings( res[ 1 ].data );
+
         setLoading( false );
       } catch ( err ) {
-        props.notify({
-          msg: 'Error loading meetings: ' + err.message,
-          type: 'danger'
-        });
+        props.store.dispatch(
+          notify({
+            message: 'Failed to fetch meeting: ' + err.message,
+            type: 'danger'
+          })
+        );
       }
     }
 

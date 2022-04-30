@@ -69,33 +69,6 @@ export const saveMeeting = ( meeting ) => {
   };
 };
 
-export const getInbox = () => {
-  return async function InboxGet( dispatch, getState ) {
-    const state = getState();
-    const email = state.user.email;
-    const user_id = state.user._id;
-
-    const participantRes = await client.get(
-      `participant/meetings/${ email }`
-    );
-
-    let ownedRes = [];
-    if ( user_id ) {
-      ownedRes = await client.get(
-        `user/meetings/${ user_id }`
-      );
-    }
-
-    dispatch({
-      type: 'meetings/getmeetings',
-      payload: {
-        ownedMeetings: ownedRes.data,
-        participantMeetings: participantRes.data
-      }
-    });
-  };
-};
-
 export const clearMeeting = () => {
   return function clearMeeting( dispatch, getState ) {
     dispatch({
