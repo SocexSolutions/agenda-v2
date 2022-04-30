@@ -58,7 +58,7 @@ h3 {
 
 :root {
   --agenda: #244a93;
-  --agendaSecondary: #9dbeff;
+  --agendaSecondary: #74a2ff;
   --agendaThree: #2254af ;
   --agendaText: #c6d7f6;
   --background: #082050;
@@ -75,7 +75,7 @@ h3 {
 
 [data-theme='default'] {
   --agenda: #244a93;
-  --agendaSecondary: #9dbeff;
+  --agendaSecondary: #2d70f8;
   --agendaThree: #2254af ;
   --agendaText: #c6d7f6;
   --background: #082050;
