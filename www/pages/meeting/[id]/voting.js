@@ -1,15 +1,9 @@
-import LoadingIcon from '../../../components/LoadingIcon';
-
+import LoadingIcon   from '../../../components/LoadingIcon';
 import ArrowCircleUp from '@mui/icons-material/ThumbUp';
-
 import styles from '../../../styles/Voting.module.css';
-
 import client from '../../../store/client';
-
 import { useEffect, useState } from 'react';
-
-import { useSelector }  from 'react-redux';
-import { fetchMeeting } from '../../../store/features/meetings/meetingSlice';
+import { useSelector } from 'react-redux';
 import { useRouter }    from 'next/router';
 
 const selectUser = state => state.user;
@@ -27,13 +21,13 @@ const Voting = ( props ) => {
       const meeting_id = router.query.id;
 
       if ( meeting_id ) {
-        await props.store.dispatch( fetchMeeting( meeting_id ) );
-
-        const { meetings: { openMeeting } } = props.store.getState();
+        const { data: { '0': meeting } } = await client.get(
+          `meeting/${ meeting_id }/aggregate`
+        );
 
         setMeeting({
-          ...openMeeting,
-          topics: openMeeting.topics.map( topic => {
+          ...meeting,
+          topics: meeting.topics.map( topic => {
             const userLiked = topic.likes.includes( user.email );
 
             return {
