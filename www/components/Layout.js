@@ -13,20 +13,35 @@ const pagesWithoutDrawer = new Set([
   'register'
 ]);
 
+const pagesNeedingAuth = new Set([
+  'meeting',
+  'user',
+  '[id]'
+]);
+
+const selectUser = state => state.user;
+
 const Layout = ({ children }) => {
   const drawerOpen = useSelector( ( state ) => state.drawer );
   const storeTheme = useSelector( ( state ) => state.theme );
 
   const router = useRouter();
 
+  const user     = useSelector( selectUser );
+
   const page       = router.pathname.split('/').pop();
   const showDrawer = !pagesWithoutDrawer.has( page );
+  const blockPage = pagesNeedingAuth.has( page );
 
   useEffect( () => {
     document.documentElement.setAttribute(
       'data-theme', storeTheme.theme.theme
     );
-  }, [ storeTheme ] );
+
+    if ( !user._id && blockPage ) {
+      router.push('/login');
+    }
+  }, [ storeTheme, router ] );
 
   return (
     <>
