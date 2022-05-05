@@ -249,8 +249,6 @@ const Meet = ( props ) => {
     );
   });
 
-  console.log( live );
-
   return (
     <div className={styles.container}>
       <div className={styles.sideContainer}>
