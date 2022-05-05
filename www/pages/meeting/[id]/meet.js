@@ -1,5 +1,6 @@
-import LoadingIcon    from '../../../components/LoadingIcon';
+import LoadingIcon   from '../../../components/LoadingIcon';
 import TakeawayBoard from '../../../components/Bundles/Meeting/TakeawayBoard';
+import Button        from '../../../components/Button';
 
 import { useEffect, useState } from 'react';
 import { useRouter }           from 'next/router';
@@ -21,6 +22,7 @@ const Meet = ( props ) => {
   const [ participants, setParticipants ] = useState([]);
 
   const [ switchingTopics, setSwitchingTopics ] = useState( null );
+  const [ closingTopic, setClosingTopic ]       = useState( null );
 
   const router     = useRouter();
   const meeting_id = router.query.id ?? null;
@@ -131,7 +133,7 @@ const Meet = ( props ) => {
         setTopics( tmp );
         setSwitchingTopics( null );
 
-        await Promise.all( promises );
+        const res = await Promise.all( promises );
 
       } catch ( err ) {
         props.store.dispatch(
@@ -147,6 +149,42 @@ const Meet = ( props ) => {
       switchTopics();
     }
   }, [ switchingTopics ] );
+
+  useEffect( () => {
+    const closeTopic = async() => {
+      try {
+        const res = await client.patch(
+          `/topic/${ closingTopic }/status`,
+          { status: 'closed' }
+        );
+
+        if ( res.status === 200 ) {
+          const tmp = topics.map( t => {
+            if ( t.status === 'live' ) {
+              return { ...t, status: 'closed' };
+            } else {
+              return t;
+            }
+          });
+
+          setTopics( tmp );
+          setClosingTopic( null );
+        }
+
+      } catch ( err ) {
+        props.store.dispatch(
+          notify({
+            message: 'Failed to close topic: ' + err.message,
+            type: 'danger'
+          })
+        );
+      }
+    };
+
+    if ( closingTopic ) {
+      closeTopic();
+    }
+  }, [ closingTopic ] );
 
   if ( !meeting || !topics.length ) {
     return (
@@ -211,6 +249,7 @@ const Meet = ( props ) => {
     );
   });
 
+  console.log( live );
 
   return (
     <div className={styles.container}>
@@ -224,6 +263,12 @@ const Meet = ( props ) => {
           <div className={sharedStyles.card}>
             <h3>{live.name}</h3>
             <p>{live.description}</p>
+            <Button
+              onClick={() => setClosingTopic( live._id )}
+              variant='outlined'
+              size='small'
+              text='close'
+            />
           </div>
         }
         { live &&

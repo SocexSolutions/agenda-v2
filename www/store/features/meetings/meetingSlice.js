@@ -36,7 +36,7 @@ export const fetchMeeting = ( meeting_id ) => {
   return async function fetchMeeting( dispatch, getState ) {
     try {
       const { data } = await client.get(
-        `meeting/${ meeting_id }`
+        `meeting/${ meeting_id }/aggregate`
       );
 
       dispatch({
@@ -55,7 +55,7 @@ export const fetchMeeting = ( meeting_id ) => {
 export const saveMeeting = ( meeting ) => {
   return async function MeetingSave( dispatch, getState ) {
     await client.post(
-      'meeting',
+      'meeting/aggregate',
       meeting
     );
 

@@ -1,6 +1,8 @@
 import styles from '../../../styles/Bundles/Meeting/DiscussionForm.module.css';
-import Card from '../../Card';
+
+import Card   from '../../Card';
 import Button from '../../Button.js';
+
 import AddIcon from '@mui/icons-material/Add';
 
 import { useState, useEffect } from 'react';
@@ -22,8 +24,6 @@ const TakeawayBoard = ( props ) => {
       setTakeaways( res.data );
       setLoading( false );
     };
-
-    console.log( fetchTakeaways );
 
     fetchTakeaways();
   }, [ loading, props.topic_id ] );
