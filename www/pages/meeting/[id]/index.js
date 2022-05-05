@@ -3,15 +3,11 @@ import TopicsForm from '../../../components/Bundles/Meeting/TopicsForm';
 import ParticipantsForm from '../../../components/Bundles/Meeting/ParticipantsForm';
 import LoadingIcon from '../../../components/LoadingIcon';
 import Button from '../../../components/Button';
+import client from '../../../store/client';
 
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-
-import {
-  saveMeeting,
-  fetchMeeting
-} from '../../../store/features/meetings/meetingSlice';
 
 import { notify } from '../../../store/features/snackbar/snackbarSlice';
 
@@ -28,7 +24,6 @@ const Meeting = ( props ) => {
   const [ topics, setTopics ]             = useState([]);
 
   const user = useSelector( ( state ) => state.user );
-  const meeting = useSelector( ( state ) => state.meetings.openMeeting );
 
   const clearPage = () => {
     setName('');
@@ -43,13 +38,13 @@ const Meeting = ( props ) => {
 
       if ( real_id ) {
         try {
-          await props.store.dispatch( fetchMeeting( meeting_id ) );
+          const { data: { '0': meeting } } = await client.get(
+            `meeting/${ meeting_id }/aggregate`
+          );
 
-          const { meetings } = props.store.getState();
-
-          setName( meetings.openMeeting.name );
-          setParticipants( meetings.openMeeting.participants );
-          setTopics( meetings.openMeeting.topics );
+          setName( meeting.name );
+          setParticipants( meeting.participants );
+          setTopics( meeting.topics );
         } catch ( err ) {
           props.store.dispatch(
             notify({
@@ -70,19 +65,23 @@ const Meeting = ( props ) => {
 
   useEffect( () => {
     const save = async() => {
+      const meeting_id = router.query.id || '';
+
       try {
-        await props.store.dispatch(
-          saveMeeting({
+        await client.post(
+          'meeting/aggregate',
+          {
             name,
             owner_id: user._id,
-            meeting_id: meeting._id || undefined,
+            meeting_id,
             date: new Date(),
             participants,
             topics
-          })
+          }
         );
 
         setSaving( false );
+
         props.store.dispatch(
           notify({
             message: 'Save Successful'
@@ -103,7 +102,7 @@ const Meeting = ( props ) => {
     if ( saving ) {
       save();
     }
-  });
+  }, [ saving ] );
 
   const setNameHandler = ( event ) => {
     setName( event.target.value );
