@@ -56,8 +56,8 @@ describe( 'controllers/meeting', () => {
   describe( '#index', () => {
 
     it( 'should fetch all meetings', async() => {
-      Meeting.create( meeting );
-      Meeting.create( meeting );
+      await Meeting.create( meeting );
+      await Meeting.create( meeting );
 
       const meetings = await client.get('/meeting');
 
@@ -82,7 +82,88 @@ describe( 'controllers/meeting', () => {
 
   });
 
-  describe( '#display', () => {
+  describe( '#get', () => {
+
+    it( 'should fetch a meeting', async() => {
+      const created = await Meeting.create({
+        ...meeting, name: 'the right meeting'
+      });
+      await Meeting.create({ ...meeting, _id: new ObjectID });
+
+      const { data: res } = await client.get( `/meeting/${ created._id }` );
+
+      assert.strictEqual( res.name, created.name );
+      assert.strictEqual( res._id, created._id.toString() );
+      assert.strictEqual( res.date, created.date );
+    });
+
+  });
+
+  describe( '#create', () => {
+
+    it( 'should create a meeting', async() => {
+      const { data: res } = await client.post( `/meeting`, meeting );
+
+      assert.strictEqual( res.name, meeting.name );
+      assert.strictEqual( res.owner_id, this.user._id.toString() );
+      assert.strictEqual( res.date, meeting.date.toISOString() );
+
+      const found = await Meeting.findOne({ _id: res._id });
+
+      assert.strictEqual( found.name, meeting.name );
+      assert.strictEqual( res.owner_id, this.user._id.toString() );
+      assert.strictEqual( found._id.toString(), res._id );
+      assert.strictEqual( found.date, meeting.date.toISOString() );
+    });
+
+  });
+
+  describe( '#update', () => {
+
+    it( 'should update a meeting', async() => {
+      const created = await Meeting.create({
+        ...meeting,
+        owner_id: this.user._id
+      });
+
+      const newDate = new Date( 0 ).toISOString();
+
+      const { data: res } = await client.patch(
+        `/meeting/${ created._id }`,
+        { ...meeting, name: 'new name', date: newDate }
+      );
+
+      assert.strictEqual( res.name, 'new name' );
+      assert.strictEqual( res.owner_id, this.user._id.toString() );
+      assert.strictEqual( res.date, newDate );
+
+      const found = await Meeting.findOne({ _id: res._id });
+
+      assert.strictEqual( found.name, 'new name' );
+      assert.strictEqual( res.owner_id, this.user._id.toString() );
+      assert.strictEqual( found._id.toString(), res._id );
+      assert.strictEqual( found.date, newDate );
+    });
+
+    it( 'should 403 if not meeting owner', async() => {
+      const created = await Meeting.create( meeting );
+
+      try {
+        await client.patch(
+          `/meeting/${ created._id }`,
+          { ...meeting, name: 'new name' }
+        );
+
+        assert.fail('Accepted wrong owner');
+      } catch ( err ) {
+        assert.strictEqual( err.response.status, 403 );
+        assert.strictEqual( err.response.data, 'unauthorized' );
+      }
+    });
+
+  });
+
+  describe( '#aggregate', () => {
 
     it( 'should fetch meeting with participants and topics', async() => {
       const { _id } = await Meeting.create({ ...meeting, _id: meeting_id });
@@ -95,7 +176,7 @@ describe( 'controllers/meeting', () => {
         participant1
       );
 
-      const { data } = await client.get( `/meeting/${ _id }` );
+      const { data } = await client.get( `/meeting/${ _id }/aggregate` );
 
       assert.containSubset(
         data[ 0 ],
@@ -122,7 +203,7 @@ describe( 'controllers/meeting', () => {
 
   });
 
-  describe( '#save', () => {
+  describe( '#aggregateSave', () => {
 
     const payload = {
       ...meeting,
@@ -132,7 +213,7 @@ describe( 'controllers/meeting', () => {
 
     it( 'should create meeting', async() => {
       const { data } = await client.post(
-        '/meeting',
+        '/meeting/aggregate',
         payload
       );
 
@@ -149,7 +230,7 @@ describe( 'controllers/meeting', () => {
 
     it( 'should create meeting with participants', async() => {
       const { data } = await client.post(
-        '/meeting',
+        '/meeting/aggregate',
         payload
       );
 
@@ -170,7 +251,7 @@ describe( 'controllers/meeting', () => {
 
     it( 'should create meeting with topics', async() => {
       const { data } = await client.post(
-        '/meeting',
+        '/meeting/aggregate',
         payload
       );
 
@@ -199,7 +280,7 @@ describe( 'controllers/meeting', () => {
       };
 
       const { data } = await client.post(
-        '/meeting',
+        '/meeting/aggregate',
         update
       );
 
@@ -232,7 +313,7 @@ describe( 'controllers/meeting', () => {
       };
 
       const { data: { topics: [ doc ] } } = await client.post(
-        '/meeting',
+        '/meeting/aggregate',
         payload
       );
 
@@ -262,7 +343,7 @@ describe( 'controllers/meeting', () => {
       };
 
       const { data } = await client.post(
-        '/meeting',
+        '/meeting/aggregate',
         payload
       );
 
@@ -289,7 +370,7 @@ describe( 'controllers/meeting', () => {
       };
 
       const { data } = await client.post(
-        '/meeting',
+        '/meeting/aggregate',
         payload
       );
 

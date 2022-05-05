@@ -32,7 +32,7 @@ export default ( state = initialState, action ) => {
 export const notify = ({
   message = 'Success',
   type = 'success',
-  ms = 1500
+  ms = 4000
 }) => {
   return async function notify( dispatch, getState ) {
     dispatch({

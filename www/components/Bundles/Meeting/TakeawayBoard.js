@@ -1,13 +1,15 @@
 import styles from '../../../styles/Bundles/Meeting/DiscussionForm.module.css';
-import Card from '../../Card';
-import Button from '../../../components/Button.js';
+
+import Card   from '../../Card';
+import Button from '../../Button.js';
+
 import AddIcon from '@mui/icons-material/Add';
 
 import { useState, useEffect } from 'react';
 
 import client from '../../../store/client';
 
-const TakeawayForm = ( props ) => {
+const TakeawayBoard = ( props ) => {
   const [ loading, setLoading ]     = useState( true );
   const [ deleting, setDeleting ]   = useState('');
   const [ saving, setSaving ]       = useState( null );
@@ -23,10 +25,8 @@ const TakeawayForm = ( props ) => {
       setLoading( false );
     };
 
-    if ( loading ) {
-      fetchTakeaways();
-    }
-  }, [ loading ] );
+    fetchTakeaways();
+  }, [ loading, props.topic_id ] );
 
   useEffect( () => {
     const create = async() => {
@@ -69,7 +69,7 @@ const TakeawayForm = ( props ) => {
       setLoading( true );
     };
 
-    if ( deleting ) {
+    if ( deleting && props.topic_id ) {
       deleteT();
       setDeleting('');
     }
@@ -121,6 +121,7 @@ const TakeawayForm = ( props ) => {
   return (
     <>
       <div className={styles.cardContainer}>
+        <h3>Takeaways</h3>
         {takeawayCards}
         <Button
           onClick={() => createTakeaway()}
@@ -133,4 +134,4 @@ const TakeawayForm = ( props ) => {
   );
 };
 
-export default TakeawayForm;
+export default TakeawayBoard;

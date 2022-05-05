@@ -6,6 +6,9 @@ const ObjectID    = require('mongoose').Types.ObjectId;
 const log         = require('@starryinternet/jobi');
 
 module.exports = {
+  /**
+   * Retrieve all meetings
+   */
   index: async( req, res ) => {
     try {
       const meetings = await Meeting.find({});
@@ -17,14 +20,81 @@ module.exports = {
   },
 
   /**
-   * Get all related meeting data (topics, participants)
-   * @param {Object} req - request object
-   * @param {Object[]} req.params._id - meeting _id to lookup
-   * participants model
-   * @param {Object} res - response object
-   * @returns {Promise<Object>} created meeting data corresponding to params
+   * Get a meeting
+   * @param {String} req.params._id - meeting id
    */
-  display: async( req, res ) => {
+  get: async( req, res ) => {
+    try {
+      const { _id } = req.params;
+
+      const meeting = await Meeting.findOne({ _id });
+
+      res.status( 200 ).send( meeting );
+    } catch ( err ) {
+      log.error( err.message );
+      res.status( 500 ).send( err );
+    }
+  },
+
+  /**
+   * Create a new meeting
+   * @param {String} req.body.name - meeting name
+   * @param {Date}   req.body.date - meeting date
+   */
+  create: async( req, res ) => {
+    try {
+      const { name, date } = req.body;
+      const subject_id     = req.credentials.sub;
+
+      const meeting = await Meeting.create({
+        name,
+        date,
+        owner_id: subject_id
+      });
+
+      res.status( 200 ).send( meeting );
+    } catch ( err ) {
+      log.error( err.message );
+      res.status( 500 ).send( err );
+    }
+  },
+
+  /**
+   * Update an existing meeting
+   * @param {String} req.body.name  - meeting name
+   * @param {Date}   req.body.date  - meeting date
+   * @param {String} req.params._id - meeting id
+   */
+  update: async( req, res ) => {
+    try {
+      const { name, date } = req.body;
+      const subject_id     = req.credentials.sub;
+      const _id            = req.params._id;
+
+      const meeting = await Meeting.findOne({ _id });
+
+      if ( meeting.owner_id.toString() !== subject_id ) {
+        return res.status( 403 ).send('unauthorized');
+      }
+
+      const updated = await Meeting.findOneAndUpdate(
+        { _id },
+        { name, date },
+        { new: true }
+      );
+
+      res.status( 200 ).send( updated );
+    } catch ( err ) {
+      log.error( err.message );
+      res.status( 500 ).send( err );
+    }
+  },
+
+  /**
+   * Get all related meeting data (topics, participants)
+   * @param {String} req.params._id - meeting _id
+   */
+  aggregate: async( req, res ) => {
     const { _id } = req.params;
 
     try {
@@ -62,17 +132,13 @@ module.exports = {
   },
 
   /**
-   * Create or update a meeting
-   * @param {string} req.body.name - meeting name
-   * @param {string} req.body.date - meeting date
-   * @param {string} req.body.ownerId - meeting owner's id
-   * @param {Object[]} req.body.topics - topics array that fits the topics model
-   * @param {Object[]} req.body.participants - participants array that fits the
-   * participants model
-   * @param {Object} res - response object
-   * @returns {Promise<Object>} created meeting data corresponding to params
+   * Create or update a meeting and all its data
+   * @param {String} req.body.name - meeting name
+   * @param {String} req.body.date - meeting date
+   * @param {Topic[]} req.body.topics - array of Topics
+   * @param {Participant[]} req.body.participants - array of Participants
    */
-  save: async( req, res ) => {
+  aggregateSave: async( req, res ) => {
     let session;
 
     try {
