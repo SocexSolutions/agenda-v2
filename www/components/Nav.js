@@ -24,16 +24,19 @@ import { useEffect, useState } from 'react';
 const selectUser = state => state.user;
 const Nav = () => {
   const router = useRouter();
-  const [ history, setHistory ] = useState([]);
+
+  const [ history, setHistory ]               = useState([]);
   const [ whereInHistory, setWhereInHistory ] = useState( -1 );
-  const [ backPressed, setBackPressed ] = useState( false );
+  const [ backPressed, setBackPressed ]       = useState( false );
   const [ forwardPressed, setForwardPressed ] = useState( false );
+
   const dispatch = useDispatch();
   const user     = useSelector( selectUser );
   const userLink = `/user/${ user._id }`;
 
   useEffect( () => {
     const clearForwardHistory = () => {
+      console.log('clearForwardHistory');
       const tempArr = history;
       tempArr.splice(
         whereInHistory + 1,
@@ -46,12 +49,16 @@ const Nav = () => {
     };
 
     const handleHistoryWhenButtonsNotPressed = () => {
+      console.log('handleHistoryWhenButtonsNotPressed');
       let theRoute = router.pathname;
+
+
       if ( router.query !== {} ) {
         for ( const [ key, value ] of Object.entries( router.query ) ) {
           theRoute = theRoute.replace( `[${ key }]`, value );
         }
       }
+
       if ( whereInHistory < history.length - 1 ) {
         clearForwardHistory();
       } else {

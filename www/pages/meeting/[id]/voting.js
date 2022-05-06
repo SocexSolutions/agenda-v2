@@ -80,6 +80,14 @@ const Voting = ( props ) => {
     );
   }
 
+  if ( !meeting.topics.length ) {
+    return (
+      <div className={styles.noTopicsContainer}>
+        <h1>This Meeting Has No Topics :(</h1>
+      </div>
+    );
+  }
+
   const topicCards = meeting.topics.map( t => {
     const classNames = t.userLiked ?
       styles.dislike :
