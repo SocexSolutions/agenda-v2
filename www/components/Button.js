@@ -21,7 +21,8 @@ const Button = ({
   type = 'neutral',
   stretch,
   children,
-  customClass
+  customClass,
+  disabled
 }) => {
 
   const [ open, setOpen ] = useState( false );
@@ -47,9 +48,7 @@ const Button = ({
     case 'outlined':
       buttonStyles += ' ' + styles.outlined;
       break;
-    case 'disabled':
-      buttonStyles += ' ' + styles.disabled;
-      break;
+
     case 'menu':
       buttonStyles += ' ' + styles.menu;
       break;
@@ -59,6 +58,10 @@ const Button = ({
     case 'icon':
       buttonStyles += ' ' + styles.icon;
       break;
+  }
+
+  if ( disabled ) {
+    buttonStyles += ' ' + styles.disabled;
   }
 
   switch ( type ) {
@@ -89,7 +92,7 @@ const Button = ({
 
   return (
     <div ref={buttonRef} onClick={() => setOpen( true )}>
-      <button className={buttonStyles} onClick={onClick}>
+      <button className={buttonStyles} onClick={onClick} disabled={disabled}>
         {
           icon &&
           <div className={styles.iconContainer}>{icon}</div>
