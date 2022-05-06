@@ -48,10 +48,8 @@
 }
 
 .disabled {
-  background-color: white;
-  color: var(--background);
-  border: 1px solid var(--background);
-  cursor: default;
+  opacity: 20%;
+  cursor: not-allowed;
 }
 
 .menu {
@@ -106,4 +104,8 @@
 .danger {
   border: 1px solid var(--danger);
   color: var(--dangerText);
+}
+
+.disabled:hover {
+  opacity: 20%;
 }
