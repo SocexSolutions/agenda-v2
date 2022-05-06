@@ -27,11 +27,11 @@ const Layout = ({ children }) => {
 
   const router = useRouter();
 
-  const user     = useSelector( selectUser );
+  const user = useSelector( selectUser );
 
   const page       = router.pathname.split('/').pop();
   const showDrawer = !pagesWithoutDrawer.has( page );
-  const blockPage = pagesNeedingAuth.has( page );
+  const blockPage  = pagesNeedingAuth.has( page );
 
   useEffect( () => {
     document.documentElement.setAttribute(

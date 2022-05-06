@@ -32,16 +32,17 @@ const Nav = () => {
 
   const dispatch = useDispatch();
   const user     = useSelector( selectUser );
-  const userLink = `/user/${ user._id }`;
+
+  const homeHref = user._id ? `/user/${ user._id }` : `/login`;
 
   useEffect( () => {
     const clearForwardHistory = () => {
-      console.log('clearForwardHistory');
       const tempArr = history;
+
       tempArr.splice(
         whereInHistory + 1,
         tempArr.length - whereInHistory - 1,
-        router.pathname
+        router.asPath
       );
 
       setHistory( tempArr );
@@ -49,20 +50,10 @@ const Nav = () => {
     };
 
     const handleHistoryWhenButtonsNotPressed = () => {
-      console.log('handleHistoryWhenButtonsNotPressed');
-      let theRoute = router.pathname;
-
-
-      if ( router.query !== {} ) {
-        for ( const [ key, value ] of Object.entries( router.query ) ) {
-          theRoute = theRoute.replace( `[${ key }]`, value );
-        }
-      }
-
       if ( whereInHistory < history.length - 1 ) {
         clearForwardHistory();
       } else {
-        setHistory( arr => [ ...arr, theRoute ] );
+        setHistory( arr => [ ...arr, router.asPath ] );
         setWhereInHistory( whereInHistory + 1 );
       }
     };
@@ -79,7 +70,7 @@ const Nav = () => {
       setBackPressed( false );
       setWhereInHistory( whereInHistory - 1 );
     }
-  }, [ router.pathname ] );
+  }, [ router ] );
 
   if ( user.token === null ) {
     return (
@@ -120,7 +111,7 @@ const Nav = () => {
             variant="icon"
             onClick={() => dispatch( toggleDrawer() )}
           />
-          <Link href={userLink} passHref>
+          <Link href={homeHref} passHref>
             <Button icon={<HomeOutlinedIcon />} variant="icon"/>
           </Link>
           {whereInHistory > 0 &&
