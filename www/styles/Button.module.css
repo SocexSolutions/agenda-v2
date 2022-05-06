@@ -43,8 +43,10 @@
 }
 
 .iconContainer {
-  margin-right: .5rem;
-  margin-top: .4rem;
+  padding: .25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .disabled {
