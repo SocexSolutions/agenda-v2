@@ -67,6 +67,7 @@ const Meeting = ( props ) => {
   useEffect( () => {
     const save = async() => {
       const meeting_id = router.query.id || '';
+      const real_id = meeting_id.length === 24;
 
       try {
         await client.post(
@@ -74,7 +75,7 @@ const Meeting = ( props ) => {
           {
             name,
             owner_id: user._id,
-            meeting_id,
+            ...( real_id && { meeting_id } ),
             date: new Date(),
             participants,
             topics
