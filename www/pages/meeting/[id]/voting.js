@@ -74,8 +74,16 @@ const Voting = ( props ) => {
 
   if ( loading ) {
     return (
-      <div className={styles.loadingContainer}>
+      <div className={styles.blank_container}>
         <LoadingIcon />
+      </div>
+    );
+  }
+
+  if ( !meeting.topics.length ) {
+    return (
+      <div className={styles.blank_container}>
+        <h1>This Meeting Has No Topics :(</h1>
       </div>
     );
   }

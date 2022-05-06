@@ -45,6 +45,7 @@ const Meeting = ( props ) => {
           setName( meeting.name );
           setParticipants( meeting.participants );
           setTopics( meeting.topics );
+          setLoading( false );
         } catch ( err ) {
           props.store.dispatch(
             notify({

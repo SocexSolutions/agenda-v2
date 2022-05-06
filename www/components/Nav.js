@@ -24,21 +24,27 @@ import { useEffect, useState } from 'react';
 const selectUser = state => state.user;
 const Nav = () => {
   const router = useRouter();
-  const [ history, setHistory ] = useState([]);
+
+  const [ history, setHistory ]               = useState([]);
   const [ whereInHistory, setWhereInHistory ] = useState( -1 );
-  const [ backPressed, setBackPressed ] = useState( false );
+  const [ backPressed, setBackPressed ]       = useState( false );
   const [ forwardPressed, setForwardPressed ] = useState( false );
+
   const dispatch = useDispatch();
   const user     = useSelector( selectUser );
-  const userLink = `/user/${ user._id }`;
+
+  const homeHref = user && user._id ? `/user/${ user._id }` : `/login`;
 
   useEffect( () => {
+    // match browser behavior of removing history when user is within their
+    // history and move to a new page breaking their timeline
     const clearForwardHistory = () => {
       const tempArr = history;
+
       tempArr.splice(
         whereInHistory + 1,
         tempArr.length - whereInHistory - 1,
-        router.pathname
+        router.asPath
       );
 
       setHistory( tempArr );
@@ -46,33 +52,28 @@ const Nav = () => {
     };
 
     const handleHistoryWhenButtonsNotPressed = () => {
-      let theRoute = router.pathname;
-      if ( router.query !== {} ) {
-        for ( const [ key, value ] of Object.entries( router.query ) ) {
-          theRoute = theRoute.replace( `[${ key }]`, value );
-        }
-      }
       if ( whereInHistory < history.length - 1 ) {
         clearForwardHistory();
       } else {
-        setHistory( arr => [ ...arr, theRoute ] );
+        setHistory( arr => [ ...arr, router.asPath ] );
         setWhereInHistory( whereInHistory + 1 );
       }
     };
 
-    if ( !backPressed ) {
-      if ( !forwardPressed ) {
-        handleHistoryWhenButtonsNotPressed();
+    if ( !backPressed && !forwardPressed ) {
+      handleHistoryWhenButtonsNotPressed();
+    }
 
-      } else {
-        setForwardPressed( false );
-        setWhereInHistory( whereInHistory + 1 );
-      }
-    } else {
+    if ( forwardPressed ) {
+      setForwardPressed( false );
+      setWhereInHistory( whereInHistory + 1 );
+    }
+
+    if ( backPressed ) {
       setBackPressed( false );
       setWhereInHistory( whereInHistory - 1 );
     }
-  }, [ router.pathname ] );
+  }, [ router ] );
 
   if ( user.token === null ) {
     return (
@@ -113,27 +114,27 @@ const Nav = () => {
             variant="icon"
             onClick={() => dispatch( toggleDrawer() )}
           />
-          <Link href={userLink} passHref>
+          <Link href={homeHref} passHref>
             <Button icon={<HomeOutlinedIcon />} variant="icon"/>
           </Link>
-          {whereInHistory > 0 &&
-            <Button
-              icon={<ArrowBackIcon />}
-              variant="icon"
-              onClick={() => {
-                setBackPressed( true );
-                router.push( history[ whereInHistory - 1 ] );
-              }}
-            />}
-          { whereInHistory < history.length - 1 &&
-            <Button
-              icon={<ArrowForwardIcon />}
-              variant="icon"
-              onClick={() => {
-                setForwardPressed( true );
-                router.push( history[ whereInHistory + 1 ] );
-              }}
-            />}
+          <Button
+            disabled={ whereInHistory < 1 }
+            icon={<ArrowBackIcon />}
+            variant="icon"
+            onClick={() => {
+              setBackPressed( true );
+              router.push( history[ whereInHistory - 1 ] );
+            }}
+          />
+          <Button
+            disabled={ whereInHistory >= history.length - 1 }
+            icon={<ArrowForwardIcon />}
+            variant="icon"
+            onClick={() => {
+              setForwardPressed( true );
+              router.push( history[ whereInHistory + 1 ] );
+            }}
+          />
           <div className={styles.navCentered}>
             <Link href="/meeting/new" passHref>
               <Button
