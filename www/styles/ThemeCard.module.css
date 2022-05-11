@@ -1,0 +1,25 @@
+.container {
+  border-radius: 5px;
+  cursor: pointer;
+  width: 10em;
+  height: 12em;
+  margin: 1em;
+  background-color: var(--agendaThree);
+}
+
+.imageContainer {
+  width: 9em;
+  position: relative;
+  height: 9em;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: .3em;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.container h3 {
+  color: var(--agendaText);
+  padding: 0 0 0 .5em;
+  margin: 0;
+}

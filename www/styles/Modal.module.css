@@ -1,0 +1,23 @@
+.blurBackground {
+  backdrop-filter: blur(3px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.container {
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  left: 50%;
+  top: 50%;
+  width: 50em;
+  border-radius: 5px;
+  background-color: var(--backgroundTwo);
+  box-shadow: 2px 2px 8px var(--backgroundShadow);
+  transform: translate(-50%, -50%);
+}

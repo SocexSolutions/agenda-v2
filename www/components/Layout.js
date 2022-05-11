@@ -4,6 +4,7 @@ import Drawer from './Drawer';
 import { useEffect }   from 'react';
 import { useRouter }   from 'next/router';
 import { useSelector } from 'react-redux';
+import { refreshTheme } from '../store/features/theme/themeSlice';
 
 import styles from '../styles/Layout.module.css';
 
@@ -21,9 +22,8 @@ const pagesNeedingAuth = new Set([
 
 const selectUser = state => state.user;
 
-const Layout = ({ children }) => {
+const Layout = ( props ) => {
   const drawerOpen = useSelector( ( state ) => state.drawer );
-  const storeTheme = useSelector( ( state ) => state.theme );
 
   const router = useRouter();
 
@@ -34,14 +34,20 @@ const Layout = ({ children }) => {
   const blockPage  = pagesNeedingAuth.has( page );
 
   useEffect( () => {
-    document.documentElement.setAttribute(
-      'data-theme', storeTheme.theme.theme
-    );
-
     if ( !user._id && blockPage ) {
       router.push('/login');
     }
-  }, [ storeTheme, router ] );
+  }, [ router ] );
+
+  useEffect( () => {
+    async function themeRefresh() {
+      props.store.dispatch(
+        refreshTheme()
+      );
+    }
+
+    themeRefresh();
+  }, [ user ] );
 
   return (
     <>
@@ -56,7 +62,7 @@ const Layout = ({ children }) => {
         }
         <main>
           <content>
-            {children}
+            {props.children}
           </content>
         </main>
       </div>

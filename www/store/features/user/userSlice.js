@@ -132,6 +132,7 @@ export const userRefresh = () => {
 export const userLogout = () => {
   return async function logoutUser( dispatch, getState ) { // eslint-disable-line
     deleteCookie('agenda-auth');
+    localStorage.removeItem('theme');
 
     router.push('/');
 
