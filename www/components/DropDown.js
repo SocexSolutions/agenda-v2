@@ -27,7 +27,6 @@ const DropDown = () => {
 
   const logout = () => {
     dispatch( userLogout() );
-    router.push('/');
   };
 
   return (
