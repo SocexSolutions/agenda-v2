@@ -9,7 +9,6 @@ import Button from '../components/Button';
 import { useState }     from 'react';
 import { useEffect }    from 'react';
 import { userRegister } from '../store/features/user/userSlice';
-import { useSelector }  from 'react-redux';
 
 import client from '../store/client';
 
@@ -87,7 +86,7 @@ const Register = props => {
 
       } catch ( err ) {
         if ( err.response.status === 409 ) {
-          setEmailError( 'username already in use' );
+          setEmailError('username already in use');
         }
       }
     };
@@ -108,7 +107,7 @@ const Register = props => {
         }
       } catch ( err ) {
         if ( err.response.status === 409 ) {
-          setUsernameError( 'username already in use' );
+          setUsernameError('username already in use');
         }
       }
     };

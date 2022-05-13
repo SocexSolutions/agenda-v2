@@ -9,14 +9,12 @@ import Layout   from '../components/Layout';
 
 import '../styles/globals.css';
 
-const selectUser = state => state.user;
-
 const App = ( props ) => {
   const store = useStore();
 
   useEffect( () => {
     async function refresh() {
-      await store.dispatch(
+      store.dispatch(
         userRefresh()
       );
     }

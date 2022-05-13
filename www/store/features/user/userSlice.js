@@ -1,5 +1,6 @@
 import client from '../../client';
 import { getCookie, deleteCookie, setCookie } from '../../../utils/cookie';
+import router from 'next/router';
 
 const initialState = {
   token: null,
@@ -132,7 +133,7 @@ export const userLogout = () => {
   return async function logoutUser( dispatch, getState ) { // eslint-disable-line
     deleteCookie('agenda-auth');
 
-    window.location.href = '/';
+    router.push('/');
 
     dispatch({
       type: 'user/logout',
