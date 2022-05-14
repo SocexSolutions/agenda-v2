@@ -22,8 +22,13 @@ export const pickTheme = ( theme ) => {
   return async function themePick( dispatch, getState ) {
     const state = getState();
     const user_id = state.user._id;
+    const currentTheme = window.localStorage.getItem('theme');
+    const html = document.querySelector('html');
 
     window.localStorage.setItem( 'theme', theme );
+    html.classList.remove( currentTheme );
+    html.classList.add( theme );
+
 
     try {
       await client.post(
@@ -33,7 +38,9 @@ export const pickTheme = ( theme ) => {
 
       dispatch({ type: 'ui/pickTheme', payload: { theme } });
 
-    } catch ( err ) {}
+    } catch ( err ) {
+      console.error( err );
+    }
   };
 };
 
@@ -46,9 +53,12 @@ export const refreshTheme = () => {
       if ( user_id ) {
         const { data } = await client.get( `ui/${ user_id }` );
 
+        document.querySelector('html').classList.add( data.theme );
         dispatch({ type: 'ui/refreshTheme', payload: { theme: data.theme } });
       }
 
-    } catch ( err ) {}
+    } catch ( err ) {
+      console.error( err );
+    }
   };
 };

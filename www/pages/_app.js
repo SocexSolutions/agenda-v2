@@ -4,10 +4,12 @@ import { Provider }  from 'react-redux';
 import { useStore }    from '../store/store';
 import { userRefresh } from '../store/features/user/userSlice';
 
+
 import Snackbar from '../components/Snackbar';
 import Layout   from '../components/Layout';
 
 import '../styles/globals.css';
+import Script from 'next/script';
 
 const App = ( props ) => {
   const store = useStore();
@@ -27,12 +29,15 @@ const App = ( props ) => {
   const Component = props.Component;
 
   return (
-    <Provider store={store}>
-      <Layout>
-        <Component store={store} {...props.pageProps} />
-      </Layout>
-      <Snackbar />
-    </Provider>
+    <>
+      <Script src="/theme.js" strategy="beforeInteractive" />
+      <Provider store={store}>
+        <Layout store={store}>
+          <Component store={store} {...props.pageProps} />
+        </Layout>
+        <Snackbar />
+      </Provider>
+    </>
   );
 };
 

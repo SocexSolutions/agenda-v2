@@ -56,7 +56,9 @@ h3 {
   }
 }
 
-:root {
+/* THEMES */
+
+.default {
   --agenda: #244a93;
   --agendaSecondary: #578ffe;
   --agendaThree: #2254af ;
@@ -73,37 +75,71 @@ h3 {
   --successBg: #5d8700;
 }
 
-[data-theme='default'] {
-  --agenda: #244a93;
-  --agendaSecondary: #578ffe;
-  --agendaThree: #2254af ;
-  --agendaText: #8eb3f9;
-  --background: #082050;
-  --backgroundTwo: #0e2d68;
-  --backgroundShadow: #041435;
-  --agendaPurple: #5d5fef;
-  --danger: #df1405;
-  --dangerText: #e0918c;
-  --dangerBg: #940c03;
-  --success: #9bc333;
-  --successText: #d0e588;
-  --successBg: #5d8700;
-}
-
-[data-theme='dark']{
+.dark{
   --agenda: #444444;
   --agendaSecondary: #878683;
   --agendaThree: #4e4e4e ;
   --agendaText: #bebebe;
   --background: #121212;
   --backgroundTwo: #242424;
-  --backgroundShadow: #041435;
+  --backgroundShadow: #0d0d0e;
   --agendaPurple: #533c55;
   --danger: #B00020;
   --dangerText: #cf6697;
   --dangerBg: #940c03;
   --success: #9bc333;
   --successText: #dae8aa;
+  --successBg: #5d8700;
+}
+
+.zachsTheme{
+  --agenda: #070707;
+  --agendaSecondary: #066b0b;
+  --agendaThree: #1d1d1d ;
+  --agendaText: #006e09;
+  --background: #000000;
+  --backgroundTwo: #101a0f;
+  --backgroundShadow: #000000;
+  --agendaPurple: #e200f7;
+  --danger: #770016;
+  --dangerText: #d80303;
+  --dangerBg: #cf1104;
+  --success: #022c79;
+  --successText: #005be4;
+  --successBg: #0081b4;
+}
+
+.agendaOG{
+  --agenda: #40c540;
+  --agendaSecondary: #179417;
+  --agendaThree: #3dcf3d ;
+  --agendaText: #000000;
+  --background: #849989;
+  --backgroundTwo: #dfe9df;
+  --backgroundShadow: #383b39;
+  --agendaPurple: #5d5fef;
+  --danger: #df1405;
+  --dangerText: #e0918c;
+  --dangerBg: #940c03;
+  --success: #9bc333;
+  --successText: #11c501;
+  --successBg: #5d8700;
+}
+
+.banana{
+  --agenda: #d8e709;
+  --agendaSecondary: #80880f;
+  --agendaThree: #eeff00;
+  --agendaText: #101306;
+  --background: #bfc200;
+  --backgroundTwo: #445305;
+  --backgroundShadow: #041435;
+  --agendaPurple: #5d5fef;
+  --danger: #df1405;
+  --dangerText: #e0918c;
+  --dangerBg: #940c03;
+  --success: #9bc333;
+  --successText: #d0e588;
   --successBg: #5d8700;
 }
 
