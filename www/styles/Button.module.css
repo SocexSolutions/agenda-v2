@@ -30,7 +30,7 @@
 }
 
 .icon {
-  background-color: var(--background);
+  background-color: transparent;
   margin: 0 !important;
   color: var(--agendaSecondary);
   min-width: 0px;
@@ -42,7 +42,7 @@
   opacity: 50%;
 }
 
-.iconContainer {
+.icon_container {
   padding: .25rem;
   display: flex;
   justify-content: center;
@@ -79,12 +79,22 @@
   border: 1px solid var(--agendaSecondary);
 }
 
+.hollow {
+  border: none;
+  background-color: transparent;
+  color: var(--agendaText);
+}
+
+.hollow:hover {
+  opacity: 70%;
+}
+
 /* stretch */
-.stretchMedium {
+.stretch_medium {
   width: 70%;
 }
 
-.stretchWide {
+.stretch_wide {
   width: 90%;
 }
 
@@ -95,17 +105,19 @@
 }
 
 .outlined:hover {
-  opacity: 50%;
+  opacity: 70%;
 }
 
 .success {
-  border: 1px solid var(--success);
+  border: 1px solid var(--successBg);
   color: var(--successText);
+  background-color: var(--successBg);
 }
 
 .danger {
-  border: 1px solid var(--danger);
+  border: 1px solid var(--dangerBg);
   color: var(--dangerText);
+  background-color: var(--dangerBg);
 }
 
 .disabled:hover {

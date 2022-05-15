@@ -11,8 +11,6 @@
 }
 
 .topic {
-  display: flex;
-  flex-direction: column;
   margin: 2rem;
   padding: 1rem;
   margin-top: 1rem;
@@ -22,31 +20,26 @@
   border-radius: 0.5rem;
 }
 
+.topic h3 {
+  margin-top: .25rem;
+}
+
 .like {
-  margin-left: auto;
   padding: .5rem;
-  margin-right: 1rem;
   overflow: visible;
   height: 2rem;
   width: 2rem;
   border-radius: .5rem;
   cursor: pointer;
-  color: var(--agendaSecondary);
 }
 
 .dislike {
-  margin-left: auto;
   padding: .5rem;
-  margin-right: 1rem;
   overflow: visible;
   height: 2rem;
   width: 2rem;
   border-radius: .5rem;
   cursor: pointer;
-  color: var(--success);
-  background-color: var(--agendaThree);
-}
-
-.topic h3 {
-  margin-top: .25rem;
+  color: var(--successText);
+  background-color: var(--successBg);
 }
