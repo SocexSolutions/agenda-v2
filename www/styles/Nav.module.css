@@ -1,14 +1,31 @@
 .nav {
-  height: 5.5rem;
-  padding: 0rem .5rem 0rem .5rem;
+  background-color: var(--backgroundTwo);
+  height: 5rem;
+  padding: .5em 1em;
   color: var(--agendaText);
   display: flex;
-  align-items: center;
-  margin-left: 1rem;
 }
 
-.navLoggedIn {
-  margin: 0 1.5rem 0 1.5rem;
+.first_third {
+  height: 100%;
+  width: 33%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.center_third {
+  width: 34%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.last_third {
+  width: 33%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .login {
@@ -18,11 +35,6 @@
   display: flex;
   align-items: center;
   margin-left: auto;
-}
-
-.navCentered {
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .agenda {
@@ -45,10 +57,10 @@
   margin: 1rem;
 }
 
-.navLoggedIn ul li a {
+.nav_logged_in ul li a {
   margin: .5rem 1.5rem;
 }
 
-.navButton {
+.nav_button {
   width: 7rem;
 }
