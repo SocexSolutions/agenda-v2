@@ -1,4 +1,4 @@
-.formContainer {
+.form_container {
   width: 100%;
   height: 70vh;
   display: flex;
@@ -8,25 +8,25 @@
   background: var(--agendaBg );
 }
 
-.formContainer form {
+.form_container form {
   background-color: var(--backgroundTwo);
+  border: 1px solid var(--agendaSecondary);
   border-radius: 5px;
   padding: 20px 30px 30px 30px;
   opacity: 85%;
 }
 
-.formTitle {
-  width: 100%;
-  color: var(--agendaSecondary);
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.formContainer Input {
+.form_container Input {
   margin: 0px 0px 20px 0px;
 }
 
-.loginButton {
+.form_title {
+  width: 100%;
+  color: var(--agendaSecondary);
+  margin-bottom: 30px;
+}
+
+.login_button {
   margin-top: 20px;
   margin-left: auto;
 }

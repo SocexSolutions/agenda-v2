@@ -10,48 +10,61 @@
   margin: 3rem;
   margin-top: 1rem;
   width: 90%;
-  min-height: 90%;
-  background-color: var(--backgroundTwo);
-  outline: .5px solid var(--agendaSecondary);
-  border-radius: 0.5rem;
 }
 
 .item {
-  border-bottom: .5px solid var(--agendaSecondary);
+  border-top: .5px solid var(--agendaSecondary);
   padding: 0.5rem;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  color: var(--agendaSecondary);
+  color: var(--agendaText);
 }
 
-.item :nth-child(1){
+.item:hover {
+  cursor: pointer;
+}
+
+.item > * {
+  transition: opacity .25s;
+}
+
+.item:hover > * {
+  opacity: 100%;
+}
+
+.item > * {
+  opacity: 0%;
+}
+
+.item > p {
+  margin: .5em;
+  opacity: 100%;
+}
+
+.item:hover > p {
+  opacity: 70%;
+}
+
+.item :nth-child(1) {
   margin-right: auto;
 }
 
-.item :nth-child(2){
+.item :nth-child(2) {
   margin-left: auto;
 }
 
-.item :nth-child(3){
+.item :nth-child(3) {
   margin-left: 1rem;
 }
 
-.item :nth-child(4){
+.item :nth-child(4) {
   margin-left: 1rem;
 }
 
 .item:hover {
   background-color: var(---agendaSecondary);
-}
-
-.item p {
-  transition: linear .2s;
-}
-
-.item:hover > p {
-  opacity: 70%;
 }
 
 .noMeetings {

@@ -69,9 +69,9 @@ const Login = ( props ) => {
   };
 
   return (
-    <div className={styles.formContainer}>
+    <div className={styles.form_container}>
       <form>
-        <h1 className={styles.formTitle}>Login</h1>
+        <h1 className={styles.form_title}>Login</h1>
         <Input
           name='username'
           type='text'
@@ -95,7 +95,7 @@ const Login = ( props ) => {
           text='Login'
           size='medium'
           variant='outlined'
-          customClass={styles.loginButton}
+          customClass={styles.login_button}
         />
       </form>
     </div>

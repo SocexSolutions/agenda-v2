@@ -44,22 +44,23 @@ const DropDown = () => {
           onClick={() => router.push( `/user/${ user_id }` ) }
         />
         <Button
-          icon={<LogoutIcon />}
-          variant="menu"
-          text="Logout"
-          onClick={() => logout()}
-        />
-        <Button
           icon={<ThemeIcon />}
           variant="menu"
           text="Theme"
           onClick={() => setShowThemes( true )}
+        />
+        <Button
+          icon={<LogoutIcon />}
+          variant="menu"
+          text="Logout"
+          onClick={() => logout()}
         />
       </div>
       <div>
         { showThemes && <Modal closeListener={closeThemes}>
           <ThemeCard header="Default" image={placeholder} theme='default'/>
           <ThemeCard header="Dark" image={placeholder} theme='dark'/>
+          <ThemeCard header="Light" image={placeholder} theme='light'/>
           <ThemeCard header="Zachs Theme" image={placeholder} theme='zachsTheme'/>
           <ThemeCard header="Agenda OG" image={placeholder} theme='agendaOG' />
           <ThemeCard header="Banana" image={placeholder} theme='banana'/>
