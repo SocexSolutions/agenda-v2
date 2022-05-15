@@ -85,20 +85,19 @@ const Nav = () => {
               <h1>Agenda</h1>
             </div>
           </Link>
-
           <div className={styles.login}>
             <Link href="/login">
               <Button
                 variant="outlined"
                 text="Login"
-                className={styles.navButton}
+                className={styles.nav_button}
               />
             </Link>
             <Link href="/register">
               <Button
                 variant="outlined"
                 text="Sign Up"
-                className={styles.navButton}
+                className={styles.nav_button}
               />
             </Link>
           </div>
@@ -108,34 +107,36 @@ const Nav = () => {
   } else {
     return (
       <>
-        <nav className={classNames( styles.nav, styles.navLoggedIn )}>
-          <Button
-            icon={<MenuIcon />}
-            variant="icon"
-            onClick={() => dispatch( toggleDrawer() )}
-          />
-          <Link href={homeHref} passHref>
-            <Button icon={<HomeOutlinedIcon />} variant="icon"/>
-          </Link>
-          <Button
-            disabled={ whereInHistory < 1 }
-            icon={<ArrowBackIcon />}
-            variant="icon"
-            onClick={() => {
-              setBackPressed( true );
-              router.push( history[ whereInHistory - 1 ] );
-            }}
-          />
-          <Button
-            disabled={ whereInHistory >= history.length - 1 }
-            icon={<ArrowForwardIcon />}
-            variant="icon"
-            onClick={() => {
-              setForwardPressed( true );
-              router.push( history[ whereInHistory + 1 ] );
-            }}
-          />
-          <div className={styles.navCentered}>
+        <nav className={classNames( styles.nav, styles.nav_logged_in )}>
+          <div className={styles.first_third}>
+            <Button
+              icon={<MenuIcon />}
+              variant="icon"
+              onClick={() => dispatch( toggleDrawer() )}
+            />
+            <Link href={homeHref} passHref>
+              <Button icon={<HomeOutlinedIcon />} variant="icon"/>
+            </Link>
+            <Button
+              disabled={ whereInHistory < 1 }
+              icon={<ArrowBackIcon />}
+              variant="icon"
+              onClick={() => {
+                setBackPressed( true );
+                router.push( history[ whereInHistory - 1 ] );
+              }}
+            />
+            <Button
+              disabled={ whereInHistory >= history.length - 1 }
+              icon={<ArrowForwardIcon />}
+              variant="icon"
+              onClick={() => {
+                setForwardPressed( true );
+                router.push( history[ whereInHistory + 1 ] );
+              }}
+            />
+          </div>
+          <div className={styles.center_third}>
             <Link href="/meeting/new" passHref>
               <Button
                 icon={<AddToPhotosOutlinedIcon />}
@@ -145,15 +146,17 @@ const Nav = () => {
               />
             </Link>
           </div>
-          <Button
-            id="dropDownButton"
-            text={user.username}
-            icon={<AccountCircleIcon />}
-            variant="icon"
-            size="medium"
-          >
-            <DropDown />
-          </ Button>
+          <div className={styles.last_third}>
+            <Button
+              id="dropDownButton"
+              text={user.username}
+              icon={<AccountCircleIcon />}
+              variant="icon"
+              size="medium"
+            >
+              <DropDown />
+            </ Button>
+          </div>
         </nav>
       </>
     );

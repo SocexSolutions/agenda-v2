@@ -1,5 +1,6 @@
 import LoadingIcon   from '../../../components/LoadingIcon';
 import ArrowCircleUp from '@mui/icons-material/ThumbUp';
+import Button from '../../../components/Button';
 import styles from '../../../styles/Voting.module.css';
 import client from '../../../store/client';
 import { useEffect, useState } from 'react';
@@ -97,10 +98,16 @@ const Voting = ( props ) => {
       <div className={styles.topic} key={t.name}>
         <h3>{t.name}</h3>
         <p>{t.description}</p>
-        <ArrowCircleUp
-          fontSize='large'
-          className={classNames}
-          onClick={() => onLike( t._id )}
+        <Button
+          className={styles.like_button}
+          variant='icon'
+          icon={
+            <ArrowCircleUp
+              fontSize='large'
+              className={classNames}
+              onClick={() => onLike( t._id )}
+            />
+          }
         />
       </div>
     );

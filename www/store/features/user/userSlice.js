@@ -134,12 +134,12 @@ export const userLogout = () => {
     deleteCookie('agenda-auth');
     localStorage.removeItem('theme');
 
-    router.push('/');
-
     dispatch({
       type: 'user/logout',
       payload: {}
     });
+
+    router.push('/');
   };
 };
 

@@ -18,19 +18,18 @@ const Drawer = () => {
   const open     = useSelector( selectDrawer ).open;
 
   return (
-    <div className={styles.godContainer}>
+    <div className={styles.god_container}>
       <div className={`${ styles.container } ${ !open && styles.closed }`}>
-        <h2>Socnet</h2>
         <Button
           text="Upcoming"
-          size="large"
+          size="medium"
           stretch="wide"
           variant="menu"
           icon={<DoubleArrowIcon style={{ color: 'var(--agendaPurple)' }} />}
         />
         <Button
           text="Voting"
-          size="large"
+          size="medium"
           stretch="wide"
           variant="menu"
           icon={
@@ -39,18 +38,18 @@ const Drawer = () => {
         />
         <Button
           text="Completed"
-          size="large"
+          size="medium"
           stretch="wide"
           variant="menu"
           icon={<CancelOutlinedIcon style={{ color: 'var(--danger)' }} />}
         />
       </div>
       <div
-        className={styles.arrowContainer}
+        className={styles.arrow_container}
         onClick={() => dispatch( toggleDrawer() )}
       >
         <div className={styles.arrow}>
-          <div className={open ? styles.arrowClose : styles.arrowOpen}>
+          <div className={open ? styles.arrow_close : styles.arrow_open}>
             <ArrowForwardIosIcon />
           </div>
         </div>

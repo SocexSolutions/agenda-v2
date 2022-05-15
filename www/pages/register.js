@@ -115,9 +115,9 @@ const Register = props => {
   }, [ fields.username ] );
 
   return (
-    <div className={styles.formContainer}>
+    <div className={styles.form_container}>
       <form>
-        <h1 className={styles.formTitle}>
+        <h1 className={styles.form_title}>
           Sign Up
         </h1>
         <Input
@@ -153,7 +153,7 @@ const Register = props => {
           onClick={handleSubmit}
           text='Sign Up'
           size='medium'
-          customClass={styles.loginButton}
+          customClass={styles.login_button}
           variant='outlined'
         />
       </form>

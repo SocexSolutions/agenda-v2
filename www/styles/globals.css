@@ -12,6 +12,7 @@ body {
   font-family: open-sans;
   overflow-x:hidden;
   color: var(--agendaSecondary);
+  font-weight: 100;
 }
 
 a {
@@ -23,16 +24,8 @@ a {
   box-sizing: border-box;
 }
 
-h1 {
-  font-weight: 100;
-}
-
-h2 {
-  font-weight: 100;
-}
-
-h3 {
-  font-weight: 100;
+p {
+  font-size: .9rem;
 }
 
 .card {
@@ -64,7 +57,7 @@ h3 {
   --agendaThree: #2254af ;
   --agendaText: #8eb3f9;
   --background: #082050;
-  --backgroundTwo: #0e2d68;
+  --backgroundTwo: #082050;
   --backgroundShadow: #041435;
   --agendaPurple: #5d5fef;
   --danger: #df1405;
@@ -75,24 +68,41 @@ h3 {
   --successBg: #5d8700;
 }
 
-.dark{
+.dark {
   --agenda: #444444;
   --agendaSecondary: #878683;
   --agendaThree: #4e4e4e ;
   --agendaText: #bebebe;
   --background: #121212;
-  --backgroundTwo: #242424;
+  --backgroundTwo: #121212;
   --backgroundShadow: #0d0d0e;
   --agendaPurple: #533c55;
-  --danger: #B00020;
-  --dangerText: #cf6697;
+  --danger: #df1405;
+  --dangerText: #e0918c;
   --dangerBg: #940c03;
   --success: #9bc333;
-  --successText: #dae8aa;
+  --successText: #d0e588;
   --successBg: #5d8700;
 }
 
-.zachsTheme{
+.light {
+  --agenda: #444444;
+  --agendaSecondary: #878683;
+  --agendaThree: #0e0e0e ;
+  --agendaText: #111111;
+  --background: #ffffff;
+  --backgroundTwo: #ffffff;
+  --backgroundShadow: #adadad;
+  --agendaPurple: #533c55;
+  --danger: #df1405;
+  --dangerText: #ffffff;
+  --dangerBg: #940c03;
+  --success: #9bc333;
+  --successText: #ffffff;
+  --successBg: #95da00;
+}
+
+.zachsTheme {
   --agenda: #070707;
   --agendaSecondary: #066b0b;
   --agendaThree: #1d1d1d ;
@@ -109,7 +119,7 @@ h3 {
   --successBg: #0081b4;
 }
 
-.agendaOG{
+.agendaOG {
   --agenda: #40c540;
   --agendaSecondary: #179417;
   --agendaThree: #3dcf3d ;
@@ -126,7 +136,7 @@ h3 {
   --successBg: #5d8700;
 }
 
-.banana{
+.banana {
   --agenda: #d8e709;
   --agendaSecondary: #80880f;
   --agendaThree: #eeff00;

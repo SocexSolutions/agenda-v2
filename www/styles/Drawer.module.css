@@ -1,11 +1,11 @@
-.godContainer {
+.god_container {
   display: flex;
   flex-direction:row;
   height: 100%;
 }
 
 .container {
-  width: 18rem;
+  width: 15rem;
   border: 1px solid var(--agendaSecondary);
   background-color: var(--backgroundTwo);
   transition: width 400ms;
@@ -30,7 +30,7 @@
   width: 0rem;
 }
 
-.arrowContainer {
+.arrow_container {
   border-radius: 0rem .5rem .5rem 0rem;
   margin-top: calc( 50vh - 7rem );
   border: 1px solid var(--agendaSecondary);
@@ -39,7 +39,6 @@
   margin-left: -1px;
   width: 2rem;
   height: 3rem;
-  background-color: var(--backgroundTwo);
 }
 
 .arrow {
@@ -47,11 +46,11 @@
   float: right;
 }
 
-.arrowClose {
+.arrow_close {
   transform: rotate(180deg) translate( 0, -.4rem );
   transition: transform 400ms linear;
 }
-.arrowOpen {
+.arrow_open {
   transform: rotate(0deg) translate( 0, .7rem );
   transition: transform 400ms linear;
 }

@@ -9,7 +9,7 @@ import styles from '../styles/Button.module.css';
  * @param {String} text - text to be displayed in button
  * @param {String} size - size of button
  * @param {Function} onClick - click handler
- * @param {String} variant - button variant [outlined, disabled, menu, icon]
+ * @param {String} variant - button variant [outlined, hollow, menu, icon]
  * @param {String} type - success or danger
  */
 const Button = ({
@@ -27,75 +27,79 @@ const Button = ({
 
   const [ open, setOpen ] = useState( false );
 
-  let buttonStyles = styles.btn;
+  let button_styles = styles.btn;
   // size cases
   switch ( size ) {
     case 'small':
-      buttonStyles += ' ' + styles.small;
+      button_styles += ' ' + styles.small;
       break;
     case 'medium':
-      buttonStyles += ' ' + styles.medium;
+      button_styles += ' ' + styles.medium;
       break;
     case 'large':
-      buttonStyles += ' ' + styles.large;
+      button_styles += ' ' + styles.large;
       break;
     case 'xl':
-      buttonStyles += ' ' + styles.xl;
+      button_styles += ' ' + styles.xl;
       break;
   }
 
   switch ( variant ) {
     case 'outlined':
-      buttonStyles += ' ' + styles.outlined;
+      button_styles += ' ' + styles.outlined;
       break;
-
     case 'menu':
-      buttonStyles += ' ' + styles.menu;
+      button_styles += ' ' + styles.menu;
+      break;
+    case 'hollow':
+      button_styles += ' ' + styles.hollow;
       break;
     case 'topic':
-      buttonStyles += ' ' + styles.topic;
+      button_styles += ' ' + styles.topic;
       break;
     case 'icon':
-      buttonStyles += ' ' + styles.icon;
+      button_styles += ' ' + styles.icon;
       break;
   }
 
   if ( disabled ) {
-    buttonStyles += ' ' + styles.disabled;
+    button_styles += ' ' + styles.disabled;
   }
 
   switch ( type ) {
     case 'success':
-      buttonStyles += ' ' + styles.success;
+      button_styles += ' ' + styles.success;
       break;
     case 'danger':
-      buttonStyles += ' ' + styles.danger;
+      button_styles += ' ' + styles.danger;
       break;
   }
 
   //stretch case
   switch ( stretch ) {
     case 'medium':
-      buttonStyles += ' ' + styles.stretchMedium;
+      button_styles += ' ' + styles.stretch_medium;
       break;
     case 'wide':
-      buttonStyles += ' ' + styles.stretchWide;
+      button_styles += ' ' + styles.stretch_wide;
       break;
     case false:
       break;
   }
 
-  buttonStyles = customClass ? buttonStyles + ' ' + customClass : buttonStyles;
+  button_styles = customClass ?
+    button_styles + ' ' + customClass :
+    button_styles;
 
   const buttonRef = useRef( null );
   useClickAway( buttonRef, () => setOpen( false ) );
 
   return (
     <div ref={buttonRef} onClick={() => setOpen( true )}>
-      <button className={buttonStyles} onClick={onClick} disabled={disabled}>
+      <button className={button_styles} onClick={onClick} disabled={disabled}>
         {
           icon &&
-          <div className={styles.iconContainer}>{icon}</div>
+          <div className={styles.icon_container}>{icon}</div>
         }
         {text}
       </button>

@@ -115,7 +115,7 @@ const Meeting = ( props ) => {
   }
 
   return (
-    <div>
+    <div className={styles.page}>
       <HeaderForm setMeetingName={setNameHandler} meetingName={name} />
       <ParticipantsForm
         owner={user.email}
