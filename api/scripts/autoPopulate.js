@@ -79,7 +79,7 @@ async function populate_fake_meetings( count, userId ) {
 
 /**
  * Create topics for testing with provided meeting and owner ID
- * @param {Object} meetings - insertMany returned document
+ * @param {Object[]} meetings - insertMany returned document
  * @param {String} userId - userId of meeting owner
  * @returns {Promise} - topics created
  */
