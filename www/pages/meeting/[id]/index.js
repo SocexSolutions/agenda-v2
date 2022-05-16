@@ -70,7 +70,7 @@ const Meeting = ( props ) => {
       const real_id = meeting_id.length === 24;
 
       try {
-        await client.post(
+        const res = await client.post(
           'meeting/aggregate',
           {
             name,
@@ -89,6 +89,8 @@ const Meeting = ( props ) => {
             message: 'Save Successful'
           })
         );
+
+        if ( !real_id ) { router.push( `/meeting/${ res.data._id }` ); }
       } catch ( err ) {
         setSaving( false );
         props.store.dispatch(
