@@ -3,6 +3,7 @@ const ObjectID        = require('mongoose').Types.ObjectId;
 const { genPassword } = require('../lib/utils/password');
 const User            = require('../lib/models/user');
 const Meeting         = require('../lib/models/meeting');
+const Topic           = require('../lib/models/topic');
 const { clean }       = require('../test/utils/db');
 const faker           = require('faker');
 const assert          = require('assert');
@@ -33,7 +34,7 @@ async function createTestUser() {
  * @param {Number} count - number of users
  * @returns {Promize} - users created
  */
-async function populateFakeUsers( count ) {
+async function populate_fake_users( count ) {
   const users = [];
 
   for ( let i = 0; i < count; i++ ) {
@@ -58,7 +59,7 @@ async function populateFakeUsers( count ) {
  * @param {String} userId - userId of meeting owner
  * @returns {Promise} - meetings created
  */
-async function populateFakeMeetings( count, userId ) {
+async function populate_fake_meetings( count, userId ) {
   const meetings = [];
 
   for ( let i = 0; i < count; i++ ) {
@@ -77,6 +78,33 @@ async function populateFakeMeetings( count, userId ) {
 }
 
 /**
+ * Create topics for testing with provided meeting and owner ID
+ * @param {Object[]} meetings - insertMany returned document
+ * @param {String} userId - userId of meeting owner
+ * @returns {Promise} - topics created
+ */
+async function populate_fake_topics( meetings, user_id ) {
+  const topics = [];
+
+  for ( let i = 0; i < meetings.length; i++ ) {
+    for ( let j = 0; j < 5; j++ ) {
+      const topic = {
+        name: faker.random.word(),
+        description: faker.lorem.paragraph(),
+        meeting_id: meetings[ i ]._id,
+        owner_id: user_id,
+        likes: faker.datatype.number({ max: 10 })
+      };
+
+      topics.push( topic );
+
+    }
+  }
+
+  return Topic.insertMany( topics );
+}
+
+/**
  * Add test user and some related meetings for local dev
  * @returns {Promise} - database hydrated
  */
@@ -87,8 +115,9 @@ async function hydrateDB() {
 
     const user = await createTestUser();
 
-    await populateFakeUsers( 100 );
-    await populateFakeMeetings( 20, user._id );
+    await populate_fake_users( 100 );
+    const meetings = await populate_fake_meetings( 20, user._id );
+    await populate_fake_topics( meetings, user._id );
 
   } catch ( err ) {
     console.log( err );
