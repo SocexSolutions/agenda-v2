@@ -45,7 +45,12 @@ describe( 'controllers/meeting', () => {
   });
 
   beforeEach( async() => {
-    await dbUtils.clean();
+    await dbUtils.clean([
+      'participants',
+      'topics',
+      'meetings',
+      'takeaways'
+    ]);
   });
 
   after( async() => {
@@ -56,28 +61,15 @@ describe( 'controllers/meeting', () => {
   describe( '#index', () => {
 
     it( 'should fetch all meetings', async() => {
-      await Meeting.create( meeting );
-      await Meeting.create( meeting );
+      const meetings = Array.from({ length: 3 }).map( () => {
+        return meetingFaker();
+      });
 
-      const meetings = await client.get('/meeting');
+      await Meeting.insertMany( meetings );
 
-      assert.containSubset(
-        meetings.data[ 0 ],
-        {
-          name: meeting.name,
-          owner_id: meeting.owner_id.toString(),
-          date: meeting.date.toString()
-        }
-      );
+      const found = await client.get('/meeting');
 
-      assert.containSubset(
-        meetings.data[ 1 ],
-        {
-          name: meeting.name,
-          owner_id: meeting.owner_id.toString(),
-          date: meeting.date.toString()
-        }
-      );
+      assert.strictEqual( found.data.length, 3 );
     });
 
   });
@@ -85,9 +77,10 @@ describe( 'controllers/meeting', () => {
   describe( '#get', () => {
 
     it( 'should fetch a meeting', async() => {
-      const created = await Meeting.create({
-        ...meeting, name: 'the right meeting'
-      });
+      const meeting = meetingFaker({ name: 'meeting 1' });
+
+      const created = await Meeting.create( meeting );
+
       await Meeting.create({ ...meeting, _id: new ObjectID });
 
       const { data: res } = await client.get( `/meeting/${ created._id }` );
@@ -102,6 +95,8 @@ describe( 'controllers/meeting', () => {
   describe( '#create', () => {
 
     it( 'should create a meeting', async() => {
+      const meeting = meetingFaker({ owner_id: this.user._id });
+
       const { data: res } = await client.post( `/meeting`, meeting );
 
       assert.strictEqual( res.name, meeting.name );
@@ -166,7 +161,11 @@ describe( 'controllers/meeting', () => {
   describe( '#aggregate', () => {
 
     it( 'should fetch meeting with participants and topics', async() => {
-      const { _id } = await Meeting.create({ ...meeting, _id: meeting_id });
+      const { _id } = await Meeting.create({
+        ...meeting,
+        _id: meeting_id,
+        owner_id: this.user._id
+      });
 
       const newTopic = await Topic.create(
         topicFaker({ owner_id: this.user._id, meeting_id })
@@ -183,7 +182,7 @@ describe( 'controllers/meeting', () => {
         {
           name: meeting.name,
           date: meeting.date.toString(),
-          owner_id: meeting.owner_id.toString()
+          owner_id: this.user._id.toString()
         }
       );
 
@@ -199,6 +198,21 @@ describe( 'controllers/meeting', () => {
           meeting_id: meeting_id.toString()
         }
       );
+    });
+
+    it( 'should 401 if not meeting owner', async() => {
+      const { _id } = await Meeting.create({
+        ...meeting,
+        _id: meeting_id
+      });
+
+      try {
+        await client.get( `/meeting/${ _id }/aggregate` );
+        assert.fail('accepted request from unauthorized user');
+      } catch ( err ) {
+        assert.strictEqual( err.response.status, 403 );
+        assert.strictEqual( err.response.data, 'unauthorized' );
+      }
     });
 
   });

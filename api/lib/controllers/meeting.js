@@ -1,6 +1,7 @@
 const mongoose    = require('mongoose');
 const Meeting     = require('../models/meeting');
 const Topic       = require('../models/topic.js');
+const User        = require('../models/user');
 const Participant = require('../models/participant');
 const ObjectID    = require('mongoose').Types.ObjectId;
 const log         = require('@starryinternet/jobi');
@@ -92,37 +93,50 @@ module.exports = {
 
   /**
    * Get all related meeting data (topics, participants)
-   * @param {String} req.params._id - meeting _id
+   * @param {string} req.params._id - meeting _id
    */
   aggregate: async( req, res ) => {
-    const { _id } = req.params;
+    const { _id }    = req.params;
+    const subject_id = req.credentials.sub;
 
     try {
-      const meeting = await Meeting.aggregate([
-        {
-          $match: {
-            _id: new ObjectID( _id )
+      const [ user, [ meeting ] ] = await Promise.all([
+        User.findOne({ _id: subject_id }),
+        Meeting.aggregate([
+          {
+            $match: {
+              _id: new ObjectID( _id )
+            }
+          },
+          {
+            $lookup: {
+              from: 'participants',
+              localField: '_id',
+              foreignField: 'meeting_id',
+              as: 'participants'
+            }
+          },
+          {
+            $lookup: {
+              from: 'topics',
+              localField: '_id',
+              foreignField: 'meeting_id',
+              as: 'topics'
+            }
           }
-        },
-        {
-          $lookup: {
-            from: 'participants',
-            localField: '_id',
-            foreignField: 'meeting_id',
-            as: 'participants'
-          }
-        },
-        {
-          $lookup: {
-            from: 'topics',
-            localField: '_id',
-            foreignField: 'meeting_id',
-            as: 'topics'
-          }
-        }
+        ])
       ]);
 
-      res.status( 200 ).send({ ...meeting });
+      const is_owner = meeting.owner_id.toString() === user._id.toString();
+      const is_participant = !!meeting.participants.find( participant => {
+        return participant.email === user.email;
+      });
+
+      if ( !( is_owner || is_participant ) ) {
+        return res.status( 403 ).send('unauthorized');
+      }
+
+      return res.status( 200 ).send([ meeting ]);
 
     } catch ( error ) {
 
