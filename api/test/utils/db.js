@@ -8,14 +8,20 @@ const utils = {
   /**
    * Drops all collections (thus remove all data in db without deleting it)
    *
+   * @param {string[]} - collection names to clean (cleans all if not specified)
+   *
    * @returns {Promise}
    */
-  async clean() {
-    const collections = await mongoose.connection.db.collections();
+  async clean( collection_names ) {
+    const conn       = mongoose.connection;
+    const coll_names = collection_names || Object.keys( conn.collections );
+
     const promises = [];
 
-    for ( const collection of collections ) {
-      promises.push( collection.deleteMany({}) );
+    for ( const collection of coll_names ) {
+      promises.push(
+        mongoose.connection.collections[ collection ].deleteMany({})
+      );
     }
 
     return Promise.all( promises );
