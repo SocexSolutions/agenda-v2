@@ -1,4 +1,4 @@
-const JWTUtils = require('../utils/jwt');
+const JWTUtils = require('../auth/jwt');
 const fs       = require('fs');
 const path     = require('path');
 const jobi     = require('@starryinternet/jobi');

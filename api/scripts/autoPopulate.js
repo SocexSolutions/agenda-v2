@@ -1,18 +1,14 @@
 const db              = require('../lib/db');
-const ObjectID        = require('mongoose').Types.ObjectId;
 const { genPassword } = require('../lib/utils/password');
 const User            = require('../lib/models/user');
 const Meeting         = require('../lib/models/meeting');
 const Topic           = require('../lib/models/topic');
 const { clean }       = require('../test/utils/db');
 const faker           = require('faker');
-const assert          = require('assert');
 
 const TEST_PASS  = 'test';
 const TEST_USER  = 'test';
 const TEST_EMAIL = 'test@test.com';
-
-const fakeUsers = [];
 
 /**
  * Create the user for testing

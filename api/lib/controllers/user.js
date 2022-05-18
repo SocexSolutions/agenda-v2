@@ -1,7 +1,7 @@
 const User      = require('../models/user');
 const Meeting   = require('../models/meeting');
-const PassUtils = require('../utils/password');
-const JWTUtils  = require('../utils/jwt');
+const PassUtils = require('../auth/password');
+const JWTUtils  = require('../auth/jwt');
 const log       = require('@starryinternet/jobi');
 
 
