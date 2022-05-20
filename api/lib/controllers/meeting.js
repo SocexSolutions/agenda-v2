@@ -165,7 +165,13 @@ module.exports = {
       let topics       = req.body.topics || null;
       let participants = req.body.participants || null;
 
-      let meeting;
+      let meeting = await Meeting.findOne({ _id: meeting_id });
+
+      console.log( meeting.save );
+
+      if ( meeting && ( meeting.owner_id.toString() !== subject_id ) ) {
+        return res.status( 403 ).send('unauthorized');
+      }
 
       session = await mongoose.connection.startSession();
 

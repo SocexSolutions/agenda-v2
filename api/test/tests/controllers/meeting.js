@@ -16,17 +16,6 @@ chai.use( chaiSubset );
 
 const assert = chai.assert;
 
-const meeting_id = new ObjectID();
-const owner_id   = new ObjectID();
-
-const topic1 = topicFaker({ meeting_id });
-const topic2 = topicFaker({ meeting_id });
-
-const participant1  = participantFaker({ meeting_id });
-const participant2  = participantFaker({ meeting_id });
-
-const meeting = meetingFaker({ owner_id });
-
 describe( 'controllers/meeting', () => {
 
   before( async() => {
@@ -116,10 +105,9 @@ describe( 'controllers/meeting', () => {
   describe( '#update', () => {
 
     it( 'should update a meeting', async() => {
-      const created = await Meeting.create({
-        ...meeting,
-        owner_id: this.user._id
-      });
+      const meeting = meetingFaker({ owner_id: this.user._id });
+
+      const created = await Meeting.create( meeting );
 
       const newDate = new Date( 0 ).toISOString();
 
@@ -141,6 +129,8 @@ describe( 'controllers/meeting', () => {
     });
 
     it( 'should 403 if not meeting owner', async() => {
+      const meeting = meetingFaker();
+
       const created = await Meeting.create( meeting );
 
       try {
@@ -149,7 +139,7 @@ describe( 'controllers/meeting', () => {
           { ...meeting, name: 'new name' }
         );
 
-        assert.fail('Accepted wrong owner');
+        assert.fail('accepted wrong owner');
       } catch ( err ) {
         assert.strictEqual( err.response.status, 403 );
         assert.strictEqual( err.response.data, 'unauthorized' );
@@ -161,19 +151,20 @@ describe( 'controllers/meeting', () => {
   describe( '#aggregate', () => {
 
     it( 'should fetch meeting with participants and topics', async() => {
-      const { _id } = await Meeting.create({
-        ...meeting,
-        _id: meeting_id,
-        owner_id: this.user._id
+      const meeting = meetingFaker({ owner_id: this.user._id });
+
+      const { _id } = await Meeting.create( meeting );
+
+      const topics = Array.from({ length: 3 }).map( () => {
+        return topicFaker({ meeting_id: _id });
       });
 
-      const newTopic = await Topic.create(
-        topicFaker({ owner_id: this.user._id, meeting_id })
-      )._doc;
+      const participants = Array.from({ length: 3 }).map( () => {
+        return participantFaker({ meeting_id: _id });
+      });
 
-      await Participant.create(
-        participant1
-      );
+      await Topic.insertMany( topics );
+      await Participant.insertMany( participants );
 
       const { data } = await client.get( `/meeting/${ _id }/aggregate` );
 
@@ -186,25 +177,14 @@ describe( 'controllers/meeting', () => {
         }
       );
 
-      assert.containSubset(
-        data[ 0 ].participants[ 0 ],
-        { ...participant1, meeting_id: meeting_id.toString() }
-      );
-
-      assert.containSubset(
-        data[ 0 ].topics[ 0 ],
-        {
-          ...newTopic,
-          meeting_id: meeting_id.toString()
-        }
-      );
+      assert.strictEqual( data[ 0 ].topics.length, 3 );
+      assert.strictEqual( data[ 0 ].participants.length, 3 );
     });
 
-    it( 'should 401 if not meeting owner', async() => {
-      const { _id } = await Meeting.create({
-        ...meeting,
-        _id: meeting_id
-      });
+    it( 'should 403 if not meeting owner', async() => {
+      const meeting = meetingFaker();
+
+      const { _id } = await Meeting.create( meeting );
 
       try {
         await client.get( `/meeting/${ _id }/aggregate` );
@@ -219,16 +199,15 @@ describe( 'controllers/meeting', () => {
 
   describe( '#aggregateSave', () => {
 
-    const payload = {
-      ...meeting,
-      participants: [ participant1, participant2 ],
-      topics: [ topic1, { ...topic2, owner_id: undefined } ]
-    };
-
     it( 'should create meeting', async() => {
+      const meeting = meetingFaker({
+        _id: new ObjectID,
+        owner_id: this.user._id
+      });
+
       const { data } = await client.post(
         '/meeting/aggregate',
-        payload
+        { ...meeting }
       );
 
       const createdMeeting = await Meeting.findById( data._id );
@@ -236,55 +215,70 @@ describe( 'controllers/meeting', () => {
       assert.containSubset(
         createdMeeting,
         {
-          name: payload.name,
-          date: payload.date.toISOString()
+          name: meeting.name,
+          date: meeting.date.toISOString()
         }
       );
     });
 
     it( 'should create meeting with participants', async() => {
+      const meeting = meetingFaker({
+        _id: new ObjectID,
+        owner_id: this.user._id
+      });
+
+      const participants = Array.from({ length: 3 }).map( () => {
+        return participantFaker({ meeting_id: meeting._id });
+      });
+
       const { data } = await client.post(
         '/meeting/aggregate',
-        payload
+        {
+          ...meeting,
+          participants
+        }
       );
+
+      assert.strictEqual( data.participants.length, 3 );
 
       const createdParticipants = await Participant.find({
         meeting_id: data._id
       });
 
-      assert.containSubset(
-        createdParticipants[ 0 ],
-        participant1
-      );
-
-      assert.containSubset(
-        createdParticipants[ 1 ],
-        participant2
-      );
+      assert.strictEqual( createdParticipants.length, 3 );
     });
 
     it( 'should create meeting with topics', async() => {
+      const meeting = meetingFaker({
+        _id: new ObjectID,
+        owner_id: this.user._id
+      });
+
+      const topic = topicFaker({ meeting_id: meeting._id });
+
       const { data } = await client.post(
         '/meeting/aggregate',
-        payload
+        {
+          ...meeting,
+          topics: [ topic ]
+        }
       );
+
+      assert.strictEqual( data.topics.length, 1 );
 
       const createdTopics = await Topic.find({
         meeting_id: data._id
       });
 
-      assert.containSubset(
-        createdTopics[ 0 ],
-        topic1
-      );
+      assert.strictEqual( createdTopics.length, 1 );
 
-      assert.containSubset(
-        createdTopics[ 1 ],
-        topic2
-      );
+      assert.strictEqual( createdTopics[ 0 ].name, topic.name );
+      assert.strictEqual( createdTopics[ 0 ].description, topic.description );
     });
 
     it( 'should update a meeting', async() => {
+      const meeting = meetingFaker({ owner_id: this.user._id });
+
       const { _id } = await Meeting.create( meeting );
 
       const update = {
@@ -304,22 +298,31 @@ describe( 'controllers/meeting', () => {
 
       const [ updated ] = await Meeting.find({ _id });
 
-      assert.strictEqual( owner_id.toString(), updated.owner_id.toString() );
+      assert.strictEqual(
+        this.user._id.toString(),
+        updated.owner_id.toString()
+      );
+
       assert.strictEqual( update.name, updated.name );
       assert.strictEqual( update.date, updated.date );
     });
 
     it( 'should update a meetings topics', async() => {
+      const meeting = meetingFaker({
+        _id: new ObjectID,
+        owner_id: this.user._id
+      });
+
       const { _id } = await Meeting.create( meeting );
 
-      const newTopic = ( await Topic.create(
+      const new_topic = ( await Topic.create(
         topicFaker({ owner_id: this.user._id, meeting_id: _id })
       ) )._doc;
 
-      const topic = { ...newTopic };
+      const topic = { ...new_topic };
 
       topic.name  = 'new topic name';
-      topic.likes = [ owner_id.toString() ];
+      topic.likes = [ this.user.email.toString() ];
 
       const payload = {
         meeting_id: _id.toString(),
@@ -342,12 +345,11 @@ describe( 'controllers/meeting', () => {
     });
 
     it( 'should delete old meeting topics', async() => {
+      const meeting = meetingFaker({ owner_id: this.user._id });
+
       const { _id } = await Meeting.create( meeting );
 
-      const topic = {
-        ...topic1,
-        meeting_id: _id.toString()
-      };
+      const topic = topicFaker({ meeting_id: _id });
 
       await Topic.create( topic );
 
@@ -369,12 +371,11 @@ describe( 'controllers/meeting', () => {
     });
 
     it( 'should delete old meeting participants', async() => {
+      const meeting = meetingFaker({ owner_id: this.user._id });
+
       const { _id } = await Meeting.create( meeting );
 
-      const participant = {
-        ...participant1,
-        meeting_id: _id.toString()
-      };
+      const participant = participantFaker({ meeting_id: _id });
 
       await Participant.create( participant );
 
@@ -393,6 +394,26 @@ describe( 'controllers/meeting', () => {
       const deleted = await Participant.find({ meeting_id: _id });
 
       assert.strictEqual( deleted.length, 0 );
+    });
+
+    it( 'should 403 if not meeting owner', async() => {
+      const meeting = meetingFaker();
+
+      const created = await Meeting.create( meeting );
+
+      const { _id } = created;
+
+      try {
+        await client.post(
+          `/meeting/aggregate`,
+          { ...created, _id: undefined, meeting_id: _id }
+        );
+
+        assert.fail('accepted request from unauthorized user');
+      } catch ( err ) {
+        assert.strictEqual( err.response.status, 403 );
+        assert.strictEqual( err.response.data, 'unauthorized' );
+      }
     });
 
   });
