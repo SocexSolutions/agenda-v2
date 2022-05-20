@@ -169,7 +169,7 @@ describe( 'controllers/meeting', () => {
       const { data } = await client.get( `/meeting/${ _id }/aggregate` );
 
       assert.containSubset(
-        data[ 0 ],
+        data,
         {
           name: meeting.name,
           date: meeting.date.toString(),
@@ -177,8 +177,8 @@ describe( 'controllers/meeting', () => {
         }
       );
 
-      assert.strictEqual( data[ 0 ].topics.length, 3 );
-      assert.strictEqual( data[ 0 ].participants.length, 3 );
+      assert.strictEqual( data.topics.length, 3 );
+      assert.strictEqual( data.participants.length, 3 );
     });
 
     it( 'should 403 if not meeting owner', async() => {

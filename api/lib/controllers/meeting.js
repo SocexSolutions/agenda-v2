@@ -136,7 +136,7 @@ module.exports = {
         return res.status( 403 ).send('unauthorized');
       }
 
-      return res.status( 200 ).send([ meeting ]);
+      return res.status( 200 ).send( meeting );
 
     } catch ( error ) {
 
@@ -166,8 +166,6 @@ module.exports = {
       let participants = req.body.participants || null;
 
       let meeting = await Meeting.findOne({ _id: meeting_id });
-
-      console.log( meeting.save );
 
       if ( meeting && ( meeting.owner_id.toString() !== subject_id ) ) {
         return res.status( 403 ).send('unauthorized');

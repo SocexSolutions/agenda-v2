@@ -38,13 +38,14 @@ const Meeting = ( props ) => {
 
       if ( real_id ) {
         try {
-          const { data: { '0': meeting } } = await client.get(
+          const { data } = await client.get(
             `meeting/${ meeting_id }/aggregate`
           );
 
-          setName( meeting.name );
-          setParticipants( meeting.participants );
-          setTopics( meeting.topics );
+          setName( data.name );
+          setParticipants( data.participants );
+          setTopics( data.topics );
+
           setLoading( false );
         } catch ( err ) {
           props.store.dispatch(

@@ -22,22 +22,11 @@ const Voting = ( props ) => {
       const meeting_id = router.query.id;
 
       if ( meeting_id ) {
-        const { data: { '0': meeting } } = await client.get(
+        const { data } = await client.get(
           `meeting/${ meeting_id }/aggregate`
         );
 
-        setMeeting({
-          ...meeting,
-          topics: meeting.topics.map( topic => {
-            const userLiked = topic.likes.includes( user.email );
-
-            return {
-              ...topic,
-              discussed: false,
-              userLiked
-            };
-          })
-        });
+        setMeeting( data );
 
         setLoading( false );
       }
