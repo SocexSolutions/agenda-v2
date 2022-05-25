@@ -31,7 +31,7 @@ describe( 'api/lib/controllers/topic', () => {
 
   beforeEach( async() => {
     client.defaults.headers.common['Authorization'] = user.token;
-    await dbUtils.clean();
+    await dbUtils.clean([ 'topics', 'takeaways' ]);
   });
 
   after( async() => {

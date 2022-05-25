@@ -27,7 +27,7 @@ describe( 'controllers/ui', () => {
   });
 
   beforeEach( async() => {
-    await dbUtils.clean();
+    await dbUtils.clean([ 'uis' ]);
 
     const themes = Array.from( { length: 5 }, () => {
       return themeFaker();

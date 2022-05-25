@@ -1,33 +1,30 @@
-const mongoose    = require('mongoose');
-const Meeting     = require('../models/meeting');
-const Topic       = require('../models/topic.js');
-const Participant = require('../models/participant');
-const ObjectID    = require('mongoose').Types.ObjectId;
-const log         = require('@starryinternet/jobi');
+const mongoose          = require('mongoose');
+const Meeting           = require('../models/meeting');
+const Topic             = require('../models/topic.js');
+const User              = require('../models/user');
+const Participant       = require('../models/participant');
+const check_participant = require('../auth/check-participant');
+const ObjectID          = require('mongoose').Types.ObjectId;
+const log               = require('@starryinternet/jobi');
 
 module.exports = {
-  /**
-   * Retrieve all meetings
-   */
-  index: async( req, res ) => {
-    try {
-      const meetings = await Meeting.find({});
-      res.status( 200 ).send( meetings );
-    } catch ( error ) {
-      log.error( 'Meeting index failed: ' + error.message );
-      res.status( 500 ).send( error.message );
-    }
-  },
-
   /**
    * Get a meeting
    * @param {String} req.params._id - meeting id
    */
   get: async( req, res ) => {
     try {
-      const { _id } = req.params;
+      const { _id }        = req.params;
+      const { sub, email } = req.credentials;
 
       const meeting = await Meeting.findOne({ _id });
+
+      const is_participant = await check_participant( _id, email );
+      const is_owner       = sub === meeting.owner_id.toString();
+
+      if ( !( is_participant || is_owner ) ) {
+        return res.status( 403 ).send('unauthorized');
+      }
 
       res.status( 200 ).send( meeting );
     } catch ( err ) {
@@ -44,12 +41,12 @@ module.exports = {
   create: async( req, res ) => {
     try {
       const { name, date } = req.body;
-      const subject_id     = req.credentials.sub;
+      const { sub }        = req.credentials;
 
       const meeting = await Meeting.create({
         name,
         date,
-        owner_id: subject_id
+        owner_id: sub
       });
 
       res.status( 200 ).send( meeting );
@@ -92,37 +89,50 @@ module.exports = {
 
   /**
    * Get all related meeting data (topics, participants)
-   * @param {String} req.params._id - meeting _id
+   * @param {string} req.params._id - meeting _id
    */
   aggregate: async( req, res ) => {
-    const { _id } = req.params;
+    const { _id }    = req.params;
+    const subject_id = req.credentials.sub;
 
     try {
-      const meeting = await Meeting.aggregate([
-        {
-          $match: {
-            _id: new ObjectID( _id )
+      const [ user, [ meeting ] ] = await Promise.all([
+        User.findOne({ _id: subject_id }),
+        Meeting.aggregate([
+          {
+            $match: {
+              _id: new ObjectID( _id )
+            }
+          },
+          {
+            $lookup: {
+              from: 'participants',
+              localField: '_id',
+              foreignField: 'meeting_id',
+              as: 'participants'
+            }
+          },
+          {
+            $lookup: {
+              from: 'topics',
+              localField: '_id',
+              foreignField: 'meeting_id',
+              as: 'topics'
+            }
           }
-        },
-        {
-          $lookup: {
-            from: 'participants',
-            localField: '_id',
-            foreignField: 'meeting_id',
-            as: 'participants'
-          }
-        },
-        {
-          $lookup: {
-            from: 'topics',
-            localField: '_id',
-            foreignField: 'meeting_id',
-            as: 'topics'
-          }
-        }
+        ])
       ]);
 
-      res.status( 200 ).send({ ...meeting });
+      const is_owner = meeting.owner_id.toString() === user._id.toString();
+      const is_participant = !!meeting.participants.find( participant => {
+        return participant.email === user.email;
+      });
+
+      if ( !( is_owner || is_participant ) ) {
+        return res.status( 403 ).send('unauthorized');
+      }
+
+      return res.status( 200 ).send( meeting );
 
     } catch ( error ) {
 
@@ -151,7 +161,11 @@ module.exports = {
       let topics       = req.body.topics || null;
       let participants = req.body.participants || null;
 
-      let meeting;
+      let meeting = await Meeting.findOne({ _id: meeting_id });
+
+      if ( meeting && ( meeting.owner_id.toString() !== subject_id ) ) {
+        return res.status( 403 ).send('unauthorized');
+      }
 
       session = await mongoose.connection.startSession();
 
@@ -214,12 +228,15 @@ module.exports = {
 
   async getTopics( req, res ) {
     try {
-      const { _id }    = req.params;
-      const subject_id = req.credentials.sub;
+      const { _id }        = req.params;
+      const { sub, email } = req.credentials;
 
       const meeting = await Meeting.findOne({ _id });
 
-      if ( subject_id !== meeting.owner_id.toString() ) {
+      const is_participant = await check_participant( _id, email );
+      const is_owner       = sub === meeting.owner_id.toString();
+
+      if ( !( is_participant || is_owner ) ) {
         return res.status( 403 ).send('unauthorized');
       }
 
@@ -234,12 +251,15 @@ module.exports = {
 
   async getParticipants( req, res ) {
     try {
-      const { _id }    = req.params;
-      const subject_id = req.credentials.sub;
+      const { _id }        = req.params;
+      const { email, sub } = req.credentials;
 
       const meeting = await Meeting.findOne({ _id });
 
-      if ( subject_id !== meeting.owner_id.toString() ) {
+      const is_participant = await check_participant( _id, email );
+      const is_owner       = sub === meeting.owner_id.toString();
+
+      if ( !( is_participant || is_owner ) ) {
         return res.status( 403 ).send('unauthorized');
       }
 

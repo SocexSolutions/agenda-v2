@@ -28,7 +28,7 @@ describe( 'api/lib/controllers/takeaway', () => {
   beforeEach( async() => {
     client.defaults.headers.common['Authorization'] = this.user.token;
 
-    await dbUtils.clean();
+    await dbUtils.clean([ 'takeaways', 'topics' ]);
 
     const fake = topicFaker();
 

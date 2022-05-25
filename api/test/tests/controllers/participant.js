@@ -40,7 +40,7 @@ describe( 'controllers/participant', () => {
   });
 
   beforeEach( async() => {
-    await dbUtils.clean();
+    await dbUtils.clean([ 'participants' ]);
   });
 
   after( async() => {
