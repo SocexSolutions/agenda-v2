@@ -14,16 +14,13 @@ module.exports = {
    */
   get: async( req, res ) => {
     try {
-      const { _id } = req.params;
+      const { _id }        = req.params;
+      const { sub, email } = req.credentials;
 
       const meeting = await Meeting.findOne({ _id });
 
-      const is_participant = await check_participant(
-        _id,
-        req.credentials.email
-      );
-
-      const is_owner = req.credentials.sub === meeting.owner_id.toString();
+      const is_participant = await check_participant( _id, email );
+      const is_owner       = sub === meeting.owner_id.toString();
 
       if ( !( is_participant || is_owner ) ) {
         return res.status( 403 ).send('unauthorized');
@@ -44,12 +41,12 @@ module.exports = {
   create: async( req, res ) => {
     try {
       const { name, date } = req.body;
-      const subject_id     = req.credentials.sub;
+      const { sub }        = req.credentials;
 
       const meeting = await Meeting.create({
         name,
         date,
-        owner_id: subject_id
+        owner_id: sub
       });
 
       res.status( 200 ).send( meeting );
@@ -231,12 +228,15 @@ module.exports = {
 
   async getTopics( req, res ) {
     try {
-      const { _id }    = req.params;
-      const subject_id = req.credentials.sub;
+      const { _id }        = req.params;
+      const { sub, email } = req.credentials;
 
       const meeting = await Meeting.findOne({ _id });
 
-      if ( subject_id !== meeting.owner_id.toString() ) {
+      const is_participant = await check_participant( _id, email );
+      const is_owner       = sub === meeting.owner_id.toString();
+
+      if ( !( is_participant || is_owner ) ) {
         return res.status( 403 ).send('unauthorized');
       }
 
@@ -251,12 +251,15 @@ module.exports = {
 
   async getParticipants( req, res ) {
     try {
-      const { _id }    = req.params;
-      const subject_id = req.credentials.sub;
+      const { _id }        = req.params;
+      const { email, sub } = req.credentials;
 
       const meeting = await Meeting.findOne({ _id });
 
-      if ( subject_id !== meeting.owner_id.toString() ) {
+      const is_participant = await check_participant( _id, email );
+      const is_owner       = sub === meeting.owner_id.toString();
+
+      if ( !( is_participant || is_owner ) ) {
         return res.status( 403 ).send('unauthorized');
       }
 
