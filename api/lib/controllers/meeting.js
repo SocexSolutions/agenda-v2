@@ -1,25 +1,13 @@
-const mongoose    = require('mongoose');
-const Meeting     = require('../models/meeting');
-const Topic       = require('../models/topic.js');
-const User        = require('../models/user');
-const Participant = require('../models/participant');
-const ObjectID    = require('mongoose').Types.ObjectId;
-const log         = require('@starryinternet/jobi');
+const mongoose          = require('mongoose');
+const Meeting           = require('../models/meeting');
+const Topic             = require('../models/topic.js');
+const User              = require('../models/user');
+const Participant       = require('../models/participant');
+const check_participant = require('../auth/check-participant');
+const ObjectID          = require('mongoose').Types.ObjectId;
+const log               = require('@starryinternet/jobi');
 
 module.exports = {
-  /**
-   * Retrieve all meetings
-   */
-  index: async( req, res ) => {
-    try {
-      const meetings = await Meeting.find({});
-      res.status( 200 ).send( meetings );
-    } catch ( error ) {
-      log.error( 'Meeting index failed: ' + error.message );
-      res.status( 500 ).send( error.message );
-    }
-  },
-
   /**
    * Get a meeting
    * @param {String} req.params._id - meeting id
@@ -29,6 +17,17 @@ module.exports = {
       const { _id } = req.params;
 
       const meeting = await Meeting.findOne({ _id });
+
+      const is_participant = await check_participant(
+        _id,
+        req.credentials.email
+      );
+
+      const is_owner = req.credentials.sub === meeting.owner_id.toString();
+
+      if ( !( is_participant || is_owner ) ) {
+        return res.status( 403 ).send('unauthorized');
+      }
 
       res.status( 200 ).send( meeting );
     } catch ( err ) {

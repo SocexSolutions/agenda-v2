@@ -1,6 +1,5 @@
 const log      = require('@starryinternet/jobi');
 const Ui       = require('../models/ui');
-const ObjectID = require('mongoose').Types.ObjectId;
 
 module.exports = {
   get: async( req, res ) => {

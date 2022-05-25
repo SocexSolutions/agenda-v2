@@ -47,36 +47,36 @@ describe( 'controllers/meeting', () => {
     await db.disconnect();
   });
 
-  describe( '#index', () => {
-
-    it( 'should fetch all meetings', async() => {
-      const meetings = Array.from({ length: 3 }).map( () => {
-        return meetingFaker();
-      });
-
-      await Meeting.insertMany( meetings );
-
-      const found = await client.get('/meeting');
-
-      assert.strictEqual( found.data.length, 3 );
-    });
-
-  });
-
   describe( '#get', () => {
 
     it( 'should fetch a meeting', async() => {
-      const meeting = meetingFaker({ name: 'meeting 1' });
+      const meeting = meetingFaker({
+        name: 'meeting 1',
+        owner_id: this.user._id
+      });
 
       const created = await Meeting.create( meeting );
-
-      await Meeting.create({ ...meeting, _id: new ObjectID });
 
       const { data: res } = await client.get( `/meeting/${ created._id }` );
 
       assert.strictEqual( res.name, created.name );
       assert.strictEqual( res._id, created._id.toString() );
       assert.strictEqual( res.date, created.date );
+    });
+
+    it( 'should 403 if not meeting owner or participant', async() => {
+      const meeting = meetingFaker();
+
+      const created = await Meeting.create( meeting );
+
+      try {
+        await client.get( `/meeting/${ created._id }` );
+
+        assert.fail('accepted unrelated user');
+      } catch ( err ) {
+        assert.strictEqual( err.response.status, 403 );
+        assert.strictEqual( err.response.data, 'unauthorized' );
+      }
     });
 
   });
