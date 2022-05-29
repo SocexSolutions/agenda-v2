@@ -1,17 +1,27 @@
-const log      = require('@starryinternet/jobi');
-const Takeaway = require('../models/takeaway');
+const log               = require('@starryinternet/jobi');
+const Takeaway          = require('../models/takeaway');
+const Topic             = require('../models/topic');
+const check_participant = require('../auth/check-participant');
 
 module.exports = {
   create: async( req, res ) => {
     try {
       const { name, description, topic_id } = req.body;
-      const subject_id = req.credentials.sub;
+      const { sub, user } = req.credentials;
+
+      const { meeting_id } = await Topic.findOne({ _id: topic_id });
+
+      const { authorized } = await check_participant( meeting_id, user );
+
+      if ( !authorized ) {
+        return res.status( 403 ).send('unauthorized');
+      }
 
       const takeaway = await Takeaway.create({
         name,
         description,
         topic_id,
-        owner_id: subject_id
+        owner_id: sub
       });
 
       res.status( 201 ).send( takeaway );

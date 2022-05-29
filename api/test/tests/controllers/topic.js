@@ -40,6 +40,7 @@ describe( 'api/lib/controllers/topic', () => {
   });
 
   describe( '#create', () => {
+
     const path = '/topic';
 
     it( 'should create topic with valid inputs', async() => {

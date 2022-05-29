@@ -1,5 +1,5 @@
-const log      = require('@starryinternet/jobi');
-const Ui       = require('../models/ui');
+const log = require('@starryinternet/jobi');
+const Ui  = require('../models/ui');
 
 module.exports = {
   get: async( req, res ) => {
