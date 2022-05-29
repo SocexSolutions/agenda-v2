@@ -42,6 +42,8 @@ module.exports = {
       const { name, date } = req.body;
       const { sub }        = req.credentials;
 
+      
+
       const meeting = await Meeting.create({
         name,
         date,

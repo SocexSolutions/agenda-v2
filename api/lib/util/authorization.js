@@ -8,11 +8,11 @@ const mongoose    = require('mongoose');
  * @param {ObjectId} meeting_id
  * @param {Object} credentials
  *
- * @typedef {Object} AuthorizationResult
+ * @typedef {Object} ParticipantCheckResult
  * @property {Boolean} authorized - user is authorized
  * @property {Meeting} [meeting] - meeting returned for utility
  *
- * @returns {Promise<AuthorizationResult>}
+ * @returns {Promise<ParticipantCheckResult>}
  */
 module.exports.check_participant = async( meeting_id, credentials ) => {
   const { user, participant } = credentials;
@@ -50,13 +50,13 @@ module.exports.check_participant = async( meeting_id, credentials ) => {
  *
  * @param {ObjectId} _id - id of item to check
  * @param {String} collection_name - collection of item to check
- * @param {Object} credentials
+ * @param {Object} credentials - req.credentials
  *
- * @typedef {Object} AuthorizationResult
+ * @typedef {Object} OwnerCheckResult
  * @property {Boolean} authorized - user or participant is authorized
  * @property {Meeting} [document] - document owned by user returned for utility
  *
- * @returns {Promise<AuthorizationResult>}
+ * @returns {Promise<OwnerCheckResult>}
  */
 module.exports.check_owner = async( _id, collection_name, credentials ) => {
   const { user, participant } = credentials;
@@ -72,4 +72,15 @@ module.exports.check_owner = async( _id, collection_name, credentials ) => {
   }
 
   return { authorized: false };
+};
+
+/**
+ * Check if a subject is a user
+ *
+ * @param credentials - req.credentials
+ *
+ * @returns {<UserCheckResult>}
+ */
+module.exports.check_user = ( credentials ) => {
+  return { authorized: !!credentials?.usr };
 };

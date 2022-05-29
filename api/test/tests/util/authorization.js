@@ -137,4 +137,20 @@ describe( module_path, () => {
 
   });
 
+  describe( '#check_user', () => {
+
+    it( 'should return authorized if user', () => {
+      const { authorized } = this.module.check_user({ usr: true });
+
+      assert.isTrue( authorized );
+    });
+
+    it( 'should return unauthorized if not user', () => {
+      const { authorized } = this.module.check_user();
+
+      assert.isFalse( authorized );
+    });
+
+  });
+
 });
