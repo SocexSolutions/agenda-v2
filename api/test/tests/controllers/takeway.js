@@ -1,11 +1,12 @@
-const { assert }    = require('chai');
-const dbUtils       = require('../../utils/db');
-const db            = require('../../../lib/db');
-const api           = require('../../utils/api');
-const client        = require('../../utils/client');
-const takeawayFaker = require('../../fakes/takeaway');
-const topicFaker    = require('../../fakes/topic');
-const Takeaway      = require('../../../lib/models/takeaway');
+const { assert }   = require('chai');
+const dbUtils      = require('../../utils/db');
+const db           = require('../../../lib/db');
+const api          = require('../../utils/api');
+const client       = require('../../utils/client');
+const fakeTakeaway = require('../../fakes/takeaway');
+const topicFaker   = require('../../fakes/topic');
+const meetingFaker = require('../../fakes/meeting');
+const Takeaway     = require('../../../lib/models/takeaway');
 
 describe( 'api/lib/controllers/takeaway', () => {
 
@@ -30,11 +31,14 @@ describe( 'api/lib/controllers/takeaway', () => {
 
     await dbUtils.clean([ 'takeaways', 'topics' ]);
 
-    const fake = topicFaker();
+    this.meeting = ( await client.post(
+      '/meeting',
+      meetingFaker({ owner_id: this.user._id })
+    ) ).data;
 
     this.topic = ( await client.post(
       '/topic',
-      fake
+      topicFaker({ owner_id: this.user._id, meeting_id: this.meeting._id })
     ) ).data;
   });
 
@@ -44,25 +48,28 @@ describe( 'api/lib/controllers/takeaway', () => {
   });
 
   describe( '#create', () => {
+
     const path = '/takeaway';
 
-    it( 'should create takeaway with valid topic', async() => {
-      const takeaway = takeawayFaker({
-        topic_id: this.topic._id,
-        owner_id: this.user.user._id
-      });
+    it( 'should create takeaway if meeting owner', async() => {
+      const takeaway = fakeTakeaway({ topic_id: this.topic._id });
 
       const res = await client.post( path, takeaway );
 
       assert.strictEqual( res.status, 201 );
       assert.deepInclude(
         res.data,
-        { ...takeaway, owner_id: takeaway.owner_id.toString() }
+        { ...takeaway, owner_id: this.user.user._id.toString() }
       );
 
       const created = await Takeaway.find({ topic_id: this.topic._id });
 
-      assert.strictEqual( created[ 0 ].owner_id.toString(), takeaway.owner_id );
+
+      assert.equal(
+        created[ 0 ].owner_id.toString(),
+        this.user.user._id.toString(),
+        'wrong user id'
+      );
       assert.deepInclude(
         created[ 0 ],
         {
@@ -73,6 +80,18 @@ describe( 'api/lib/controllers/takeaway', () => {
       );
     });
 
+    it( 'should 403 if not meeting owner or participant', async() => {
+      const takeaway = fakeTakeaway({ topic_id: this.topic._id });
+
+      client.defaults.headers.common['Authorization'] = this.user2.token;
+
+      try {
+        await client.post( path, takeaway );
+      } catch ( err ) {
+        assert.equal( err.response.status, 403 );
+      }
+    });
+
   });
 
   describe( '#update', () => {
@@ -80,11 +99,13 @@ describe( 'api/lib/controllers/takeaway', () => {
     const path = '/takeaway';
 
     beforeEach( async() => {
-      const fake = takeawayFaker();
-
       this.takeaway = ( await client.post(
-        path, fake )
-      ).data;
+        path,
+        fakeTakeaway({
+          topic_id: this.topic._id,
+          owner_id: this.user._id
+        })
+      ) ).data;
     });
 
     it( 'should update a takeaway', async() => {
@@ -134,7 +155,7 @@ describe( 'api/lib/controllers/takeaway', () => {
     const path = '/takeaway';
 
     it( 'should delete takeaway', async() => {
-      const takeaway = takeawayFaker({ topic_id: this.topic._id });
+      const takeaway = fakeTakeaway({ topic_id: this.topic._id });
       const resTakeaway = await client.post( path, takeaway );
 
       const res = await client.delete( path + '/' + resTakeaway.data._id );
@@ -151,7 +172,7 @@ describe( 'api/lib/controllers/takeaway', () => {
     });
 
     it( 'should 403 if not takeaway owner', async() => {
-      const takeaway = takeawayFaker({ topic_id: this.topic._id });
+      const takeaway = fakeTakeaway({ topic_id: this.topic._id });
       const resTakeaway = await client.post( path, takeaway );
 
       client.defaults.headers.common['Authorization'] = this.user2.token;

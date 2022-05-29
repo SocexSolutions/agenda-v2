@@ -5,10 +5,10 @@ const Takeaway = require('../models/takeaway');
 module.exports = {
   create: async( req, res ) => {
     const newTopic = req.body;
-    const sub_id = req.credentials.sub;
+    const { user } = req.credentials;
 
     try {
-      const topic = await Topic.create({ ...newTopic, sub_id });
+      const topic = await Topic.create({ ...newTopic, owner_id: user._id });
 
       res.status( 201 ).send( topic );
     } catch ( error ) {

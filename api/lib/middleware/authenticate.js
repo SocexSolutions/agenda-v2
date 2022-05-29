@@ -21,9 +21,9 @@ const authenticate = async( req, res, next ) => {
       }
     );
 
-    const { email } = await User.findOne({ _id: decoded.sub });
+    const user = await User.findOne({ _id: decoded.sub });
 
-    req.credentials = { ...decoded, email };
+    req.credentials = { ...decoded, user };
 
     next();
 

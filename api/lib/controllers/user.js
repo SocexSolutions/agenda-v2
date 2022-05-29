@@ -144,12 +144,11 @@ module.exports = {
 
   async getOwnedMeetings( req, res ) {
     try {
-      const { _id } = req.params;
+      const { user } = req.credentials;
 
-      const meetings = await Meeting.find({ owner_id: _id });
+      const meetings = await Meeting.find({ owner_id: user._id });
 
       res.status( 200 ).json( meetings );
-
     } catch ( error ) {
       res.status( 500 ).send( error );
     }
@@ -166,7 +165,9 @@ module.exports = {
           new Error('Username already exists')
         );
 
-      } else { res.status( 200 ).send(); }
+      } else {
+        res.status( 200 ).send();
+      }
 
     } catch ( err ) {
       log.error( err.message );
@@ -184,7 +185,9 @@ module.exports = {
           new Error('Email already exists')
         );
 
-      } else { res.status( 200 ).send(); }
+      } else {
+        res.status( 200 ).send();
+      }
 
     } catch ( err ) {
       log.error( err.message );
