@@ -1,24 +1,24 @@
-const rewire       = require('rewire');
 const sinon        = require('sinon');
 const path         = require('path');
 const fs           = require('fs');
 const JsonWebToken = require('jsonwebtoken');
 const client       = require('../../utils/client');
-const dbUtils      = require('../../utils/db');
+const db_utils     = require('../../utils/db');
 const db           = require('../../../lib/db');
 const api          = require('../../utils/api');
+const lib_rewire   = require('../../utils/lib-rewire');
 
-const modulePath = '../../../lib/middleware/authenticate';
+const module_path = 'lib/middleware/authenticate';
 
 const pathToKey = path.join( __dirname, '../../../keys/id_rsa_priv.pem' );
 const PRIV_KEY   = fs.readFileSync( pathToKey, 'utf8' );
 
-describe( 'lib/middleware/authenticate', () => {
+describe( module_path, () => {
 
   before( async() => {
     await api.start();
     await db.connect();
-    await dbUtils.clean();
+    await db_utils.clean();
 
     const res = await client.post(
       '/user/register',
@@ -35,7 +35,7 @@ describe( 'lib/middleware/authenticate', () => {
   });
 
   beforeEach( () => {
-    this.module = rewire( modulePath );
+    this.module = lib_rewire( module_path );
   });
 
   it( 'should accept an valid auth token', async() => {
