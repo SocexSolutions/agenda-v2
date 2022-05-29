@@ -1,6 +1,6 @@
 const express  = require('express');
 const cors     = require('cors');
-const mongoose = require( "mongoose" ); // eslint-disable-line
+const mongoose = require('mongoose'); // eslint-disable-line
 const db       = require('./db');
 const router   = require('./routes');
 const jobi     = require('@starryinternet/jobi');

@@ -1,12 +1,12 @@
-const { assert }    = require('chai');
-const dbUtils       = require('../../utils/db');
-const db            = require('../../../lib/db');
-const api           = require('../../utils/api');
-const client        = require('../../utils/client');
-const Topic         = require('../../../lib/models/topic');
-const Takeaway      = require('../../../lib/models/takeaway');
-const topicFaker    = require('../../fakes/topic');
-const takeawayFaker = require('../../fakes/takeaway');
+const { assert }   = require('chai');
+const dbUtils      = require('../../utils/db');
+const db           = require('../../../lib/db');
+const api          = require('../../utils/api');
+const client       = require('../../utils/client');
+const Topic        = require('../../../lib/models/topic');
+const Takeaway     = require('../../../lib/models/takeaway');
+const fakeTopic    = require('../../fakes/topic');
+const fakeTakeaway = require('../../fakes/takeaway');
 
 describe( 'api/lib/controllers/topic', () => {
 
@@ -44,7 +44,7 @@ describe( 'api/lib/controllers/topic', () => {
     const path = '/topic';
 
     it( 'should create topic with valid inputs', async() => {
-      const topic = topicFaker();
+      const topic = fakeTopic();
 
       const res = await client.post( path, topic );
 
@@ -64,7 +64,7 @@ describe( 'api/lib/controllers/topic', () => {
     });
 
     it( 'should create topic without likes', async() => {
-      const topic = topicFaker({ likes: [] });
+      const topic = fakeTopic({ likes: [] });
 
       const res = await client.post( path, topic );
 
@@ -84,7 +84,7 @@ describe( 'api/lib/controllers/topic', () => {
     });
 
     it( 'should not create topic without name', async() => {
-      const topicWithoutName = topicFaker({ name: '' });
+      const topicWithoutName = fakeTopic({ name: '' });
 
       const errorRegex = /^Topic validation failed: name/;
 
@@ -105,7 +105,7 @@ describe( 'api/lib/controllers/topic', () => {
     });
 
     it( 'should not create topic without meeting_id', async() => {
-      const topicWithoutMeetingId = topicFaker({ meeting_id: '' });
+      const topicWithoutMeetingId = fakeTopic({ meeting_id: '' });
       const errorRegex = /^Topic validation failed: meeting_id/;
 
       try {
@@ -130,7 +130,7 @@ describe( 'api/lib/controllers/topic', () => {
 
     beforeEach( async() => {
       this.topic = await Topic.create(
-        topicFaker({ owner_id: user.user._id })
+        fakeTopic({ owner_id: user.user._id })
       );
     });
 
@@ -185,7 +185,7 @@ describe( 'api/lib/controllers/topic', () => {
   describe( '#like', () => {
 
     beforeEach( async() => {
-      this.topic = await Topic.create( topicFaker() );
+      this.topic = await Topic.create( fakeTopic() );
     });
 
     it( 'should add a topic like', async() => {
@@ -221,7 +221,7 @@ describe( 'api/lib/controllers/topic', () => {
   describe( '#status', () => {
 
     beforeEach( async() => {
-      this.topic = await Topic.create( topicFaker() );
+      this.topic = await Topic.create( fakeTopic() );
     });
 
     it( 'should set the topics status', async() => {
@@ -243,11 +243,11 @@ describe( 'api/lib/controllers/topic', () => {
   describe( '#getTakeaways', () => {
 
     it( 'should get topic\'s takeaways', async() => {
-      const topic = topicFaker();
+      const topic = fakeTopic();
 
       const insertedTopic = await Topic.create( topic );
 
-      const takeaway = takeawayFaker({
+      const takeaway = fakeTakeaway({
         topic_id: insertedTopic._id.toString(),
         owner_id: user.user._id
       });

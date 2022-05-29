@@ -1,11 +1,11 @@
-const mongoose          = require('mongoose');
-const Meeting           = require('../models/meeting');
-const Topic             = require('../models/topic.js');
-const User              = require('../models/user');
-const Participant       = require('../models/participant');
-const check_participant = require('../auth/check-participant');
-const ObjectID          = require('mongoose').Types.ObjectId;
-const log               = require('@starryinternet/jobi');
+const mongoose              = require('mongoose');
+const Meeting               = require('../models/meeting');
+const Topic                 = require('../models/topic.js');
+const User                  = require('../models/user');
+const Participant           = require('../models/participant');
+const { check_participant } = require('../util/authorization');
+const ObjectID              = require('mongoose').Types.ObjectId;
+const log                   = require('@starryinternet/jobi');
 
 module.exports = {
   /**
@@ -15,9 +15,11 @@ module.exports = {
   get: async( req, res ) => {
     try {
       const { _id }  = req.params;
-      const { user } = req.credentials;
 
-      const { authorized, meeting } = await check_participant( _id, user );
+      const { authorized, meeting } = await check_participant(
+        _id,
+        req.credentials
+      );
 
       if ( !authorized ) {
         return res.status( 403 ).send('unauthorized');
@@ -226,9 +228,11 @@ module.exports = {
   async getTopics( req, res ) {
     try {
       const { _id }  = req.params;
-      const { user } = req.credentials;
 
-      const { authorized } = await check_participant( _id, user );
+      const { authorized } = await check_participant(
+        _id,
+        req.credentials
+      );
 
       if ( !authorized ) {
         return res.status( 403 ).send('unauthorized');
@@ -246,9 +250,11 @@ module.exports = {
   async getParticipants( req, res ) {
     try {
       const { _id }  = req.params;
-      const { user } = req.credentials;
 
-      const { authorized } = await check_participant( _id, user );
+      const { authorized } = await check_participant(
+        _id,
+        req.credentials
+      );
 
       if ( !authorized ) {
         return res.status( 403 ).send('unauthorized');

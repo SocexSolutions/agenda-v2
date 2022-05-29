@@ -1,17 +1,17 @@
 const sinon      = require('sinon');
-const rewire     = require('rewire');
 const { assert } = require('chai');
 const router     = require('express').Router();
 const api        = require('../../utils/api');
+const lib_rewire = require('../../utils/lib-rewire');
 const client     = require('../../utils/client');
 
-const modulePath = '../../../lib/middleware/req-logger';
+const module_path = 'lib/middleware/req-logger';
 
 
 describe( 'lib/middleware/req-logger', () => {
 
   beforeEach( () => {
-    this.module = rewire( modulePath );
+    this.module = lib_rewire( module_path );
   });
 
   afterEach( () => {

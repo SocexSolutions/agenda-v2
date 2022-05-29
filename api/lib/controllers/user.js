@@ -1,7 +1,7 @@
 const User      = require('../models/user');
 const Meeting   = require('../models/meeting');
-const PassUtils = require('../auth/password');
-const JWTUtils  = require('../auth/jwt');
+const PassUtils = require('../util/password');
+const JWTUtils  = require('../util/jwt');
 const log       = require('@starryinternet/jobi');
 
 
@@ -37,7 +37,7 @@ module.exports = {
 
       const user = await User.create( newUser );
 
-      const { token, expiresIn } = JWTUtils.issueJWT( user );
+      const { token, expiresIn } = JWTUtils.issueJWT( user, true );
 
       return res.status( 201 ).json({
         success: true,
@@ -78,7 +78,7 @@ module.exports = {
       );
 
       if ( valid ) {
-        const { token, expiresIn } = JWTUtils.issueJWT( user );
+        const { token, expiresIn } = JWTUtils.issueJWT( user, true );
 
         return res.status( 200 ).json({
           success: true,
@@ -112,7 +112,7 @@ module.exports = {
     try {
       const token = req.headers.authorization;
 
-      const decoded = JWTUtils.verifyJwt( token );
+      const decoded = JWTUtils.verifyJWT( token );
 
       const user = await User.findById( decoded.sub );
 
