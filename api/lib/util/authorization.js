@@ -1,6 +1,7 @@
 const Participant = require('../models/participant');
 const Meeting     = require('../models/meeting');
 const mongoose    = require('mongoose');
+const ObjectId    = require('mongoose').Types.ObjectId;
 
 /**
  * Check if a user or participant is a participant or owner of a meeting
@@ -48,7 +49,7 @@ module.exports.check_participant = async( meeting_id, credentials ) => {
  * Check if a user or participant is the owner of a document by comparing the
  * owner_id with the subject id
  *
- * @param {ObjectId} _id - id of item to check
+ * @param {ObjectId|String} _id - id of item to check
  * @param {String} collection_name - collection of item to check
  * @param {Object} credentials - req.credentials
  *
@@ -58,26 +59,31 @@ module.exports.check_participant = async( meeting_id, credentials ) => {
  *
  * @returns {Promise<OwnerCheckResult>}
  */
-module.exports.check_owner = async( _id, collection_name, credentials ) => {
+module.exports.check_owner = async( _id, collection_name, credentials, res ) => {
   const { user, participant } = credentials;
 
   const subject_id = user?._id || participant._id;
 
   const collection = mongoose.connection.collection( collection_name );
 
-  const document = await collection.findOne({ _id });
+  const id = _id instanceof ObjectId ? _id : new ObjectId( _id );
+
+  const document = await collection.findOne({ _id: id });
 
   if ( document.owner_id.toString() === subject_id.toString() ) {
     return { authorized: true, document };
   }
 
-  return { authorized: false };
+  return res.status( 403 ).send('unauthorized');
 };
 
 /**
  * Check if a subject is a user
  *
  * @param credentials - req.credentials
+ *
+ * @typedef {Object} UserCheckResult
+ * @property {Boolean} authorized - subject is user
  *
  * @returns {<UserCheckResult>}
  */

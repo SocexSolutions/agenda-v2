@@ -1,28 +1,13 @@
-const { assert }  = require('chai');
-const dbUtils     = require('../../utils/db');
-const db          = require('../../../lib/db');
-const api         = require('../../utils/api');
-const ObjectID    = require('mongoose').Types.ObjectId;
-const client      = require('../../utils/client');
-const Meeting     = require('../../../lib/models/meeting');
-const Participant = require('../../../lib/models/participant');
+const { assert }      = require('chai');
+const dbUtils         = require('../../utils/db');
+const db              = require('../../../lib/db');
+const api             = require('../../utils/api');
+const client          = require('../../utils/client');
+const Meeting         = require('../../../lib/models/meeting');
+const Participant     = require('../../../lib/models/participant');
+const fakeParticipant = require('../../fakes/participant');
+const fakeMeeting     = require('../../fakes/meeting');
 
-const meeting1 = {
-  name: 'meeting1',
-  owner_id: new ObjectID(),
-  date: 'tues'
-};
-
-const meeting2 = {
-  name: 'meeting2',
-  owner_id: new ObjectID(),
-  date: 'tuesdy'
-};
-
-const participant = {
-  email: 'lt@linux.com',
-  meeting_id: new ObjectID()
-};
 
 describe( 'controllers/participant', () => {
 
@@ -33,14 +18,21 @@ describe( 'controllers/participant', () => {
 
     const res = await client.post(
       '/user/register',
-      { username: 'user', password: 'pass', email: 'email' }
+      { email: 'email', password: 'pass', username: 'username' }
     );
 
-    client.defaults.headers.common['Authorization'] = res.data.token;
+    this.user  = res.data.user;
+    this.token = res.data.token;
   });
 
   beforeEach( async() => {
-    await dbUtils.clean([ 'participants' ]);
+    await dbUtils.clean([ 'participants', 'meetings' ]);
+
+    client.defaults.headers.common['Authorization'] = this.token;
+
+    this.meeting = await Meeting.create(
+      fakeMeeting({ owner_id: this.user._id })
+    );
   });
 
   after( async() => {
@@ -49,59 +41,53 @@ describe( 'controllers/participant', () => {
   });
 
   describe( '#create', () => {
+
     const path = '/participant';
 
     it( 'should create a participant with valid inputs', async() => {
+      const participant = fakeParticipant({
+        meeting_id: this.meeting._id
+      });
+
       const res = await client.post( path, participant );
 
-      assert(
-        res.status === 201,
-        'failed to create participant with valid args'
-      );
+      assert.equal( res.status, 201 );
+      assert.equal( res.data.email, participant.email );
+      assert.equal( res.data.meeting_id, participant.meeting_id );
 
-      assert(
-        res.data.email === participant.email,
-        'created participant with incorrect email'
+      const found = await Participant.findOne({ _id: res.data._id });
+
+      assert.equal( found.email, participant.email );
+      assert.equal(
+        found.meeting_id.toString(),
+        participant.meeting_id.toString()
       );
     });
 
-    it( 'should not create a participant without email', async() => {
-      const invalidParticipant = { ...participant, email: '' };
-      const errorRegex = /^Participant validation failed: email/;
+    it( 'should 403 if not meeting owner', async() => {
+      const created = await Meeting.create( fakeMeeting() );
+
+      const participant = fakeParticipant({
+        meeting_id: created._id
+      });
 
       try {
-        await client.post( path, invalidParticipant );
-
-        throw new Error('accepted invalid email');
+        await client.post( path, participant );
+        assert.fail();
       } catch ( err ) {
-        assert(
-          errorRegex.test( err.response.data.message ),
-          JSON.stringify( err.response.data.message )
-        );
+        assert.equal( err.response.status, 403 );
       }
     });
 
-    it( 'should not create a participant without meeting_id', async() => {
-      const invalidParticipant = { ...participant, meeting_id: '' };
-      const errorRegex = /^Participant validation failed: meeting_id/;
-
-      try {
-        await client.post( path, invalidParticipant );
-
-        throw new Error('accepted invalid email');
-      } catch ( err ) {
-        assert(
-          errorRegex.test( err.response.data.message ),
-          JSON.stringify( err.response.data.message )
-        );
-      }
-    });
   });
 
   describe( '#getMeetings', () => {
 
     it( 'should return meetings', async() => {
-      const res = await Meeting.insertMany([ meeting1, meeting2 ]);
+      const res = await Meeting.insertMany([
+        fakeMeeting(),
+        fakeMeeting()
+      ]);
 
       const participants = [];
 
