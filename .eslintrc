@@ -142,7 +142,7 @@
     ],
     "max-len": [
       2,
-      80,
+      100,
       2
     ],
     "space-infix-ops": [
