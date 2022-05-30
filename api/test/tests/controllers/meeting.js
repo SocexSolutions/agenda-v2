@@ -1,16 +1,16 @@
-const chai             = require('chai');
-const chaiSubset       = require('chai-subset');
-const dbUtils          = require('../../utils/db');
-const db               = require('../../../lib/db');
-const api              = require('../../utils/api');
-const client           = require('../../utils/client');
-const ObjectID         = require('mongoose').Types.ObjectId;
-const Meeting          = require('../../../lib/models/meeting');
-const Participant      = require('../../../lib/models/participant');
-const Topic            = require('../../../lib/models/topic');
-const topicFaker       = require('../../fakes/topic');
-const participantFaker = require('../../fakes/participant');
-const meetingFaker     = require('../../fakes/meeting');
+const chai            = require('chai');
+const chaiSubset      = require('chai-subset');
+const dbUtils         = require('../../utils/db');
+const db              = require('../../../lib/db');
+const api             = require('../../utils/api');
+const client          = require('../../utils/client');
+const ObjectID        = require('mongoose').Types.ObjectId;
+const Meeting         = require('../../../lib/models/meeting');
+const Participant     = require('../../../lib/models/participant');
+const Topic           = require('../../../lib/models/topic');
+const fakeTopic       = require('../../fakes/topic');
+const fakeParticipant = require('../../fakes/participant');
+const fakeMeeting     = require('../../fakes/meeting');
 
 chai.use( chaiSubset );
 
@@ -28,12 +28,21 @@ describe( 'lib/controllers/meeting', () => {
       { username: 'user', password: 'pass', email: 'email' }
     );
 
-    this.user = res.data.user;
+    this.user  = res.data.user;
+    this.token = res.data.token;
 
-    client.defaults.headers.common['Authorization'] = res.data.token;
+    const res2 = await client.post(
+      '/user/register',
+      { username: 'user2', password: 'pass2', email: 'email2' }
+    );
+
+    this.user2  = res2.data.user;
+    this.token2 = res2.data.token;
   });
 
   beforeEach( async() => {
+    client.defaults.headers.common['Authorization'] = this.token;
+
     await dbUtils.clean([
       'participants',
       'topics',
@@ -50,7 +59,7 @@ describe( 'lib/controllers/meeting', () => {
   describe( '#get', () => {
 
     it( 'should fetch a meeting', async() => {
-      const meeting = meetingFaker({
+      const meeting = fakeMeeting({
         name: 'meeting 1',
         owner_id: this.user._id
       });
@@ -65,7 +74,7 @@ describe( 'lib/controllers/meeting', () => {
     });
 
     it( 'should 403 if not meeting owner or participant', async() => {
-      const meeting = meetingFaker();
+      const meeting = fakeMeeting();
 
       const created = await Meeting.create( meeting );
 
@@ -84,7 +93,7 @@ describe( 'lib/controllers/meeting', () => {
   describe( '#create', () => {
 
     it( 'should create a meeting', async() => {
-      const meeting = meetingFaker({ owner_id: this.user._id });
+      const meeting = fakeMeeting({ owner_id: this.user._id });
 
       const { data: res } = await client.post( `/meeting`, meeting );
 
@@ -105,7 +114,7 @@ describe( 'lib/controllers/meeting', () => {
   describe( '#update', () => {
 
     it( 'should update a meeting', async() => {
-      const meeting = meetingFaker({ owner_id: this.user._id });
+      const meeting = fakeMeeting({ owner_id: this.user._id });
 
       const created = await Meeting.create( meeting );
 
@@ -129,7 +138,7 @@ describe( 'lib/controllers/meeting', () => {
     });
 
     it( 'should 403 if not meeting owner', async() => {
-      const meeting = meetingFaker();
+      const meeting = fakeMeeting();
 
       const created = await Meeting.create( meeting );
 
@@ -151,16 +160,16 @@ describe( 'lib/controllers/meeting', () => {
   describe( '#aggregate', () => {
 
     it( 'should fetch meeting with participants and topics', async() => {
-      const meeting = meetingFaker({ owner_id: this.user._id });
+      const meeting = fakeMeeting({ owner_id: this.user._id });
 
       const { _id } = await Meeting.create( meeting );
 
       const topics = Array.from({ length: 3 }).map( () => {
-        return topicFaker({ meeting_id: _id });
+        return fakeTopic({ meeting_id: _id });
       });
 
       const participants = Array.from({ length: 3 }).map( () => {
-        return participantFaker({ meeting_id: _id });
+        return fakeParticipant({ meeting_id: _id });
       });
 
       await Topic.insertMany( topics );
@@ -182,7 +191,7 @@ describe( 'lib/controllers/meeting', () => {
     });
 
     it( 'should 403 if not meeting owner', async() => {
-      const meeting = meetingFaker();
+      const meeting = fakeMeeting();
 
       const { _id } = await Meeting.create( meeting );
 
@@ -200,7 +209,7 @@ describe( 'lib/controllers/meeting', () => {
   describe( '#aggregateSave', () => {
 
     it( 'should create meeting', async() => {
-      const meeting = meetingFaker({
+      const meeting = fakeMeeting({
         _id: new ObjectID,
         owner_id: this.user._id
       });
@@ -222,13 +231,13 @@ describe( 'lib/controllers/meeting', () => {
     });
 
     it( 'should create meeting with participants', async() => {
-      const meeting = meetingFaker({
+      const meeting = fakeMeeting({
         _id: new ObjectID,
         owner_id: this.user._id
       });
 
       const participants = Array.from({ length: 3 }).map( () => {
-        return participantFaker({ meeting_id: meeting._id });
+        return fakeParticipant({ meeting_id: meeting._id });
       });
 
       const { data } = await client.post(
@@ -249,12 +258,12 @@ describe( 'lib/controllers/meeting', () => {
     });
 
     it( 'should create meeting with topics', async() => {
-      const meeting = meetingFaker({
+      const meeting = fakeMeeting({
         _id: new ObjectID,
         owner_id: this.user._id
       });
 
-      const topic = topicFaker({ meeting_id: meeting._id });
+      const topic = fakeTopic({ meeting_id: meeting._id });
 
       const { data } = await client.post(
         '/meeting/aggregate',
@@ -277,7 +286,7 @@ describe( 'lib/controllers/meeting', () => {
     });
 
     it( 'should update a meeting', async() => {
-      const meeting = meetingFaker({ owner_id: this.user._id });
+      const meeting = fakeMeeting({ owner_id: this.user._id });
 
       const { _id } = await Meeting.create( meeting );
 
@@ -308,7 +317,7 @@ describe( 'lib/controllers/meeting', () => {
     });
 
     it( 'should update a meetings topics', async() => {
-      const meeting = meetingFaker({
+      const meeting = fakeMeeting({
         _id: new ObjectID,
         owner_id: this.user._id
       });
@@ -316,7 +325,7 @@ describe( 'lib/controllers/meeting', () => {
       const { _id } = await Meeting.create( meeting );
 
       const new_topic = ( await Topic.create(
-        topicFaker({ owner_id: this.user._id, meeting_id: _id })
+        fakeTopic({ owner_id: this.user._id, meeting_id: _id })
       ) )._doc;
 
       const topic = { ...new_topic };
@@ -345,11 +354,11 @@ describe( 'lib/controllers/meeting', () => {
     });
 
     it( 'should delete old meeting topics', async() => {
-      const meeting = meetingFaker({ owner_id: this.user._id });
+      const meeting = fakeMeeting({ owner_id: this.user._id });
 
       const { _id } = await Meeting.create( meeting );
 
-      const topic = topicFaker({ meeting_id: _id });
+      const topic = fakeTopic({ meeting_id: _id });
 
       await Topic.create( topic );
 
@@ -371,11 +380,11 @@ describe( 'lib/controllers/meeting', () => {
     });
 
     it( 'should delete old meeting participants', async() => {
-      const meeting = meetingFaker({ owner_id: this.user._id });
+      const meeting = fakeMeeting({ owner_id: this.user._id });
 
       const { _id } = await Meeting.create( meeting );
 
-      const participant = participantFaker({ meeting_id: _id });
+      const participant = fakeParticipant({ meeting_id: _id });
 
       await Participant.create( participant );
 
@@ -397,7 +406,7 @@ describe( 'lib/controllers/meeting', () => {
     });
 
     it( 'should 403 if not meeting owner', async() => {
-      const meeting = meetingFaker();
+      const meeting = fakeMeeting();
 
       const created = await Meeting.create( meeting );
 
@@ -414,6 +423,80 @@ describe( 'lib/controllers/meeting', () => {
         assert.strictEqual( err.response.status, 403 );
         assert.strictEqual( err.response.data, 'unauthorized' );
       }
+    });
+
+  });
+
+  describe( '#getTopics', () => {
+
+    beforeEach( async() => {
+      const meeting = fakeMeeting({
+        owner_id: this.user._id
+      });
+
+      this.meeting = await Meeting.create( meeting );
+    });
+
+    it( 'should return a meetings topics', async() => {
+      const topics = Array.from({ length: 3 }).map( () => {
+        return fakeTopic({ meeting_id: this.meeting._id });
+      });
+
+      await Topic.insertMany( topics );
+
+      const res = await client.get( `/meeting/${ this.meeting._id }/topics` );
+
+      assert.equal( res.status, 200 );
+      assert.equal( res.data.length, 3, 'didnt get topics' );
+    });
+
+    it( 'should 403 if not owner or participant', async() => {
+      client.defaults.headers.common['Authorization'] = this.token2;
+
+      await assert.isRejected(
+        client.get(
+          `/meeting/${ this.meeting._id }/topics`
+        ),
+        'Request failed with status code 403'
+      );
+    });
+
+  });
+
+  describe( '#getParticipants', () => {
+
+    beforeEach( async() => {
+      const meeting = fakeMeeting({
+        owner_id: this.user._id
+      });
+
+      this.meeting = await Meeting.create( meeting );
+    });
+
+    it( 'should get a meetings participants', async() => {
+      const participants = Array.from({ length: 3 }).map( () => {
+        return fakeParticipant({ meeting_id: this.meeting._id });
+      });
+
+      await Participant.insertMany( participants );
+
+      const res = await client.get(
+        `/meeting/${ this.meeting._id }/participants`
+      );
+
+      assert.equal( res.status, 200 );
+      assert.equal( res.data.length, 3 );
+    });
+
+    it( 'should 403 if not meeting owner or participant', async() => {
+      client.defaults.headers.common['Authorization'] = this.token2;
+
+      await assert.isRejected(
+        client.get(
+          `/meeting/${ this.meeting._id }/topics`
+        ),
+        'Request failed with status code 403'
+      );
     });
 
   });

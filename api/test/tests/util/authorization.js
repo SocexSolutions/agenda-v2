@@ -131,12 +131,12 @@ describe( modulePath, () => {
 
   describe( '#checkUser', () => {
 
-    it( 'should not throw if user', () => {
-      this.module.checkUser({ usr: true });
+    it( 'should not throw if user', async() => {
+      await this.module.checkUser({ usr: true });
     });
 
-    it( 'should return unauthorized if not user', () => {
-      assert.throws( this.module.checkUser );
+    it( 'should return unauthorized if not user', async() => {
+      await assert.isRejected( this.module.checkUser() );
     });
 
   });

@@ -4,7 +4,7 @@ const User        = require('../models/user');
 const Participant = require('../models/user');
 
 const authenticate = async( req, res, next ) => {
-  jobi.trace('authenticating');
+  jobi.debug('authenticating');
 
   try {
     const auth = req.headers.authorization;
@@ -12,8 +12,8 @@ const authenticate = async( req, res, next ) => {
     const decoded = JWTUtils.verifyJWT( auth );
 
     if ( decoded.usr ) {
-      const user = await User.findOne({ _id: decoded.sub });
-      req.credentials = { ...decoded, user };
+      const { email, username, _id } = await User.findOne({ _id: decoded.sub });
+      req.credentials = { ...decoded, user: { email, username, _id } };
     } else {
       const participant = await Participant.findOne({ _id: decoded.sub });
       req.credentials = { ...decoded, participant };

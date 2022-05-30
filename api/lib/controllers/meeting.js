@@ -27,7 +27,7 @@ module.exports = {
   create: async( req, res ) => {
     const { name, date } = req.body;
 
-    authUtils.checkUser( req.credentials );
+    await authUtils.checkUser( req.credentials );
 
     const meeting = await Meeting.create({
       name,
