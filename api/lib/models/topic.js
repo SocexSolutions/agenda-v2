@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const jobi     = require('@starryinternet/jobi');
+
 const Schema = mongoose.Schema;
-const logger = require('@starryinternet/jobi');
 
 const topicSchema = new mongoose.Schema(
   {
@@ -43,13 +44,13 @@ const topicSchema = new mongoose.Schema(
  * @returns {Promise<Object[]>} - meeting's associated topics after save
  */
 async function saveMeetingTopics({ meeting_id, savedTopics, subject_id }) {
-  logger.debug(`#saveMeetingTopics models/topic`);
+  jobi.debug(`#saveMeetingTopics models/topic`);
 
   const writeOperations = [];
 
   const existingTopics = await this.find({ meeting_id });
 
-  logger.debug( `found ${ existingTopics.length } existing topics` );
+  jobi.debug( `found ${ existingTopics.length } existing topics` );
 
   const savedTopicIds = savedTopics.map( topic => {
     return topic._id ? topic._id.toString() : null;
@@ -57,7 +58,7 @@ async function saveMeetingTopics({ meeting_id, savedTopics, subject_id }) {
 
   existingTopics.forEach( ({ _id }) => {
     if ( !savedTopicIds.includes( _id.toString() ) ) {
-      logger.debug( `deleting topic with _id: ${ _id }` );
+      jobi.debug( `deleting topic with _id: ${ _id }` );
       writeOperations.push({ deleteOne: { filter: { _id } } });
     }
   });
@@ -75,10 +76,10 @@ async function saveMeetingTopics({ meeting_id, savedTopics, subject_id }) {
 
   formattedTopics.forEach( topic => {
     if ( !topic._id ) {
-      logger.debug( `inserting topic with _id: ${ topic._id }` );
+      jobi.debug( `inserting topic with _id: ${ topic._id }` );
       writeOperations.push({ insertOne: { document: topic } });
     } else {
-      logger.debug( `updating topic with _id: ${ topic._id }` );
+      jobi.debug( `updating topic with _id: ${ topic._id }` );
       writeOperations.push({
         updateOne: {
           filter: { _id: topic._id },

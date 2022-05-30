@@ -1,12 +1,15 @@
-const router            = require('express').Router();
-const meetingController = require('../controllers/meeting');
+const router             = require('express').Router();
+const meetingController  = require('../controllers/meeting');
+const { wrapController } = require('../util/error-wrapper');
 
-router.get( '/:_id', meetingController.get );
-router.post( '/', meetingController.create );
-router.patch( '/:_id', meetingController.update );
-router.get( '/:_id/aggregate', meetingController.aggregate );
-router.post( '/aggregate', meetingController.aggregateSave );
-router.get( '/:_id/topics', meetingController.getTopics );
-router.get( '/:_id/participants', meetingController.getParticipants );
+const wrapped = wrapController( meetingController );
+
+router.get( '/:_id', wrapped.get );
+router.post( '/', wrapped.create );
+router.patch( '/:_id', wrapped.update );
+router.get( '/:_id/aggregate', wrapped.aggregate );
+router.post( '/aggregate', wrapped.aggregateSave );
+router.get( '/:_id/topics', wrapped.getTopics );
+router.get( '/:_id/participants', wrapped.getParticipants );
 
 module.exports = router;

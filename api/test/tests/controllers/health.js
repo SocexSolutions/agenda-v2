@@ -2,7 +2,7 @@ const assert = require('assert');
 const api    = require('../../utils/api');
 const client = require('../../utils/client');
 
-describe( 'controllers/health.js', () => {
+describe( 'lib/controllers/health.js', () => {
   const path = '/health';
 
   before( async() => {

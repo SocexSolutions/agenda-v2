@@ -1,17 +1,16 @@
 const sinon      = require('sinon');
-const rewire     = require('rewire');
 const { assert } = require('chai');
 const router     = require('express').Router();
 const api        = require('../../utils/api');
+const libRewire  = require('../../utils/lib-rewire');
 const client     = require('../../utils/client');
 
-const modulePath = '../../../lib/middleware/req-logger';
+const modulePath = 'lib/middleware/req-logger';
 
-
-describe( 'lib/middleware/req-logger', () => {
+describe( modulePath, () => {
 
   beforeEach( () => {
-    this.module = rewire( modulePath );
+    this.module = libRewire( modulePath );
   });
 
   afterEach( () => {
@@ -29,26 +28,26 @@ describe( 'lib/middleware/req-logger', () => {
   };
 
   it( 'should call controller regardless of failure', async() => {
-    const log = {
+    const jobi = {
       info: sinon.stub()
     };
 
     const urlPath = '/test1';
 
-    this.module.__set__({ log });
+    this.module.__set__({ jobi });
 
     this.bindRoutesStartServer( urlPath, this.module, this.controller );
 
     const res = await client.post( urlPath, { msg: 'hi' } );
 
-    sinon.assert.calledOnce( log.info );
+    sinon.assert.calledOnce( jobi.info );
 
     assert.strictEqual( res.status, 200 );
     assert.strictEqual( res.data, 'hello' );
   });
 
   it( 'should log request and response', async() => {
-    const log = {
+    const jobi = {
       info: sinon.stub().returns(),
       debug: sinon.stub().returns(),
       trace: sinon.stub().returns()
@@ -56,23 +55,23 @@ describe( 'lib/middleware/req-logger', () => {
 
     const urlPath = '/test2';
 
-    this.module.__set__({ log });
+    this.module.__set__({ jobi });
 
     this.bindRoutesStartServer( urlPath, this.module, this.controller );
 
     await client.post( urlPath, { msg: 'hi' } );
 
-    sinon.assert.calledOnceWithExactly( log.info, '*' + urlPath );
-    sinon.assert.calledThrice( log.debug );
+    sinon.assert.calledOnceWithExactly( jobi.info, '*' + urlPath );
+    sinon.assert.calledThrice( jobi.debug );
 
     sinon.assert.calledWithExactly(
-      log.debug.getCall( 0 ), 'request params: {}'
+      jobi.debug.getCall( 0 ), 'request params: {}'
     );
     sinon.assert.calledWithExactly(
-      log.debug.getCall( 1 ), 'request body: {"msg":"hi"}'
+      jobi.debug.getCall( 1 ), 'request body: {"msg":"hi"}'
     );
     sinon.assert.calledWithExactly(
-      log.debug.getCall( 2 ), 'response payload: "hello"'
+      jobi.debug.getCall( 2 ), 'response payload: "hello"'
     );
   });
 

@@ -4,11 +4,11 @@ const db           = require('../../../lib/db');
 const api          = require('../../utils/api');
 const client       = require('../../utils/client');
 const fakeTakeaway = require('../../fakes/takeaway');
-const topicFaker   = require('../../fakes/topic');
-const meetingFaker = require('../../fakes/meeting');
+const fakeTopic    = require('../../fakes/topic');
+const fakeMeeting  = require('../../fakes/meeting');
 const Takeaway     = require('../../../lib/models/takeaway');
 
-describe( 'api/lib/controllers/takeaway', () => {
+describe( 'lib/controllers/takeaway', () => {
 
   before( async() => {
     await api.start();
@@ -33,12 +33,12 @@ describe( 'api/lib/controllers/takeaway', () => {
 
     this.meeting = ( await client.post(
       '/meeting',
-      meetingFaker({ owner_id: this.user._id })
+      fakeMeeting({ owner_id: this.user._id })
     ) ).data;
 
     this.topic = ( await client.post(
       '/topic',
-      topicFaker({ owner_id: this.user._id, meeting_id: this.meeting._id })
+      fakeTopic({ owner_id: this.user._id, meeting_id: this.meeting._id })
     ) ).data;
   });
 

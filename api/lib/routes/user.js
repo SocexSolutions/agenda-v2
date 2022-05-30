@@ -1,16 +1,14 @@
-const router         = require('express').Router();
-const userController = require('../controllers/user');
+const router             = require('express').Router();
+const userController     = require('../controllers/user');
+const { wrapController } = require('../util/error-wrapper');
 
-router.post( '/register', userController.register );
+const wrapped = wrapController( userController );
 
-router.post( '/login', userController.login );
-
-router.post( '/checkexistingusername', userController.checkExistingUsername );
-
-router.post( '/checkexistingemail', userController.checkExistingEmail );
-
-router.get( '/refresh', userController.refresh );
-
-router.get( '/meetings/:_id', userController.getOwnedMeetings );
+router.post( '/register', wrapped.register );
+router.post( '/login', wrapped.login );
+router.post( '/checkexistingusername', wrapped.checkExistingUsername );
+router.post( '/checkexistingemail', wrapped.checkExistingEmail );
+router.get( '/refresh', wrapped.refresh );
+router.get( '/meetings/:_id', wrapped.getOwnedMeetings );
 
 module.exports = router;

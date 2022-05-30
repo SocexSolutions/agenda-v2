@@ -1,10 +1,13 @@
-const router          = require('express').Router();
-const topicController = require('../controllers/topic');
+const router             = require('express').Router();
+const topicController    = require('../controllers/topic');
+const { wrapController } = require('../util/error-wrapper');
 
-router.post( '/', topicController.create );
-router.post( '/:_id', topicController.update );
-router.patch( '/:_id/like', topicController.like );
-router.patch( '/:_id/status', topicController.status );
-router.get( '/:id/takeaways', topicController.getTakeaways );
+const wrapped = wrapController( topicController );
+
+router.post( '/', wrapped.create );
+router.post( '/:_id', wrapped.update );
+router.patch( '/:_id/like', wrapped.like );
+router.patch( '/:_id/status', wrapped.status );
+router.get( '/:_id/takeaways', wrapped.getTakeaways );
 
 module.exports = router;

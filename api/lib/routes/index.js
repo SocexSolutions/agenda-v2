@@ -1,5 +1,5 @@
 const router      = require('express').Router();
-const auth        = require('../middleware/authenticate');
+const authMdw     = require('../middleware/authenticate');
 const reqLogger   = require('../middleware/req-logger');
 const health      = require('./health');
 const user        = require('./user');
@@ -11,10 +11,10 @@ const takeaway    = require('./takeaway');
 
 router.use( '/health', health );
 router.use( '/user', reqLogger, user );
-router.use( '/meeting', reqLogger, auth, meeting );
-router.use( '/topic', reqLogger, auth, topic );
-router.use( '/takeaway', reqLogger, auth, takeaway );
-router.use( '/participant', reqLogger, auth, participant );
-router.use( '/ui', reqLogger, auth, ui );
+router.use( '/meeting', reqLogger, authMdw, meeting );
+router.use( '/topic', reqLogger, authMdw, topic );
+router.use( '/takeaway', reqLogger, authMdw, takeaway );
+router.use( '/participant', reqLogger, authMdw, participant );
+router.use( '/ui', reqLogger, authMdw, ui );
 
 module.exports = router;

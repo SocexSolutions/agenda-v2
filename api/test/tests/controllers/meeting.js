@@ -16,7 +16,7 @@ chai.use( chaiSubset );
 
 const assert = chai.assert;
 
-describe( 'controllers/meeting', () => {
+describe( 'lib/controllers/meeting', () => {
 
   before( async() => {
     await api.start();
@@ -207,7 +207,7 @@ describe( 'controllers/meeting', () => {
 
       const { data } = await client.post(
         '/meeting/aggregate',
-        { ...meeting }
+        meeting
       );
 
       const createdMeeting = await Meeting.findById( data._id );

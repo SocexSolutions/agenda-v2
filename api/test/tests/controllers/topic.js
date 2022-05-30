@@ -1,37 +1,48 @@
-const { assert }    = require('chai');
-const dbUtils       = require('../../utils/db');
-const db            = require('../../../lib/db');
-const api           = require('../../utils/api');
-const client        = require('../../utils/client');
-const Topic         = require('../../../lib/models/topic');
-const Takeaway      = require('../../../lib/models/takeaway');
-const topicFaker    = require('../../fakes/topic');
-const takeawayFaker = require('../../fakes/takeaway');
+const { assert }   = require('chai');
+const dbUtils      = require('../../utils/db');
+const db           = require('../../../lib/db');
+const api          = require('../../utils/api');
+const Topic        = require('../../../lib/models/topic');
+const Takeaway     = require('../../../lib/models/takeaway');
+const Meeting      = require('../../../lib/models/meeting');
+const fakeTopic    = require('../../fakes/topic');
+const fakeTakeaway = require('../../fakes/takeaway');
+const fakeMeeting  = require('../../fakes/meeting');
+const rewire       = require('rewire');
 
-describe( 'api/lib/controllers/topic', () => {
-
-  let user;
-  let user2;
+describe( 'lib/controllers/topic', () => {
 
   before( async() => {
+    this.Client = rewire('../../utils/client');
+
     await api.start();
     await db.connect();
     await dbUtils.clean();
 
-    user = ( await client.post(
+    const res = ( await this.Client.post(
       '/user/register',
       { username: 'user3', password: 'pass', email: 'email3' }
     ) ).data;
 
-    user2 = ( await client.post(
+    const res2 = ( await this.Client.post(
       '/user/register',
       { username: 'user2', password: 'pass', email: 'email2' }
     ) ).data;
+
+    this.user  = res.user;
+    this.token = res.token;
+
+    this.user2  = res2.user;
+    this.token2 = res2.token;
   });
 
   beforeEach( async() => {
-    client.defaults.headers.common['Authorization'] = user.token;
-    await dbUtils.clean([ 'topics', 'takeaways' ]);
+    this.Client.defaults.headers.common['Authorization'] = this.token;
+    await dbUtils.clean([ 'topics', 'takeaways', 'meetings' ]);
+
+    this.meeting = await Meeting.create(
+      fakeMeeting({ owner_id: this.user._id })
+    );
   });
 
   after( async() => {
@@ -44,84 +55,39 @@ describe( 'api/lib/controllers/topic', () => {
     const path = '/topic';
 
     it( 'should create topic with valid inputs', async() => {
-      const topic = topicFaker();
+      const topic = fakeTopic({ meeting_id: this.meeting._id });
 
-      const res = await client.post( path, topic );
+      const res = await this.Client.post( path, topic );
 
-      assert( res.status === 201, 'failed to create topic with valid inputs' );
+      assert.equal(
+        res.status,
+        201,
+        'failed to create topic with valid inputs'
+      );
 
-      assert(
-        res.data.name === topic.name,
+      assert.equal(
+        res.data.name,
+        topic.name,
         'created topic with incorrect name: ' + res.data.name
       );
 
       const created = await Topic.find({});
 
-      assert.strictEqual( created.length, 1 );
-      assert.strictEqual( created[ 0 ].name, topic.name );
-      assert.strictEqual( created[ 0 ].likes[ 0 ], topic.likes[ 0 ] );
+      assert.equal( created.length, 1 );
+      assert.equal( created[ 0 ].name, topic.name );
+      assert.equal( created[ 0 ].likes[ 0 ], topic.likes[ 0 ] );
       assert.deepEqual( created[ 0 ].meeting_id, topic.meeting_id );
     });
 
-    it( 'should create topic without likes', async() => {
-      const topic = topicFaker({ likes: [] });
+    it( 'should 403 if not owner or participant', async() => {
+      this.Client.defaults.headers.common['Authorization'] = this.token2;
 
-      const res = await client.post( path, topic );
+      const topic = fakeTopic({ meeting_id: this.meeting._id });
 
-      assert( res.status === 201, 'failed to create topic without likes' );
-
-      assert(
-        res.data.likes.length === 0,
-        'created topic with incorrect likes: ' + res.data.likes
+      await assert.isRejected(
+        this.Client.post( path, topic ),
+        'Request failed with status code 403'
       );
-
-      const created = await Topic.find({});
-
-      assert.strictEqual( created.length, 1 );
-      assert.strictEqual( created[ 0 ].name, topic.name );
-      assert.strictEqual( created[ 0 ].likes.length, 0 );
-      assert.deepEqual( created[ 0 ].meeting_id, topic.meeting_id );
-    });
-
-    it( 'should not create topic without name', async() => {
-      const topicWithoutName = topicFaker({ name: '' });
-
-      const errorRegex = /^Topic validation failed: name/;
-
-      try {
-        await client.post( path, topicWithoutName );
-
-        throw new Error('accepted topic without name');
-      } catch ( err ) {
-        assert(
-          errorRegex.test( err.response.data ),
-          'failed to create topic for wrong reason: ' + err.response.data
-        );
-      }
-
-      const res = await Topic.find({});
-
-      assert.strictEqual( res.length, 0 );
-    });
-
-    it( 'should not create topic without meeting_id', async() => {
-      const topicWithoutMeetingId = topicFaker({ meeting_id: '' });
-      const errorRegex = /^Topic validation failed: meeting_id/;
-
-      try {
-        await client.post( path, topicWithoutMeetingId );
-
-        throw new Error('accepted topic without meeting_id');
-      } catch ( err ) {
-        assert(
-          errorRegex.test( err.response.data ),
-          'failed to create topic for wrong reason: ' + err.response.data
-        );
-      }
-
-      const res = await Topic.find({});
-
-      assert.strictEqual( res.length, 0 );
     });
 
   });
@@ -130,14 +96,14 @@ describe( 'api/lib/controllers/topic', () => {
 
     beforeEach( async() => {
       this.topic = await Topic.create(
-        topicFaker({ owner_id: user.user._id })
+        fakeTopic({ owner_id: this.user._id })
       );
     });
 
     it( 'should update topic name', async() => {
-      const res = await client.post(
+      const res = await this.Client.post(
         '/topic/' + this.topic._id,
-        { ...this.topic._doc, name: 'new name' }
+        { ...this.topic._doc, name: 'new name', description: 'new description' }
       );
 
       assert.strictEqual( res.status, 200 );
@@ -146,38 +112,21 @@ describe( 'api/lib/controllers/topic', () => {
       const [ topic ] = await Topic.find({ _id: this.topic._id });
 
       assert.strictEqual( topic.name, 'new name' );
-      assert.strictEqual( topic.status, this.topic.status );
-      assert.deepEqual( topic.likes, this.topic.likes );
-    });
-
-    it( 'should update topic description', async() => {
-      const res = await client.post(
-        '/topic/' + this.topic._id,
-        { ...this.topic._doc, description: 'new description' }
-      );
-
-      assert.strictEqual( res.status, 200 );
-      assert.strictEqual( res.data.description, 'new description' );
-
-      const [ topic ] = await Topic.find({ _id: this.topic._id });
-
       assert.strictEqual( topic.description, 'new description' );
       assert.strictEqual( topic.status, this.topic.status );
       assert.deepEqual( topic.likes, this.topic.likes );
     });
 
-    it( 'should 403 with incorrect subject identity', async() => {
-      client.defaults.headers.common['Authorization'] = user2.token;
+    it( 'should 403 if not topic owner', async() => {
+      this.Client.defaults.headers.common['Authorization'] = this.token2;
 
-      try {
-        await client.post(
+      await assert.isRejected(
+        this.Client.post(
           '/topic/' + this.topic._id,
           {}
-        );
-      } catch ( err ) {
-        assert.strictEqual( err.response.status, 403 );
-        assert.strictEqual( err.response.data, 'unauthorized' );
-      }
+        ),
+        'Request failed with status code 403'
+      );
     });
 
   });
@@ -185,11 +134,13 @@ describe( 'api/lib/controllers/topic', () => {
   describe( '#like', () => {
 
     beforeEach( async() => {
-      this.topic = await Topic.create( topicFaker() );
+      this.topic = await Topic.create(
+        fakeTopic({ meeting_id: this.meeting._id })
+      );
     });
 
     it( 'should add a topic like', async() => {
-      const res = await client.patch(
+      const res = await this.Client.patch(
         '/topic/' + this.topic._id + '/like',
         { email: 'thudson@agenda.com' }
       );
@@ -203,7 +154,7 @@ describe( 'api/lib/controllers/topic', () => {
     });
 
     it( 'should remove a topic like', async() => {
-      const res = await client.patch(
+      const res = await this.Client.patch(
         '/topic/' + this.topic._id + '/like',
         { email: 'bryan@bacon.com' }
       );
@@ -216,16 +167,30 @@ describe( 'api/lib/controllers/topic', () => {
       assert.isFalse( topic.likes.includes('bryan@bacon.com') );
     });
 
+    it( 'should 403 if not owner or participant', async() => {
+      this.Client.defaults.headers.common['Authorization'] = this.token2;
+
+      await assert.isRejected(
+        this.Client.patch(
+          '/topic/' + this.topic._id + '/like',
+          { email: 'bryan@bacon.com' }
+        ),
+        'Request failed with status code 403'
+      );
+    });
+
   });
 
   describe( '#status', () => {
 
     beforeEach( async() => {
-      this.topic = await Topic.create( topicFaker() );
+      this.topic = await Topic.create(
+        fakeTopic({ meeting_id: this.meeting._id })
+      );
     });
 
     it( 'should set the topics status', async() => {
-      const res = await client.patch(
+      const res = await this.Client.patch(
         '/topic/' + this.topic._id + '/status',
         { status: 'discussed' }
       );
@@ -238,30 +203,56 @@ describe( 'api/lib/controllers/topic', () => {
       assert.strictEqual( topic.status, 'discussed' );
       assert.strictEqual( topic.name, this.topic.name );
     });
+
+    it( 'should 403 if not owner or participant', async() => {
+      this.Client.defaults.headers.common['Authorization'] = this.token2;
+
+      await assert.isRejected(
+        this.Client.patch(
+          '/topic/' + this.topic._id + '/status',
+          { status: 'discussed' }
+        ),
+        'Request failed with status code 403'
+      );
+    });
+
   });
 
   describe( '#getTakeaways', () => {
 
+    beforeEach( async() => {
+      this.inserted_topic = await Topic.create(
+        fakeTopic({ meeting_id: this.meeting._id })
+      );
+    });
+
     it( 'should get topic\'s takeaways', async() => {
-      const topic = topicFaker();
-
-      const insertedTopic = await Topic.create( topic );
-
-      const takeaway = takeawayFaker({
-        topic_id: insertedTopic._id.toString(),
-        owner_id: user.user._id
+      const takeaway = fakeTakeaway({
+        topic_id: this.inserted_topic._id.toString(),
+        owner_id: this.user._id
       });
 
       await Takeaway.create( takeaway );
 
-      const { data: [ foundTakeaway ] } = await client.get(
-        '/topic/' + insertedTopic._id + '/takeaways'
+      const { data: [ foundTakeaway ] } = await this.Client.get(
+        '/topic/' + this.inserted_topic._id + '/takeaways'
       );
 
       assert.strictEqual( takeaway.name, foundTakeaway.name );
       assert.strictEqual( takeaway.description, foundTakeaway.description );
       assert.strictEqual( takeaway.topic_id, foundTakeaway.topic_id );
       assert.strictEqual( takeaway.owner_id, foundTakeaway.owner_id );
+    });
+
+    it( 'should 403 if not owner or participant', async() => {
+      this.Client.defaults.headers.common['Authorization'] = this.token2;
+
+      await assert.isRejected(
+        this.Client.get(
+          '/topic/' + this.inserted_topic._id + '/takeaways'
+        ),
+        'Request failed with status code 403'
+      );
     });
 
   });
