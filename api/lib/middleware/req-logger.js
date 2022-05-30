@@ -2,15 +2,15 @@ const jobi = require('@starryinternet/jobi');
 
 function reqLog( req, res, next ) {
   try {
-    jobi.info( '*' + req.originalUrl );
-    jobi.debug( 'request params: ' + JSON.stringify( req.params ) );
-    jobi.debug( 'request body: ' + JSON.stringify( req.body ) );
+    jobi.info( 'url: ' + req.originalUrl );
+    jobi.debug( 'params: ', req.params );
+    jobi.debug( 'body: ', req.body );
     jobi.trace( req );
 
     const baseSend = res.send;
 
     res.send = ( data ) => {
-      jobi.debug( 'response payload: ' + JSON.stringify( data ) );
+      jobi.debug( 'response payload: ', data );
 
       res.send = baseSend;
 

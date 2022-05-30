@@ -3,6 +3,7 @@ const Meeting     = require('../models/meeting');
 const mongoose    = require('mongoose');
 const ObjectId    = require('mongoose').Types.ObjectId;
 const AuthErr     = require('../classes/auth-err');
+const jobi        = require('@starryinternet/jobi');
 
 /**
  * Check if a user or participant is a participant or owner of a meeting
@@ -14,6 +15,8 @@ const AuthErr     = require('../classes/auth-err');
  */
 module.exports.checkParticipant = async( meeting_id, credentials ) => {
   try {
+    jobi.debug( 'checkParticipant creds:', credentials );
+
     const { user, participant } = credentials;
 
     if ( participant ) {
@@ -47,6 +50,7 @@ module.exports.checkParticipant = async( meeting_id, credentials ) => {
       throw err;
     }
 
+    /* istanbul ignore next */
     throw new AuthErr( err.message );
   }
 };
@@ -63,6 +67,8 @@ module.exports.checkParticipant = async( meeting_id, credentials ) => {
  */
 module.exports.checkOwner = async( _id, collection_name, credentials ) => {
   try {
+    jobi.info( 'checkOwner creds: ', credentials );
+
     const { user, participant } = credentials;
 
     const subject_id = user?._id || participant._id;
@@ -84,6 +90,7 @@ module.exports.checkOwner = async( _id, collection_name, credentials ) => {
       throw err;
     }
 
+    /* istanbul ignore next */
     throw new AuthErr( err.message );
   }
 };
@@ -93,8 +100,10 @@ module.exports.checkOwner = async( _id, collection_name, credentials ) => {
  *
  * @param credentials - req.credentials
  */
-module.exports.checkUser = ( credentials ) => {
+module.exports.checkUser = async( credentials ) => {
+  jobi.debug( 'checkUser creds:', credentials );
+
   if ( !credentials?.usr ) {
-    throw new AuthErr('not owner');
+    throw new AuthErr('not user');
   }
 };

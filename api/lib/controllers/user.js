@@ -91,18 +91,7 @@ module.exports = {
   },
 
   async refresh( req, res ) {
-    const token = req.headers.authorization;
-
-    const decoded = jwtUtils.verifyJWT( token );
-
-    const user = await User.findById( decoded.sub );
-
-    if ( !user ) {
-      return res.status( 401 ).json({
-        success: false,
-        msg: 'Invalid Credentials'
-      });
-    }
+    const { user } = req.credentials;
 
     return res.status( 200 ).json({
       success: true,
@@ -115,7 +104,7 @@ module.exports = {
   },
 
   async getOwnedMeetings( req, res ) {
-    authUtils.checkUser( req.credentials );
+    await authUtils.checkUser( req.credentials );
 
     const { sub } = req.credentials;
 
