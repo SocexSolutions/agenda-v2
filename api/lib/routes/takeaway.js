@@ -1,8 +1,11 @@
-const router             = require('express').Router();
-const takeawayController = require('../controllers/takeaway');
+const router              = require('express').Router();
+const takeaway_controller = require('../controllers/takeaway');
+const { wrap_controller } = require('../util/error-wrapper');
 
-router.post( '/', takeawayController.create );
-router.patch( '/:id', takeawayController.update );
-router.delete( '/:id', takeawayController.delete );
+const wrapped = wrap_controller( takeaway_controller );
+
+router.post( '/', wrapped.create );
+router.patch( '/:id', wrapped.update );
+router.delete( '/:id', wrapped.delete );
 
 module.exports = router;

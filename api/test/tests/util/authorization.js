@@ -37,30 +37,28 @@ describe( module_path, () => {
 
   describe( '#check_participant', () => {
 
-    it( 'should return authorized if user is participant', async() => {
-      const { authorized, meeting } = await this.module.check_participant(
+    it( 'should return meeting if user is participant', async() => {
+      const meeting = await this.module.check_participant(
         this.inserted_meeting._id,
         {
           user: fakeUser({ _id: 'someid', email: this.participants[ 0 ].email })
         }
       );
 
-      assert.isTrue( authorized );
       assert.equal( meeting.name, this.inserted_meeting.name );
     });
 
-    it( 'should return authorized if user is meeting owner', async() => {
-      const { authorized, meeting } = await this.module.check_participant(
+    it( 'should return meeting if user is meeting owner', async() => {
+      const meeting = await this.module.check_participant(
         this.inserted_meeting._id,
         { user: fakeUser({ _id: this.meeting.owner_id }) }
       );
 
-      assert.isTrue( authorized );
       assert.equal( meeting.name, this.inserted_meeting.name );
     });
 
-    it( 'should return authorized if participant is participant', async() => {
-      const { authorized, meeting } = await this.module.check_participant(
+    it( 'should return meeting if participant is participant', async() => {
+      const meeting = await this.module.check_participant(
         this.inserted_meeting._id,
         {
           participant: fakeParticipant({
@@ -70,85 +68,75 @@ describe( module_path, () => {
         }
       );
 
-      assert.isTrue( authorized );
       assert.equal( meeting.name, this.inserted_meeting.name );
     });
 
-    it( 'should return unauthorized if user is not participant', async() => {
-      const { authorized, meeting } = await this.module.check_participant(
-        this.inserted_meeting._id,
-        { user: fakeUser({ _id: 'some_id', email: 'some_email' }) }
+    it( 'should reject if user is not participant', async() => {
+      return assert.isRejected(
+        this.module.check_participant(
+          this.inserted_meeting._id,
+          { user: fakeUser({ _id: 'some_id', email: 'some_email' }) }
+        )
       );
-
-      assert.isFalse( authorized );
-      assert.notExists( meeting );
     });
 
-    it( 'should return unauthorized if partic is not participant', async() => {
-      const { authorized, meeting } = await this.module.check_participant(
-        this.inserted_meeting._id,
-        {
-          participant: fakeParticipant({
-            _id: this.participants[ 0 ]._id
-          })
-        }
+    it( 'should reject if participant is not participant', async() => {
+      return assert.isRejected(
+        this.module.check_participant(
+          this.inserted_meeting._id,
+          {
+            participant: fakeParticipant({
+              _id: this.participants[ 0 ]._id
+            })
+          }
+        )
       );
-
-      assert.isFalse( authorized );
-      assert.notExists( meeting );
     });
 
   });
 
   describe( '#check_owner', () => {
 
-    it( 'should return authorized and doc if doc user is owner', async() => {
-      const { authorized, document } = await this.module.check_owner(
+    it( 'should return document and doc if doc user is owner', async() => {
+      const document = await this.module.check_owner(
         this.inserted_meeting._id,
         'meetings',
         { user: { _id: this.meeting.owner_id } }
       );
 
-      assert.isTrue( authorized );
       assert.equal( this.inserted_meeting.name, document.name );
     });
 
     it( 'should return authorized and doc if doc participant is owner', async() => {
-      const { authorized, document } = await this.module.check_owner(
+      const document = await this.module.check_owner(
         this.inserted_meeting._id,
         'meetings',
         { participant: { _id: this.meeting.owner_id } }
       );
 
-      assert.isTrue( authorized );
       assert.equal( this.inserted_meeting.name, document.name );
     });
 
-    it( 'should return unauthorized and no doc if not owner', async() => {
-      const { authorized, document } = await this.module.check_owner(
-        this.inserted_meeting._id,
-        'meetings',
-        { user: { _id: 'some_id' } }
+    it( 'should reject if not owner', async() => {
+      return assert.isRejected(
+        this.module.check_owner(
+          this.inserted_meeting._id,
+          'meetings',
+          { user: { _id: 'some_id' } }
+        )
       );
-
-      assert.isFalse( authorized );
-      assert.notExists( document );
     });
 
   });
 
   describe( '#check_user', () => {
 
-    it( 'should return authorized if user', () => {
-      const { authorized } = this.module.check_user({ usr: true });
-
-      assert.isTrue( authorized );
+    it( 'should not throw if user', () => {
+      this.module.check_user({ usr: true });
     });
 
     it( 'should return unauthorized if not user', () => {
-      const { authorized } = this.module.check_user();
-
-      assert.isFalse( authorized );
+      assert.throws( this.module.check_user );
     });
 
   });

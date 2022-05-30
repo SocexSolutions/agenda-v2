@@ -1,16 +1,10 @@
-const mongoose    = require('mongoose');
+const Mongoose    = require('mongoose');
 const Meeting     = require('../models/meeting');
 const Topic       = require('../models/topic.js');
 const Participant = require('../models/participant');
 const ObjectID    = require('mongoose').Types.ObjectId;
-const log         = require('@starryinternet/jobi');
-
-const {
-  check_participant,
-  check_owner,
-  check_user
-} = require('../util/authorization');
-
+const Jobi        = require('@starryinternet/jobi');
+const Auth        = require('../util/authorization');
 
 module.exports = {
   /**
@@ -18,23 +12,11 @@ module.exports = {
    * @param {String} req.params._id - meeting id
    */
   get: async( req, res ) => {
-    try {
-      const { _id }  = req.params;
+    const { _id }  = req.params;
 
-      const { authorized, meeting } = await check_participant(
-        _id,
-        req.credentials
-      );
+    const meeting = await Auth.check_participant( _id, req.credentials );
 
-      if ( !authorized ) {
-        return res.status( 403 ).send('unauthorized');
-      }
-
-      res.status( 200 ).send( meeting );
-    } catch ( err ) {
-      log.error( err.message );
-      res.status( 500 ).send( err );
-    }
+    res.status( 200 ).send( meeting );
   },
 
   /**
@@ -43,26 +25,17 @@ module.exports = {
    * @param {Date}   req.body.date - meeting date
    */
   create: async( req, res ) => {
-    try {
-      const { name, date } = req.body;
+    const { name, date } = req.body;
 
-      const { authorized } = check_user( req.credentials );
+    Auth.check_user( req.credentials );
 
-      if ( !authorized ) {
-        return res.status( 403 ).send('unauthorized');
-      }
+    const meeting = await Meeting.create({
+      name,
+      date,
+      owner_id: req.credentials.sub
+    });
 
-      const meeting = await Meeting.create({
-        name,
-        date,
-        owner_id: req.credentials.sub
-      });
-
-      res.status( 200 ).send( meeting );
-    } catch ( err ) {
-      log.error( err.message );
-      res.status( 500 ).send( err );
-    }
+    res.status( 200 ).send( meeting );
   },
 
   /**
@@ -72,31 +45,18 @@ module.exports = {
    * @param {String} req.params._id - meeting id
    */
   update: async( req, res ) => {
-    try {
-      const { name, date } = req.body;
-      const _id            = req.params._id;
+    const { name, date } = req.body;
+    const _id            = req.params._id;
 
-      const { authorized } = await check_owner(
-        _id,
-        'meetings',
-        req.credentials
-      );
+    await Auth.check_owner( _id, 'meetings', req.credentials );
 
-      if ( !authorized ) {
-        return res.status( 403 ).send('unauthorized');
-      }
+    const updated = await Meeting.findOneAndUpdate(
+      { _id },
+      { name, date },
+      { new: true }
+    );
 
-      const updated = await Meeting.findOneAndUpdate(
-        { _id },
-        { name, date },
-        { new: true }
-      );
-
-      res.status( 200 ).send( updated );
-    } catch ( err ) {
-      log.error( err.message );
-      res.status( 500 ).send( err );
-    }
+    res.status( 200 ).send( updated );
   },
 
   /**
@@ -104,49 +64,35 @@ module.exports = {
    * @param {string} req.params._id - meeting _id
    */
   aggregate: async( req, res ) => {
-    try {
-      const { _id }    = req.params;
+    const { _id }    = req.params;
 
-      const { authorized } = await check_participant(
-        _id,
-        req.credentials
-      );
+    await Auth.check_participant( _id, req.credentials );
 
-      if ( !authorized ) {
-        return res.status( 403 ).send('unauthorized');
-      }
-
-      const [ meeting ] = await Meeting.aggregate([
-        {
-          $match: {
-            _id: new ObjectID( _id )
-          }
-        },
-        {
-          $lookup: {
-            from: 'participants',
-            localField: '_id',
-            foreignField: 'meeting_id',
-            as: 'participants'
-          }
-        },
-        {
-          $lookup: {
-            from: 'topics',
-            localField: '_id',
-            foreignField: 'meeting_id',
-            as: 'topics'
-          }
+    const [ meeting ] = await Meeting.aggregate([
+      {
+        $match: {
+          _id: new ObjectID( _id )
         }
-      ]);
+      },
+      {
+        $lookup: {
+          from: 'participants',
+          localField: '_id',
+          foreignField: 'meeting_id',
+          as: 'participants'
+        }
+      },
+      {
+        $lookup: {
+          from: 'topics',
+          localField: '_id',
+          foreignField: 'meeting_id',
+          as: 'topics'
+        }
+      }
+    ]);
 
-      return res.status( 200 ).send( meeting );
-
-    } catch ( error ) {
-
-      log.error( 'error getting meeting: ' + error.message );
-      res.status( 500 ).send( error.message );
-    }
+    return res.status( 200 ).send( meeting );
   },
 
   /**
@@ -175,7 +121,7 @@ module.exports = {
         return res.status( 403 ).send('unauthorized');
       }
 
-      session = await mongoose.connection.startSession();
+      session = await Mongoose.connection.startSession();
 
       await session.withTransaction( async() => {
 
@@ -226,7 +172,7 @@ module.exports = {
       });
 
     } catch ( error ) {
-      log.error( error.message );
+      Jobi.error( error.message );
 
       res.status( 500 ).send( error.message );
     } finally {
@@ -235,47 +181,23 @@ module.exports = {
   },
 
   async getTopics( req, res ) {
-    try {
-      const { _id }  = req.params;
+    const { _id }  = req.params;
 
-      const { authorized } = await check_participant(
-        _id,
-        req.credentials
-      );
+    await Auth.check_participant( _id, req.credentials );
 
-      if ( !authorized ) {
-        return res.status( 403 ).send('unauthorized');
-      }
+    const topics = await Topic.find({ meeting_id: _id });
 
-      const topics = await Topic.find({ meeting_id: _id });
-
-      return res.status( 200 ).send( topics );
-    } catch ( err ) {
-      log.error( err );
-      res.status( 500 ).send( err.message );
-    }
+    return res.status( 200 ).send( topics );
   },
 
   async getParticipants( req, res ) {
-    try {
-      const { _id }  = req.params;
+    const { _id }  = req.params;
 
-      const { authorized } = await check_participant(
-        _id,
-        req.credentials
-      );
+    await Auth.check_participant( _id, req.credentials );
 
-      if ( !authorized ) {
-        return res.status( 403 ).send('unauthorized');
-      }
+    const participants = await Participant.find({ meeting_id: _id });
 
-      const participants = await Participant.find({ meeting_id: _id });
-
-      return res.status( 200 ).send( participants );
-    } catch ( err ) {
-      log.error( err );
-      res.status( 500 ).send( err.message );
-    }
+    return res.status( 200 ).send( participants );
   }
 
 };

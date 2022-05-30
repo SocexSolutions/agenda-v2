@@ -1,106 +1,92 @@
-const log      = require('@starryinternet/jobi');
 const Topic    = require('../models/topic');
 const Takeaway = require('../models/takeaway');
+const Auth     = require('../util/authorization');
 
 module.exports = {
   create: async( req, res ) => {
-    const newTopic = req.body;
-    const { user } = req.credentials;
+    const new_topic = req.body;
 
-    try {
-      const topic = await Topic.create({ ...newTopic, owner_id: user._id });
+    await Auth.check_participant(
+      new_topic.meeting_id,
+      req.credentials
+    );
 
-      res.status( 201 ).send( topic );
-    } catch ( error ) {
-      log.error( 'Error creating topic: ' + error.message );
-      res.status( 500 ).send( error.message );
-    }
+    const topic = await Topic.create({
+      ...new_topic,
+      owner_id: req.credentials.sub
+    });
+
+    return res.status( 201 ).send( topic );
   },
 
-  update: async( request, response ) => {
-    const updates = request.body;
-    const { _id } = request.params;
+  update: async( req, res ) => {
+    const updates = req.body;
+    const { _id } = req.params;
 
-    const sub_id = request.credentials.sub;
+    const sub_id = req.credentials.sub;
 
-    try {
-      const topic = await Topic.findOne({ _id });
+    await Auth.check_owner( _id, 'topics', req.credentials );
 
-      if ( sub_id !== topic.owner_id.toString() ) {
-        return response.status( 403 ).send('unauthorized');
-      }
+    const topic_updated = await Topic.findOneAndUpdate(
+      { _id },
+      { ...updates, owner_id: sub_id },
+      { new: true }
+    );
 
-      const topicUpdated = await Topic.findOneAndUpdate(
-        { _id },
-        { ...updates, owner_id: sub_id },
-        { new: true }
-      );
-
-      response.status( 200 ).send( topicUpdated );
-
-    } catch ( error ) {
-      log.error( error );
-      response.status( 500 ).send( error.message );
-    }
+    res.status( 200 ).send( topic_updated );
   },
 
-  like: async( request, response ) => {
-    const { _id } = request.params;
-    const { email } = request.body;
+  like: async( req, res ) => {
+    const { _id }   = req.params;
+    const { email } = req.body;
 
-    try {
-      const topic = await Topic.findOne({ _id });
+    const topic = await Topic.findOne({ _id });
 
-      //like and unlike
-      if ( !topic.likes.includes( email ) ) {
-        topic.likes.push( email );
-      } else {
-        topic.likes = topic.likes.filter( email => {
-          return email !== email;
-        });
-      }
+    await Auth.check_participant( topic.meeting_id, req.credentials );
 
-      //update topic in db
-      const res = await Topic.findOneAndUpdate(
-        { _id },
-        { likes: topic.likes },
-        { new: true }
-      );
-
-      response.status( 200 ).send( res );
-
-    } catch ( error ) {
-      response.status( 500 ).send( error );
+    if ( !topic.likes.includes( email ) ) {
+      topic.likes.push( email );
+    } else {
+      topic.likes = topic.likes.filter( email => {
+        return email !== email;
+      });
     }
+
+    const updated = await Topic.findOneAndUpdate(
+      { _id },
+      { likes: topic.likes },
+      { new: true }
+    );
+
+    return res.status( 200 ).send( updated );
   },
 
-  status: async( request, response ) => {
-    try {
-      const { _id }    = request.params;
-      const { status } = request.body;
+  status: async( req, res ) => {
+    const { _id }    = req.params;
+    const { status } = req.body;
 
-      const res = await Topic.findOneAndUpdate(
-        { _id },
-        { status },
-        { new: true }
-      );
+    const topic = await Topic.findOne({ _id });
 
-      response.status( 200 ).send( res );
-    } catch ( err ) {
-      response.status( 500 ).send( err );
-    }
+    await Auth.check_participant( topic.meeting_id, req.credentials );
+
+    const updated = await Topic.findOneAndUpdate(
+      { _id },
+      { status },
+      { new: true }
+    );
+
+    return res.status( 200 ).send( updated );
   },
 
   getTakeaways: async( req, res ) => {
-    try {
-      const  topic_id = req.params.id;
+    const { _id } = req.params;
 
-      const takeaways = await Takeaway.find({ topic_id });
+    const topic = await Topic.findOne({ _id });
 
-      res.status( 200 ).send( takeaways );
-    } catch ( err ) {
-      log.error( err );
-      res.status( 500 ).send( err );
-    }
+    await Auth.check_participant( topic.meeting_id, req.credentials );
+
+    const takeaways = await Takeaway.find({ topic_id: _id });
+
+    res.status( 200 ).send( takeaways );
   }
 };

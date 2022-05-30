@@ -2,6 +2,7 @@ const Participant = require('../models/participant');
 const Meeting     = require('../models/meeting');
 const mongoose    = require('mongoose');
 const ObjectId    = require('mongoose').Types.ObjectId;
+const AuthErr     = require('../classes/auth-err');
 
 /**
  * Check if a user or participant is a participant or owner of a meeting
@@ -9,84 +10,91 @@ const ObjectId    = require('mongoose').Types.ObjectId;
  * @param {ObjectId} meeting_id
  * @param {Object} credentials
  *
- * @typedef {Object} ParticipantCheckResult
- * @property {Boolean} authorized - user is authorized
- * @property {Meeting} [meeting] - meeting returned for utility
- *
- * @returns {Promise<ParticipantCheckResult>}
+ * @returns {Promise<Meeting>}
  */
 module.exports.check_participant = async( meeting_id, credentials ) => {
-  const { user, participant } = credentials;
+  try {
+    const { user, participant } = credentials;
 
-  if ( participant ) {
-    if ( participant.meeting_id.toString() === meeting_id.toString() ) {
-      const meeting = await Meeting.findOne({ _id: meeting_id });
-      return { authorized: true, meeting };
+    if ( participant ) {
+      if ( participant.meeting_id.toString() === meeting_id.toString() ) {
+        const meeting = await Meeting.findOne({ _id: meeting_id });
+        return meeting;
+      }
+
+      throw new AuthErr('participant not participant');
     }
 
-    return { authorized: false };
-  }
+    const [ participant_res, meeting_res ] = await Promise.allSettled([
+      Participant.findOne({ meeting_id, email: user.email }),
+      Meeting.findOne({ _id: meeting_id })
+    ]);
 
-  const [ participant_res, meeting_res ] = await Promise.allSettled([
-    Participant.findOne({ meeting_id, email: user.email }),
-    Meeting.findOne({ _id: meeting_id })
-  ]);
-
-  const is_owner = meeting_res.status === 'fulfilled' &&
+    const is_owner = meeting_res.status === 'fulfilled' &&
     meeting_res.value.owner_id.toString() === user._id.toString();
 
-  const is_participant = participant_res.status === 'fulfilled' &&
+    const is_participant = participant_res.status === 'fulfilled' &&
     participant_res.value;
 
-  if ( is_owner || is_participant ) {
-    return { authorized: true, meeting: meeting_res.value };
-  }
+    if ( is_owner || is_participant ) {
+      return meeting_res.value;
+    }
 
-  return { authorized: false };
+    throw new AuthErr('user not participant');
+
+  } catch ( err ) {
+    if ( err instanceof AuthErr ) {
+      throw err;
+    }
+
+    throw new AuthErr( err.message );
+  }
 };
 
 /**
  * Check if a user or participant is the owner of a document by comparing the
- * owner_id with the subject id
+ * owner_id with the subject id, throws if not
  *
  * @param {ObjectId|String} _id - id of item to check
  * @param {String} collection_name - collection of item to check
  * @param {Object} credentials - req.credentials
  *
- * @typedef {Object} OwnerCheckResult
- * @property {Boolean} authorized - user or participant is authorized
- * @property {Meeting} [document] - document owned by user returned for utility
- *
- * @returns {Promise<OwnerCheckResult>}
+ * @returns {Promise<document>}
  */
-module.exports.check_owner = async( _id, collection_name, credentials, res ) => {
-  const { user, participant } = credentials;
+module.exports.check_owner = async( _id, collection_name, credentials ) => {
+  try {
+    const { user, participant } = credentials;
 
-  const subject_id = user?._id || participant._id;
+    const subject_id = user?._id || participant._id;
 
-  const collection = mongoose.connection.collection( collection_name );
+    const collection = mongoose.connection.collection( collection_name );
 
-  const id = _id instanceof ObjectId ? _id : new ObjectId( _id );
+    const id = _id instanceof ObjectId ? _id : new ObjectId( _id );
 
-  const document = await collection.findOne({ _id: id });
+    const document = await collection.findOne({ _id: id });
 
-  if ( document.owner_id.toString() === subject_id.toString() ) {
-    return { authorized: true, document };
+    if ( document.owner_id.toString() === subject_id.toString() ) {
+      return document;
+    }
+
+    throw new AuthErr('not owner');
+
+  } catch ( err ) {
+    if ( err instanceof AuthErr ) {
+      throw err;
+    }
+
+    throw new AuthErr( err.message );
   }
-
-  return res.status( 403 ).send('unauthorized');
 };
 
 /**
- * Check if a subject is a user
+ * Check if a subject is a user, throws if not
  *
  * @param credentials - req.credentials
- *
- * @typedef {Object} UserCheckResult
- * @property {Boolean} authorized - subject is user
- *
- * @returns {<UserCheckResult>}
  */
 module.exports.check_user = ( credentials ) => {
-  return { authorized: !!credentials?.usr };
+  if ( !credentials?.usr ) {
+    throw new AuthErr('not owner');
+  }
 };

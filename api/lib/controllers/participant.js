@@ -13,49 +13,37 @@ module.exports = {
    * @returns {Promise<Participant>} - created participant
    */
   create: async( req, res ) => {
-    try {
-      const { email, meeting_id } = req.body;
+    const { email, meeting_id } = req.body;
 
-      const { authorized } = await check_owner(
-        meeting_id,
-        'meetings',
-        req.credentials
-      );
+    await check_owner(
+      meeting_id,
+      'meetings',
+      req.credentials
+    );
 
-      if ( !authorized ) {
-        return res.status( 403 ).send('unauthorized');
-      }
+    const participant = await Participant.create({
+      email,
+      meeting_id
+    });
 
-      const participant = await Participant.create({
-        email,
-        meeting_id
-      });
-
-      return res.status( 201 ).send( participant );
-    } catch ( error ) {
-      res.status( 500 ).send( error );
-    }
+    return res.status( 201 ).send( participant );
   },
 
   getMeetings: async( req, res ) => {
-    try {
-      const { email } = req.params;
+    const { email } = req.params;
 
-      const participants = await Participant.find({ email });
+    const participants = await Participant.find({ email });
 
-      const meetingIds = [];
+    const meetingIds = [];
 
-      participants.forEach( ( participant ) => {
-        meetingIds.push( participant.meeting_id );
-      });
+    participants.forEach( ( participant ) => {
+      meetingIds.push( participant.meeting_id );
+    });
 
-      const query = { _id: { $in: meetingIds } };
+    const query = { _id: { $in: meetingIds } };
 
-      const cursorMeetings = await Meeting.find( query );
+    const cursorMeetings = await Meeting.find( query );
 
-      res.status( 200 ).send( cursorMeetings );
-    } catch ( error ) {
-      res.status( 500 ).send( error );
-    }
+    res.status( 200 ).send( cursorMeetings );
   }
 };

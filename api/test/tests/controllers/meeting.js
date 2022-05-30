@@ -207,7 +207,7 @@ describe( 'controllers/meeting', () => {
 
       const { data } = await client.post(
         '/meeting/aggregate',
-        { ...meeting }
+        meeting
       );
 
       const createdMeeting = await Meeting.findById( data._id );
