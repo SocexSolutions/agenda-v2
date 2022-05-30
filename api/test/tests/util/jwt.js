@@ -5,18 +5,18 @@ const fakeUser     = require('../../fakes/user');
 const ObjectId     = require('mongoose').Types.ObjectId;
 const { assert }   = require('chai');
 
-const path_to_priv_key = process.cwd() + '/keys/id_rsa_priv.pem';
-const path_to_pub_key  = process.cwd() + '/keys/id_rsa_pub.pem';
+const pathToPrivKey = process.cwd() + '/keys/id_rsa_priv.pem';
+const pathToPubKey  = process.cwd() + '/keys/id_rsa_pub.pem';
 
-const PRIV_KEY = fs.readFileSync( path_to_priv_key, 'utf8' );
-const PUB_KEY  = fs.readFileSync( path_to_pub_key, 'utf8' );
+const PRIV_KEY = fs.readFileSync( pathToPrivKey, 'utf8' );
+const PUB_KEY  = fs.readFileSync( pathToPubKey, 'utf8' );
 
-const module_path = 'lib/util/jwt';
+const modulePath = 'lib/util/jwt';
 
-describe( module_path, () => {
+describe( modulePath, () => {
 
   beforeEach( () => {
-    this.module = libRewire( module_path );
+    this.module = libRewire( modulePath );
     this.user = fakeUser({ _id: new ObjectId });
   });
 

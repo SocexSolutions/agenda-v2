@@ -9,7 +9,6 @@ const ObjectId       = require('mongoose').Types.ObjectId;
 chai.use( chaiAsPromised );
 const { assert } = chai;
 
-
 describe( 'lib/models/topic', () => {
 
   before( async() => {

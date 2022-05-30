@@ -3,10 +3,10 @@ const dbUtils    = require('../../utils/db');
 const db         = require('../../../lib/db');
 const api        = require('../../utils/api');
 const client     = require('../../utils/client');
-const themeFaker = require('../../fakes/theme');
+const fakeTheme  = require('../../fakes/theme');
 const Ui         = require('../../../lib/models/ui');
 
-describe( 'controllers/ui', () => {
+describe( 'lib/controllers/ui', () => {
 
   let user_id;
   const path = '/ui';
@@ -30,7 +30,7 @@ describe( 'controllers/ui', () => {
     await dbUtils.clean([ 'uis' ]);
 
     const themes = Array.from( { length: 5 }, () => {
-      return themeFaker();
+      return fakeTheme();
     });
 
     await Ui.insertMany( themes );

@@ -1,16 +1,16 @@
-const log = require('@starryinternet/jobi');
+const jobi = require('@starryinternet/jobi');
 
 function reqLog( req, res, next ) {
   try {
-    log.info( '*' + req.originalUrl );
-    log.debug( 'request params: ' + JSON.stringify( req.params ) );
-    log.debug( 'request body: ' + JSON.stringify( req.body ) );
-    log.trace( req );
+    jobi.info( '*' + req.originalUrl );
+    jobi.debug( 'request params: ' + JSON.stringify( req.params ) );
+    jobi.debug( 'request body: ' + JSON.stringify( req.body ) );
+    jobi.trace( req );
 
     const baseSend = res.send;
 
     res.send = ( data ) => {
-      log.debug( 'response payload: ' + JSON.stringify( data ) );
+      jobi.debug( 'response payload: ' + JSON.stringify( data ) );
 
       res.send = baseSend;
 

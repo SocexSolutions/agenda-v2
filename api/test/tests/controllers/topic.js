@@ -1,23 +1,23 @@
-const { assert }    = require('chai');
-const DBUtils       = require('../../utils/db');
-const DB            = require('../../../lib/db');
-const API           = require('../../utils/api');
-const Topic         = require('../../../lib/models/topic');
-const Takeaway      = require('../../../lib/models/takeaway');
-const Meeting       = require('../../../lib/models/meeting');
-const fake_topic    = require('../../fakes/topic');
-const fake_takeaway = require('../../fakes/takeaway');
-const fake_meeting  = require('../../fakes/meeting');
-const rewire        = require('rewire');
+const { assert }   = require('chai');
+const dbUtils      = require('../../utils/db');
+const db           = require('../../../lib/db');
+const api          = require('../../utils/api');
+const Topic        = require('../../../lib/models/topic');
+const Takeaway     = require('../../../lib/models/takeaway');
+const Meeting      = require('../../../lib/models/meeting');
+const fakeTopic    = require('../../fakes/topic');
+const fakeTakeaway = require('../../fakes/takeaway');
+const fakeMeeting  = require('../../fakes/meeting');
+const rewire       = require('rewire');
 
-describe( 'api/lib/controllers/topic', () => {
+describe( 'lib/controllers/topic', () => {
 
   before( async() => {
     this.Client = rewire('../../utils/client');
 
-    await API.start();
-    await DB.connect();
-    await DBUtils.clean();
+    await api.start();
+    await db.connect();
+    await dbUtils.clean();
 
     const res = ( await this.Client.post(
       '/user/register',
@@ -38,16 +38,16 @@ describe( 'api/lib/controllers/topic', () => {
 
   beforeEach( async() => {
     this.Client.defaults.headers.common['Authorization'] = this.token;
-    await DBUtils.clean([ 'topics', 'takeaways', 'meetings' ]);
+    await dbUtils.clean([ 'topics', 'takeaways', 'meetings' ]);
 
     this.meeting = await Meeting.create(
-      fake_meeting({ owner_id: this.user._id })
+      fakeMeeting({ owner_id: this.user._id })
     );
   });
 
   after( async() => {
-    await API.stop();
-    await DB.disconnect();
+    await api.stop();
+    await db.disconnect();
   });
 
   describe( '#create', () => {
@@ -55,7 +55,7 @@ describe( 'api/lib/controllers/topic', () => {
     const path = '/topic';
 
     it( 'should create topic with valid inputs', async() => {
-      const topic = fake_topic({ meeting_id: this.meeting._id });
+      const topic = fakeTopic({ meeting_id: this.meeting._id });
 
       const res = await this.Client.post( path, topic );
 
@@ -82,7 +82,7 @@ describe( 'api/lib/controllers/topic', () => {
     it( 'should 403 if not owner or participant', async() => {
       this.Client.defaults.headers.common['Authorization'] = this.token2;
 
-      const topic = fake_topic({ meeting_id: this.meeting._id });
+      const topic = fakeTopic({ meeting_id: this.meeting._id });
 
       await assert.isRejected(
         this.Client.post( path, topic ),
@@ -96,7 +96,7 @@ describe( 'api/lib/controllers/topic', () => {
 
     beforeEach( async() => {
       this.topic = await Topic.create(
-        fake_topic({ owner_id: this.user._id })
+        fakeTopic({ owner_id: this.user._id })
       );
     });
 
@@ -135,7 +135,7 @@ describe( 'api/lib/controllers/topic', () => {
 
     beforeEach( async() => {
       this.topic = await Topic.create(
-        fake_topic({ meeting_id: this.meeting._id })
+        fakeTopic({ meeting_id: this.meeting._id })
       );
     });
 
@@ -185,7 +185,7 @@ describe( 'api/lib/controllers/topic', () => {
 
     beforeEach( async() => {
       this.topic = await Topic.create(
-        fake_topic({ meeting_id: this.meeting._id })
+        fakeTopic({ meeting_id: this.meeting._id })
       );
     });
 
@@ -222,12 +222,12 @@ describe( 'api/lib/controllers/topic', () => {
 
     beforeEach( async() => {
       this.inserted_topic = await Topic.create(
-        fake_topic({ meeting_id: this.meeting._id })
+        fakeTopic({ meeting_id: this.meeting._id })
       );
     });
 
     it( 'should get topic\'s takeaways', async() => {
-      const takeaway = fake_takeaway({
+      const takeaway = fakeTakeaway({
         topic_id: this.inserted_topic._id.toString(),
         owner_id: this.user._id
       });

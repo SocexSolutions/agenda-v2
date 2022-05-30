@@ -1,8 +1,8 @@
-const router              = require('express').Router();
-const meeting_controller  = require('../controllers/meeting');
-const { wrap_controller } = require('../util/error-wrapper');
+const router             = require('express').Router();
+const meetingController  = require('../controllers/meeting');
+const { wrapController } = require('../util/error-wrapper');
 
-const wrapped = wrap_controller( meeting_controller );
+const wrapped = wrapController( meetingController );
 
 router.get( '/:_id', wrapped.get );
 router.post( '/', wrapped.create );

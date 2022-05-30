@@ -12,7 +12,7 @@ const AuthErr     = require('../classes/auth-err');
  *
  * @returns {Promise<Meeting>}
  */
-module.exports.check_participant = async( meeting_id, credentials ) => {
+module.exports.checkParticipant = async( meeting_id, credentials ) => {
   try {
     const { user, participant } = credentials;
 
@@ -61,7 +61,7 @@ module.exports.check_participant = async( meeting_id, credentials ) => {
  *
  * @returns {Promise<document>}
  */
-module.exports.check_owner = async( _id, collection_name, credentials ) => {
+module.exports.checkOwner = async( _id, collection_name, credentials ) => {
   try {
     const { user, participant } = credentials;
 
@@ -93,7 +93,7 @@ module.exports.check_owner = async( _id, collection_name, credentials ) => {
  *
  * @param credentials - req.credentials
  */
-module.exports.check_user = ( credentials ) => {
+module.exports.checkUser = ( credentials ) => {
   if ( !credentials?.usr ) {
     throw new AuthErr('not owner');
   }

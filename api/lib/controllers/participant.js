@@ -1,6 +1,6 @@
-const Participant     = require('../models/participant');
-const Meeting         = require('../models/meeting');
-const { check_owner } = require('../util/authorization');
+const Participant    = require('../models/participant');
+const Meeting        = require('../models/meeting');
+const { checkOwner } = require('../util/authorization');
 
 module.exports = {
   /**
@@ -15,7 +15,7 @@ module.exports = {
   create: async( req, res ) => {
     const { email, meeting_id } = req.body;
 
-    await check_owner(
+    await checkOwner(
       meeting_id,
       'meetings',
       req.credentials

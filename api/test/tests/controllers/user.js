@@ -15,7 +15,7 @@ const user = {
   email:    'email'
 };
 
-describe( 'api/lib/controllers/user.js', () => {
+describe( 'lib/controllers/user.js', () => {
 
   before( async() => {
     // clear cache

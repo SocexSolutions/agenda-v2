@@ -1,4 +1,4 @@
-const logger    = require('@starryinternet/jobi');
+const jobi      = require('@starryinternet/jobi');
 const sendGrid  = require('../classes/sendGrid');
 const templates = require('./emailTemplates/templates');
 
@@ -20,7 +20,7 @@ module.exports = {
 
     } catch ( err ) {
       res.status( 500 ).send( err );
-      logger.log( 'error', err.message );
+      jobi.log( 'error', err.message );
     }
   }
 

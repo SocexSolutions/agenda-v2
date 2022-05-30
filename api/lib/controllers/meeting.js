@@ -1,10 +1,10 @@
-const Mongoose    = require('mongoose');
+const mongoose    = require('mongoose');
 const Meeting     = require('../models/meeting');
 const Topic       = require('../models/topic.js');
 const Participant = require('../models/participant');
 const ObjectID    = require('mongoose').Types.ObjectId;
-const Jobi        = require('@starryinternet/jobi');
-const Auth        = require('../util/authorization');
+const jobi        = require('@starryinternet/jobi');
+const authUtils   = require('../util/authorization');
 
 module.exports = {
   /**
@@ -14,7 +14,7 @@ module.exports = {
   get: async( req, res ) => {
     const { _id }  = req.params;
 
-    const meeting = await Auth.check_participant( _id, req.credentials );
+    const meeting = await authUtils.checkParticipant( _id, req.credentials );
 
     res.status( 200 ).send( meeting );
   },
@@ -27,7 +27,7 @@ module.exports = {
   create: async( req, res ) => {
     const { name, date } = req.body;
 
-    Auth.check_user( req.credentials );
+    authUtils.checkUser( req.credentials );
 
     const meeting = await Meeting.create({
       name,
@@ -48,7 +48,7 @@ module.exports = {
     const { name, date } = req.body;
     const _id            = req.params._id;
 
-    await Auth.check_owner( _id, 'meetings', req.credentials );
+    await authUtils.checkOwner( _id, 'meetings', req.credentials );
 
     const updated = await Meeting.findOneAndUpdate(
       { _id },
@@ -66,7 +66,7 @@ module.exports = {
   aggregate: async( req, res ) => {
     const { _id }    = req.params;
 
-    await Auth.check_participant( _id, req.credentials );
+    await authUtils.checkParticipant( _id, req.credentials );
 
     const [ meeting ] = await Meeting.aggregate([
       {
@@ -121,7 +121,7 @@ module.exports = {
         return res.status( 403 ).send('unauthorized');
       }
 
-      session = await Mongoose.connection.startSession();
+      session = await mongoose.connection.startSession();
 
       await session.withTransaction( async() => {
 
@@ -172,7 +172,7 @@ module.exports = {
       });
 
     } catch ( error ) {
-      Jobi.error( error.message );
+      jobi.error( error.message );
 
       res.status( 500 ).send( error.message );
     } finally {
@@ -183,7 +183,7 @@ module.exports = {
   async getTopics( req, res ) {
     const { _id }  = req.params;
 
-    await Auth.check_participant( _id, req.credentials );
+    await authUtils.checkParticipant( _id, req.credentials );
 
     const topics = await Topic.find({ meeting_id: _id });
 
@@ -193,7 +193,7 @@ module.exports = {
   async getParticipants( req, res ) {
     const { _id }  = req.params;
 
-    await Auth.check_participant( _id, req.credentials );
+    await authUtils.checkParticipant( _id, req.credentials );
 
     const participants = await Participant.find({ meeting_id: _id });
 

@@ -1,8 +1,8 @@
-const router              = require('express').Router();
-const ui_controller       = require('../controllers/ui');
-const { wrap_controller } = require('../util/error-wrapper');
+const router             = require('express').Router();
+const uiController       = require('../controllers/ui');
+const { wrapController } = require('../util/error-wrapper');
 
-const wrapped = wrap_controller( ui_controller );
+const wrapped = wrapController( uiController );
 
 router.get( '/:user_id', wrapped.get );
 router.post( '/', wrapped.save );

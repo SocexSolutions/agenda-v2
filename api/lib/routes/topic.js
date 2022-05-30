@@ -1,8 +1,8 @@
-const router              = require('express').Router();
-const topic_controller    = require('../controllers/topic');
-const { wrap_controller } = require('../util/error-wrapper');
+const router             = require('express').Router();
+const topicController    = require('../controllers/topic');
+const { wrapController } = require('../util/error-wrapper');
 
-const wrapped = wrap_controller( topic_controller );
+const wrapped = wrapController( topicController );
 
 router.post( '/', wrapped.create );
 router.post( '/:_id', wrapped.update );

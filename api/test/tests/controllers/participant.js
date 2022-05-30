@@ -9,7 +9,7 @@ const fakeParticipant = require('../../fakes/participant');
 const fakeMeeting     = require('../../fakes/meeting');
 
 
-describe( 'controllers/participant', () => {
+describe( 'lib/controllers/participant', () => {
 
   before( async() => {
     await api.start();

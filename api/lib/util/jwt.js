@@ -1,4 +1,4 @@
-const JsonWebToken = require('jsonwebtoken');
+const jsonWebToken = require('jsonwebtoken');
 const fs           = require('fs');
 const path         = require('path');
 
@@ -28,7 +28,7 @@ module.exports = {
       usr // whether this is for a user or participant
     };
 
-    const signedToken = JsonWebToken.sign(
+    const signedToken = jsonWebToken.sign(
       payload,
       PRIV_KEY,
       { algorithm: 'RS256' }
@@ -60,7 +60,7 @@ module.exports = {
       throw new Error('unauthorized');
     }
 
-    const decrypted = JsonWebToken.verify(
+    const decrypted = jsonWebToken.verify(
       token,
       PUB_KEY,
       { algorithms: [ 'RS256' ] }

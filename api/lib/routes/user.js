@@ -1,8 +1,8 @@
-const router              = require('express').Router();
-const user_controller     = require('../controllers/user');
-const { wrap_controller } = require('../util/error-wrapper');
+const router             = require('express').Router();
+const userController     = require('../controllers/user');
+const { wrapController } = require('../util/error-wrapper');
 
-const wrapped = wrap_controller( user_controller );
+const wrapped = wrapController( userController );
 
 router.post( '/register', wrapped.register );
 router.post( '/login', wrapped.login );

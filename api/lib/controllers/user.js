@@ -1,8 +1,8 @@
 const User      = require('../models/user');
 const Meeting   = require('../models/meeting');
-const PassUtils = require('../util/password');
-const JWTUtils  = require('../util/jwt');
-const Auth      = require('../util/authorization');
+const passUtils = require('../util/password');
+const jwtUtils  = require('../util/jwt');
+const authUtils = require('../util/authorization');
 
 
 module.exports = {
@@ -25,7 +25,7 @@ module.exports = {
       });
     }
 
-    const { hash, salt } = PassUtils.genPassword( password );
+    const { hash, salt } = passUtils.genPassword( password );
 
     const newUser = {
       email,
@@ -36,7 +36,7 @@ module.exports = {
 
     const user = await User.create( newUser );
 
-    const { token, expiresIn } = JWTUtils.issueJWT( user, true );
+    const { token, expiresIn } = jwtUtils.issueJWT( user, true );
 
     return res.status( 201 ).json({
       success: true,
@@ -62,14 +62,14 @@ module.exports = {
       });
     }
 
-    const valid = PassUtils.validatePassword(
+    const valid = passUtils.validatePassword(
       password,
       user.hash,
       user.salt
     );
 
     if ( valid ) {
-      const { token, expiresIn } = JWTUtils.issueJWT( user, true );
+      const { token, expiresIn } = jwtUtils.issueJWT( user, true );
 
       return res.status( 200 ).json({
         success: true,
@@ -93,7 +93,7 @@ module.exports = {
   async refresh( req, res ) {
     const token = req.headers.authorization;
 
-    const decoded = JWTUtils.verifyJWT( token );
+    const decoded = jwtUtils.verifyJWT( token );
 
     const user = await User.findById( decoded.sub );
 
@@ -115,7 +115,7 @@ module.exports = {
   },
 
   async getOwnedMeetings( req, res ) {
-    Auth.check_user( req.credentials );
+    authUtils.checkUser( req.credentials );
 
     const { sub } = req.credentials;
 

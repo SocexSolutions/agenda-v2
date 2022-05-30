@@ -1,8 +1,8 @@
-const router              = require('express').Router();
-const takeaway_controller = require('../controllers/takeaway');
-const { wrap_controller } = require('../util/error-wrapper');
+const router             = require('express').Router();
+const takeawayController = require('../controllers/takeaway');
+const { wrapController } = require('../util/error-wrapper');
 
-const wrapped = wrap_controller( takeaway_controller );
+const wrapped = wrapController( takeawayController );
 
 router.post( '/', wrapped.create );
 router.patch( '/:id', wrapped.update );

@@ -1,5 +1,5 @@
 const templates = require( "./emailTemplates/templates" );
-const sgMail = require('@sendgrid/mail')
+const sgMail    = require('@sendgrid/mail')
 
 class SendGrid {
   // eslint-disable-next-line
@@ -16,7 +16,7 @@ class SendGrid {
   }
 
    /**
-    * 
+    *
     * @param {string} recipients recipient email
     * @param {object} message sendgrid template object
     */

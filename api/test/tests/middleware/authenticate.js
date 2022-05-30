@@ -3,22 +3,22 @@ const path         = require('path');
 const fs           = require('fs');
 const JsonWebToken = require('jsonwebtoken');
 const client       = require('../../utils/client');
-const db_utils     = require('../../utils/db');
+const dbUtils      = require('../../utils/db');
 const db           = require('../../../lib/db');
 const api          = require('../../utils/api');
-const lib_rewire   = require('../../utils/lib-rewire');
+const libRewire    = require('../../utils/lib-rewire');
 
-const module_path = 'lib/middleware/authenticate';
+const modulePath = 'lib/middleware/authenticate';
 
 const pathToKey = path.join( __dirname, '../../../keys/id_rsa_priv.pem' );
-const PRIV_KEY   = fs.readFileSync( pathToKey, 'utf8' );
+const PRIV_KEY  = fs.readFileSync( pathToKey, 'utf8' );
 
-describe( module_path, () => {
+describe( modulePath, () => {
 
   before( async() => {
     await api.start();
     await db.connect();
-    await db_utils.clean();
+    await dbUtils.clean();
 
     const res = await client.post(
       '/user/register',
@@ -35,7 +35,7 @@ describe( module_path, () => {
   });
 
   beforeEach( () => {
-    this.module = lib_rewire( module_path );
+    this.module = libRewire( modulePath );
   });
 
   it( 'should accept an valid auth token', async() => {

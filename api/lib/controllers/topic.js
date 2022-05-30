@@ -1,12 +1,12 @@
-const Topic    = require('../models/topic');
-const Takeaway = require('../models/takeaway');
-const Auth     = require('../util/authorization');
+const Topic     = require('../models/topic');
+const Takeaway  = require('../models/takeaway');
+const authUtils = require('../util/authorization');
 
 module.exports = {
   create: async( req, res ) => {
     const new_topic = req.body;
 
-    await Auth.check_participant(
+    await authUtils.checkParticipant(
       new_topic.meeting_id,
       req.credentials
     );
@@ -25,7 +25,7 @@ module.exports = {
 
     const sub_id = req.credentials.sub;
 
-    await Auth.check_owner( _id, 'topics', req.credentials );
+    await authUtils.checkOwner( _id, 'topics', req.credentials );
 
     const topic_updated = await Topic.findOneAndUpdate(
       { _id },
@@ -42,7 +42,7 @@ module.exports = {
 
     const topic = await Topic.findOne({ _id });
 
-    await Auth.check_participant( topic.meeting_id, req.credentials );
+    await authUtils.checkParticipant( topic.meeting_id, req.credentials );
 
     if ( !topic.likes.includes( email ) ) {
       topic.likes.push( email );
@@ -67,7 +67,7 @@ module.exports = {
 
     const topic = await Topic.findOne({ _id });
 
-    await Auth.check_participant( topic.meeting_id, req.credentials );
+    await authUtils.checkParticipant( topic.meeting_id, req.credentials );
 
     const updated = await Topic.findOneAndUpdate(
       { _id },
@@ -83,7 +83,7 @@ module.exports = {
 
     const topic = await Topic.findOne({ _id });
 
-    await Auth.check_participant( topic.meeting_id, req.credentials );
+    await authUtils.checkParticipant( topic.meeting_id, req.credentials );
 
     const takeaways = await Takeaway.find({ topic_id: _id });
 

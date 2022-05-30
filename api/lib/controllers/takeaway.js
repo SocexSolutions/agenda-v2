@@ -1,6 +1,6 @@
-const Takeaway = require('../models/takeaway');
-const Topic    = require('../models/topic');
-const Auth     = require('../util/authorization');
+const Takeaway  = require('../models/takeaway');
+const Topic     = require('../models/topic');
+const authUtils = require('../util/authorization');
 
 module.exports = {
   create: async( req, res ) => {
@@ -8,7 +8,7 @@ module.exports = {
 
     const { meeting_id } = await Topic.findOne({ _id: topic_id });
 
-    await Auth.check_participant( meeting_id, req.credentials );
+    await authUtils.checkParticipant( meeting_id, req.credentials );
 
     const takeaway = await Takeaway.create({
       name,
@@ -25,7 +25,7 @@ module.exports = {
     const { name, description } = req.body;
     const subject_id = req.credentials.sub;
 
-    await Auth.check_owner( id, 'takeaways', req.credentials );
+    await authUtils.checkOwner( id, 'takeaways', req.credentials );
 
     const updatedTakeaway = await Takeaway.findOneAndUpdate(
       { _id: id },
@@ -39,7 +39,7 @@ module.exports = {
   delete: async( req, res ) => {
     const { id } = req.params;
 
-    await Auth.check_owner( id, 'takeaways', req.credentials );
+    await authUtils.checkOwner( id, 'takeaways', req.credentials );
 
     const deleted = await Takeaway.deleteOne({
       _id: id

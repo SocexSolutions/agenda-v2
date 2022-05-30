@@ -1,7 +1,7 @@
 const rewire = require('rewire');
 
-module.exports = ( path_in_lib ) => {
-  const full_path = process.cwd() + '/' + path_in_lib;
+module.exports = ( pathInLib ) => {
+  const fullPath = process.cwd() + '/' + pathInLib;
 
-  return rewire( full_path );
+  return rewire( fullPath );
 };

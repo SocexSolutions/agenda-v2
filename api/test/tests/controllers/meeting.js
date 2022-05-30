@@ -16,7 +16,7 @@ chai.use( chaiSubset );
 
 const assert = chai.assert;
 
-describe( 'controllers/meeting', () => {
+describe( 'lib/controllers/meeting', () => {
 
   before( async() => {
     await api.start();
