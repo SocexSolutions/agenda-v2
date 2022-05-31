@@ -10,7 +10,7 @@ Generate public and private keys and install dependencies:
 npm run setup
 ```
 
-## Containerized (Recommended)
+## Containerized
 
 To run the frontend, backend, and database in separate containers use:
 ```
