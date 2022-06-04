@@ -6,7 +6,20 @@
   margin-bottom: 1rem;
   padding: 1rem;
   border-radius: 10px;
-  width: 90%;
+  width: 100%;
+  cursor: pointer;
+}
+
+.container:hover {
+  opacity: 70%;
+}
+
+.editing {
+  cursor: initial;
+}
+
+.editing:hover {
+  opacity: 100%;
 }
 
 .container h3 {
@@ -15,7 +28,7 @@
 }
 
 .container input {
-  font-size: .9rem;
+  width: 50%;
   margin: .5rem 0rem;
 }
 

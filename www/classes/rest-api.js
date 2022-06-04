@@ -1,5 +1,5 @@
-import store from '../store';
 import client from '../store/client';
+import { store } from '../store/store';
 import { notify } from '../store/features/snackbar/snackbarSlice';
 
 class RestAPI {
@@ -12,19 +12,17 @@ class RestAPI {
    * @param {Object} type - rest type (e.g. takeaway, meeting, topic)
    * @param {Object} [opts] - options
    * @property {Object} methods - custom methods to add to the RestAPI which
-   * have access to `this.client`, `this.store`, and `this.notify`
+   * have access to `client`, `store`, and `notify`
    *
    * @returns {RestAPI}
    */
   constructor( type, opts = {} ) {
     this.type = type;
 
-    this.client = client;
-    this.store  = store;
-    this.notify = notify;
-
-    for ( const methodName of Object.keys( opts.additionalMethods ) ) {
-      this[ methodName ] = opts.additionalMethods[ methodName ].bind( this );
+    if ( opts.additionalMethods ) {
+      for ( const methodName of Object.keys( opts.additionalMethods ) ) {
+        this[ methodName ] = opts.additionalMethods[ methodName ].bind( this );
+      }
     }
   }
 
@@ -35,11 +33,11 @@ class RestAPI {
    */
   async get( id ) {
     try {
-      const res = await this.client.get( `${ this.type }/${ id }` );
+      const res = await client.get( `${ this.type }/${ id }` );
 
-      return res;
+      return res.data;
     } catch ( err ) {
-      this.store.dispatch( this.notify({
+      store().dispatch( notify({
         message: `Failed to get ${ this.type } (${ err.message } )`,
         type: 'danger'
       }) );
@@ -53,11 +51,11 @@ class RestAPI {
    */
   async create( payload ) {
     try {
-      const res = await this.client.post( this.type, payload );
+      const res = await client.post( this.type, payload );
 
-      return res;
+      return res.data;
     } catch ( err ) {
-      this.store.dispatch( this.notify({
+      store().dispatch( notify({
         message: `Failed to create ${ this.type } (${ err.message } )`,
         type: 'danger'
       }) );
@@ -72,11 +70,11 @@ class RestAPI {
    */
   async update( id, payload ) {
     try {
-      const res = await this.client.patch( `${ this.type }/${ id }`, payload );
+      const res = await client.patch( `${ this.type }/${ id }`, payload );
 
-      return res;
+      return res.data;
     } catch ( err ) {
-      this.store.dispatch( this.notify({
+      store().dispatch( notify({
         message: `Failed to update ${ this.type } (${ err.message } )`,
         type: 'danger'
       }) );
@@ -92,9 +90,9 @@ class RestAPI {
    */
   async destroy( id ) {
     try {
-      await this.client.delete( `${ this.type }/${ id }` );
+      await client.delete( `${ this.type }/${ id }` );
     } catch ( err ) {
-      this.store.dispatch( this.notify({
+      store().dispatch( notify({
         message: `Failed to delete ${ this.type } (${ err.message } )`,
         type: 'danger'
       }) );

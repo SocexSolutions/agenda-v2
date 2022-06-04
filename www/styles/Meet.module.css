@@ -14,8 +14,12 @@
   align-items: center;
   border-left: 2px solid var(--agenda);
   border-right: 2px solid var(--agenda);
-  padding: 1rem;
+  padding: 0rem 3rem 3rem 3rem;
   box-shadow: inset -15px 0 10px -15px var(--backgroundShadow) , inset 15px 0 15px -15px var(--backgroundShadow);
+}
+
+.mainContainer h3 {
+  width: 100%;
 }
 
 .sideContainer {
@@ -24,7 +28,10 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+}
+
+.sideContainer h3 {
+  width: 100%;
 }
 
 .loadingContainer {
@@ -33,4 +40,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.card {
+  width: 100%;
 }

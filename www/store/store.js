@@ -4,7 +4,7 @@ import thunkMiddleware                  from 'redux-thunk';
 import { composeWithDevTools }          from 'redux-devtools-extension';
 import rootReducer                      from './rootReducer';
 
-let store;
+let _store;
 
 const composedEnhancer = composeWithDevTools(
   applyMiddleware( thunkMiddleware )
@@ -15,33 +15,37 @@ function initStore( initialState ) {
 }
 
 export const initializeStore = ( preloadedState ) => {
+  let new_store = _store ?? initStore( preloadedState );
 
-  let _store = store ?? initStore( preloadedState );
-
-  if ( preloadedState && store ) {
-    _store = initStore({
-      ...store.getState(),
+  if ( preloadedState && _store ) {
+    new_store = initStore({
+      ..._store.getState(),
       ...preloadedState
     });
 
-    store = undefined;
+    _store = undefined;
   }
 
   if ( typeof window === 'undefined' ) {
-    return _store;
+    return new_store;
   }
 
-  if ( !store ) {
-    store = _store;
+  if ( !_store ) {
+    _store = new_store;
   }
 
-  return _store;
+  return new_store;
 };
 
 export function useStore( initialState ) {
-  const store = useMemo( () =>
+  _store = useMemo( () =>
     initializeStore( initialState ), [ initialState ]
   );
 
-  return store;
+  return _store;
+}
+
+
+export function store() {
+  return _store;
 }

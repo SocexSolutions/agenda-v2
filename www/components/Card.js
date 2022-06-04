@@ -8,41 +8,41 @@ import { useState } from 'react';
 
 /**
  * @param {Object} item             - item that to display
- * @param {Function} saveTakeaway   - save function for an item
- * @param {Function} deleteTakeaway - delete function (called with items _id)
+ * @param {Function} updateItem   - save function for an item
+ * @param {Function} destroyItem - delete function (called with items _id)
  */
 const Card = ({
   editing,
   setEditing,
   item,
-  saveTakeaway,
-  deleteTakeaway
+  updateItem,
+  destroyItem
 }) => {
   const [ name, setName ]               = useState( item.name || null );
   const [ description, setDescription ] = useState( item.description || null );
 
-  const onSave = () => {
-    saveTakeaway({ ...item, name, description });
+  const onUpdate = () => {
+    updateItem({ ...item, name, description });
   };
 
-  const onDelete = () => {
-    deleteTakeaway( item._id );
+  const onDestroy = () => {
+    destroyItem( item._id );
   };
 
   if ( !editing ) {
     return (
       <div
         className={styles.container}
-        onDoubleClick={() => setEditing( item._id )}
+        onClick={() => setEditing( item._id )}
       >
-        <h1>{name}</h1>
+        <h2>{name}</h2>
         <p>{description}</p>
       </div>
     );
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container + ' ' + styles.editing}>
       <Input onChange={( e ) => setName( e.target.value ) } value={name}/>
       <Input
         multiLine={true}
@@ -53,16 +53,14 @@ const Card = ({
       />
       <div className={styles.buttonContainer}>
         <Button
-          onClick={() => onDelete()}
+          onClick={() => onDestroy()}
           text="delete"
           size="small"
-          type='danger'
         />
         <Button
-          onClick={() => onSave()}
+          onClick={() => onUpdate()}
           text="save"
           size="small"
-          type='success'
         />
       </div>
     </div>
