@@ -1,6 +1,9 @@
 import LoadingIcon   from '../../../components/LoadingIcon';
-import TakeawayBoard from '../../../components/Bundles/Meeting/TakeawayBoard';
 import Button        from '../../../components/Button';
+import CardBoard     from '../../../components/CardBoard';
+
+import takeawayAPI from '../../../api/takeaway';
+import topicAPI    from '../../../api/topic';
 
 import { useEffect, useState } from 'react';
 import { useRouter }           from 'next/router';
@@ -133,7 +136,7 @@ const Meet = ( props ) => {
         setTopics( tmp );
         setSwitchingTopics( null );
 
-        const res = await Promise.all( promises );
+        await Promise.all( promises );
 
       } catch ( err ) {
         props.store.dispatch(
@@ -230,7 +233,7 @@ const Meet = ( props ) => {
   const openCards = open.map( t => {
     return (
       <div
-        className={sharedStyles.card} key={ t.name }
+        className={sharedStyles.card + ' ' + styles.card} key={ t.name }
         onClick={ () => setSwitchingTopics( t._id ) }
       >
         {t.name}
@@ -241,7 +244,7 @@ const Meet = ( props ) => {
   const closedCards = closed.map( t => {
     return (
       <div
-        className={sharedStyles.card} key={ t.name }
+        className={sharedStyles.card + ' ' + styles.card} key={ t.name }
         onClick={ () => setSwitchingTopics( t._id ) }
       >
         {t.name}
@@ -258,7 +261,7 @@ const Meet = ( props ) => {
       <div className={styles.mainContainer}>
         <h3>Under Discussion</h3>
         { live &&
-          <div className={sharedStyles.card}>
+          <div className={sharedStyles.card + ' ' + styles.card}>
             <h3>{live.name}</h3>
             <p>{live.description}</p>
             <Button
@@ -270,7 +273,16 @@ const Meet = ( props ) => {
           </div>
         }
         { live &&
-          <TakeawayBoard topic_id={ live._id } />
+          <CardBoard
+            key={ live._id }
+            getAll={ () => topicAPI.getTakeaways( live._id )}
+            create={ ( payload ) => takeawayAPI.create({
+              topic_id: live._id,
+              ...payload
+            })}
+            update={ ( id, payload ) => takeawayAPI.update( id, payload ) }
+            destroy={ ( id ) => takeawayAPI.destroy( id )}
+          />
         }
       </div>
       <div className={styles.sideContainer}>

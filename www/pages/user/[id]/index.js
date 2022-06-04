@@ -6,6 +6,8 @@ import LoadingIcon from '../../../components/LoadingIcon';
 
 import client from '../../../store/client';
 
+import shared from '../../../styles/Shared.module.css';
+
 import { notify } from '../../../store/features/snackbar/snackbarSlice';
 
 
@@ -54,11 +56,13 @@ const User = ( props ) => {
   const meetings = ownedMeetings.concat( participantMeetings );
 
   return (
-    <>
-      <Inbox
-        meetings={ meetings }
-      />
-    </>
+    <div className={shared.page}>
+      <div className={shared.container}>
+        <Inbox
+          meetings={ meetings }
+        />
+      </div>
+    </div>
   );
 };
 

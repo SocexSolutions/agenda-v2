@@ -2,6 +2,7 @@ import LoadingIcon   from '../../../components/LoadingIcon';
 import ArrowCircleUp from '@mui/icons-material/ThumbUp';
 import Button from '../../../components/Button';
 import styles from '../../../styles/Voting.module.css';
+import shared from '../../../styles/Shared.module.css';
 import client from '../../../store/client';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -88,7 +89,7 @@ const Voting = ( props ) => {
         <h3>{t.name}</h3>
         <p>{t.description}</p>
         <Button
-          className={styles.like_button}
+          className={styles.like}
           variant='icon'
           icon={
             <ArrowCircleUp
@@ -103,8 +104,10 @@ const Voting = ( props ) => {
   });
 
   return (
-    <div className={styles.container}>
-      { topicCards }
+    <div className={shared.page}>
+      <div className={shared.container}>
+        { topicCards }
+      </div>
     </div>
   );
 };

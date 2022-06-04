@@ -6,10 +6,6 @@
   align-items: center;
 }
 
-.container {
-  width: 100%;
-}
-
 .topic {
   margin: 2rem;
   padding: 1rem;
@@ -22,6 +18,10 @@
 
 .topic h3 {
   margin-top: .25rem;
+}
+
+.topic Button {
+  margin-left: auto;
 }
 
 .like {

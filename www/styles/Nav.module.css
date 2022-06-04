@@ -53,14 +53,10 @@
   margin: .5rem 1rem;
 }
 
-.nav Button {
-  margin: 1rem;
-}
-
 .nav_logged_in ul li a {
   margin: .5rem 1.5rem;
 }
 
 .nav_button {
-  width: 7rem;
+  margin-left: 1em;
 }

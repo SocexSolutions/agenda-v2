@@ -1,8 +1,10 @@
 import RestAPI from '../classes/rest-api';
+import client from '../store/client';
+import { notify } from '../store/features/snackbar/snackbarSlice';
+import { store } from '../store/store';
 
 /**
- * Fetch the takeaways for a given topic, relies on the existence of
- * `client`, `store`, and `notify` in its context
+ * Fetch the takeaways for a given topic
 
  * @param {String} id - topic id to get takeaways for
 
@@ -10,11 +12,11 @@ import RestAPI from '../classes/rest-api';
  */
 async function getTakeaways( id ) {
   try {
-    const res = await this.client.get( `topic/${ id }/takeaways` );
+    const res = await client.get( `topic/${ id }/takeaways` );
 
-    return res;
+    return res.data;
   } catch ( err ) {
-    this.store.dispatch( this.notify({
+    store().dispatch( notify({
       message: 'Failed to get takeaways for topic',
       type: 'danger'
     }) );

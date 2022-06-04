@@ -20,7 +20,7 @@
 }
 
 .medium {
-  padding: .4rem 1rem;
+  padding: .4em .7em;
   font-size: 1.05rem;
 }
 
@@ -31,11 +31,10 @@
 
 .icon {
   background-color: transparent;
-  margin: 0 !important;
   color: var(--agendaSecondary);
   min-width: 0px;
-  padding: 0.2rem;
-  margin-top: 0.2rem;
+  padding: 0.2em;
+  margin-top: 0.2em;
 }
 
 .icon:hover {
@@ -43,7 +42,7 @@
 }
 
 .icon_container {
-  padding: .25rem;
+  padding-right: .5em;
   display: flex;
   justify-content: center;
   align-items: center;

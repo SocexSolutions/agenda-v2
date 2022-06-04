@@ -90,14 +90,14 @@ const Nav = () => {
               <Button
                 variant="outlined"
                 text="Login"
-                className={styles.nav_button}
+                customClass={styles.nav_button}
               />
             </Link>
             <Link href="/register">
               <Button
                 variant="outlined"
                 text="Sign Up"
-                className={styles.nav_button}
+                customClass={styles.nav_button}
               />
             </Link>
           </div>

@@ -2,6 +2,10 @@ import styles from '../styles/Inbox.module.css';
 
 import Link from 'next/link';
 
+import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown';
+import GroupsIcon from '@mui/icons-material/Groups';
+import CreateSharpIcon from '@mui/icons-material/CreateSharp';
+
 import Button from '../components/Button';
 
 const Inbox = ({ meetings, emptyMessage }) => {
@@ -13,8 +17,17 @@ const Inbox = ({ meetings, emptyMessage }) => {
       >
         <div className={styles.item}>
           <p>{meeting.name}</p>
+          <Link  href={ `/meeting/${ meeting._id }`}>
+            <Button
+              icon={<CreateSharpIcon/>}
+              text='vote'
+              size='medium'
+              variant='hollow'
+            />
+          </Link>
           <Link  href={ `/meeting/${ meeting._id }/voting`}>
             <Button
+              icon={<ThumbsUpDownIcon/>}
               text='vote'
               size='medium'
               variant='hollow'
@@ -22,9 +35,10 @@ const Inbox = ({ meetings, emptyMessage }) => {
           </Link>
           <Link href={ `/meeting/${ meeting._id }/meet`}>
             <Button
+              icon={<GroupsIcon/>}
               text='meet'
               size='medium'
-              type='success'
+              variant='hollow'
             />
           </Link>
         </div>
