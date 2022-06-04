@@ -8,7 +8,6 @@ function ParticipantsForm( props ) {
       <ChipForm
         items={props.participants}
         itemKey='email'
-        itemName='Participant'
         setItems={props.setParticipants}
       />
     </div>

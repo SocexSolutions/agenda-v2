@@ -122,7 +122,9 @@ function TopicsForm( props ) {
           onClick={() => addTopic()}
         />
       </div>
-      { topicCards }
+      <div className={styles.topics_container}>
+        { topicCards }
+      </div>
     </div>
   );
 }

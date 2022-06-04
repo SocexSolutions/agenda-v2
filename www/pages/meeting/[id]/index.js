@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { notify } from '../../../store/features/snackbar/snackbarSlice';
 
 import styles from '../../../styles/MeetingPage.module.css';
+import shared from '../../../styles/Shared.module.css';
 
 const Meeting = ( props ) => {
   const router = useRouter();
@@ -118,24 +119,29 @@ const Meeting = ( props ) => {
   }
 
   return (
-    <div className={styles.page}>
-      <HeaderForm setMeetingName={setNameHandler} meetingName={name} />
-      <ParticipantsForm
-        owner={user.email}
-        participants={participants}
-        setParticipants={setParticipants}
-      />
-      <TopicsForm
-        store={props.store}
-        topics={topics}
-        setTopics={setTopics}
-      />
-      <Button
-        size='large'
-        customClass={styles.meetingButton}
-        onClick={() => setSaving( true )}
-        text="save"
-      />
+    <div className={shared.page}>
+      <div className={shared.container}>
+        <h3>Meeting Details</h3>
+        <HeaderForm setMeetingName={setNameHandler} meetingName={name} />
+        <h3>Participants</h3>
+        <ParticipantsForm
+          owner={user.email}
+          participants={participants}
+          setParticipants={setParticipants}
+        />
+        <h3>Topics</h3>
+        <TopicsForm
+          store={props.store}
+          topics={topics}
+          setTopics={setTopics}
+        />
+        <Button
+          size='large'
+          customClass={styles.meetingButton}
+          onClick={() => setSaving( true )}
+          text="save"
+        />
+      </div>
     </div>
   );
 };

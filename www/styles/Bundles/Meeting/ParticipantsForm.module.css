@@ -1,9 +1,8 @@
 .container {
+  width: 100%;
   color: var(--agendaText);
   background-color: var(--backgroundTwo);
   border: 1px solid var(--agendaSecondary);
-  margin-left: 3rem;
-  margin-right: 3rem;
   margin-bottom: 1rem;
   padding: 1rem;
   border-radius: 10px;

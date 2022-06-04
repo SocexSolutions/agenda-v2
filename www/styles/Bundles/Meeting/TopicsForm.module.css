@@ -1,9 +1,8 @@
 .container {
+  width: 100%;
   color: var(--agendaText);
   background-color: var(--backgroundTwo);
   border: 1px solid var(--agendaSecondary);
-  margin-left: 3rem;
-  margin-right: 3rem;
   margin-bottom: 1rem;
   padding: 1rem;
   border-radius: 10px;
@@ -25,4 +24,26 @@
 .container button {
   margin-top: 1rem;
   margin-left: auto;
+}
+
+.topics_container {
+  overflow-y: scroll;
+  height: 30vh;
+  padding: .5em;
+  margin: 1em;
+}
+
+/* use psuedoselector for scrollbar (not supported by all browsers) */
+.topics_container::-webkit-scrollbar {
+  width: .75rem;
+}
+
+.topics_container::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+/* thumb refers to the bar on the slider */
+.topics_container::-webkit-scrollbar-thumb {
+  background-image: linear-gradient(var(--agendaSecondary), var(--agendaThree));
+  border-radius: 25px;
 }

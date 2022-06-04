@@ -78,7 +78,6 @@ function ChipForm( props ) {
 
   return (
     <div className={styles.chipForm}>
-      <h3>{ props.itemName }s</h3>
       <div className={styles.chipContainer}>
         {chips}
       </div>
