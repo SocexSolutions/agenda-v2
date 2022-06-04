@@ -6,8 +6,8 @@ import { useEffect } from 'react';
 
 import { useRouter } from 'next/router';
 
-import { userLogin } from '../store/features/user/userSlice';
-import { notify }    from '../store/features/snackbar/snackbarSlice';
+import { userLogin } from '../store/features/user';
+import { notify }    from '../store/features/snackbar';
 
 import styles from '../styles/Register.module.css';
 

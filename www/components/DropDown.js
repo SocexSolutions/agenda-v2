@@ -6,13 +6,14 @@ import Modal from '../components/Modal';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon        from '@mui/icons-material/ExitToApp';
 import ThemeIcon         from '@mui/icons-material/ColorLens';
+
 import placeholder from '../public/placeholderTheme.png';
 import ThemeCard from './ThemeCard';
 
 import { useRouter } from 'next/router';
 
 import { useState } from 'react';
-import { userLogout } from '../store/features/user/userSlice';
+import { userLogout } from '../store/features/user';
 
 import { useSelector, useDispatch } from 'react-redux';
 

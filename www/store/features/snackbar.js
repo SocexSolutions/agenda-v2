@@ -1,4 +1,4 @@
-import wait from '../../../utils/wait';
+import wait from '../../utils/wait';
 
 const initialState = {
   open: false,

@@ -1,12 +1,18 @@
 import LoadingIcon   from '../../../components/LoadingIcon';
+
 import ArrowCircleUp from '@mui/icons-material/ThumbUp';
+
 import Button from '../../../components/Button';
+
 import styles from '../../../styles/Voting.module.css';
 import shared from '../../../styles/Shared.module.css';
-import client from '../../../store/client';
+
+import meetingAPI from '../../../api/meeting';
+import topicAPI   from '../../../api/topic';
+
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useRouter }    from 'next/router';
+import { useSelector }         from 'react-redux';
+import { useRouter }           from 'next/router';
 
 const selectUser = state => state.user;
 
@@ -15,34 +21,27 @@ const Voting = ( props ) => {
   const [ loading, setLoading ] = useState( true );
   const [ meeting, setMeeting ] = useState( null );
 
-  const user = useSelector( selectUser );
+  const user   = useSelector( selectUser );
   const router = useRouter();
+
+  const meeting_id = router.query.id;
 
   useEffect( () => {
     const loadMeeting = async() => {
-      const meeting_id = router.query.id;
+      const meeting = await meetingAPI.aggregate( meeting_id );
 
-      if ( meeting_id ) {
-        const { data } = await client.get(
-          `meeting/${ meeting_id }/aggregate`
-        );
-
-        setMeeting( data );
-
-        setLoading( false );
-      }
+      setMeeting( meeting );
+      setLoading( false );
     };
 
-    loadMeeting();
+    if ( meeting_id ) {
+      loadMeeting();
+    }
   }, [ loading, router.query.id, props.store, user.email ] );
 
   useEffect( () => {
     const likeTopic = async() => {
-      await client.patch(
-        'topic/' + liking + '/like',
-        { email: user.email }
-      );
-
+      await topicAPI.like( liking, user.email );
       setLiking( false );
     };
 

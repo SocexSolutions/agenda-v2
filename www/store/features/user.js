@@ -1,5 +1,5 @@
-import client from '../../client';
-import { getCookie, deleteCookie, setCookie } from '../../../utils/cookie';
+import client from '../../api/client';
+import { getCookie, deleteCookie, setCookie } from '../../utils/cookie';
 import router from 'next/router';
 
 const initialState = {

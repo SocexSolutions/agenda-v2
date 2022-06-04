@@ -4,7 +4,7 @@ import Drawer from './Drawer';
 import { useEffect }   from 'react';
 import { useRouter }   from 'next/router';
 import { useSelector } from 'react-redux';
-import { refreshTheme } from '../store/features/theme/themeSlice';
+import { refreshTheme } from '../store/features/theme';
 
 import styles from '../styles/Layout.module.css';
 

@@ -4,11 +4,11 @@ import { useSelector }         from 'react-redux';
 import Inbox       from '../../../components/Inbox';
 import LoadingIcon from '../../../components/LoadingIcon';
 
-import client from '../../../store/client';
+import client from '../../../api/client';
 
 import shared from '../../../styles/Shared.module.css';
 
-import { notify } from '../../../store/features/snackbar/snackbarSlice';
+import { notify } from '../../../store/features/snackbar';
 
 
 const User = ( props ) => {

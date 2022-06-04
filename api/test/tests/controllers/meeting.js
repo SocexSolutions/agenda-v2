@@ -178,7 +178,7 @@ describe( 'lib/controllers/meeting', () => {
       const { data } = await client.get( `/meeting/${ _id }/aggregate` );
 
       assert.containSubset(
-        data,
+        data.meeting,
         {
           name: meeting.name,
           date: meeting.date.toString(),
@@ -210,16 +210,17 @@ describe( 'lib/controllers/meeting', () => {
 
     it( 'should create meeting', async() => {
       const meeting = fakeMeeting({
-        _id: new ObjectID,
         owner_id: this.user._id
       });
 
-      const { data } = await client.post(
+      const { data: { meeting: res_meeting } } = await client.post(
         '/meeting/aggregate',
-        meeting
+        { meeting }
       );
 
-      const createdMeeting = await Meeting.findById( data._id );
+      assert.equal( res_meeting.name, meeting.name );
+
+      const createdMeeting = await Meeting.findById( res_meeting._id );
 
       assert.containSubset(
         createdMeeting,
@@ -231,10 +232,7 @@ describe( 'lib/controllers/meeting', () => {
     });
 
     it( 'should create meeting with participants', async() => {
-      const meeting = fakeMeeting({
-        _id: new ObjectID,
-        owner_id: this.user._id
-      });
+      const meeting = fakeMeeting({ owner_id: this.user._id });
 
       const participants = Array.from({ length: 3 }).map( () => {
         return fakeParticipant({ meeting_id: meeting._id });
@@ -243,7 +241,7 @@ describe( 'lib/controllers/meeting', () => {
       const { data } = await client.post(
         '/meeting/aggregate',
         {
-          ...meeting,
+          meeting,
           participants
         }
       );
@@ -251,24 +249,21 @@ describe( 'lib/controllers/meeting', () => {
       assert.strictEqual( data.participants.length, 3 );
 
       const createdParticipants = await Participant.find({
-        meeting_id: data._id
+        meeting_id: data.meeting._id
       });
 
       assert.strictEqual( createdParticipants.length, 3 );
     });
 
     it( 'should create meeting with topics', async() => {
-      const meeting = fakeMeeting({
-        _id: new ObjectID,
-        owner_id: this.user._id
-      });
+      const meeting = fakeMeeting({ owner_id: this.user._id });
 
       const topic = fakeTopic({ meeting_id: meeting._id });
 
       const { data } = await client.post(
         '/meeting/aggregate',
         {
-          ...meeting,
+          meeting,
           topics: [ topic ]
         }
       );
@@ -276,7 +271,7 @@ describe( 'lib/controllers/meeting', () => {
       assert.strictEqual( data.topics.length, 1 );
 
       const createdTopics = await Topic.find({
-        meeting_id: data._id
+        meeting_id: data.meeting._id
       });
 
       assert.strictEqual( createdTopics.length, 1 );
@@ -291,25 +286,30 @@ describe( 'lib/controllers/meeting', () => {
       const { _id } = await Meeting.create( meeting );
 
       const update = {
-        meeting_id: _id.toString(),
+        _id: _id.toString(),
         name: 'meeting 2',
         date: new Date().toISOString()
       };
 
       const { data } = await client.post(
         '/meeting/aggregate',
-        update
+        { meeting: update }
       );
 
-      assert.strictEqual( data.name, update.name );
-      assert.strictEqual( data.date, update.date );
-      assert.strictEqual( data._id, update.meeting_id );
+      assert.strictEqual( data.meeting.name, update.name );
+      assert.strictEqual( data.meeting.date, update.date );
+      assert.strictEqual(
+        data.meeting._id,
+        update._id,
+        'bad meeting id'
+      );
 
       const [ updated ] = await Meeting.find({ _id });
 
       assert.strictEqual(
         this.user._id.toString(),
-        updated.owner_id.toString()
+        updated.owner_id.toString(),
+        'bad owner id'
       );
 
       assert.strictEqual( update.name, updated.name );
@@ -334,7 +334,7 @@ describe( 'lib/controllers/meeting', () => {
       topic.likes = [ this.user.email.toString() ];
 
       const payload = {
-        meeting_id: _id.toString(),
+        meeting: {  _id: _id.toString() },
         topics: [ topic ]
       };
 
@@ -363,7 +363,7 @@ describe( 'lib/controllers/meeting', () => {
       await Topic.create( topic );
 
       const payload = {
-        meeting_id: _id.toString(),
+        meeting: { _id: _id.toString() },
         topics: []
       };
 
@@ -389,7 +389,7 @@ describe( 'lib/controllers/meeting', () => {
       await Participant.create( participant );
 
       const payload = {
-        meeting_id: _id.toString(),
+        meeting: { _id: _id.toString() },
         participants: []
       };
 
@@ -415,7 +415,7 @@ describe( 'lib/controllers/meeting', () => {
       try {
         await client.post(
           `/meeting/aggregate`,
-          { ...created, _id: undefined, meeting_id: _id }
+          { meeting: { ...created, _id } }
         );
 
         assert.fail('accepted request from unauthorized user');

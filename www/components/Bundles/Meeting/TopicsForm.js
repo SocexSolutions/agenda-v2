@@ -5,7 +5,7 @@ import { useState } from 'react';
 import Input  from '../../Input';
 import Button from '../../Button';
 
-import { notify } from '../../../store/features/snackbar/snackbarSlice';
+import { notify } from '../../../store/features/snackbar';
 
 import TopicCard from './TopicCard';
 

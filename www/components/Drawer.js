@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleDrawer }             from '../store/features/drawer/drawerSlice';
+import { toggleDrawer }             from '../store/features/drawer';
 
 import Button from '../components/Button';
 

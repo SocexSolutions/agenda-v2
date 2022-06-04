@@ -68,7 +68,7 @@ module.exports = {
 
     await authUtils.checkParticipant( _id, req.credentials );
 
-    const [ meeting ] = await Meeting.aggregate([
+    const [ agg ] = await Meeting.aggregate([
       {
         $match: {
           _id: new ObjectID( _id )
@@ -92,13 +92,18 @@ module.exports = {
       }
     ]);
 
-    return res.status( 200 ).send( meeting );
+    const { _id: agg_id, name, date, owner_id } = agg;
+
+    return res.status( 200 ).send({
+      meeting: { _id: agg_id, name, date, owner_id },
+      participants: agg.participants,
+      topics: agg.topics
+    });
   },
 
   /**
    * Create or update a meeting and all its data
-   * @param {String} req.body.name - meeting name
-   * @param {String} req.body.date - meeting date
+   * @param {Meeting} req.body.meeting - meeting
    * @param {Topic[]} req.body.topics - array of Topics
    * @param {Participant[]} req.body.participants - array of Participants
    */
@@ -106,10 +111,9 @@ module.exports = {
     let session;
 
     try {
-      const name       = req.body.name;
-      const date       = req.body.date;
-      const owner_id   = req.body.owner_id;
-      const meeting_id = req.body.meeting_id || new ObjectID();
+      const { name, date, owner_id } = req.body.meeting;
+
+      const meeting_id = req.body.meeting?._id || new ObjectID();
       const subject_id = req.credentials.sub;
 
       let topics       = req.body.topics || null;
@@ -163,10 +167,7 @@ module.exports = {
       });
 
       res.status( 201 ).send({
-        _id: meeting._id,
-        name: meeting.name,
-        date: meeting.date,
-        owner_id: meeting.owner_id,
+        meeting,
         topics,
         participants
       });

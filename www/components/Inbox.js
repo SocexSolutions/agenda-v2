@@ -20,7 +20,7 @@ const Inbox = ({ meetings, emptyMessage }) => {
           <Link  href={ `/meeting/${ meeting._id }`}>
             <Button
               icon={<CreateSharpIcon/>}
-              text='vote'
+              text='edit'
               size='medium'
               variant='hollow'
             />

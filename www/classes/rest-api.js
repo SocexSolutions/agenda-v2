@@ -1,6 +1,6 @@
-import client from '../store/client';
-import { store } from '../store/store';
-import { notify } from '../store/features/snackbar/snackbarSlice';
+import client from '../api/client';
+import { store } from '../store';
+import { notify } from '../store/features/snackbar';
 
 class RestAPI {
 

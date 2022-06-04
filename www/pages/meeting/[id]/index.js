@@ -3,13 +3,15 @@ import TopicsForm from '../../../components/Bundles/Meeting/TopicsForm';
 import ParticipantsForm from '../../../components/Bundles/Meeting/ParticipantsForm';
 import LoadingIcon from '../../../components/LoadingIcon';
 import Button from '../../../components/Button';
-import client from '../../../store/client';
+
+import meetingAPI from '../../../api/meeting';
+import client from '../../../api/client';
 
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { notify } from '../../../store/features/snackbar/snackbarSlice';
+import { notify } from '../../../store/features/snackbar';
 
 import styles from '../../../styles/MeetingPage.module.css';
 import shared from '../../../styles/Shared.module.css';
@@ -38,24 +40,15 @@ const Meeting = ( props ) => {
       const real_id = meeting_id.length === 24;
 
       if ( real_id ) {
-        try {
-          const { data } = await client.get(
-            `meeting/${ meeting_id }/aggregate`
-          );
+        const res = await meetingAPI.aggregate( meeting_id );
 
-          setName( data.name );
-          setParticipants( data.participants );
-          setTopics( data.topics );
+        console.log( res.meeting );
 
-          setLoading( false );
-        } catch ( err ) {
-          props.store.dispatch(
-            notify({
-              message: 'Failed to fetch meeting: ' + err.message,
-              type: 'danger'
-            })
-          );
-        }
+        setName( res.meeting.name );
+        setParticipants( res.participants );
+        setTopics( res.topics );
+
+        setLoading( false );
       } else {
         clearPage();
       }
@@ -71,37 +64,28 @@ const Meeting = ( props ) => {
       const meeting_id = router.query.id || '';
       const real_id = meeting_id.length === 24;
 
-      try {
-        const res = await client.post(
-          'meeting/aggregate',
-          {
-            name,
-            owner_id: user._id,
-            ...( real_id && { meeting_id } ),
-            date: new Date(),
-            participants,
-            topics
-          }
-        );
+      console.log( real_id, meeting_id );
 
-        setSaving( false );
+      const res = await meetingAPI.aggregateSave({
+        meeting: {
+          name,
+          owner_id: user._id,
+          ...( real_id && { _id: meeting_id } )
+        },
+        participants,
+        topics
+      });
 
-        props.store.dispatch(
-          notify({
-            message: 'Save Successful'
-          })
-        );
+      setSaving( false );
 
-        if ( !real_id ) { router.push( `/meeting/${ res.data._id }` ); }
-      } catch ( err ) {
-        setSaving( false );
-        props.store.dispatch(
-          notify({
-            message: 'Save Failed: ' + err.message,
-            type: 'danger',
-            success: false
-          })
-        );
+      props.store.dispatch(
+        notify({
+          message: 'Save Successful'
+        })
+      );
+
+      if ( !real_id ) {
+        router.push( `/meeting/${ res.data._id }` );
       }
     };
 

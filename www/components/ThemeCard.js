@@ -1,7 +1,7 @@
 import styles from '../styles/ThemeCard.module.css';
 import Image from 'next/image';
 
-import { pickTheme }  from '../store/features/theme/themeSlice';
+import { pickTheme }  from '../store/features/theme';
 
 import { useStore } from 'react-redux';
 

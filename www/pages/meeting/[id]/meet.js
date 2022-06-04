@@ -1,16 +1,17 @@
-import LoadingIcon   from '../../../components/LoadingIcon';
-import Button        from '../../../components/Button';
-import CardBoard     from '../../../components/CardBoard';
+import LoadingIcon from '../../../components/LoadingIcon';
+import Button      from '../../../components/Button';
+import CardBoard   from '../../../components/CardBoard';
 
 import takeawayAPI from '../../../api/takeaway';
 import topicAPI    from '../../../api/topic';
+import meetingAPI  from '../../../api/meeting';
 
 import { useEffect, useState } from 'react';
 import { useRouter }           from 'next/router';
 
-import { notify } from '../../../store/features/snackbar/snackbarSlice';
+import { notify } from '../../../store/features/snackbar';
 
-import client from '../../../store/client';
+import client from '../../../api/client';
 
 import styles       from '../../../styles/Meet.module.css';
 import sharedStyles from '../../../styles/Shared.module.css';
@@ -32,21 +33,10 @@ const Meet = ( props ) => {
 
   useEffect( () => {
     const loadTopics = async() => {
-      try {
-        const { data: topics } = await client.get(
-          `/meeting/${ meeting_id }/topics`
-        );
+      const topics = await meetingAPI.getTopics( meeting_id );
 
-        setTopics( topics );
-        setTopicsLoading( false );
-      } catch ( err ) {
-        props.store.dispatch(
-          notify({
-            message: 'Failed to fetch topics: ' + err.message,
-            type: 'danger'
-          })
-        );
-      }
+      setTopics( topics );
+      setTopicsLoading( false );
     };
 
     if ( topicsLoading && meeting_id ) {
@@ -56,45 +46,22 @@ const Meet = ( props ) => {
 
   useEffect( () => {
     const loadParticipants = async() => {
-      try {
-        const { data: participants } = await client.get(
-          `/meeting/${ meeting_id }/participants`
-        );
-
-        setParticipants( participants );
-        setParticipantsLoading( false );
-      } catch ( err ) {
-        props.store.dispatch(
-          notify({
-            message: 'Failed to fetch participants: ' + err.message,
-            type: 'danger'
-          })
-        );
-      }
+      const participants = await meetingAPI.getParticipants( meeting_id );
+      setParticipants( participants );
+      setParticipantsLoading( false );
     };
 
-    if ( meeting_id && participantsLoading ) {
+    if ( participantsLoading && meeting_id ) {
       loadParticipants();
     }
   }, [ router.query.id, participantsLoading ] );
 
   useEffect( () => {
     const loadMeeting = async() => {
-      try {
-        const { data: meeting } = await client.get(
-          `/meeting/${ meeting_id }`
-        );
+      const meeting = await meetingAPI.get( meeting_id );
 
-        setMeeting( meeting );
-        setMeetingLoading( false );
-      } catch ( err ) {
-        props.store.dispatch(
-          notify({
-            message: 'Failed to fetch participants: ' + err.message,
-            type: 'danger'
-          })
-        );
-      }
+      setMeeting( meeting );
+      setMeetingLoading( false );
     };
 
     if ( meeting_id && meetingLoading ) {
