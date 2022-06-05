@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 
 import { notify } from '../store/features/snackbar/snackbarSlice';
 
-import styles from '../styles/Register.module.css';
 import Input  from '../components/Input';
 import Button from '../components/Button';
 
@@ -11,6 +10,8 @@ import { useEffect }    from 'react';
 import { userRegister } from '../store/features/user/userSlice';
 
 import client from '../store/client';
+
+import styles from '../styles/pages/register.module.css';
 
 const initialState = {
   email:    '',

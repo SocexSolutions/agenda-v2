@@ -13,7 +13,7 @@ import { notify } from '../../../store/features/snackbar';
 
 import client from '../../../api/client';
 
-import styles       from '../../../styles/Meet.module.css';
+import styles       from '../../../styles/pages/meeting/[id]/meet.module.css';
 import sharedStyles from '../../../styles/Shared.module.css';
 
 const Meet = ( props ) => {

@@ -1,7 +1,7 @@
-import styles from '../styles/Chip.module.css';
-
 import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
 import AccountCircleIcon       from '@mui/icons-material/AccountCircle';
+
+import styles from '../styles/components/Chip.module.css';
 
 const Chip = ({ text, editing, deleteFunc, icon }) => {
 

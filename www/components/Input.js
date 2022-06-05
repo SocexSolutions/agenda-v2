@@ -1,6 +1,8 @@
 import React from 'react';
-import styles from '../styles/Input.module.css';
+
 import PropTypes from 'prop-types';
+
+import styles from '../styles/components/Input.module.css';
 
 const Input = ({
   label,

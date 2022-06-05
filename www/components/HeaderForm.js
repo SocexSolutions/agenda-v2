@@ -1,6 +1,7 @@
 
-import styles from '../../../styles/Bundles/Meeting/HeaderForm.module.css';
-import Input from '../../Input';
+import Input from './Input';
+
+import styles from '../styles/components/HeaderForm.module.css';
 
 function HeaderForm( props ) {
   return (

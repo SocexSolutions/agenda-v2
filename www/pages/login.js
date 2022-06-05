@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import { userLogin } from '../store/features/user';
 import { notify }    from '../store/features/snackbar';
 
-import styles from '../styles/Register.module.css';
+import styles from '../styles/pages/register.module.css';
 
 const initialState = {
   username: '',

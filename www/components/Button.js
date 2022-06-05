@@ -1,8 +1,11 @@
-import React from 'react';
+import React     from 'react';
 import PropTypes from 'prop-types';
+
 import { useRef, useState } from 'react';
+
 import useClickAway from '../utils/clickAway';
-import styles from '../styles/Button.module.css';
+
+import styles from '../styles/components/Button.module.css';
 
 /**
  * @param {Icon} icon - icon for the button

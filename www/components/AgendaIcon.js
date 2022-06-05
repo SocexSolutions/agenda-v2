@@ -1,7 +1,7 @@
 import CalendarTodayRoundedIcon from '@mui/icons-material/CalendarTodayRounded';
 import AccessAlarmRoundedIcon   from '@mui/icons-material/AccessAlarmRounded';
 
-import styles from '../styles/AgendaIcon.module.css';
+import styles from '../styles/components/AgendaIcon.module.css';
 
 function AgendaIcon() {
   return (

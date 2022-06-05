@@ -4,7 +4,7 @@ import ArrowCircleUp from '@mui/icons-material/ThumbUp';
 
 import Button from '../../../components/Button';
 
-import styles from '../../../styles/Voting.module.css';
+import styles from '../../../styles/pages/meeting/[id]/voting.module.css';
 import shared from '../../../styles/Shared.module.css';
 
 import meetingAPI from '../../../api/meeting';

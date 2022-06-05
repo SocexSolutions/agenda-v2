@@ -1,13 +1,13 @@
-import styles from '../styles/ThemeCard.module.css';
 import Image from 'next/image';
 
-import { pickTheme }  from '../store/features/theme';
+import { pickTheme } from '../store/features/theme';
 
 import { useStore } from 'react-redux';
 
+import styles from '../styles/components/ThemeCard.module.css';
+
 const ThemeCard = ( props ) => {
   const store = useStore();
-
 
   const themeSwitch = async( theme ) => {
     await store.dispatch( pickTheme( theme ) );

@@ -1,5 +1,3 @@
-import styles from '../styles/ChipForm.module.css';
-
 import { useStore } from '../store';
 import { notify }   from '../store/features/snackbar';
 
@@ -8,6 +6,8 @@ import Input  from './Input';
 import Button from './Button';
 
 import { useEffect, useState } from 'react';
+
+import styles from '../styles/components/ChipForm.module.css';
 
 /**
  * Form for editing chip arrays

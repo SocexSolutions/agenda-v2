@@ -1,5 +1,3 @@
-import styles from '../styles/Inbox.module.css';
-
 import Link from 'next/link';
 
 import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown';
@@ -7,6 +5,8 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import CreateSharpIcon from '@mui/icons-material/CreateSharp';
 
 import Button from '../components/Button';
+
+import styles from '../styles/components/Inbox.module.css';
 
 const Inbox = ({ meetings, emptyMessage }) => {
   const lineItems = meetings.map( meeting => {

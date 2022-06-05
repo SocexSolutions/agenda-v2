@@ -1,6 +1,6 @@
-import styles from '../styles/Snackbar.module.css';
-
 import { useSelector } from 'react-redux';
+
+import styles from '../styles/components/Snackbar.module.css';
 
 /**
  * Snackbar used for displaying notifications to the user

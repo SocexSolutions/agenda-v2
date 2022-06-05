@@ -1,11 +1,11 @@
-import styles from '../styles/CardBoard.module.css';
-
 import Card   from './Card';
 import Button from './Button.js';
 
 import AddIcon from '@mui/icons-material/Add';
 
 import { useState, useEffect } from 'react';
+
+import styles from '../styles/components/CardBoard.module.css';
 
 /**
  * General board component that displays a list of crud cards

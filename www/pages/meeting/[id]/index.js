@@ -1,4 +1,4 @@
-import HeaderForm  from '../../../components/Bundles/Meeting/HeaderForm';
+import HeaderForm  from '../../../components/HeaderForm';
 import CardBoard   from '../../../components/CardBoard';
 import ChipForm    from '../../../components/ChipForm';
 import LoadingIcon from '../../../components/LoadingIcon';
@@ -11,7 +11,7 @@ import { useRouter }           from 'next/router';
 import { useEffect, useState } from 'react';
 import { useSelector }         from 'react-redux';
 
-import styles from '../../../styles/MeetingPage.module.css';
+import styles from '../../../styles/pages/meeting/[id]/index.module.css';
 import shared from '../../../styles/Shared.module.css';
 
 const Meeting = ( props ) => {
@@ -57,6 +57,7 @@ const Meeting = ( props ) => {
   return (
     <div className={shared.page}>
       <div className={shared.container}>
+        <h1>Edit Meeting: {name}</h1>
         <h3>Meeting Details</h3>
         <HeaderForm
           setMeetingName={( e ) => setName( e.target.value ) }

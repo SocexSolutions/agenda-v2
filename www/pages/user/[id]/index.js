@@ -7,6 +7,7 @@ import LoadingIcon from '../../../components/LoadingIcon';
 import client from '../../../api/client';
 
 import shared from '../../../styles/Shared.module.css';
+import styles from '../../../styles/pages/user/[id]/index.module.css';
 
 import { notify } from '../../../store/features/snackbar';
 
@@ -58,6 +59,7 @@ const User = ( props ) => {
   return (
     <div className={shared.page}>
       <div className={shared.container}>
+        <h1 className={styles.page_title}>My Meetings</h1>
         <Inbox
           meetings={ meetings }
         />

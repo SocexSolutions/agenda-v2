@@ -8,7 +8,7 @@ import DoubleArrowIcon      from '@mui/icons-material/DoubleArrow';
 import CheckBoxOutlinedIcon from '@mui/icons-material/Checkboxoutlined';
 import CancelOutlinedIcon   from '@mui/icons-material/CancelOutlined';
 
-import styles from '../styles/Drawer.module.css';
+import styles from '../styles/components/Drawer.module.css';
 
 
 const selectDrawer = state => state.drawer;

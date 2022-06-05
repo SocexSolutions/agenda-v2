@@ -1,21 +1,21 @@
-import styles from '../styles/DropDown.module.css';
-
-import Button from '../components/Button';
-import Modal from '../components/Modal';
+import Button    from './Button';
+import Modal     from './Modal';
+import ThemeCard from './ThemeCard';
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon        from '@mui/icons-material/ExitToApp';
 import ThemeIcon         from '@mui/icons-material/ColorLens';
 
 import placeholder from '../public/placeholderTheme.png';
-import ThemeCard from './ThemeCard';
 
 import { useRouter } from 'next/router';
-
-import { useState } from 'react';
-import { userLogout } from '../store/features/user';
+import { useState }  from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
+
+import { userLogout } from '../store/features/user';
+
+import styles from '../styles/components/DropDown.module.css';
 
 const selectUser = ( state ) => state.user;
 

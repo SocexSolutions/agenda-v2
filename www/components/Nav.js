@@ -1,10 +1,6 @@
-import { useSelector, useDispatch } from 'react-redux';
-
 import { toggleDrawer } from '../store/features/drawer';
 
 import classNames from 'classNames';
-import Link       from 'next/link';
-import { useRouter }     from 'next/router';
 
 import Button     from './Button';
 import DropDown   from './DropDown';
@@ -19,11 +15,16 @@ import AccountCircleIcon       from '@mui/icons-material/AccountCircle';
 import ArrowBackIcon           from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon        from '@mui/icons-material/ArrowForward';
 
-import styles from '../styles/Nav.module.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState }      from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
+import Link          from 'next/link';
+import { useRouter } from 'next/router';
+
+import styles from '../styles/components/Nav.module.css';
 
 const selectUser = state => state.user;
+
 const Nav = () => {
   const router   = useRouter();
   const dispatch = useDispatch();
