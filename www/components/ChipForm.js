@@ -1,48 +1,72 @@
 import styles from '../styles/ChipForm.module.css';
 
+import { useStore } from '../store';
+import { notify }   from '../store/features/snackbar';
+
 import Chip   from './Chip';
 import Input  from './Input';
 import Button from './Button';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * Form for editing chip arrays
- * @param {Object} props.items - array of objects displayed in chips
- * @param {String} props.itemKey - key unique among chips (will be displayed)
- * @param {String} props.itemName - name of chips (tags, participants... )
- * @param {Function} props.setItems - function to overwrite parent's item array
+ *
+ * @param {String} change - key used to tell if form should reload
+ * @param {String} itemKey - key unique among chips that will be displayed
+ * @param {String} itemName - singular type of items (eg. participant)
+ * @param {Function} getAll - async function to fetch all items that should be
+ * displayed in the form
+ * @param {Function} create - async function to create a new item in the form
+ * given a `payload` as a param
+ * @param {Function} destroy - async function to delete an item in the form
+ * given an `id` as a param
  */
 function ChipForm( props ) {
-  const [ input, setInput ] = useState('');
+  const store = useStore();
 
-  function addChip( chip ) {
-    const duplicates = props.items.filter( item => {
-      return item[ props.itemKey ] === chip;
+  const [ input, setInput ]       = useState('');
+  const [ items, setItems ]       = useState([]);
+  const [ initLoad, setInitLoad ] = useState( true );
+
+  useEffect( () => {
+    const loadItems = async() => {
+      const res = await props.getAll();
+      setItems( res );
+
+      setInitLoad( false );
+    };
+
+    if ( initLoad ) {
+      loadItems();
+    }
+  });
+
+  const createChip = async( key ) => {
+    const duplicates = items.filter( item => {
+      return item[ props.itemKey ] === key;
     });
 
     if ( duplicates.length ) {
-      const msg = `Cannot create multiple ${ props.itemName }s with the same name`;
-
-      // TODO swap with something sexier
-      window.alert( msg );
+      store.dispatch( notify({
+        message: `${ props.itemName }s with duplicate ${ props.itemKey }s`,
+        type: 'danger'
+      }) );
 
       return;
     }
 
-    props.items.unshift({ [ props.itemKey ]: chip });
+    const res = await props.create({ [ props.itemKey ]: key });
 
-    props.setItems([ ...props.items ]);
-  }
+    items.unshift( res );
+    setItems([ ...items ]);
+  };
 
-  function deleteChip( index ) {
-    props.items.splice( index, 1 );
+  function destroyChip( index ) {
+    const [ toDelete ] = items.splice( index, 1 );
+    setItems([ ...items ]);
 
-    props.setItems([ ...props.items ]);
-  }
-
-  function handleChange( event ) {
-    setInput( event.target.value );
+    props.destroy( toDelete._id );
   }
 
   function handleEnter( event ) {
@@ -53,16 +77,16 @@ function ChipForm( props ) {
 
   function handleSubmit() {
     if ( input ) {
-      addChip( input );
+      createChip( input );
       setInput('');
     }
   }
 
   const chips = [];
 
-  if ( props.items ) {
-    for ( let i = 0; i < props.items.length; i++ ) {
-      const item = props.items[ i ];
+  if ( items.length ) {
+    for ( let i = 0; i < items.length; i++ ) {
+      const item = items[ i ];
 
       chips.push(
         <Chip
@@ -70,7 +94,7 @@ function ChipForm( props ) {
           editing={true}
           text={item[ props.itemKey ]}
           key={item[ props.itemKey ]}
-          deleteFunc={() => deleteChip( i )}
+          deleteFunc={() => destroyChip( i )}
         />
       );
     }
@@ -85,7 +109,7 @@ function ChipForm( props ) {
         <Input
           placeholder={props.itemKey}
           value={input}
-          onChange={handleChange}
+          onChange={( e ) => setInput( e.target.value )}
           onKeyPress={handleEnter}
         />
         <Button

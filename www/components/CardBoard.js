@@ -22,85 +22,58 @@ import { useState, useEffect } from 'react';
  * corresponding item
  */
 const CardBoard = ( props ) => {
-  const [ loading, setLoading ]       = useState( true );
-  const [ destroying, setDestroying ] = useState('');
-  const [ updating, setUpdating ]     = useState( null );
-  const [ creating, setCreating ]     = useState( false );
-  const [ items, setItems ]           = useState([]);
-  const [ editingId, setEditingId ]   = useState('');
+  const [ initLoad, setInitLoad ]   = useState( true );
+  const [ items, setItems ]         = useState([]);
+  const [ editingId, setEditingId ] = useState('');
+
+  const fetchItems = async() => {
+    const res = await props.getAll();
+
+    if ( Array.isArray( res ) ) {
+      setItems( res );
+    }
+  };
 
   useEffect( () => {
-    const fetchItems = async() => {
-      const res = await props.getAll();
-
-      if ( Array.isArray( res ) ) {
-        setItems( res );
-      }
-
-      setLoading( false );
+    const load = async() => {
+      await fetchItems();
+      setInitLoad( false );
     };
+
+    if ( initLoad ) {
+      load();
+    }
+  }, [ initLoad ] );
+
+  const createItem = async() => {
+    const { _id } = await props.create({
+      name: '',
+      description: ''
+    });
+
+    setEditingId( _id );
 
     fetchItems();
-  }, [ loading ] );
+  };
 
-  useEffect( () => {
-    const create = async() => {
-      const res = await props.create({
-        name: '',
-        description: ''
-      });
-
-      setCreating( false );
-      setItems([ ...items, res ]);
-      setEditingId( res._id );
-    };
-
-    if ( creating ) {
-      create();
-    }
-  }, [ creating ] );
-
-  useEffect( () => {
-    const update = async() => {
-      await props.update( updating._id, updating );
-    };
-
-    if ( updating ) {
-      update();
-      setUpdating( null );
-    }
-  }, [ updating ] );
-
-  useEffect( () => {
-    const destroy = async() => {
-      await props.destroy( destroying );
-      setLoading( true );
-    };
-
-    if ( destroying ) {
-      destroy();
-      setDestroying('');
-    }
-  }, [ destroying ] );
-
-  const updateItem = ( takeaway ) => {
+  const updateItem = async( takeaway ) => {
     setEditingId( null );
-    setUpdating( takeaway );
+
+    await props.update( takeaway._id, takeaway );
+
+    fetchItems();
   };
 
-  const destroyItem = ( _id ) => {
-    setDestroying( _id );
-  };
+  const destroyItem = async( takeaway ) => {
+    await props.destroy( takeaway._id );
 
-  const createItem = () => {
-    setCreating( true );
+    fetchItems();
   };
 
   const itemCards = [];
 
   if ( items.length ) {
     for ( const item of items ) {
-      console.log( item );
       const editing = editingId === item._id;
       if ( editing ) {
         itemCards.push(

@@ -6,6 +6,7 @@ const wrapped = wrapController( topicController );
 
 router.post( '/', wrapped.create );
 router.patch( '/:_id', wrapped.update );
+router.delete( '/:_id', wrapped.delete );
 router.patch( '/:_id/like', wrapped.like );
 router.patch( '/:_id/status', wrapped.status );
 router.get( '/:_id/takeaways', wrapped.getTakeaways );

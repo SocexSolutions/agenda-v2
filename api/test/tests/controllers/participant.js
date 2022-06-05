@@ -81,6 +81,33 @@ describe( 'lib/controllers/participant', () => {
 
   });
 
+  describe( '#delete', () => {
+
+    it( 'should delete a participant', async() => {
+      const { _id } = await Participant.create(
+        fakeParticipant({ meeting_id: this.meeting._id })
+      );
+
+      const res = await client.delete( `participant/${ _id }` );
+
+      assert.equal( res.status, 204, 'bad status code' );
+
+      const found = await Participant.find({ _id });
+
+      assert.equal( found.length, 0, 'did not delete participant' );
+    });
+
+    it( 'should 403 if not meeting owner', async() => {
+      const { _id } = await Participant.create( fakeParticipant() );
+
+      await assert.isRejected(
+        client.delete( `participant/${ _id }` ),
+        'Request failed with status code 403'
+      );
+    });
+
+  });
+
   describe( '#getMeetings', () => {
 
     it( 'should return meetings', async() => {

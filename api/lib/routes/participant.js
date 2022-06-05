@@ -5,6 +5,7 @@ const { wrapController }    = require('../util/error-wrapper');
 const wrapped = wrapController( participantController );
 
 router.post( '/', wrapped.create );
+router.delete( '/:id', wrapped.delete );
 router.get( '/meetings/:email', wrapped.getMeetings );
 
 module.exports = router;

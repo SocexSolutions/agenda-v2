@@ -6,12 +6,10 @@ const Schema = mongoose.Schema;
 const topicSchema = new mongoose.Schema(
   {
     name: {
-      type: String,
-      required: true
+      type: String
     },
     description: {
-      type: String,
-      required: true
+      type: String
     },
     meeting_id: {
       type: Schema.Types.ObjectId, ref: 'Meeting',

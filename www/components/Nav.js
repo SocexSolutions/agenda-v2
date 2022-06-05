@@ -10,12 +10,14 @@ import Button     from './Button';
 import DropDown   from './DropDown';
 import AgendaIcon from './AgendaIcon';
 
+import meetingAPI from '../api/meeting';
+
 import MenuIcon                from '@mui/icons-material/Menu';
 import HomeOutlinedIcon        from '@mui/icons-material/HomeOutlined';
 import AddToPhotosOutlinedIcon from '@mui/icons-material/AddToPhotosOutlined';
 import AccountCircleIcon       from '@mui/icons-material/AccountCircle';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon           from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon        from '@mui/icons-material/ArrowForward';
 
 import styles from '../styles/Nav.module.css';
 import { useEffect, useState } from 'react';
@@ -23,17 +25,31 @@ import { useEffect, useState } from 'react';
 
 const selectUser = state => state.user;
 const Nav = () => {
-  const router = useRouter();
+  const router   = useRouter();
+  const dispatch = useDispatch();
+  const user     = useSelector( selectUser );
 
+  const [ creating, setCreating ]             = useState( false );
   const [ history, setHistory ]               = useState([]);
   const [ whereInHistory, setWhereInHistory ] = useState( -1 );
   const [ backPressed, setBackPressed ]       = useState( false );
   const [ forwardPressed, setForwardPressed ] = useState( false );
 
-  const dispatch = useDispatch();
-  const user     = useSelector( selectUser );
-
   const homeHref = user && user._id ? `/user/${ user._id }` : `/login`;
+
+  useEffect( () => {
+    const create_meeting = async() => {
+      // create a draft meeting before redirect so that created participants
+      // and topics have a meeting_id to reference
+      const res = await meetingAPI.create({ name: 'Draft', date: new Date() });
+
+      router.push( `/meeting/${ res._id }` );
+    };
+
+    if ( creating ) {
+      create_meeting();
+    }
+  }, [ creating, router ] );
 
   useEffect( () => {
     // match browser behavior of removing history when user is within their
@@ -137,14 +153,13 @@ const Nav = () => {
             />
           </div>
           <div className={styles.center_third}>
-            <Link href="/meeting/new" passHref>
-              <Button
-                icon={<AddToPhotosOutlinedIcon />}
-                text="create"
-                variant="outlined"
-                hollow={true}
-              />
-            </Link>
+            <Button
+              onClick={ () => setCreating( true )}
+              icon={<AddToPhotosOutlinedIcon />}
+              text="create"
+              variant="outlined"
+              hollow={true}
+            />
           </div>
           <div className={styles.last_third}>
             <Button

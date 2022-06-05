@@ -36,6 +36,16 @@ module.exports = {
     res.status( 200 ).send( topic_updated );
   },
 
+  delete: async( req, res ) => {
+    const { _id }  = req.params;
+
+    await authUtils.checkOwner( _id, 'topics', req.credentials );
+
+    await Topic.deleteOne({ _id });
+
+    return res.status( 204 ).send();
+  },
+
   like: async( req, res ) => {
     const { _id }   = req.params;
     const { email } = req.body;

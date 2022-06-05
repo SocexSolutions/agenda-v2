@@ -29,6 +29,27 @@ module.exports = {
     return res.status( 201 ).send( participant );
   },
 
+  /**
+   * Delete a participant
+   *
+   * @param {String} req.params.id - id of participant to delete
+   */
+  delete: async( req, res ) => {
+    const { id } = req.params;
+
+    const { meeting_id } = await Participant.findOne({ _id: id });
+
+    await checkOwner(
+      meeting_id,
+      'meetings',
+      req.credentials
+    );
+
+    await Participant.deleteOne({ _id: id });
+
+    return res.status( 204 ).send();
+  },
+
   getMeetings: async( req, res ) => {
     const { email } = req.params;
 

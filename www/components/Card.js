@@ -26,7 +26,7 @@ const Card = ({
   };
 
   const onDestroy = () => {
-    destroyItem( item._id );
+    destroyItem( item );
   };
 
   if ( !editing ) {

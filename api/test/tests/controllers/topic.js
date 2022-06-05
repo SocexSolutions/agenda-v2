@@ -13,18 +13,18 @@ const rewire       = require('rewire');
 describe( 'lib/controllers/topic', () => {
 
   before( async() => {
-    this.Client = rewire('../../utils/client');
+    this.client = rewire('../../utils/client');
 
     await api.start();
     await db.connect();
     await dbUtils.clean();
 
-    const res = ( await this.Client.post(
+    const res = ( await this.client.post(
       '/user/register',
       { username: 'user3', password: 'pass', email: 'email3' }
     ) ).data;
 
-    const res2 = ( await this.Client.post(
+    const res2 = ( await this.client.post(
       '/user/register',
       { username: 'user2', password: 'pass', email: 'email2' }
     ) ).data;
@@ -37,7 +37,7 @@ describe( 'lib/controllers/topic', () => {
   });
 
   beforeEach( async() => {
-    this.Client.defaults.headers.common['Authorization'] = this.token;
+    this.client.defaults.headers.common['Authorization'] = this.token;
     await dbUtils.clean([ 'topics', 'takeaways', 'meetings' ]);
 
     this.meeting = await Meeting.create(
@@ -57,7 +57,7 @@ describe( 'lib/controllers/topic', () => {
     it( 'should create topic with valid inputs', async() => {
       const topic = fakeTopic({ meeting_id: this.meeting._id });
 
-      const res = await this.Client.post( path, topic );
+      const res = await this.client.post( path, topic );
 
       assert.equal(
         res.status,
@@ -80,12 +80,12 @@ describe( 'lib/controllers/topic', () => {
     });
 
     it( 'should 403 if not owner or participant', async() => {
-      this.Client.defaults.headers.common['Authorization'] = this.token2;
+      this.client.defaults.headers.common['Authorization'] = this.token2;
 
       const topic = fakeTopic({ meeting_id: this.meeting._id });
 
       await assert.isRejected(
-        this.Client.post( path, topic ),
+        this.client.post( path, topic ),
         'Request failed with status code 403'
       );
     });
@@ -101,7 +101,7 @@ describe( 'lib/controllers/topic', () => {
     });
 
     it( 'should update topic name', async() => {
-      const res = await this.Client.patch(
+      const res = await this.client.patch(
         '/topic/' + this.topic._id,
         { ...this.topic._doc, name: 'new name', description: 'new description' }
       );
@@ -118,13 +118,40 @@ describe( 'lib/controllers/topic', () => {
     });
 
     it( 'should 403 if not topic owner', async() => {
-      this.Client.defaults.headers.common['Authorization'] = this.token2;
+      this.client.defaults.headers.common['Authorization'] = this.token2;
 
       await assert.isRejected(
-        this.Client.patch(
+        this.client.patch(
           '/topic/' + this.topic._id,
           {}
         ),
+        'Request failed with status code 403'
+      );
+    });
+
+  });
+
+  describe( '#delete', () => {
+
+    it( 'should delete a topic', async() => {
+      const { _id } = await Topic.create(
+        fakeTopic({ owner_id: this.user._id })
+      );
+
+      const res = await this.client.delete( `topic/${ _id }` );
+
+      assert.equal( res.status, 204, 'bad status code' );
+
+      const found = await Topic.find({ _id });
+
+      assert.equal( found.length, 0, 'did not delete topic' );
+    });
+
+    it( 'should 403 if not topic owner', async() => {
+      const { _id } = await Topic.create( fakeTopic() );
+
+      await assert.isRejected(
+        this.client.delete( `topic/${ _id }` ),
         'Request failed with status code 403'
       );
     });
@@ -140,7 +167,7 @@ describe( 'lib/controllers/topic', () => {
     });
 
     it( 'should add a topic like', async() => {
-      const res = await this.Client.patch(
+      const res = await this.client.patch(
         '/topic/' + this.topic._id + '/like',
         { email: 'thudson@agenda.com' }
       );
@@ -154,7 +181,7 @@ describe( 'lib/controllers/topic', () => {
     });
 
     it( 'should remove a topic like', async() => {
-      const res = await this.Client.patch(
+      const res = await this.client.patch(
         '/topic/' + this.topic._id + '/like',
         { email: 'bryan@bacon.com' }
       );
@@ -168,10 +195,10 @@ describe( 'lib/controllers/topic', () => {
     });
 
     it( 'should 403 if not owner or participant', async() => {
-      this.Client.defaults.headers.common['Authorization'] = this.token2;
+      this.client.defaults.headers.common['Authorization'] = this.token2;
 
       await assert.isRejected(
-        this.Client.patch(
+        this.client.patch(
           '/topic/' + this.topic._id + '/like',
           { email: 'bryan@bacon.com' }
         ),
@@ -190,7 +217,7 @@ describe( 'lib/controllers/topic', () => {
     });
 
     it( 'should set the topics status', async() => {
-      const res = await this.Client.patch(
+      const res = await this.client.patch(
         '/topic/' + this.topic._id + '/status',
         { status: 'discussed' }
       );
@@ -205,10 +232,10 @@ describe( 'lib/controllers/topic', () => {
     });
 
     it( 'should 403 if not owner or participant', async() => {
-      this.Client.defaults.headers.common['Authorization'] = this.token2;
+      this.client.defaults.headers.common['Authorization'] = this.token2;
 
       await assert.isRejected(
-        this.Client.patch(
+        this.client.patch(
           '/topic/' + this.topic._id + '/status',
           { status: 'discussed' }
         ),
@@ -234,7 +261,7 @@ describe( 'lib/controllers/topic', () => {
 
       await Takeaway.create( takeaway );
 
-      const { data: [ foundTakeaway ] } = await this.Client.get(
+      const { data: [ foundTakeaway ] } = await this.client.get(
         '/topic/' + this.inserted_topic._id + '/takeaways'
       );
 
@@ -245,10 +272,10 @@ describe( 'lib/controllers/topic', () => {
     });
 
     it( 'should 403 if not owner or participant', async() => {
-      this.Client.defaults.headers.common['Authorization'] = this.token2;
+      this.client.defaults.headers.common['Authorization'] = this.token2;
 
       await assert.isRejected(
-        this.Client.get(
+        this.client.get(
           '/topic/' + this.inserted_topic._id + '/takeaways'
         ),
         'Request failed with status code 403'
