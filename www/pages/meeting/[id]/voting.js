@@ -105,6 +105,7 @@ const Voting = ( props ) => {
   return (
     <div className={shared.page}>
       <div className={shared.container}>
+        <h2 className={styles.page_title}>Voting For: {meeting.meeting.name}</h2>
         { topicCards }
       </div>
     </div>

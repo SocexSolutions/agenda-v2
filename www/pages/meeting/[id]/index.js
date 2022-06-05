@@ -57,7 +57,7 @@ const Meeting = ( props ) => {
   return (
     <div className={shared.page}>
       <div className={shared.container}>
-        <h1>Edit Meeting: {name}</h1>
+        <h2>Edit Meeting: {name}</h2>
         <h3>Meeting Details</h3>
         <HeaderForm
           setMeetingName={( e ) => setName( e.target.value ) }

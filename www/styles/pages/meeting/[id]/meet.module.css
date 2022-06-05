@@ -45,7 +45,6 @@
 .main_container::-webkit-scrollbar-thumb {
   background-image: linear-gradient(var(--agendaSecondary), var(--agendaThree));
   border-radius: 25px;
-  margin: 1em;
 }
 
 .main_container h3 {

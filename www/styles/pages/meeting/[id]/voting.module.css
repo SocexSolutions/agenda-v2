@@ -6,18 +6,22 @@
   align-items: center;
 }
 
+.page_title {
+  width: 100%;
+  margin-left: 1.3em;
+}
+
 .topic {
-  margin: 2rem;
-  padding: 1rem;
-  margin-top: 1rem;
-  width: 90%;
+  margin: 2em;
+  padding: 1em;
+  margin-top: 1em;
   background-color: var(--backgroundTwo);
   outline: .5px solid var(--agendaSecondary);
-  border-radius: 0.5rem;
+  border-radius: 0.5em;
 }
 
 .topic h3 {
-  margin-top: .25rem;
+  margin-top: .25em;
 }
 
 .topic Button {
@@ -25,20 +29,20 @@
 }
 
 .like {
-  padding: .5rem;
+  padding: .25em;
   overflow: visible;
-  height: 2rem;
-  width: 2rem;
-  border-radius: .5rem;
+  height: 1.1em;
+  width: 1.1em;
+  border-radius: .5em;
   cursor: pointer;
 }
 
 .dislike {
-  padding: .5rem;
+  padding: .25em;
   overflow: visible;
-  height: 2rem;
-  width: 2rem;
-  border-radius: .5rem;
+  height: 1.1em;
+  width: 1.1em;
+  border-radius: .25em;
   cursor: pointer;
   color: var(--successText);
   background-color: var(--successBg);
