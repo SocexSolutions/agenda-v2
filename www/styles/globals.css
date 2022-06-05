@@ -153,17 +153,6 @@ p {
   --successBg: #5d8700;
 }
 
-/* use psuedoselector for scrollbar (not supported by all browsers) */
-body::-webkit-scrollbar {
-  width: .75rem;
-}
-
-body::-webkit-scrollbar-track {
-  background: var(--background);
-}
-
-/* thumb refers to the bar on the slider */
-body::-webkit-scrollbar-thumb {
-  background-image: linear-gradient(var(--agendaSecondary), var(--agendaThree));
-  border-radius: 25px;
+body {
+  overflow: hidden;
 }
