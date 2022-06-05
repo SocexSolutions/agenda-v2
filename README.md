@@ -1,11 +1,12 @@
 # Agenda
 
-Agenda will allow for more efficient meetings by estabilshing meeting topics in advance, establishing each topics value, and then deciding on the order and allocating time to the topics based on their value. In addition, agenda will simplify meeting notes avoiding TLDR through action items for each topic.
+Agenda will allow for more efficient meetings by establishing meeting topics in advance, determining each topics value, and then deciding on the order and allocating time to the topics based on their value. In addition, agenda will simplify meeting notes avoiding TLDR through action items for each topic.
 
 # Getting Started
 
 ## Setup
-Generate public and private keys and install dependencies:
+Generate public and private keys, install dependencies, and add fake data to
+local mongo:
 ```
 npm run setup
 ```

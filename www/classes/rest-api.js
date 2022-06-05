@@ -9,26 +9,19 @@ class RestAPI {
    * for a given type/controller. By default there are `get`, `create`,
    * `update`, and `destroy`. Others can be included in the constructor.
    *
-   * @param {Object} type - rest type (e.g. takeaway, meeting, topic)
-   * @param {Object} [opts] - options
-   * @property {Object} methods - custom methods to add to the RestAPI which
-   * have access to `client`, `store`, and `notify`
+   * @param {String} type - rest type (e.g. takeaway, meeting, topic)
    *
    * @returns {RestAPI}
    */
-  constructor( type, opts = {} ) {
+  constructor( type ) {
     this.type = type;
-
-    if ( opts.additionalMethods ) {
-      for ( const methodName of Object.keys( opts.additionalMethods ) ) {
-        this[ methodName ] = opts.additionalMethods[ methodName ].bind( this );
-      }
-    }
   }
 
   /**
    * Get a specific object by id (handles errors with notification)
+   *
    * @param {String} id - id of object to retrieve
+   *
    * @returns {Promise<Object|undefined>} - retrieved object
    */
   async get( id ) {
@@ -46,7 +39,9 @@ class RestAPI {
 
   /**
    * Create a object (handles errors with notifications)
+   *
    * @param {Object} payload - object to create
+   *
    * @returns {Promise<Object|undefined>} - created object
    */
   async create( payload ) {
@@ -64,8 +59,10 @@ class RestAPI {
 
   /**
    * Update an object (handles errors with notifications)
+   *
    * @param {String} id - id of object to update
    * @param {Object} payload  - updates to object
+   *
    * @returns {Promise<Object|undefined>} - updated object
    */
   async update( id, payload ) {
@@ -85,7 +82,9 @@ class RestAPI {
 
   /**
    * Delete a object (handles errors with notifications)
+   *
    * @param {String} id - id of object to delete
+   *
    * @returns {Promise<undefined>}
    */
   async destroy( id ) {
