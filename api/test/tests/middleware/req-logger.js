@@ -61,23 +61,20 @@ describe( modulePath, () => {
 
     await client.post( urlPath, { msg: 'hi' } );
 
-    sinon.assert.calledOnceWithExactly( jobi.info, 'url: ' + urlPath );
-    sinon.assert.calledThrice( jobi.debug );
+    sinon.assert.calledOnceWithExactly( jobi.info, 'POST', urlPath );
 
-    sinon.assert.calledWithExactly(
-      jobi.debug.getCall( 0 ),
-      'params: ',
-      {}
+    assert.deepEqual(
+      jobi.debug.getCall( 0 ).args,
+      [ 'body:', { msg: 'hi' } ],
+      'bad method body log'
     );
-    sinon.assert.calledWithExactly(
-      jobi.debug.getCall( 1 ),
-      'body: ',
-      { msg: 'hi' }
-    );
-    sinon.assert.calledWithExactly(
-      jobi.debug.getCall( 2 ),
-      'response payload: ',
-      'hello'
+
+    sinon.assert.calledOnce( jobi.trace );
+
+    assert.deepEqual(
+      jobi.debug.getCall( 1 ).args,
+      [ 'response payload:', 'hello' ],
+      'bad response payload log'
     );
   });
 

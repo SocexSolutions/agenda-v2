@@ -101,7 +101,7 @@ describe( 'lib/controllers/topic', () => {
     });
 
     it( 'should update topic name', async() => {
-      const res = await this.Client.post(
+      const res = await this.Client.patch(
         '/topic/' + this.topic._id,
         { ...this.topic._doc, name: 'new name', description: 'new description' }
       );
@@ -121,7 +121,7 @@ describe( 'lib/controllers/topic', () => {
       this.Client.defaults.headers.common['Authorization'] = this.token2;
 
       await assert.isRejected(
-        this.Client.post(
+        this.Client.patch(
           '/topic/' + this.topic._id,
           {}
         ),
