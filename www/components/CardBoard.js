@@ -33,7 +33,10 @@ const CardBoard = ( props ) => {
     const fetchItems = async() => {
       const res = await props.getAll();
 
-      setItems( res );
+      if ( Array.isArray( res ) ) {
+        setItems( res );
+      }
+
       setLoading( false );
     };
 
@@ -97,6 +100,7 @@ const CardBoard = ( props ) => {
 
   if ( items.length ) {
     for ( const item of items ) {
+      console.log( item );
       const editing = editingId === item._id;
       if ( editing ) {
         itemCards.push(
@@ -125,7 +129,6 @@ const CardBoard = ( props ) => {
 
   return (
     <>
-      <h3>Takeaways</h3>
       {itemCards}
       <div className={styles.button_container}>
         <Button

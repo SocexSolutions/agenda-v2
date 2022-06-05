@@ -6,8 +6,8 @@
   height: 100%;
 }
 
-.mainContainer {
-  width: 50%;
+.main_container {
+  width: 60%;
   display: flex;
   margin: 0 30px;
   flex-direction: column;
@@ -18,16 +18,18 @@
   box-shadow: inset -15px 0 10px -15px var(--backgroundShadow) , inset 15px 0 15px -15px var(--backgroundShadow);
 }
 
-.mainContainer h3 {
+.main_container h3 {
   width: 100%;
 }
 
-.sideContainer {
-  width: 25%;
+.side_container {
+  width: 20%;
   min-width: 250px;
   align-items: center;
   display: flex;
   flex-direction: column;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
 }
 
 .sideContainer h3 {
@@ -44,4 +46,34 @@
 
 .card {
   width: 100%;
+  padding: 1em;
+}
+
+.card:hover {
+  cursor: pointer;
+  opacity: 70%;
+}
+
+.card p {
+  width: 100%;
+  text-align: left;
+  margin: 0;
+}
+
+.discussion_card {
+  padding: 1em;
+}
+
+.discussion_card h3 {
+  width: 100%;
+  text-align: left;
+}
+
+.discussion_card p {
+  width: 100%;
+  text-align: left;
+}
+
+.discussion_card button {
+  margin-left: auto;
 }

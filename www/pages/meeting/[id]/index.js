@@ -1,11 +1,11 @@
 import HeaderForm from '../../../components/Bundles/Meeting/HeaderForm';
-import TopicsForm from '../../../components/Bundles/Meeting/TopicsForm';
+import CardBoard from '../../../components/CardBoard';
 import ParticipantsForm from '../../../components/Bundles/Meeting/ParticipantsForm';
 import LoadingIcon from '../../../components/LoadingIcon';
 import Button from '../../../components/Button';
 
 import meetingAPI from '../../../api/meeting';
-import client from '../../../api/client';
+import topicAPI   from '../../../api/topic';
 
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -18,6 +18,9 @@ import shared from '../../../styles/Shared.module.css';
 
 const Meeting = ( props ) => {
   const router = useRouter();
+  const user   = useSelector( ( state ) => state.user );
+
+  const meeting_id = router.query.id || '';
 
   const [ loading, setLoading ] = useState( true );
   const [ saving, setSaving ]   = useState( false );
@@ -25,8 +28,6 @@ const Meeting = ( props ) => {
   const [ name, setName ]                 = useState('');
   const [ participants, setParticipants ] = useState([]);
   const [ topics, setTopics ]             = useState([]);
-
-  const user = useSelector( ( state ) => state.user );
 
   const clearPage = () => {
     setName('');
@@ -36,13 +37,10 @@ const Meeting = ( props ) => {
 
   useEffect( () => {
     const loadMeeting = async() => {
-      const meeting_id = router.query.id || '';
       const real_id = meeting_id.length === 24;
 
       if ( real_id ) {
         const res = await meetingAPI.aggregate( meeting_id );
-
-        console.log( res.meeting );
 
         setName( res.meeting.name );
         setParticipants( res.participants );
@@ -61,10 +59,7 @@ const Meeting = ( props ) => {
 
   useEffect( () => {
     const save = async() => {
-      const meeting_id = router.query.id || '';
       const real_id = meeting_id.length === 24;
-
-      console.log( real_id, meeting_id );
 
       const res = await meetingAPI.aggregateSave({
         meeting: {
@@ -114,10 +109,19 @@ const Meeting = ( props ) => {
           setParticipants={setParticipants}
         />
         <h3>Topics</h3>
-        <TopicsForm
-          store={props.store}
-          topics={topics}
-          setTopics={setTopics}
+        <CardBoard
+          key={meeting_id}
+          getAll={ () => {
+            if ( meeting_id !== 'new' ) {
+              return meetingAPI.getTopics( meeting_id );
+            }
+          }}
+          create={ ( payload ) => topicAPI.create({
+            meeting_id,
+            ...payload
+          })}
+          update={ ( id, payload ) => topicAPI.update( id, payload ) }
+          destroy={ ( id ) => topicAPI.destroy( id ) }
         />
         <Button
           size='large'
