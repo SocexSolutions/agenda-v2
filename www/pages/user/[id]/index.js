@@ -59,7 +59,7 @@ const User = ( props ) => {
   return (
     <div className={shared.page}>
       <div className={shared.container}>
-        <h1 className={styles.page_title}>My Meetings</h1>
+        <h2 className={styles.page_title}>My Meetings</h2>
         <Inbox
           meetings={ meetings }
         />

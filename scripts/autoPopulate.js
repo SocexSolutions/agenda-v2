@@ -4,12 +4,25 @@ const User            = require('../api/lib/models/user');
 const Meeting         = require('../api/lib/models/meeting');
 const Topic           = require('../api/lib/models/topic');
 const Participant     = require('../api/lib/models/participant');
+const Takeaway        = require('../api/lib/models/Takeaway');
 const { clean }       = require('../api/test/utils/db');
 const faker           = require('faker');
 
 const TEST_PASS  = 'test';
 const TEST_USER  = 'test';
 const TEST_EMAIL = 'test@test.com';
+
+/**
+ * Get rand int
+ *
+ * @param max - max number
+ *
+ * @returns {Number}
+ */
+function rand_int( max ) {
+  // add one so that we don't end up with anything empty
+  return Math.floor( Math.random() * max ) + 1;
+}
 
 /**
  * Create the user for testing
@@ -47,8 +60,7 @@ async function populate_fake_users( count ) {
     users.push( user );
   }
 
-  console.log( '\ninserting users', users.length );
-  console.log( 'user 0', users[ 0 ] );
+  console.log( '\ninserting users:', users.length );
 
   return User.insertMany( users );
 }
@@ -74,8 +86,7 @@ async function populate_fake_meetings( count, userId ) {
     meetings.push( meeting );
   }
 
-  console.log( '\ninserting meetings', meetings.length );
-  console.log( 'meeting 0', meetings[ 0 ] );
+  console.log( '\ninserting meetings:', meetings.length );
 
   return Meeting.insertMany( meetings );
 }
@@ -91,14 +102,14 @@ async function populate_fake_topics( meetings, users, user_id ) {
   const topics = [];
 
   for ( const meeting of meetings ) {
-    Array.from({ length: 7 }).map( () => {
-      const likes = Array.from({ length: 5 }).map( () => {
+    Array.from({ length: rand_int( 7 ) }).forEach( () => {
+      const likes = Array.from({ length: rand_int( 10 ) }).forEach( () => {
         return users[ Math.floor( Math.random() * users.length ) ].email;
       });
 
       topics.push({
-        name: faker.random.word(),
-        description: faker.lorem.paragraph(),
+        name: faker.lorem.words( rand_int( 7 ) ),
+        description: faker.lorem.paragraphs( rand_int( 3 ) ),
         meeting_id: meeting._id,
         owner_id: user_id,
         likes
@@ -106,10 +117,26 @@ async function populate_fake_topics( meetings, users, user_id ) {
     });
   }
 
-  console.log( '\ninserting topics: ', topics.length );
-  console.log( 'topic 0', topics[ 0 ] );
+  console.log( '\ninserting topics:', topics.length );
 
-  return Topic.insertMany( topics );
+  const inserted_topics = await Topic.insertMany( topics );
+
+  const takeaways = [];
+
+  for ( const topic of inserted_topics ) {
+    Array.from({ length: rand_int( 8 ) }).forEach( () => {
+      takeaways.push({
+        owner_id: user_id,
+        topic_id: topic._id,
+        name: faker.random.words( rand_int( 5 ) ),
+        description: faker.lorem.paragraphs( rand_int( 3 ) )
+      });
+    });
+  }
+
+  console.log( `\ninserting takeaways:`, takeaways.length );
+
+  return Takeaway.insertMany( takeaways );
 }
 
 /**
@@ -121,7 +148,7 @@ async function populate_fake_participants( meetings, users ) {
   const participants = [];
 
   for ( const meeting of meetings ) {
-    Array.from({ length: 5 }).forEach( () => {
+    Array.from({ length: rand_int( 8 ) }).forEach( () => {
       participants.push({
         meeting_id: meeting._id,
         email: users[ Math.floor( Math.random() * users.length ) ].email
@@ -129,9 +156,7 @@ async function populate_fake_participants( meetings, users ) {
     });
   }
 
-
-  console.log( '\ninserting participants: ', participants.length );
-  console.log( 'participant 0', participants[ 0 ] );
+  console.log( '\ninserting participants:', participants.length );
 
   return Participant.insertMany( participants );
 }
@@ -142,14 +167,14 @@ async function populate_fake_participants( meetings, users ) {
  */
 async function hydrateDB() {
   try {
-    console.log('\nPopulating database...\n');
+    console.log('\nPopulating database...');
 
     await db.connect();
     await clean();
 
     const user = await createTestUser();
 
-    const users = await populate_fake_users( 1000 );
+    const users = await populate_fake_users( 500 );
     const meetings = await populate_fake_meetings( 15, user._id );
 
     await Promise.all([

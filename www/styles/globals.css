@@ -13,6 +13,7 @@ body {
   overflow-x:hidden;
   color: var(--agendaSecondary);
   font-weight: 100;
+  overflow: hidden;
 }
 
 a {
@@ -151,8 +152,4 @@ p {
   --success: #9bc333;
   --successText: #d0e588;
   --successBg: #5d8700;
-}
-
-body {
-  overflow: hidden;
 }

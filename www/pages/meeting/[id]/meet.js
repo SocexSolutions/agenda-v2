@@ -219,43 +219,51 @@ const Meet = ( props ) => {
   });
 
   return (
-    <div className={styles.container}>
-      <div className={styles.side_container}>
-        <h3>Open Topics</h3>
-        { openCards }
-      </div>
-      <div className={styles.main_container}>
-        <h3>Under Discussion</h3>
-        { live &&
-          <div className={sharedStyles.card + ' ' + styles.discussion_card }>
-            <h3>{live.name}</h3>
-            <p>{live.description}</p>
-            <Button
-              onClick={() => setClosingTopic( live._id )}
-              variant='outlined'
-              text='close'
-            />
+    <div className={sharedStyles.page}>
+      <h2 className={styles.page_title}>Live Meeting: {meeting.name}</h2>
+      <div className={styles.container}>
+        <div className={styles.side_container}>
+          <h3>Open Topics</h3>
+          { openCards }
+        </div>
+        <div className={styles.main_container}>
+          <h3>Under Discussion</h3>
+          <div className={styles.discussion_container}>
+            { live &&
+            <div className={sharedStyles.card + ' ' + styles.discussion_card }>
+              <h3>{live.name}</h3>
+              <p>{live.description}</p>
+              <Button
+                onClick={() => setClosingTopic( live._id )}
+                variant='outlined'
+                text='close'
+              />
+            </div>
+            }
           </div>
-        }
-        { live &&
+
+          { live &&
           <>
             <h3>Takeaways</h3>
-            <CardBoard
-              key={ live._id }
-              getAll={ () => topicAPI.getTakeaways( live._id )}
-              create={ ( payload ) => takeawayAPI.create({
-                topic_id: live._id,
-                ...payload
-              })}
-              update={ ( id, payload ) => takeawayAPI.update( id, payload ) }
-              destroy={ ( id ) => takeawayAPI.destroy( id )}
-            />
+            <div className={styles.takeaway_container}>
+              <CardBoard
+                key={ live._id }
+                getAll={ () => topicAPI.getTakeaways( live._id )}
+                create={ ( payload ) => takeawayAPI.create({
+                  topic_id: live._id,
+                  ...payload
+                })}
+                update={ ( id, payload ) => takeawayAPI.update( id, payload ) }
+                destroy={ ( id ) => takeawayAPI.destroy( id )}
+              />
+            </div>
           </>
-        }
-      </div>
-      <div className={styles.side_container}>
-        <h3>Closed Topics</h3>
-        { closedCards }
+          }
+        </div>
+        <div className={styles.side_container}>
+          <h3>Closed Topics</h3>
+          { closedCards }
+        </div>
       </div>
     </div>
   );

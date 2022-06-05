@@ -60,9 +60,24 @@
 
 .multiLine {
   height: auto;
-  resize: none;
+  resize: vertical;
   font-family: inherit;
-  color: var(--agendaText)
+  color: var(--agendaText);
+}
+
+/* use psuedoselector for scrollbar (not supported by all browsers) */
+.multiLine::-webkit-scrollbar {
+  width: .75em;
+}
+
+.multiLine::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+/* thumb refers to the bar on the slider */
+.multiLine::-webkit-scrollbar-thumb {
+  background-image: linear-gradient(var(--agendaSecondary), var(--agendaThree));
+  border-radius: 2em;
 }
 
 .wrapper textarea::placeholder {
