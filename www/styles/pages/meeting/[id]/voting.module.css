@@ -8,20 +8,6 @@
 
 .page_title {
   width: 100%;
-  margin-left: 1.3em;
-}
-
-.topic {
-  margin: 2em;
-  padding: 1em;
-  margin-top: 1em;
-  background-color: var(--backgroundTwo);
-  outline: .5px solid var(--agendaSecondary);
-  border-radius: 0.5em;
-}
-
-.topic h3 {
-  margin-top: .25em;
 }
 
 .topic Button {

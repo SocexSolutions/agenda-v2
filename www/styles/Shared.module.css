@@ -2,13 +2,13 @@
   color: var(--agendaText);
   background-color: var(--backgroundTwo);
   border: 1px solid var(--agendaSecondary);
-  min-width: 177px;
-  min-height: 30px;
-  margin: 15px 0px;
-  text-align: center;
-  border-radius: 10px;
+  border-radius: .5em;
   padding: 1em;
   font-weight: 600;
+}
+
+.card p {
+  white-space: pre-wrap;
 }
 
 @media only screen and (max-width: 600px) {
@@ -22,8 +22,9 @@
   flex-direction: column;
   align-items: center;
   padding: 0em 3em 5em 3em;
-  max-height: 91vh;
-  overflow: scroll;
+  max-height: 95vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
   resize: none;
 }
 

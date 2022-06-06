@@ -38,6 +38,10 @@
   width: 100%;
 }
 
+.container p {
+  white-space: pre-wrap;
+}
+
 .container button {
   margin-top: 1rem;
   margin-left: auto;

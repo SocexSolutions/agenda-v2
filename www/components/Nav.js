@@ -30,7 +30,6 @@ const Nav = () => {
   const dispatch = useDispatch();
   const user     = useSelector( selectUser );
 
-  const [ creating, setCreating ]             = useState( false );
   const [ history, setHistory ]               = useState([]);
   const [ whereInHistory, setWhereInHistory ] = useState( -1 );
   const [ backPressed, setBackPressed ]       = useState( false );
@@ -38,19 +37,13 @@ const Nav = () => {
 
   const homeHref = user && user._id ? `/user/${ user._id }` : `/login`;
 
-  useEffect( () => {
-    const create_meeting = async() => {
-      // create a draft meeting before redirect so that created participants
-      // and topics have a meeting_id to reference
-      const res = await meetingAPI.create({ name: 'Draft', date: new Date() });
+  const create_meeting = async() => {
+    // create a draft meeting before redirect so that created participants
+    // and topics have a meeting_id to reference
+    const res = await meetingAPI.create({ name: 'Draft', date: new Date() });
 
-      router.push( `/meeting/${ res._id }` );
-    };
-
-    if ( creating ) {
-      create_meeting();
-    }
-  }, [ creating, router ] );
+    router.push( `/meeting/${ res._id }` );
+  };
 
   useEffect( () => {
     // match browser behavior of removing history when user is within their
@@ -155,7 +148,7 @@ const Nav = () => {
           </div>
           <div className={styles.center_third}>
             <Button
-              onClick={ () => setCreating( true )}
+              onClick={ () => create_meeting()}
               icon={<AddToPhotosOutlinedIcon />}
               text="create"
               variant="outlined"

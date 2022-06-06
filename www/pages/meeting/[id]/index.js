@@ -37,18 +37,14 @@ const Meeting = ( props ) => {
     }
   }, [ user, props.store, router.query.id ] );
 
-  useEffect( () => {
-    const updateMeeting = () => {
-      meetingAPI.update(
-        meeting_id,
-        { name }
-      );
-    };
+  const updateMeeting = ( name ) => {
+    meetingAPI.update(
+      meeting_id,
+      { name }
+    );
 
-    if ( !initLoad ) {
-      updateMeeting();
-    }
-  }, [ name ] );
+    setName( name );
+  };
 
   if ( initLoad ) {
     return <LoadingIcon />;
@@ -60,7 +56,7 @@ const Meeting = ( props ) => {
         <h2>Edit Meeting: {name}</h2>
         <h3>Meeting Details</h3>
         <HeaderForm
-          setMeetingName={( e ) => setName( e.target.value ) }
+          setMeetingName={( e ) => updateMeeting( e.target.value ) }
           meetingName={name}
         />
         <h3>Participants</h3>

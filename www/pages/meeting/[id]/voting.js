@@ -84,7 +84,7 @@ const Voting = ( props ) => {
       styles.like;
 
     return (
-      <div className={styles.topic} key={t.name}>
+      <div className={shared.card + ' ' + styles.topic} key={t.name}>
         <h3>{t.name}</h3>
         <p>{t.description}</p>
         <Button

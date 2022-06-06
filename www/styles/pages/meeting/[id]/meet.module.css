@@ -61,7 +61,7 @@
   padding-right: 1.5em;
 }
 
-.sideContainer h3 {
+.side_container h3 {
   width: 100%;
 }
 
@@ -76,6 +76,7 @@
 .card {
   width: 100%;
   padding: 1em;
+  margin: .5em;
 }
 
 .card:hover {
@@ -85,8 +86,8 @@
 
 .card p {
   width: 100%;
-  text-align: left;
   margin: 0;
+  white-space: pre-wrap;
 }
 
 .discussion_container {
