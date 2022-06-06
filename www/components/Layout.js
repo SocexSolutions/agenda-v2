@@ -1,8 +1,8 @@
 import Nav    from './Nav';
 import Drawer from './Drawer';
 
-import { useEffect }    from 'react';
 import { useRouter }    from 'next/router';
+import { useEffect }    from 'react';
 import { useSelector }  from 'react-redux';
 import { refreshTheme } from '../store/features/theme';
 
@@ -14,30 +14,14 @@ const pagesWithoutDrawer = new Set([
   'register'
 ]);
 
-const pagesNeedingAuth = new Set([
-  'meeting',
-  'user',
-  '[id]'
-]);
-
-const selectUser = state => state.user;
-
 const Layout = ( props ) => {
-  const drawerOpen = useSelector( ( state ) => state.drawer );
+  const user       = useSelector( s => s.user );
+  const drawerOpen = useSelector( s => s.drawer );
 
   const router = useRouter();
 
-  const user = useSelector( selectUser );
-
   const page       = router.pathname.split('/').pop();
   const showDrawer = !pagesWithoutDrawer.has( page );
-  const blockPage  = pagesNeedingAuth.has( page );
-
-  useEffect( () => {
-    if ( !user._id && blockPage ) {
-      router.push('/login');
-    }
-  }, [ router ] );
 
   useEffect( () => {
     async function themeRefresh() {

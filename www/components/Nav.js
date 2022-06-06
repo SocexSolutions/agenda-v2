@@ -85,7 +85,9 @@ const Nav = () => {
     }
   }, [ router ] );
 
-  if ( user.token === null ) {
+  console.log( user );
+
+  if ( !user.token ) {
     return (
       <>
         <nav className={styles.nav}>

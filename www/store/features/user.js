@@ -1,5 +1,5 @@
 import client from '../../api/client';
-import { getCookie, deleteCookie, setCookie } from '../../utils/cookie';
+import { getCookie, setCookie } from '../../utils/cookie';
 import router from 'next/router';
 
 const initialState = {
@@ -111,7 +111,7 @@ export const userRefresh = () => {
         dispatch({
           type: 'user/refresh',
           payload: {
-            token:    data.token,
+            token,
             _id:      data.user._id,
             username: data.user.username,
             email:    data.user.email
@@ -131,7 +131,7 @@ export const userRefresh = () => {
  */
 export const userLogout = () => {
   return async function logoutUser( dispatch, getState ) { // eslint-disable-line
-    deleteCookie('agenda-auth');
+    setCookie( 'agenda-auth', '' );
     localStorage.removeItem('theme');
 
     dispatch({
