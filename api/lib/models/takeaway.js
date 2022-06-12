@@ -10,7 +10,8 @@ const takeawaySchema = new Schema({
   },
   topic_id: {
     type: Schema.Types.ObjectId, ref: 'Topic',
-    required: true
+    required: true,
+    index: true
   },
   reactions: [ {
     type: String

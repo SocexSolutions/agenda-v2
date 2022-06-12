@@ -10,7 +10,8 @@ const participantSchema = new mongoose.Schema(
     meeting_id: {
       type: Schema.Types.ObjectId,
       ref: 'Meeting',
-      required: true
+      required: true,
+      index: true
     }
   },
   {
