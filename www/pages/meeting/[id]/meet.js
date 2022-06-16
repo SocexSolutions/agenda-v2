@@ -155,7 +155,7 @@ const Meet = ( props ) => {
     }
   }, [ closingTopic ] );
 
-  if ( !meeting || !topics.length ) {
+  if ( !meeting || topicsLoading ) {
     return (
       <div className={styles.loadingContainer}>
         <LoadingIcon />
