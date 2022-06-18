@@ -20,6 +20,11 @@ const takeawaySchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
+  },
+  meeting_id: {
+    type: Schema.Types.ObjectId,
+    ref: 'Meeting',
+    required: true
   }
 });
 
