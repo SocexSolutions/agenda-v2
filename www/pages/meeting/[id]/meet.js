@@ -251,6 +251,7 @@ const Meet = ( props ) => {
                 getAll={ () => topicAPI.getTakeaways( live._id )}
                 create={ ( payload ) => takeawayAPI.create({
                   topic_id: live._id,
+                  meeting_id: meeting._id,
                   ...payload
                 })}
                 update={ ( id, payload ) => takeawayAPI.update( id, payload ) }

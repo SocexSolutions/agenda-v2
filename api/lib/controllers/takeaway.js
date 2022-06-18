@@ -1,12 +1,9 @@
 const Takeaway  = require('../models/takeaway');
-const Topic     = require('../models/topic');
 const authUtils = require('../util/authorization');
 
 module.exports = {
   create: async( req, res ) => {
-    const { name, description, topic_id } = req.body;
-
-    const { meeting_id } = await Topic.findOne({ _id: topic_id });
+    const { name, description, topic_id, meeting_id } = req.body;
 
     await authUtils.checkParticipant( meeting_id, req.credentials );
 
@@ -14,6 +11,7 @@ module.exports = {
       name,
       description,
       topic_id,
+      meeting_id,
       owner_id: req.credentials.sub
     });
 

@@ -52,7 +52,10 @@ describe( 'lib/controllers/takeaway', () => {
     const path = '/takeaway';
 
     it( 'should create takeaway if meeting owner', async() => {
-      const takeaway = fakeTakeaway({ topic_id: this.topic._id });
+      const takeaway = fakeTakeaway({
+        topic_id: this.topic._id,
+        meeting_id: this.meeting._id
+      });
 
       const res = await client.post( path, takeaway );
 
@@ -103,7 +106,8 @@ describe( 'lib/controllers/takeaway', () => {
         path,
         fakeTakeaway({
           topic_id: this.topic._id,
-          owner_id: this.user._id
+          owner_id: this.user._id,
+          meeting_id: this.meeting._id
         })
       ) ).data;
     });
@@ -155,7 +159,11 @@ describe( 'lib/controllers/takeaway', () => {
     const path = '/takeaway';
 
     it( 'should delete takeaway', async() => {
-      const takeaway = fakeTakeaway({ topic_id: this.topic._id });
+      const takeaway = fakeTakeaway({
+        topic_id: this.topic._id,
+        meeting_id: this.meeting._id
+      });
+
       const resTakeaway = await client.post( path, takeaway );
 
       const res = await client.delete( path + '/' + resTakeaway.data._id );
@@ -172,7 +180,11 @@ describe( 'lib/controllers/takeaway', () => {
     });
 
     it( 'should 403 if not takeaway owner', async() => {
-      const takeaway = fakeTakeaway({ topic_id: this.topic._id });
+      const takeaway = fakeTakeaway({
+        topic_id: this.topic._id,
+        meeting_id: this.meeting._id
+      });
+
       const resTakeaway = await client.post( path, takeaway );
 
       client.defaults.headers.common['Authorization'] = this.user2.token;
