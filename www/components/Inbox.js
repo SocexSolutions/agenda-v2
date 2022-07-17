@@ -51,7 +51,7 @@ const Inbox = ({ meetings, emptyMessage }) => {
     <div className={styles.list}>
       {
         lineItems.length ? lineItems :
-          <div className={styles.noMeetings}>{emptyMessage}</div> //No Meetings :( <br></br> <a><Link href="/meeting/new">Get Started</Link></a>
+          <div className={styles.noMeetings}>{emptyMessage}</div>
       }
     </div>
   );

@@ -19,11 +19,9 @@ import sharedStyles from '../../../styles/Shared.module.css';
 const Meet = ( props ) => {
   const [ meetingLoading, setMeetingLoading ]           = useState( true );
   const [ topicsLoading, setTopicsLoading ]             = useState( true );
-  const [ participantsLoading, setParticipantsLoading ] = useState( true );
 
   const [ meeting, setMeeting ]           = useState( null );
   const [ topics, setTopics ]             = useState([]);
-  const [ participants, setParticipants ] = useState([]);
 
   const [ switchingTopics, setSwitchingTopics ] = useState( null );
   const [ closingTopic, setClosingTopic ]       = useState( null );
@@ -43,18 +41,6 @@ const Meet = ( props ) => {
       loadTopics();
     }
   }, [ router.query.id, topicsLoading ] );
-
-  useEffect( () => {
-    const loadParticipants = async() => {
-      const participants = await meetingAPI.getParticipants( meeting_id );
-      setParticipants( participants );
-      setParticipantsLoading( false );
-    };
-
-    if ( participantsLoading && meeting_id ) {
-      loadParticipants();
-    }
-  }, [ router.query.id, participantsLoading ] );
 
   useEffect( () => {
     const loadMeeting = async() => {
