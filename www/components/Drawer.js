@@ -5,7 +5,7 @@ import Button from '../components/Button';
 
 import ArrowForwardIosIcon  from '@mui/icons-material/ArrowForwardIosTwoTone';
 import DoubleArrowIcon      from '@mui/icons-material/DoubleArrow';
-import CheckBoxOutlinedIcon from '@mui/icons-material/Checkboxoutlined';
+import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import CancelOutlinedIcon   from '@mui/icons-material/CancelOutlined';
 
 import styles from '../styles/components/Drawer.module.css';

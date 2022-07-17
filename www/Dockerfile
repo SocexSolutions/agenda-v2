@@ -1,4 +1,4 @@
-FROM node:16
+FROM --platform=linux/x86_64 node:16
 
 WORKDIR /app
 
@@ -6,8 +6,10 @@ COPY . .
 
 RUN npm install --production
 
+RUN npm i @next/swc-linux-x64-gnu
+
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 80
 
 CMD [ "npm", "start" ]

@@ -1,6 +1,6 @@
 import { toggleDrawer } from '../store/features/drawer';
 
-import classNames from 'classNames';
+import classNames from 'classnames';
 
 import Button     from './Button';
 import DropDown   from './DropDown';

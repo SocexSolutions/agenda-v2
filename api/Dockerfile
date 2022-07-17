@@ -6,6 +6,6 @@ COPY . .
 
 RUN npm install --production
 
-EXPOSE 4000
+EXPOSE 80
 
 CMD [ "node", "./lib/index.js" ]

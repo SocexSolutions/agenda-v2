@@ -1,15 +1,15 @@
 import { useRouter } from 'next/router';
 
-import { notify } from '../store/features/snackbar/snackbarSlice';
+import { notify } from '../store/features/snackbar';
 
 import Input  from '../components/Input';
 import Button from '../components/Button';
 
 import { useState }     from 'react';
 import { useEffect }    from 'react';
-import { userRegister } from '../store/features/user/userSlice';
+import { userRegister } from '../store/features/user';
 
-import client from '../store/client';
+import client from '../api/client';
 
 import styles from '../styles/pages/register.module.css';
 
