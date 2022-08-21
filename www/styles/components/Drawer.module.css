@@ -5,15 +5,12 @@
 }
 
 .container {
-  width: 15rem;
-  border: 1px solid var(--agendaSecondary);
+  width: 20rem;
   background-color: var(--backgroundTwo);
   transition: width 400ms;
   overflow: hidden;
-  height: 90%;
-  margin-top: 1rem;
-  margin-left: -2px;
-  border-radius: 0rem .5rem .5rem 0rem;
+  height: 110%;
+  border-right: 1px solid var(--agenda);
 }
 
 .container h2 {
@@ -33,7 +30,7 @@
 .arrow_container {
   border-radius: 0rem .5rem .5rem 0rem;
   margin-top: calc( 50vh - 7rem );
-  border: 1px solid var(--agendaSecondary);
+  border: 1px solid var(--agenda);
   background-color: var(--backgroundTwo);
   margin-bottom: auto;
   margin-left: -1px;

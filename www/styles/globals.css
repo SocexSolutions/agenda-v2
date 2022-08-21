@@ -66,13 +66,14 @@ p {
 }
 
 .light {
-  --agenda: #444444;
-  --agendaSecondary: #878683;
-  --agendaThree: #0e0e0e ;
+  --agenda: #b5b9be;
+  --agendaSecondary: #32363a;
+  --agendaThree: #1a62e7 ;
+  --agendaDarkBlue: #0f427c ;
   --agendaText: #111111;
-  --background: #ffffff;
-  --backgroundTwo: #ffffff;
-  --backgroundShadow: #adadad;
+  --background: #f8fbff;
+  --backgroundTwo: #f0f4f8; /*#eff2f5  */
+  --backgroundShadow: #181818;
   --agendaPurple: #533c55;
   --danger: #df1405;
   --dangerText: #ffffff;

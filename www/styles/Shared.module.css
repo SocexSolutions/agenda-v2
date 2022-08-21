@@ -21,7 +21,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0em 3em 5em 3em;
+  padding: 0em 0em 5em 0em;
   max-height: 95vh;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -34,7 +34,7 @@
 }
 
 .page::-webkit-scrollbar-track {
-  background: var(--background);
+  background: var(--backgroundTwo);
 }
 
 .page::-webkit-scrollbar-button {
@@ -48,7 +48,7 @@
 
 /* thumb refers to the bar on the slider */
 .page::-webkit-scrollbar-thumb {
-  background-image: linear-gradient(var(--agendaSecondary), var(--agendaThree));
+  background-image: linear-gradient(var(--agenda), var(--agendaThree));
   border-radius: 25px;
 }
 

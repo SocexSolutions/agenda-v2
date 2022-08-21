@@ -44,7 +44,7 @@ const Drawer = () => {
           icon={<CancelOutlinedIcon style={{ color: 'var(--danger)' }} />}
         />
       </div>
-      <div
+      {/* <div
         className={styles.arrow_container}
         onClick={() => dispatch( toggleDrawer() )}
       >
@@ -53,7 +53,7 @@ const Drawer = () => {
             <ArrowForwardIosIcon />
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
