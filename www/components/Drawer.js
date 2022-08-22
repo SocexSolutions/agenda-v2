@@ -44,16 +44,6 @@ const Drawer = () => {
           icon={<CancelOutlinedIcon style={{ color: 'var(--danger)' }} />}
         />
       </div>
-      {/* <div
-        className={styles.arrow_container}
-        onClick={() => dispatch( toggleDrawer() )}
-      >
-        <div className={styles.arrow}>
-          <div className={open ? styles.arrow_close : styles.arrow_open}>
-            <ArrowForwardIosIcon />
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 };
