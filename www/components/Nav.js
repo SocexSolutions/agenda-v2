@@ -2,7 +2,9 @@ import { toggleDrawer } from '../store/features/drawer';
 
 import classNames from 'classnames';
 
-import Button     from './Button';
+import { Button }     from '@mui/material';
+import { IconButton } from '@mui/material';
+
 import DropDown   from './DropDown';
 import AgendaIcon from './AgendaIcon';
 
@@ -100,17 +102,15 @@ const Nav = () => {
           <div className={styles.login}>
             <Link href="/login">
               <Button
-                variant="outlined"
-                text="Login"
-                customClass={styles.nav_button}
-              />
+                className={styles.nav_button}
+              > Login</Button>
             </Link>
             <Link href="/register">
               <Button
-                variant="outlined"
-                text="Sign Up"
-                customClass={styles.nav_button}
-              />
+                className={styles.nav_button}
+              >
+                Sign Up
+              </Button>
             </Link>
           </div>
         </nav>
@@ -121,41 +121,47 @@ const Nav = () => {
       <>
         <nav className={classNames( styles.nav, styles.nav_logged_in )}>
           <div className={styles.first_third}>
-            <Button
-              icon={<MenuIcon />}
-              variant="icon"
+            <IconButton
               onClick={() => dispatch( toggleDrawer() )}
-            />
+            >
+              <MenuIcon />
+            </IconButton>
             <Link href={homeHref} passHref>
-              <Button icon={<HomeOutlinedIcon />} variant="icon"/>
+              <IconButton className={styles.icon_button}>
+                <HomeOutlinedIcon />
+              </IconButton>
             </Link>
-            <Button
+            <IconButton
+              className={styles.icon_button}
               disabled={ whereInHistory < 1 }
-              icon={<ArrowBackIcon />}
-              variant="icon"
               onClick={() => {
                 setBackPressed( true );
                 router.push( history[ whereInHistory - 1 ] );
               }}
-            />
-            <Button
+            >
+              <ArrowBackIcon />
+            </IconButton>
+            <IconButton
+              className={styles.icon_button}
               disabled={ whereInHistory >= history.length - 1 }
-              icon={<ArrowForwardIcon />}
-              variant="icon"
               onClick={() => {
                 setForwardPressed( true );
                 router.push( history[ whereInHistory + 1 ] );
               }}
-            />
+            >
+              <ArrowForwardIcon />
+            </IconButton>
           </div>
           <div className={styles.center_third}>
-            <Button
+            <IconButton
+              className={styles.icon_button}
               onClick={ () => create_meeting()}
-              icon={<AddToPhotosOutlinedIcon />}
-              text="create"
-              variant="outlined"
+              startIcon={<AddToPhotosOutlinedIcon />}
+              variant="text"
               hollow={true}
-            />
+            >
+              Create
+            </IconButton>
           </div>
           <div className={styles.last_third}>
             <Button

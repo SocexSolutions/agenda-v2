@@ -9,7 +9,7 @@
   background-color: inherit;
   color: var(--agendaText);
   border: 0;
-  border-bottom: 1px solid var(--agendaSecondary);
+  border-bottom: 1px solid var(--agenda);
   padding: 0.5rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -23,7 +23,7 @@
 }
 
 .outlined {
-  border-color: var(--agendaSecondary);
+  border-color: var(--agenda);
   background-color: inherit;
   border-width: 2px;
   padding: 0.5rem;
@@ -62,6 +62,7 @@
   height: auto;
   resize: vertical;
   font-family: inherit;
+  border: 1px solid var(--agenda);
   color: var(--agendaText);
 }
 

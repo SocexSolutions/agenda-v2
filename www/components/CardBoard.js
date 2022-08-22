@@ -77,24 +77,28 @@ const CardBoard = ( props ) => {
       const editing = editingId === item._id;
       if ( editing ) {
         itemCards.push(
-          <Card
-            setEditing={setEditingId}
-            editing={ editingId === item._id }
-            key={item._id}
-            item={item}
-            updateItem={updateItem}
-            destroyItem={destroyItem}
-          />
+          <div className={styles.card_container}>
+            <Card
+              setEditing={setEditingId}
+              editing={ editingId === item._id }
+              key={item._id}
+              item={item}
+              updateItem={updateItem}
+              destroyItem={destroyItem}
+            />
+          </div>
         );
       } else {
         itemCards.push(
-          <Card
-            setEditing={setEditingId}
-            key={item._id}
-            item={item}
-            updateItem={updateItem}
-            destroyItem={destroyItem}
-          />
+          <div className={styles.card_container}>
+            <Card
+              setEditing={setEditingId}
+              key={item._id}
+              item={item}
+              updateItem={updateItem}
+              destroyItem={destroyItem}
+            />
+          </div>
         );
       }
     }
@@ -107,7 +111,7 @@ const CardBoard = ( props ) => {
         <Button
           className={styles.add_button}
           onClick={() => createItem()}
-          variant='icon'
+          variant='iconInverted'
           text='New'
           icon={<AddIcon />}
         />

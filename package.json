@@ -45,6 +45,9 @@
     "include": "api/lib/**/*.js"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
+    "@mui/material": "^5.10.1",
     "deprank": "^0.1.1"
   }
 }

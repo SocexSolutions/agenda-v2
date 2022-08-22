@@ -62,4 +62,9 @@
 
 .nav_button {
   margin-left: 1em;
+  color: white;
+}
+
+.icon_button {
+  color: white;
 }

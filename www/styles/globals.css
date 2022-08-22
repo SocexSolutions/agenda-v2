@@ -16,6 +16,12 @@ body {
   overflow: hidden;
 }
 
+h3 {
+  margin: 0;
+  margin-bottom: 1em;
+  padding: 0;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -68,7 +74,7 @@ p {
 .light {
   --agenda: #b5b9be;
   --agendaSecondary: #32363a;
-  --agendaThree: #1a62e7 ;
+  --agendaThree: #518dfc ;
   --agendaDarkBlue: #0f427c ;
   --agendaText: #111111;
   --background: #f8fbff;

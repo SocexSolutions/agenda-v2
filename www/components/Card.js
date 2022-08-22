@@ -44,13 +44,14 @@ const Card = ({
 
   return (
     <div className={styles.container + ' ' + styles.editing}>
-      <Input onChange={( e ) => setName( e.target.value ) } value={name}/>
+      <Input onChange={( e ) => setName( e.target.value ) } value={name} placeholder='Title'/>
       <Input
         multiLine={true}
         rows='5'
         value={description}
         variant='outlined'
         onChange={( e ) => setDescription( e.target.value )}
+        placeholder='Description...'
       />
       <div className={styles.buttonContainer}>
         <Button

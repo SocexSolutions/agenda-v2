@@ -41,6 +41,18 @@
   opacity: 50%;
 }
 
+.icon_inverted {
+  background-color: transparent;
+  color: var(--agendaThree);
+  min-width: 0px;
+  padding: 0.2em;
+  margin-top: 0.2em;
+}
+
+.icon_inverted:hover {
+  opacity: 50%;
+}
+
 .icon_container {
   padding-right: .5em;
   display: flex;

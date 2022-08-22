@@ -54,15 +54,16 @@ const Meeting = ( props ) => {
     <div className={shared.page}>
       <div className={shared.container}>
         <h2>Edit Meeting: {name}</h2>
-        <h3>Meeting Details</h3>
-        <HeaderForm
-          setMeetingName={( e ) => updateMeeting( e.target.value ) }
-          meetingName={name}
-        />
-        <h3>Participants</h3>
-        <div className={shared.card}>
+        <div className={shared.card + ' ' + styles.section}>
+          <h3>Meeting Details</h3>
+          <HeaderForm
+            setMeetingName={( e ) => updateMeeting( e.target.value ) }
+            meetingName={name}
+          />
+        </div>
+        <div className={shared.card + ' ' + styles.section}>
+          <h3>Participants</h3>
           <ChipForm
-            className={shared.card + ' ' + styles.card}
             change={meeting_id}
             itemKey={'email'}
             itemName={'participant'}
@@ -74,17 +75,19 @@ const Meeting = ( props ) => {
             destroy={ ( id ) => participantAPI.destroy( id ) }
           />
         </div>
-        <h3>Topics</h3>
-        <CardBoard
-          change={meeting_id}
-          getAll={ () => meetingAPI.getTopics( meeting_id ) }
-          create={ ( payload ) => topicAPI.create({
-            meeting_id,
-            ...payload
-          })}
-          update={ ( id, payload ) => topicAPI.update( id, payload ) }
-          destroy={ ( id ) => topicAPI.destroy( id ) }
-        />
+        <div className={shared.card + ' ' + styles.section}>
+          <h3>Topics</h3>
+          <CardBoard
+            change={meeting_id}
+            getAll={ () => meetingAPI.getTopics( meeting_id ) }
+            create={ ( payload ) => topicAPI.create({
+              meeting_id,
+              ...payload
+            })}
+            update={ ( id, payload ) => topicAPI.update( id, payload ) }
+            destroy={ ( id ) => topicAPI.destroy( id ) }
+          />
+        </div>
       </div>
     </div>
   );
