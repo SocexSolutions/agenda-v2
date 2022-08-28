@@ -20,8 +20,8 @@ const api = {
       app.use( express.json() );
       app.use( express.urlencoded({ extended: true }) );
 
-      const basePath = urlPath || '/';
-      const baseRouter  = router || apiRouter;
+      const basePath   = urlPath || '/api';
+      const baseRouter = router || apiRouter;
 
       app.use( basePath, baseRouter );
 

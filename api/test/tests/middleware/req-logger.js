@@ -24,7 +24,7 @@ describe( modulePath, () => {
   this.bindRoutesStartServer = ( urlPath, middleware, controller ) => {
     router.use( urlPath, middleware, controller );
 
-    api.start( '/', router );
+    api.start( '/api', router );
   };
 
   it( 'should call controller regardless of failure', async() => {
@@ -61,7 +61,7 @@ describe( modulePath, () => {
 
     await client.post( urlPath, { msg: 'hi' } );
 
-    sinon.assert.calledOnceWithExactly( jobi.info, 'POST', urlPath );
+    sinon.assert.calledOnceWithExactly( jobi.info, 'POST', '/api' + urlPath );
 
     assert.deepEqual(
       jobi.debug.getCall( 0 ).args,

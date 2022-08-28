@@ -18,9 +18,11 @@ const start = async() => {
     app.use( express.urlencoded({ extended: true }) );
 
     // cors
-    app.use( cors({ origin: 'http://localhost:3000' }) );
+    if ( process.env.NODE_ENV === 'dev' ) {
+      app.use( cors({ origin: 'http://localhost:3000' }) );
+    }
 
-    app.use( '/', router );
+    app.use( '/api', router );
 
     const port = process.env.PORT || 4000;
 
