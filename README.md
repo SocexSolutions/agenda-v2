@@ -36,6 +36,24 @@ To run the tests use:
 npm run test
 ```
 
+# Deployment
+
+The www container image can be pushed to GCR using the `push-www-to-gcr` script
+with a specified semver version:
+
+```bash
+bash scripts/push-www-to-gcr.sh
+```
+
+The api container image can be pushed to GCR using the `push-api-to-gcr` script
+with a specified semver version:
+
+```bash
+bash scripts/push-api-to-gcr.sh
+```
+
+The image version will then need to updated in cloud run.
+
 # Info
 More information specific to the api and server containers can be found in the README.md files for the `api` and `www` directories.
 
