@@ -31,7 +31,7 @@
 
 .icon {
   background-color: transparent;
-  color: var(--agendaSecondary);
+  color: var(--backgroundTwo);
   min-width: 0px;
   padding: 0.2em;
   margin-top: 0.2em;
@@ -40,6 +40,19 @@
 .icon:hover {
   opacity: 50%;
 }
+
+.icon_inverted {
+  background-color: transparent;
+  color: var(--agendaThree);
+  min-width: 0px;
+  padding: 0.2em;
+  margin-top: 0.2em;
+}
+
+.icon_inverted:hover {
+  opacity: 50%;
+}
+
 
 .icon_container {
   padding-right: .5em;
@@ -81,7 +94,8 @@
 .hollow {
   border: none;
   background-color: transparent;
-  color: var(--agendaText);
+  color: var(--agendaThree);
+  
 }
 
 .hollow:hover {
@@ -98,9 +112,9 @@
 }
 
 .outlined {
-  background-color: inherit;
-  border: 1px solid var(--agendaSecondary);
-  color: var(--agendaText);
+  background-color: var(--backgroundTwo);
+  border: 1px solid var(--agendaDarkBlue);
+  color: var(--agendaThree);
 }
 
 .outlined:hover {

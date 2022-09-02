@@ -63,6 +63,9 @@ const Button = ({
     case 'icon':
       button_styles += ' ' + styles.icon;
       break;
+    case 'iconInverted':
+      button_styles += ' ' + styles.icon_inverted;
+      break;
   }
 
   if ( disabled ) {

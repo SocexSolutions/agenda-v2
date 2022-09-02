@@ -43,5 +43,7 @@
   ],
   "nyc": {
     "include": "api/lib/**/*.js"
+  },
+  "dependencies": {
   }
 }

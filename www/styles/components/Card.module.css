@@ -2,10 +2,9 @@
   font-size: 10px;
   color: var(--agendaText);
   background-color: var(--backgroundTwo);
-  border: 1px solid var(--agendaSecondary);
-  margin-bottom: 1rem;
-  padding: 1rem;
-  border-radius: 10px;
+  margin-bottom: 1em;
+  padding: 1em;
+  border-radius: 5px;
   width: 100%;
   cursor: pointer;
 }

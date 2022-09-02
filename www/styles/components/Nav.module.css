@@ -1,8 +1,11 @@
 .nav {
-  background-color: var(--backgroundTwo);
-  height: 5rem;
+  background-color: var(--agendaThree);
+  opacity: 100%;
+  backdrop-filter: blur(20px);
+  height: 5%;
   padding: .5em 1em;
   color: var(--agendaText);
+  border-bottom: 1px solid var(--agenda);
   display: flex;
 }
 
@@ -10,7 +13,7 @@
   height: 100%;
   width: 33%;
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
 }
 
@@ -59,4 +62,9 @@
 
 .nav_button {
   margin-left: 1em;
+  color: white;
+}
+
+.icon_button {
+  color: white;
 }
