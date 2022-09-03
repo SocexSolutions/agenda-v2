@@ -1,20 +1,17 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { toggleDrawer }             from '../store/features/drawer';
+import { useSelector } from 'react-redux';
 
-import Button from '../components/Button';
+import Button from '../Button/Button';
 
-import ArrowForwardIosIcon  from '@mui/icons-material/ArrowForwardIosTwoTone';
 import DoubleArrowIcon      from '@mui/icons-material/DoubleArrow';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import CancelOutlinedIcon   from '@mui/icons-material/CancelOutlined';
 
-import styles from '../styles/components/Drawer.module.css';
+import styles from './Drawer.module.css';
 
 
 const selectDrawer = state => state.drawer;
 
 const Drawer = () => {
-  const dispatch = useDispatch();
   const open     = useSelector( selectDrawer ).open;
 
   return (

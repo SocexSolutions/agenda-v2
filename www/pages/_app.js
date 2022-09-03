@@ -5,8 +5,8 @@ import { useStore }    from '../store';
 import { userRefresh } from '../store/features/user';
 import { useRouter }   from 'next/router';
 
-import Snackbar from '../components/Snackbar';
-import Layout   from '../components/Layout';
+import Snackbar from '../components/Snackbar/Snackbar';
+import Layout   from '../components/Layout/Layout';
 
 import '../styles/globals.css';
 import Script from 'next/script';

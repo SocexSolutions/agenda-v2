@@ -1,8 +1,7 @@
-import LoadingIcon   from '../../../components/LoadingIcon';
+import LoadingIcon from '../../../components/LoadingIcon/LoadingIcon';
+import Button      from '../../../components/Button/Button';
 
 import ArrowCircleUp from '@mui/icons-material/ThumbUp';
-
-import Button from '../../../components/Button';
 
 import styles from '../../../styles/pages/meeting/[id]/voting.module.css';
 import shared from '../../../styles/Shared.module.css';

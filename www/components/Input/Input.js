@@ -2,7 +2,7 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
-import styles from '../styles/components/Input.module.css';
+import styles from './Input.module.css';
 
 const Input = ({
   label,

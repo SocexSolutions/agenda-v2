@@ -1,7 +1,7 @@
-import HeaderForm  from '../../../components/HeaderForm';
-import CardBoard   from '../../../components/CardBoard';
-import ChipForm    from '../../../components/ChipForm';
-import LoadingIcon from '../../../components/LoadingIcon';
+import HeaderForm  from '../../../components/HeaderForm/HeaderForm';
+import CardBoard   from '../../../components/CardBoard/CardBoard';
+import ChipForm    from '../../../components/ChipForm/ChipForm';
+import LoadingIcon from '../../../components/LoadingIcon/LoadingIcon';
 
 import meetingAPI     from '../../../api/meeting';
 import topicAPI       from '../../../api/topic';

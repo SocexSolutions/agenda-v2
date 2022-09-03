@@ -1,7 +1,7 @@
 
-import Input from './Input';
+import Input from '../Input/Input';
 
-import styles from '../styles/components/HeaderForm.module.css';
+import styles from './HeaderForm.module.css';
 
 function HeaderForm( props ) {
   return (

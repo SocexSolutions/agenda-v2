@@ -1,12 +1,12 @@
-import { toggleDrawer } from '../store/features/drawer';
+import { toggleDrawer } from '../../store/features/drawer';
 
 import classNames from 'classnames';
 
-import Button     from './Button';
-import DropDown   from './DropDown';
-import AgendaIcon from './AgendaIcon';
+import Button     from '../Button/Button';
+import DropDown   from '../DropDown/DropDown';
+import AgendaIcon from '../AgendaIcon/AgendaIcon';
 
-import meetingAPI from '../api/meeting';
+import meetingAPI from '../../api/meeting';
 
 import MenuIcon                from '@mui/icons-material/Menu';
 import HomeOutlinedIcon        from '@mui/icons-material/HomeOutlined';
@@ -21,7 +21,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Link          from 'next/link';
 import { useRouter } from 'next/router';
 
-import styles from '../styles/components/Nav.module.css';
+import styles from './Nav.module.css';
 
 const selectUser = state => state.user;
 

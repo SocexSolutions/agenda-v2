@@ -1,4 +1,4 @@
-import styles from '../styles/components/Modal.module.css';
+import styles from './Modal.module.css';
 
 const Modal = ( props ) => {
   return (

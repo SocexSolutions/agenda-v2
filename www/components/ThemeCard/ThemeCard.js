@@ -1,10 +1,10 @@
 import Image from 'next/image';
 
-import { pickTheme } from '../store/features/theme';
+import { pickTheme } from '../../store/features/theme';
 
 import { useStore } from 'react-redux';
 
-import styles from '../styles/components/ThemeCard.module.css';
+import styles from './ThemeCard.module.css';
 
 const ThemeCard = ( props ) => {
   const store = useStore();

@@ -1,5 +1,5 @@
-import Input  from '../components/Input';
-import Button from '../components/Button';
+import Input  from '../components/Input/Input';
+import Button from '../components/Button/Button';
 
 
 const Test = () => {

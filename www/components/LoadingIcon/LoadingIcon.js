@@ -1,4 +1,4 @@
-import styles from '../styles/components/LoadingIcon.module.css';
+import styles from './LoadingIcon.module.css';
 
 const LoadingIcon = ({ size }) => {
   switch ( size ) {

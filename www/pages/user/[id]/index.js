@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSelector }         from 'react-redux';
 
-import Inbox       from '../../../components/Inbox';
-import LoadingIcon from '../../../components/LoadingIcon';
+import Inbox       from '../../../components/Inbox/Inbox';
+import LoadingIcon from '../../../components/LoadingIcon/LoadingIcon';
 
 import client from '../../../api/client';
 

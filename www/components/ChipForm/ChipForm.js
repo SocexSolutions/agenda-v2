@@ -1,13 +1,13 @@
-import { useStore } from '../store';
-import { notify }   from '../store/features/snackbar';
+import { useStore } from '../../store';
+import { notify }   from '../../store/features/snackbar';
 
-import Chip   from './Chip';
-import Input  from './Input';
-import Button from './Button';
+import Chip   from '../Chip/Chip';
+import Input  from '../Input/Input';
+import Button from '../Button/Button';
 
 import { useEffect, useState } from 'react';
 
-import styles from '../styles/components/ChipForm.module.css';
+import styles from './ChipForm.module.css';
 
 /**
  * Form for editing chip arrays

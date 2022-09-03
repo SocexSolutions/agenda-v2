@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 
-import Input  from './Input';
-import Button from './Button';
+import Input  from '../Input/Input';
+import Button from '../Button/Button';
 
 import { useState } from 'react';
 
-import styles from '../styles/components/Card.module.css';
+import styles from './Card.module.css';
 
 /**
  * @param {Object} item             - item that to display

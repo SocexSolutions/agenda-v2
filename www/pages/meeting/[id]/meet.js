@@ -1,6 +1,6 @@
-import LoadingIcon from '../../../components/LoadingIcon';
-import Button      from '../../../components/Button';
-import CardBoard   from '../../../components/CardBoard';
+import LoadingIcon from '../../../components/LoadingIcon/LoadingIcon';
+import Button      from '../../../components/Button/Button';
+import CardBoard   from '../../../components/CardBoard/CardBoard';
 
 import takeawayAPI from '../../../api/takeaway';
 import topicAPI    from '../../../api/topic';

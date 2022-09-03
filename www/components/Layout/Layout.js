@@ -1,12 +1,12 @@
-import Nav    from './Nav';
-import Drawer from './Drawer';
+import Nav    from '../Nav/Nav';
+import Drawer from '../Drawer/Drawer';
 
 import { useRouter }    from 'next/router';
 import { useEffect }    from 'react';
 import { useSelector }  from 'react-redux';
-import { refreshTheme } from '../store/features/theme';
+import { refreshTheme } from '../../store/features/theme';
 
-import styles from '../styles/components/Layout.module.css';
+import styles from './Layout.module.css';
 
 const pagesWithoutDrawer = new Set([
   '',
