@@ -1,6 +1,7 @@
 import LoadingIcon from '../../../components/LoadingIcon/LoadingIcon';
 import Button      from '../../../components/Button/Button';
 import CardBoard   from '../../../components/CardBoard/CardBoard';
+import Hr          from '../../../components/Hr/Hr';
 
 import takeawayAPI from '../../../api/takeaway';
 import topicAPI    from '../../../api/topic';
@@ -17,11 +18,11 @@ import styles       from '../../../styles/pages/meeting/[id]/meet.module.css';
 import sharedStyles from '../../../styles/Shared.module.css';
 
 const Meet = ( props ) => {
-  const [ meetingLoading, setMeetingLoading ]           = useState( true );
-  const [ topicsLoading, setTopicsLoading ]             = useState( true );
+  const [ meetingLoading, setMeetingLoading ] = useState( true );
+  const [ topicsLoading, setTopicsLoading ]   = useState( true );
 
-  const [ meeting, setMeeting ]           = useState( null );
-  const [ topics, setTopics ]             = useState([]);
+  const [ meeting, setMeeting ] = useState( null );
+  const [ topics, setTopics ]   = useState([]);
 
   const [ switchingTopics, setSwitchingTopics ] = useState( null );
   const [ closingTopic, setClosingTopic ]       = useState( null );
@@ -207,6 +208,7 @@ const Meet = ( props ) => {
   return (
     <div className={sharedStyles.page}>
       <h2 className={styles.page_title}>Live Meeting: {meeting.name}</h2>
+      <Hr />
       <div className={styles.container}>
         <div className={styles.side_container}>
           <h3>Open Topics</h3>

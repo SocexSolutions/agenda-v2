@@ -1,6 +1,8 @@
 @font-face {
   font-family: open-sans;
   src: url('../public/font/OpenSans-Regular.ttf');
+   -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 html,
@@ -11,7 +13,7 @@ body {
   background-color: var(--background);
   font-family: open-sans;
   overflow-x:hidden;
-  color: var(--agendaSecondary);
+  color: var(--secondary);
   font-weight: 100;
   overflow: hidden;
 }
@@ -38,104 +40,26 @@ p {
 /* THEMES */
 
 .default {
-  --agenda: #244a93;
-  --agendaSecondary: #578ffe;
-  --agendaThree: #2254af ;
-  --agendaText: #8eb3f9;
-  --background: #082050;
-  --backgroundTwo: #082050;
-  --backgroundShadow: #041435;
-  --agendaPurple: #5d5fef;
-  --danger: #df1405;
-  --dangerText: #e0918c;
-  --dangerBg: #940c03;
-  --success: #9bc333;
-  --successText: #d0e588;
-  --successBg: #5d8700;
-}
-
-.dark {
-  --agenda: #444444;
-  --agendaSecondary: #878683;
-  --agendaThree: #4e4e4e ;
-  --agendaText: #bebebe;
-  --background: #121212;
-  --backgroundTwo: #121212;
-  --backgroundShadow: #0d0d0e;
-  --agendaPurple: #533c55;
-  --danger: #df1405;
-  --dangerText: #e0918c;
-  --dangerBg: #940c03;
-  --success: #9bc333;
-  --successText: #d0e588;
-  --successBg: #5d8700;
-}
-
-.light {
-  --agenda: #b5b9be;
-  --agendaSecondary: #32363a;
-  --agendaThree: #518dfc ;
-  --agendaDarkBlue: #0f427c ;
-  --agendaText: #111111;
-  --background: #f8fbff;
-  --backgroundTwo: #f0f4f8; /*#eff2f5  */
-  --backgroundShadow: #181818;
-  --agendaPurple: #533c55;
+  --primary: #518dfc;
+  --background: #f5f5f5;
+  --backgroundHighlight: #e6e6e6;
+  --foreground: #fff;
+  --border: #c9c9c9;
+  --darkText: #303337;
+  --midText: #6a737d;
+  --lightText: #fff;
   --danger: #df1405;
   --dangerText: #ffffff;
-  --dangerBg: #940c03;
+  --dangerBackground: #940c03;
   --success: #9bc333;
   --successText: #ffffff;
-  --successBg: #95da00;
-}
-
-.zachsTheme {
-  --agenda: #070707;
-  --agendaSecondary: #066b0b;
-  --agendaThree: #1d1d1d ;
-  --agendaText: #006e09;
-  --background: #000000;
-  --backgroundTwo: #101a0f;
-  --backgroundShadow: #000000;
-  --agendaPurple: #e200f7;
-  --danger: #770016;
-  --dangerText: #d80303;
-  --dangerBg: #cf1104;
-  --success: #022c79;
-  --successText: #005be4;
-  --successBg: #0081b4;
-}
-
-.agendaOG {
-  --agenda: #40c540;
-  --agendaSecondary: #179417;
-  --agendaThree: #3dcf3d ;
-  --agendaText: #000000;
-  --background: #849989;
-  --backgroundTwo: #dfe9df;
-  --backgroundShadow: #383b39;
-  --agendaPurple: #5d5fef;
-  --danger: #df1405;
-  --dangerText: #e0918c;
-  --dangerBg: #940c03;
-  --success: #9bc333;
-  --successText: #11c501;
-  --successBg: #5d8700;
-}
-
-.banana {
-  --agenda: #d8e709;
-  --agendaSecondary: #80880f;
-  --agendaThree: #eeff00;
-  --agendaText: #101306;
-  --background: #bfc200;
-  --backgroundTwo: #445305;
-  --backgroundShadow: #041435;
-  --agendaPurple: #5d5fef;
-  --danger: #df1405;
-  --dangerText: #e0918c;
-  --dangerBg: #940c03;
-  --success: #9bc333;
-  --successText: #d0e588;
-  --successBg: #5d8700;
+  --successBackground: #95da00;
+  --yellow: #f6e336;
+  --orange: #f69100;
+  --green: #45a749;
+  --blue: #1e8feb;
+  --indigo: #394bad;
+  --purple: #9697e6;
+  --pink: #e01b5c;
+  --boxShadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }

@@ -31,5 +31,5 @@
   border-radius: .25em;
   cursor: pointer;
   color: var(--successText);
-  background-color: var(--successBg);
+  background-color: var(--successBackground);
 }

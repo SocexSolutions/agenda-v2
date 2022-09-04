@@ -85,8 +85,6 @@ const Nav = () => {
     }
   }, [ router ] );
 
-  console.log( user );
-
   if ( !user.token ) {
     return (
       <>

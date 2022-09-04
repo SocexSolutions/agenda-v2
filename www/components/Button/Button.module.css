@@ -31,7 +31,7 @@
 
 .icon {
   background-color: transparent;
-  color: var(--backgroundTwo);
+  color: var(--background);
   min-width: 0px;
   padding: 0.2em;
   margin-top: 0.2em;
@@ -43,7 +43,7 @@
 
 .icon_inverted {
   background-color: transparent;
-  color: var(--agendaThree);
+  color: var(--primary);
   min-width: 0px;
   padding: 0.2em;
   margin-top: 0.2em;
@@ -68,34 +68,34 @@
 
 .menu {
   background-color: inherit;
-  color: var(--agendaSecondary);
+  color: var(--secondary);
   justify-content: flex-start;
   align-items: left;
   font-weight: 300;
 }
 
 .menu:hover {
-  background-color: var(--backgroundThree);
+  background-color: var(--secondary);
   font-weight: 300;
 }
 
 .topic {
   background-color: var(--backgroundTwo);
-  color: var(--agendaSecondary);
-  border: 1px solid var(--agendaSecondary);
+  color: var(--secondary);
+  border: 1px solid var(--secondary);
 }
 
 .topic:hover {
   background-color: var(--backgroundTwo);
-  color: var(--agendaSecondary);
-  border: 1px solid var(--agendaSecondary);
+  color: var(--secondary);
+  border: 1px solid var(--secondary);
 }
 
 .hollow {
   border: none;
   background-color: transparent;
-  color: var(--agendaThree);
-  
+  color: var(--primary);
+
 }
 
 .hollow:hover {
@@ -112,9 +112,9 @@
 }
 
 .outlined {
-  background-color: var(--backgroundTwo);
-  border: 1px solid var(--agendaDarkBlue);
-  color: var(--agendaThree);
+  background-color: inherit;
+  border: 1px solid var(--primary);
+  color: var(--primary);
 }
 
 .outlined:hover {
@@ -122,15 +122,15 @@
 }
 
 .success {
-  border: 1px solid var(--successBg);
+  border: 1px solid var(--successBackground);
   color: var(--successText);
-  background-color: var(--successBg);
+  background-color: var(--successBackground);
 }
 
 .danger {
-  border: 1px solid var(--dangerBg);
+  border: 1px solid var(--dangerBackground);
   color: var(--dangerText);
-  background-color: var(--dangerBg);
+  background-color: var(--dangerBackground);
 }
 
 .disabled:hover {

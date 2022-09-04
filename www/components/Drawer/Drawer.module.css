@@ -6,48 +6,40 @@
 
 .container {
   width: 20rem;
-  background-color: var(--backgroundTwo);
+  background-color: var(--background);
   transition: width 400ms;
   overflow: hidden;
-  height: 110%;
-  border-right: 1px solid var(--agenda);
-}
-
-.container h2 {
-  color: var(--agendaSecondary);
-  font-size: 2rem;
-  margin-left: 1rem;
-}
-
-.container Button {
-  margin: 1.25rem;
+  border-right: 1px solid var(--border);
 }
 
 .closed {
   width: 0rem;
 }
 
-.arrow_container {
-  border-radius: 0rem .5rem .5rem 0rem;
-  margin-top: calc( 50vh - 7rem );
-  border: 1px solid var(--agenda);
-  background-color: var(--backgroundTwo);
-  margin-bottom: auto;
-  margin-left: -1px;
-  width: 2rem;
-  height: 3rem;
+.icon_button {
+  font-size: 1.5rem;
+  text-transform: capitalize;
+  width: 100%;
+  padding: .5em 0em .5em 2em;
+  justify-content: flex-start;
+  color: var(--midText);
+  font-weight: 400;
 }
 
-.arrow {
-  color: var(--agendaSecondary);
-  float: right;
+.icon_button:hover {
+  background-color: var(--backgroundHighlight);
+  color: var(--darkText);
 }
 
-.arrow_close {
-  transform: rotate(180deg) translate( 0, -.4rem );
-  transition: transform 400ms linear;
+.icon_button svg {
+  font-size: 40px;
+  color: var(--green);
 }
-.arrow_open {
-  transform: rotate(0deg) translate( 0, .7rem );
-  transition: transform 400ms linear;
+
+.orange svg {
+  color: var(--orange);
+}
+
+.indigo svg {
+  color: var(--indigo);
 }

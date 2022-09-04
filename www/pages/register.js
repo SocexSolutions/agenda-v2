@@ -11,7 +11,7 @@ import { userRegister } from '../store/features/user';
 
 import client from '../api/client';
 
-import styles from '../styles/pages/register.module.css';
+import styles from '../styles/pages/login.module.css';
 
 const initialState = {
   email:    '',

@@ -4,7 +4,7 @@
   width: 10em;
   height: 12em;
   margin: 1em;
-  background-color: var(--agendaThree);
+  background-color: var(--primary);
 }
 
 .imageContainer {
@@ -19,7 +19,7 @@
 }
 
 .container h3 {
-  color: var(--agendaText);
+  color: var(--darkText);
   padding: 0 0 0 .5em;
   margin: 0;
 }

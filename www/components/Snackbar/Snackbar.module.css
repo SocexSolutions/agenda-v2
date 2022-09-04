@@ -21,7 +21,7 @@
 }
 
 .success {
-  background-color: var(--successBg);
+  background-color: var(--successBackground);
   border: 1px solid var(--success);
 }
 
@@ -30,7 +30,7 @@
 }
 
 .danger {
-  background-color: var(--dangerBg);
+  background-color: var(--dangerBackground);
   border: 1px solid var(--danger);
 }
 

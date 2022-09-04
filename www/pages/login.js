@@ -1,5 +1,6 @@
-import Button from '../components/Button/Button';
 import Input  from '../components/Input/Input';
+
+import Button from '@mui/material/Button';
 
 import { useState }  from 'react';
 import { useEffect } from 'react';
@@ -9,7 +10,7 @@ import { useRouter } from 'next/router';
 import { userLogin } from '../store/features/user';
 import { notify }    from '../store/features/snackbar';
 
-import styles from '../styles/pages/register.module.css';
+import styles from '../styles/pages/login.module.css';
 
 const initialState = {
   username: '',
@@ -92,11 +93,10 @@ const Login = ( props ) => {
         />
         <Button
           onClick={handleSubmit}
-          text='Login'
-          size='medium'
-          variant='outlined'
-          customClass={styles.login_button}
-        />
+          className={styles.login_button}
+          variant='contained'
+          disableElevation
+        >Login</Button>
       </form>
     </div>
   );

@@ -5,12 +5,12 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: var(--agendaBg );
+  background: var(--background);
 }
 
 .form_container form {
-  background-color: var(--backgroundTwo);
-  border: 1px solid var(--agendaSecondary);
+  background-color: var(--foreground);
+  border: 1px solid var(--border);
   border-radius: 5px;
   padding: 20px 30px 30px 30px;
   opacity: 85%;
@@ -22,11 +22,12 @@
 
 .form_title {
   width: 100%;
-  color: var(--agendaSecondary);
+  color: var(--secondary);
   margin-bottom: 30px;
 }
 
 .login_button {
   margin-top: 20px;
   margin-left: auto;
+  background-color: var(--primary);
 }

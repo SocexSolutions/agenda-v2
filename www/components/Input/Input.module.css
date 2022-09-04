@@ -7,9 +7,9 @@
 .default {
   height: 1.5rem;
   background-color: inherit;
-  color: var(--agendaText);
+  color: var(--darkText);
   border: 0;
-  border-bottom: 1px solid var(--agenda);
+  border-bottom: 1px solid var(--border);
   padding: 0.5rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -19,26 +19,26 @@
 
 .default:focus {
   outline: none;
-  border-bottom: 1px solid var(--agendaText);
+  border-bottom: 1px solid var(--darkText);
 }
 
 .outlined {
-  border-color: var(--agenda);
+  border-color: var(--border);
   background-color: inherit;
   border-width: 2px;
   padding: 0.5rem;
   font-size: 1rem;
   border-radius: 5px;
-  color: var(--agendaText);
+  color: var(--background);
 }
 
 .outlined:focus {
   outline: none;
-  border-color: var(--agendaText);
+  border-color: var(--border);
 }
 
 .error {
-  border-color: var(--dangerBg);
+  border-color: var(--dangerBackground);
 }
 
 .error:focus {
@@ -47,7 +47,7 @@
 }
 
 .wrapper input::placeholder {
-  color: var(--agendaSecondary);
+  color: var(--midText);
 }
 
 .wrapper p {
@@ -62,8 +62,8 @@
   height: auto;
   resize: vertical;
   font-family: inherit;
-  border: 1px solid var(--agenda);
-  color: var(--agendaText);
+  border: 1px solid var(--border);
+  color: var(--darkText);
 }
 
 /* use psuedoselector for scrollbar (not supported by all browsers) */
@@ -77,10 +77,10 @@
 
 /* thumb refers to the bar on the slider */
 .multiLine::-webkit-scrollbar-thumb {
-  background-image: linear-gradient(var(--agendaSecondary), var(--agendaThree));
+  background-image: linear-gradient(var(--secondary), var(--primary));
   border-radius: 2em;
 }
 
 .wrapper textarea::placeholder {
-  color: var(--agendaSecondary);
+  color: var(--midText);
 }

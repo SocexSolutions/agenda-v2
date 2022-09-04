@@ -1,13 +1,17 @@
 .container {
   width: 200px;
   height: fit-content;
-  right: 5%;
-  background-color: var(--backgroundTwo);
+  right: 30px;
+  background-color: var(--background);
+  color: var(--textDark);
   justify-content: center;
   position: absolute;
   border-radius: 10px;
-  border: 1px solid var(--agendaSecondary);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   z-index: 1;
+  padding: 2em;
+
 }
 
 .container Button {

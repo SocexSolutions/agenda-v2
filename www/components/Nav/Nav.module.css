@@ -1,11 +1,9 @@
 .nav {
-  background-color: var(--agendaThree);
-  opacity: 100%;
-  backdrop-filter: blur(20px);
-  height: 5%;
-  padding: .5em 1em;
-  color: var(--agendaText);
-  border-bottom: 1px solid var(--agenda);
+  height: 4em;
+  padding: 1em;
+  color: var(--lightText);
+  background-color: var(--primary);
+  border-bottom: 1px solid var(--border);
   display: flex;
 }
 
@@ -32,20 +30,20 @@
 }
 
 .login {
-  height: 4rem;
   padding: 1rem;
-  color: var(--agendaText);
+  color: var(--lightText);
   display: flex;
   align-items: center;
   margin-left: auto;
 }
 
 .agenda {
+  margin-left: 1.5em;
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 140px;
-  color: var(--agendaText);
+  color: var(--lightText);
 }
 
 .agenda h1 {
