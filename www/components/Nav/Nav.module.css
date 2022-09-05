@@ -66,3 +66,9 @@
 .icon_button {
   color: white;
 }
+
+.logo {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}

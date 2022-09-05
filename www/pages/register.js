@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router';
+import Link          from 'next/link';
+
+import Button    from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 import { notify } from '../store/features/snackbar';
-
-import Input  from '../components/Input/Input';
-import Button from '../components/Button/Button';
 
 import { useState }     from 'react';
 import { useEffect }    from 'react';
@@ -11,7 +12,7 @@ import { userRegister } from '../store/features/user';
 
 import client from '../api/client';
 
-import styles from '../styles/pages/login.module.css';
+import styles from '../styles/pages/register.module.css';
 
 const initialState = {
   email:    '',
@@ -121,42 +122,51 @@ const Register = props => {
         <h1 className={styles.form_title}>
           Sign Up
         </h1>
-        <Input
+        <TextField
           name='email'
-          type='email'
-          id='email'
-          placeholder='Email'
-          size='medium'
+          label='email'
+          variant='standard'
           value={fields.email}
           onChange={handleChange}
-          errorMessage={emailError}
+          className={styles.text_field}
+          error={emailError}
         />
-        <Input
+        <TextField
           name='username'
-          type='text'
-          id='username'
-          placeholder='Username'
-          size='medium'
+          label='username'
+          variant='standard'
           value={fields.username}
           onChange={handleChange}
-          errorMessage={usernameError}
+          className={styles.text_field}
+          error={usernameError}
         />
-        <Input
+        <TextField
           name='password'
+          label='password'
           type='password'
-          id='password'
-          placeholder='Password'
-          size='medium'
-          value= {fields.password}
+          variant='standard'
+          value={fields.password}
           onChange={handleChange}
+          className={styles.text_field}
         />
-        <Button
-          onClick={handleSubmit}
-          text='Sign Up'
-          size='medium'
-          customClass={styles.login_button}
-          variant='outlined'
-        />
+        <div className={styles.login_button_container}>
+          <Button
+            variant='contained'
+            onClick={handleSubmit}
+            className={styles.login_button}
+            disableElevation
+          >
+            Sign Up
+          </Button>
+        </div>
+        <p className={styles.have_an_account}>
+          Have an account?
+          <Link
+            href={'/login'}
+          >
+            Log in
+          </Link>
+        </p>
       </form>
     </div>
   );

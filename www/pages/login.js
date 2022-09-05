@@ -1,11 +1,11 @@
-import Input  from '../components/Input/Input';
-
-import Button from '@mui/material/Button';
+import Button    from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 import { useState }  from 'react';
 import { useEffect } from 'react';
 
 import { useRouter } from 'next/router';
+import Link          from 'next/link';
 
 import { userLogin } from '../store/features/user';
 import { notify }    from '../store/features/snackbar';
@@ -73,30 +73,42 @@ const Login = ( props ) => {
     <div className={styles.form_container}>
       <form>
         <h1 className={styles.form_title}>Login</h1>
-        <Input
+        <TextField
           name='username'
-          type='text'
-          id='username'
-          placeholder='Username'
-          size='medium'
+          label='username'
+          variant='standard'
           value={fields.username}
-          onChange={handleChange}
+          onChange={e => handleChange( e )}
+          className={styles.text_field}
         />
-        <Input
+        <TextField
           name='password'
+          label='password'
+          variant='standard'
           type='password'
-          id='password'
-          placeholder='Password'
-          size='medium'
           value={fields.password}
-          onChange={handleChange}
+          onChange={e => handleChange( e )}
+          className={styles.text_field}
         />
-        <Button
-          onClick={handleSubmit}
-          className={styles.login_button}
-          variant='contained'
-          disableElevation
-        >Login</Button>
+        <div className={styles.login_button_container}>
+          <Button
+            onClick={handleSubmit}
+            className={styles.login_button}
+            variant='contained'
+            disableElevation
+          >
+            Login
+          </Button>
+        </div>
+        <p className={styles.new_to_agenda}>
+          New to agenda?
+          <Link
+            href={'/register'}
+            className={styles.register_link}
+          >
+            Sign up
+          </Link>
+        </p>
       </form>
     </div>
   );

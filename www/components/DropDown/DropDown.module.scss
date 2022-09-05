@@ -1,0 +1,14 @@
+.container {
+  right: 30px;
+  background: var(--foreground);
+  color: var(--darkText);
+  position: absolute;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  z-index: 1;
+
+  .button {
+    color: var(--darkText);
+  }
+}

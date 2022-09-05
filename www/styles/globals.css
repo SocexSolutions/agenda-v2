@@ -40,12 +40,13 @@ p {
 /* THEMES */
 
 .default {
-  --primary: #518dfc;
+  --primary: #3A3C45;
+  --primary-hover: #1d1e23;
   --background: #f5f5f5;
   --backgroundHighlight: #e6e6e6;
   --foreground: #fff;
   --border: #c9c9c9;
-  --darkText: #303337;
+  --darkText: #3A3C45;
   --midText: #6a737d;
   --lightText: #fff;
   --danger: #df1405;

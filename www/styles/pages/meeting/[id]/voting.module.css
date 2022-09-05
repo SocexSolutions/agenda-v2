@@ -10,6 +10,10 @@
   width: 100%;
 }
 
+.topic {
+  margin-top: 20px;
+}
+
 .topic Button {
   margin-left: auto;
 }
