@@ -1,5 +1,6 @@
 .container {
-  border: 1px solid var(--agendaSecondary);
+  border: 1px solid var(--border);
+  color: var(--textDark);
   border-radius: 7px;
   display: flex;
   flex-direction: row;
@@ -14,7 +15,7 @@
 .container p {
   font-size: 1rem;
   margin: .5rem;
-  color: var(--agendaText)
+  color: var(--textDark)
 }
 
 .deleteIcon {
@@ -29,7 +30,7 @@
 }
 
 .icons {
-  color: var(--agendaText);
+  color: var(--textDark);
   display: inline-block;
   margin-left: .5rem;
 }

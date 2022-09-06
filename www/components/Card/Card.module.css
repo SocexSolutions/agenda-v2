@@ -1,7 +1,6 @@
 .container {
-  font-size: 10px;
-  color: var(--agendaText);
-  background-color: var(--backgroundTwo);
+  color: var(--darkText);
+  border: 1px solid var(--border);
   margin-bottom: 1em;
   padding: 1em;
   border-radius: 5px;
@@ -22,7 +21,6 @@
 }
 
 .container h3 {
-  font-size: .9rem;
   margin: 0;
 }
 
@@ -32,7 +30,6 @@
 }
 
 .container textarea {
-  font-size: .75rem;
   margin-top: .5rem;
   width: 100%;
 }

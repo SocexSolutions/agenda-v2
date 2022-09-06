@@ -20,7 +20,6 @@ const Inbox = ({ meetings, emptyMessage }) => {
           <Link  href={ `/meeting/${ meeting._id }`}>
             <Button
               icon={<CreateSharpIcon/>}
-              text='edit'
               size='medium'
               variant='hollow'
             />
@@ -28,7 +27,6 @@ const Inbox = ({ meetings, emptyMessage }) => {
           <Link  href={ `/meeting/${ meeting._id }/voting`}>
             <Button
               icon={<ThumbsUpDownIcon/>}
-              text='vote'
               size='medium'
               variant='hollow'
             />
@@ -36,7 +34,6 @@ const Inbox = ({ meetings, emptyMessage }) => {
           <Link href={ `/meeting/${ meeting._id }/meet`}>
             <Button
               icon={<GroupsIcon/>}
-              text='meet'
               size='medium'
               variant='hollow'
             />

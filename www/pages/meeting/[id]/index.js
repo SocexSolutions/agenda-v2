@@ -2,6 +2,7 @@ import HeaderForm  from '../../../components/HeaderForm/HeaderForm';
 import CardBoard   from '../../../components/CardBoard/CardBoard';
 import ChipForm    from '../../../components/ChipForm/ChipForm';
 import LoadingIcon from '../../../components/LoadingIcon/LoadingIcon';
+import Hr          from '../../../components/Hr/hr';
 
 import meetingAPI     from '../../../api/meeting';
 import topicAPI       from '../../../api/topic';
@@ -54,14 +55,15 @@ const Meeting = ( props ) => {
     <div className={shared.page}>
       <div className={shared.container}>
         <h2>Edit Meeting: {name}</h2>
-        <div className={shared.card + ' ' + styles.section}>
+        <Hr/>
+        <div className={shared.bxCard + ' ' + styles.section}>
           <h3>Meeting Details</h3>
           <HeaderForm
             setMeetingName={( e ) => updateMeeting( e.target.value ) }
             meetingName={name}
           />
         </div>
-        <div className={shared.card + ' ' + styles.section}>
+        <div className={shared.bxCard + ' ' + styles.section}>
           <h3>Participants</h3>
           <ChipForm
             change={meeting_id}
@@ -75,7 +77,7 @@ const Meeting = ( props ) => {
             destroy={ ( id ) => participantAPI.destroy( id ) }
           />
         </div>
-        <div className={shared.card + ' ' + styles.section}>
+        <div className={shared.bxCard + ' ' + styles.section}>
           <h3>Topics</h3>
           <CardBoard
             change={meeting_id}

@@ -36,7 +36,7 @@ const Card = ({
         className={styles.container}
         onClick={() => setEditing( item._id )}
       >
-        <h2>{name}</h2>
+        <h3>{name}</h3>
         <p>{description}</p>
       </div>
     );

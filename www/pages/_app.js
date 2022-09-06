@@ -3,7 +3,10 @@ import { Provider }  from 'react-redux';
 
 import { useStore }    from '../store';
 import { userRefresh } from '../store/features/user';
+
 import { useRouter }   from 'next/router';
+
+import { StyledEngineProvider } from '@mui/material/styles';
 
 import Snackbar from '../components/Snackbar/Snackbar';
 import Layout   from '../components/Layout/Layout';
@@ -45,13 +48,16 @@ const App = ( props ) => {
 
   return (
     <>
-      <Script src="/theme.js" strategy="beforeInteractive" />
-      <Provider store={store}>
-        <Layout store={store}>
-          <Component store={store} {...props.pageProps} />
-        </Layout>
-        <Snackbar />
-      </Provider>
+      {/* inject MUI styles first so that custom css/scss takes presidence */}
+      <StyledEngineProvider injectFirst>
+        <Script src="/theme.js" strategy="beforeInteractive" />
+        <Provider store={store}>
+          <Layout store={store}>
+            <Component store={store} {...props.pageProps} />
+          </Layout>
+          <Snackbar />
+        </Provider>
+      </StyledEngineProvider>
     </>
   );
 };

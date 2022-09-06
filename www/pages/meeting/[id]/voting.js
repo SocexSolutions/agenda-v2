@@ -1,5 +1,6 @@
 import LoadingIcon from '../../../components/LoadingIcon/LoadingIcon';
 import Button      from '../../../components/Button/Button';
+import Hr          from '../../../components/Hr/Hr';
 
 import ArrowCircleUp from '@mui/icons-material/ThumbUp';
 
@@ -105,6 +106,7 @@ const Voting = ( props ) => {
     <div className={shared.page}>
       <div className={shared.container}>
         <h2 className={styles.page_title}>Voting For: {meeting.meeting.name}</h2>
+        <Hr />
         { topicCards }
       </div>
     </div>

@@ -4,7 +4,6 @@ import classNames from 'classnames';
 
 import Button     from '../Button/Button';
 import DropDown   from '../DropDown/DropDown';
-import AgendaIcon from '../AgendaIcon/AgendaIcon';
 
 import meetingAPI from '../../api/meeting';
 
@@ -85,16 +84,13 @@ const Nav = () => {
     }
   }, [ router ] );
 
-  console.log( user );
-
   if ( !user.token ) {
     return (
       <>
         <nav className={styles.nav}>
           <Link href="/">
             <div className={styles.agenda}>
-              <AgendaIcon />
-              <h1>Agenda</h1>
+              <img src='./logo.png' alt="Agenda" className={styles.logo}/>
             </div>
           </Link>
           <div className={styles.login}>

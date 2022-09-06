@@ -14,10 +14,9 @@
   justify-content: space-between;
   flex-wrap: wrap;
   left: 50%;
-  top: 50%;
+  top: 30vh;
   width: 50em;
   border-radius: 5px;
   background-color: var(--backgroundTwo);
   box-shadow: 2px 2px 8px var(--backgroundShadow);
-  transform: translate(-50%, -50%);
 }

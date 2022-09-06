@@ -16,10 +16,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-left: 2px solid var(--agenda);
-  border-right: 2px solid var(--agenda);
+  border-left: 2px solid var(--border);
+  border-right: 2px solid var(--border);
   padding: 0em 2em 2em 2em;
-  box-shadow: inset -15px 0 10px -15px var(--backgroundShadow) , inset 15px 0 15px -15px var(--backgroundShadow);
   overflow: scroll;
 }
 
@@ -43,7 +42,7 @@
 
 /* thumb refers to the bar on the slider */
 .main_container::-webkit-scrollbar-thumb {
-  background-image: linear-gradient(var(--agendaSecondary), var(--agendaThree));
+  background-image: linear-gradient(var(--secondary), var(--primary));
   border-radius: 25px;
 }
 

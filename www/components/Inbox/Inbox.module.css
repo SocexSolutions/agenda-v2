@@ -1,24 +1,23 @@
 .inboxContainer {
   display: flex;
-  margin-left: 0;
   width: 100%;
+  margin-left: 0;
 }
 
 .list {
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: var(--background);
 }
 
 .item {
-  border-top: .5px solid var(--agenda);
+  border-top: .5px solid var(--border);
   padding: 0.5em;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  color: var(--agendaText);
+  color: var(--textDark);
 }
 
 .item:hover {
@@ -63,18 +62,18 @@
 }
 
 .item:hover {
-  background-color: var(---agendaSecondary);
+  background-color: var(--secondary);
 }
 
 .noMeetings {
   margin: auto;
   font-size: large;
-  color: var(--agendaText);
+  color: var(--darkText);
   text-align: center;
 }
 
 .noMeetings a {
-  color: var(--agendaSecondary);
+  color: var(--secondary);
 }
 
 .noMeetings a:hover {
