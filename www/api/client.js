@@ -3,7 +3,7 @@ import { getCookie } from '../utils/cookie';
 
 const baseURL = process.env.NODE_ENV === 'development' ?
   'http://localhost:4000/api' :
-  'https://meetingminder.com/api';
+  'https://meetingminder.dev/api';
 
 const client = axios.create({
   baseURL,
