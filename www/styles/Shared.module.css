@@ -33,7 +33,6 @@
   overflow-y: scroll;
   overflow-x: hidden;
   resize: none;
-  background-color: var(--foreground);
 }
 
 .page_stretch {
@@ -47,9 +46,9 @@
   resize: none;
 }
 
-
 /* use psuedoselector for scrollbar (not supported by all browsers) */
-.page::-webkit-scrollbar {
+
+/* .page::-webkit-scrollbar {
   width: .75em;
 }
 
@@ -64,7 +63,7 @@
 
 .page::-webkit-scrollbar-corner {
   background: var(--background);
-}
+} */
 
 /* thumb refers to the bar on the slider */
 /* .page::-webkit-scrollbar-thumb {
