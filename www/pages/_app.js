@@ -48,6 +48,7 @@ const App = ( props ) => {
 
   return (
     <>
+      {/* inject MUI styles first so that custom css/scss takes presidence */}
       <StyledEngineProvider injectFirst>
         <Script src="/theme.js" strategy="beforeInteractive" />
         <Provider store={store}>
