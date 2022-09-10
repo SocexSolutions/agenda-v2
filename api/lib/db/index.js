@@ -6,7 +6,7 @@ const db  = {};
 /* istanbul ignore next */
 db.connect = async() => {
   try {
-    // because docker compose create a docker network, we use this internal
+    // because docker compose creates a docker network, we use this internal
     // network by default, but for local dev we use localhost instead
 
     let dbConStr = 'mongodb://host.docker.internal:27017/agenda-dev';

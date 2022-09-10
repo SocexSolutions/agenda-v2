@@ -2,7 +2,7 @@ import HeaderForm  from '../../../components/HeaderForm/HeaderForm';
 import CardBoard   from '../../../components/CardBoard/CardBoard';
 import ChipForm    from '../../../components/ChipForm/ChipForm';
 import LoadingIcon from '../../../components/LoadingIcon/LoadingIcon';
-import Hr          from '../../../components/Hr/hr';
+import Hr          from '../../../components/Hr/Hr';
 
 import meetingAPI     from '../../../api/meeting';
 import topicAPI       from '../../../api/topic';

@@ -58,9 +58,10 @@ const Register = props => {
             ms: 3000
           })
         );
+
+        setFields( initialState );
       }
 
-      setFields( initialState );
       setRegistering( false );
     };
 
