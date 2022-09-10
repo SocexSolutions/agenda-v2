@@ -1,4 +1,4 @@
-version: "3.7"
+version: "4.0.0"
 
 services:
 
@@ -15,6 +15,7 @@ services:
     container_name: agenda.api
     environment:
       NODE_DEBUG: info
+      DB_CONNECTION: 'mongodb://host.docker.internal:27017/agenda-dev'
     volumes:
       - ./api/:/app
     ports:
@@ -22,9 +23,9 @@ services:
     depends_on:
       - mongodb
 
-  ui:
+  www:
     build: ./www/
-    container_name: agenda.ui
+    container_name: agenda.www
     volumes:
       - ./www/:/app
     ports:

@@ -1,12 +1,11 @@
 import axios         from 'axios';
 import { getCookie } from '../utils/cookie';
 
-const baseURL = process.env.NODE_ENV === 'development' ?
-  'http://localhost:4000/api' :
-  'https://meetingminder.dev/api';
+const hostname = process.env.NEXT_PUBLIC_API_HOSTNAME;
+const path     = `api`;
 
 const client = axios.create({
-  baseURL,
+  baseURL: `${ hostname }/${ path }`,
   timeout: 1000
 });
 
