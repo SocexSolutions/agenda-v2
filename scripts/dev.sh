@@ -28,7 +28,7 @@ P1=$!
 # Start api
 cd ../api
 
-NODE_ENV=dev NODE_DEBUG=info npm run dev &
+NODE_ENV=dev npm run dev &
 P2=$!
 
 # Wait on end of both
