@@ -6,7 +6,6 @@
 
 .container {
   width: 20rem;
-  background-color: var(--background);
   transition: width 400ms;
   overflow: hidden;
   border-right: 1px solid var(--border);
