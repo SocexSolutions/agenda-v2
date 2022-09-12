@@ -1,5 +1,6 @@
 const Participant    = require('../models/participant');
 const Meeting        = require('../models/meeting');
+const ObjectId       = require('mongoose').Types.ObjectId;
 const { checkOwner } = require('../util/authorization');
 
 module.exports = {
@@ -52,6 +53,8 @@ module.exports = {
 
   getMeetings: async( req, res ) => {
     const { email } = req.params;
+    const { owner_id } = req.query;
+    const { name } = req.query;
 
     const participants = await Participant.find({ email });
 
@@ -61,9 +64,21 @@ module.exports = {
       meetingIds.push( participant.meeting_id );
     });
 
-    const query = { _id: { $in: meetingIds } };
+    //build query for optional search filters:
+    const queries = [];
+    owner_id && queries.push({ owner_id: ObjectId( owner_id ) });
+    name     && queries.push({ name });
 
-    const cursorMeetings = await Meeting.find( query );
+    const pipeline = [
+      { $match: {
+        $and: [
+          { _id: { '$in': meetingIds } },
+          ...queries
+        ]
+      } }
+    ];
+
+    const cursorMeetings = await Meeting.aggregate( pipeline );
 
     res.status( 200 ).send( cursorMeetings );
   }

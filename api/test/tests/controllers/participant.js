@@ -108,7 +108,7 @@ describe( 'lib/controllers/participant', () => {
 
   });
 
-  describe( '#getMeetings', () => {
+  describe.only( '#getMeetings', () => {
 
     it( 'should return meetings', async() => {
       const res = await Meeting.insertMany([
@@ -128,6 +128,60 @@ describe( 'lib/controllers/participant', () => {
 
       assert.strictEqual( data.length, 2 );
       assert.deepEqual( data[ 1 ].name, res[ 1 ].name );
+    });
+
+    it( 'should return filtered meetings by Owner', async() => {
+      const res = await Meeting.insertMany([
+        fakeMeeting(),
+        fakeMeeting()
+      ]);
+
+      const participants = [];
+
+      res.forEach( ( meeting ) => {
+        participants.push({ email: 'jack@aol.com', meeting_id: meeting._id });
+      });
+
+      await Participant.insertMany( participants );
+
+      const { data } = await client.get(
+        'participant/meetings/jack@aol.com ',
+        {
+          params: {
+            owner_id: ( res[ 1 ].owner_id.toString() )
+          }
+        }
+      );
+
+      assert.strictEqual( data.length, 1 );
+      assert.deepEqual( data[ 0 ].name, res[ 1 ].name );
+    });
+
+    it( 'should return filtered meetings by name', async() => {
+      const res = await Meeting.insertMany([
+        fakeMeeting(),
+        fakeMeeting()
+      ]);
+
+      const participants = [];
+
+      res.forEach( ( meeting ) => {
+        participants.push({ email: 'jack@aol.com', meeting_id: meeting._id });
+      });
+
+      await Participant.insertMany( participants );
+
+      const { data } = await client.get(
+        'participant/meetings/jack@aol.com ',
+        {
+          params: {
+            name: ( res[ 1 ].name )
+          }
+        }
+      );
+
+      assert.strictEqual( data.length, 1 ); //this test will fail 1 in a million times
+      assert.deepEqual( data[ 0 ].name, res[ 1 ].name );
     });
 
   });
