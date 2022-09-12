@@ -108,7 +108,7 @@ describe( 'lib/controllers/participant', () => {
 
   });
 
-  describe.only( '#getMeetings', () => {
+  describe( '#getMeetings', () => {
 
     it( 'should return meetings', async() => {
       const res = await Meeting.insertMany([

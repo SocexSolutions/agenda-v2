@@ -1,10 +1,10 @@
 const ObjectId = require('mongoose').Types.ObjectId;
+const  faker   = require('@faker-js/faker').faker;
 
 const meeting = ( opts ) => {
-  const randomName = ( Math.random() + 1 ).toString( 36 ).substring( 7 ); //rip faker
 
   return {
-    name: randomName,
+    name: faker.name.firstName(),
     owner_id: new ObjectId,
     date: new Date(),
     ...opts
