@@ -221,6 +221,72 @@ module.exports = {
     // draft to sent.
 
     return res.status( 200 ).send( meeting );
+  },
+
+  async getAllMeetings( req, res ) {
+    const subject_id = req.credentials.sub;
+    const { skip, limit } = req.params;
+
+    console.log('ah shit here we go again');
+    const queries = [];
+    console.log( subject_id );
+    const pipeline2 = [
+      {
+        $match: {
+          // $or: [
+          //   {
+          //     $and: [
+          //       { _id: { '$in': new ObjectID() } },
+          //       ...queries
+          //     ]
+          //   },
+          //{
+          $and: [
+            { owner_id: subject_id },
+            ...queries
+          ]
+        }
+
+        //          ]
+      }
+      //}//,
+      // {
+      //   $lookup: {
+      //     from: 'users',
+      //     localField: 'owner_id',
+      //     foreignField: '_id',
+      //     let: { email: '$email' }
+      //   }
+      // }//,
+      // {
+      //   $lookup: {
+      //     from: 'participants',
+      //     foreignField: { $eq: [ '$email', '$$email' ] },
+      //     let: { meetingIds: '$meeting_id' }
+      //   }
+      // }
+    ];
+
+    const pipeline = [
+      {
+        $match: {
+          $and: [
+            { owner_id: subject_id },
+            ...queries
+          ]
+        }
+      }
+    ];
+
+    const test = await Meeting.find({ owner_id: subject_id });
+    console.log( test );
+
+    console.log('this query hard');
+    console.log( JSON.stringify( pipeline ) );
+    const meetings = await Meeting.aggregate( pipeline );
+    console.log( meetings );
+
+    return res.status( 200 ).send( meetings );
   }
 
 };

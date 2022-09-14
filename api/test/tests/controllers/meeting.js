@@ -204,6 +204,22 @@ describe( 'lib/controllers/meeting', () => {
       }
     });
 
+    it.only( 'should get a users owned and participating meetings', async() => {
+      const ownedMeeting = fakeMeeting({ owner_id: this.user._id });
+      const includedMeeting = fakeMeeting();
+
+      const ownedRes = await Meeting.create( ownedMeeting );
+      const includedRes = await Meeting.create( includedMeeting );
+
+      const participant = fakeParticipant({ meeting_id: includedRes._id });
+
+      const participantRes = await Participant.create( participant );
+
+      const { data } = await client.get(`/meeting/`);
+
+      assert.strictEqual( data.meetings.length, 2 );
+    });
+
   });
 
   describe( '#aggregateSave', () => {
