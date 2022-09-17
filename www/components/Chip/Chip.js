@@ -1,5 +1,5 @@
-import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
-import AccountCircleIcon       from '@mui/icons-material/AccountCircle';
+import CancelIcon        from '@mui/icons-material/Cancel';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import styles from './Chip.module.css';
 
@@ -14,7 +14,7 @@ const Chip = ({ text, editing, deleteFunc, icon }) => {
       {icon}
       <p>{text}</p>
       { editing &&
-        <HighlightOffRoundedIcon
+        <CancelIcon
           className={styles.deleteIcon}
           onClick={deleteFunc}
         />

@@ -5,3 +5,7 @@
 .section {
   margin: 1.5em 0 1.5em 0;
 }
+
+.card_title {
+  margin-bottom: 1.5em;
+}
