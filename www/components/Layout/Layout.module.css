@@ -8,9 +8,9 @@
   width: 100%;
   display: flex;
   justify-content: center;
+  overflow-y: auto;
 }
 
 .container content {
   width: 100%;
-  max-width: 1500px;
 }
