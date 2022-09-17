@@ -7,5 +7,14 @@
 
 .card_container {
   margin: .5em 0 .5em 0;
-  
+}
+
+.add_button {
+  color: var(--midText);
+  text-transform: capitalize;
+  font-size: 1.1em;
+}
+
+.add_icon {
+  color: var(--primary);
 }

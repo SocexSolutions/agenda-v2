@@ -102,6 +102,7 @@ const Meeting = ( props ) => {
             }
             update={( id, payload ) => topicAPI.update( id, payload )}
             destroy={( id ) => topicAPI.destroy( id )}
+            itemName={'topic'}
           />
         </div>
       </div>
