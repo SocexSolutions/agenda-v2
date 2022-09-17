@@ -23,12 +23,14 @@ const Meeting = ( props ) => {
 
   const [ initLoad, setInitLoad ] = useState( true );
   const [ name, setName ]         = useState('');
+  const [ date, setDate ]         = useState('');
 
   useEffect( () => {
     const loadMeeting = async() => {
       const res = await meetingAPI.get( meeting_id );
 
       setName( res.name );
+      setDate( res.date );
 
       setInitLoad( false );
     };
@@ -38,13 +40,17 @@ const Meeting = ( props ) => {
     }
   }, [ user, props.store, router.query.id ] );
 
-  const updateMeeting = ( name ) => {
+  const updateMeeting = ({ name, date }) => {
     meetingAPI.update(
       meeting_id,
-      { name }
+      {
+        name,
+        date
+      }
     );
 
     setName( name );
+    setDate( date );
   };
 
   if ( initLoad ) {
@@ -54,40 +60,48 @@ const Meeting = ( props ) => {
   return (
     <div className={shared.page}>
       <div className={shared.container}>
-        <h2>Edit Meeting: {name}</h2>
-        <Hr/>
-        <div className={shared.bxCard + ' ' + styles.section}>
-          <h3>Meeting Details</h3>
+        <h2 className={shared.page_title}>Edit Meeting: {name}</h2>
+        <Hr />
+        <div className={shared.card + ' ' + styles.section}>
+          <h3 className={styles.card_title}>Meeting Details</h3>
           <HeaderForm
-            setMeetingName={( e ) => updateMeeting( e.target.value ) }
             meetingName={name}
+            setMeetingName={( e ) =>
+              updateMeeting({ name: e.target.value, date })
+            }
+            meetingDate={date}
+            setMeetingDate={( e ) => updateMeeting({ name, date: e.$d })}
           />
         </div>
-        <div className={shared.bxCard + ' ' + styles.section}>
+        <div className={shared.card + ' ' + styles.section}>
           <h3>Participants</h3>
           <ChipForm
             change={meeting_id}
             itemKey={'email'}
             itemName={'participant'}
-            getAll={ () => meetingAPI.getParticipants( meeting_id ) }
-            create={ ( payload ) => participantAPI.create({
-              meeting_id,
-              ...payload
-            }) }
-            destroy={ ( id ) => participantAPI.destroy( id ) }
+            getAll={() => meetingAPI.getParticipants( meeting_id )}
+            create={( payload ) =>
+              participantAPI.create({
+                meeting_id,
+                ...payload
+              })
+            }
+            destroy={( id ) => participantAPI.destroy( id )}
           />
         </div>
-        <div className={shared.bxCard + ' ' + styles.section}>
+        <div className={shared.card + ' ' + styles.section}>
           <h3>Topics</h3>
           <CardBoard
             change={meeting_id}
-            getAll={ () => meetingAPI.getTopics( meeting_id ) }
-            create={ ( payload ) => topicAPI.create({
-              meeting_id,
-              ...payload
-            })}
-            update={ ( id, payload ) => topicAPI.update( id, payload ) }
-            destroy={ ( id ) => topicAPI.destroy( id ) }
+            getAll={() => meetingAPI.getTopics( meeting_id )}
+            create={( payload ) =>
+              topicAPI.create({
+                meeting_id,
+                ...payload
+              })
+            }
+            update={( id, payload ) => topicAPI.update( id, payload )}
+            destroy={( id ) => topicAPI.destroy( id )}
           />
         </div>
       </div>

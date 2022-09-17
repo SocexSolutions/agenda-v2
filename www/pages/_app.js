@@ -8,6 +8,9 @@ import { useRouter }   from 'next/router';
 
 import { StyledEngineProvider } from '@mui/material/styles';
 
+import { AdapterDayjs }         from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+
 import Snackbar from '../components/Snackbar/Snackbar';
 import Layout   from '../components/Layout/Layout';
 
@@ -50,13 +53,15 @@ const App = ( props ) => {
     <>
       {/* inject MUI styles first so that custom css/scss takes presidence */}
       <StyledEngineProvider injectFirst>
-        <Script src="/theme.js" strategy="beforeInteractive" />
-        <Provider store={store}>
-          <Layout store={store}>
-            <Component store={store} {...props.pageProps} />
-          </Layout>
-          <Snackbar />
-        </Provider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Script src="/theme.js" strategy="beforeInteractive" />
+          <Provider store={store}>
+            <Layout store={store}>
+              <Component store={store} {...props.pageProps} />
+            </Layout>
+            <Snackbar />
+          </Provider>
+        </LocalizationProvider>
       </StyledEngineProvider>
     </>
   );
