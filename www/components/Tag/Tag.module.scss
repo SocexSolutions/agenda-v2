@@ -1,0 +1,56 @@
+@use '../../styles/colors' as colors;
+
+.tag {
+  color: colors.$lightText;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  text-transform: uppercase;
+
+  &.primary {
+    background-color: colors.$primary;
+  }
+
+  &.red {
+    background-color: colors.$red;
+  }
+
+  &.green {
+    background-color: colors.$green;
+  }
+
+  &.blue {
+    background-color: colors.$blue;
+  }
+
+  &.yellow {
+    background-color: colors.$yellow;
+  }
+
+  &.orange {
+    background-color: colors.$orange;
+  }
+
+  &.purple {
+    background-color: colors.$purple;
+  }
+
+  &.indigo {
+    background-color: colors.$indigo;
+  }
+
+  &.pink {
+    background-color: colors.$pink;
+  }
+
+  &.small {
+    font-size: 0.7em;
+  }
+
+  &.medium {
+    font-size: .75em;
+  }
+
+  &.large {
+    font-size: 1em;
+  }
+}
