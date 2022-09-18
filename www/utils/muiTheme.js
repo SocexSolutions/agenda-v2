@@ -41,6 +41,10 @@ const theme = createTheme({
     pink: {
       main: '#e01b5c',
       contrastText: '#fff'
+    },
+    grey: {
+      main: '#6a737d',
+      contrastText: '#fff'
     }
   }
 });
