@@ -7,23 +7,15 @@
   display: flex;
 }
 
-.first_third {
+.start {
   height: 100%;
-  width: 33%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
 
-.center_third {
-  width: 34%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.last_third {
-  width: 33%;
+.end {
+  margin-left: auto;
   display: flex;
   justify-content: flex-end;
   align-items: center;

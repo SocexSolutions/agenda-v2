@@ -2,44 +2,49 @@ import { useSelector } from 'react-redux';
 
 import Button from '@mui/material/Button';
 
-import DoubleArrowIcon      from '@mui/icons-material/DoubleArrow';
-import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
-import CancelOutlinedIcon   from '@mui/icons-material/CancelOutlined';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import DescriptionIcon from '@mui/icons-material/Description';
 
-import styles from './Drawer.module.css';
+import { useRouter } from 'next/router';
 
+import styles from './Drawer.module.scss';
 
-const selectDrawer = state => state.drawer;
+const selectDrawer = ( state ) => state.drawer;
+const selectUser = ( state ) => state.user;
 
 const Drawer = () => {
   const open = useSelector( selectDrawer ).open;
+  const router = useRouter();
+  const user = useSelector( selectUser );
 
   return (
-    <div className={styles.god_container}>
-      <div className={`${ styles.container } ${ !open && styles.closed }`}>
+    <div className={styles.container}>
+      <div className={`${ styles.drawer } ${ !open && styles.closed }`}>
         <Button
-          startIcon={<DoubleArrowIcon />}
+          startIcon={<CalendarMonthIcon />}
           variant="text"
           size="large"
-          className={styles.icon_button}
+          className={styles.icon_button + ' ' + styles.blue}
+          onClick={() => router.push( `/user/${ user._id }` )}
         >
           Upcoming
         </Button>
         <Button
-          startIcon={<CheckBoxOutlinedIcon />}
+          startIcon={<EventAvailableIcon />}
           variant="text"
           size="large"
-          className={styles.icon_button + ' ' + styles.orange}
+          className={styles.icon_button + ' ' + styles.green}
         >
           Completed
         </Button>
         <Button
-          startIcon={<CancelOutlinedIcon />}
+          startIcon={<DescriptionIcon />}
           variant="text"
           size="large"
-          className={styles.icon_button + ' ' + styles.indigo}
+          className={styles.icon_button + ' ' + styles.purple}
         >
-          Voting
+          Drafts
         </Button>
       </div>
     </div>
