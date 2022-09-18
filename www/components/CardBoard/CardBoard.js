@@ -1,7 +1,7 @@
 import Card   from '../Card/Card';
-import Button from '../Button/Button';
 
-import AddIcon from '@mui/icons-material/Add';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import Button        from '@mui/material/Button';
 
 import { useState, useEffect } from 'react';
 
@@ -109,12 +109,15 @@ const CardBoard = ( props ) => {
       {itemCards}
       <div className={styles.button_container}>
         <Button
+          variant="text"
+          size="large"
           className={styles.add_button}
           onClick={() => createItem()}
-          variant='iconInverted'
-          text='New'
-          icon={<AddIcon />}
-        />
+          startIcon={<AddCircleIcon className={styles.add_icon} />}
+          disableElevation
+        >
+          Add {props.itemName}
+        </Button>
       </div>
     </>
   );

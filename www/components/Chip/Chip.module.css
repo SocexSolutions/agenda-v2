@@ -19,7 +19,7 @@
 }
 
 .deleteIcon {
-  color: var(--danger);
+  color: var(--textDark);
   margin: .5rem;
   opacity: .5;
 }

@@ -1,0 +1,13 @@
+.container {
+  position: relative;
+
+  .input {
+    width: 20em;
+  }
+
+  .icon_button {
+    position: absolute;
+    transform: translate(-40px, 3px);
+    color: var(--black);
+  }
+}

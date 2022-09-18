@@ -30,8 +30,6 @@
   align-items: center;
   padding: 0em 1.5em 5em 1.5em;
   max-height: 95vh;
-  overflow-y: scroll;
-  overflow-x: hidden;
   resize: none;
 }
 
@@ -46,32 +44,12 @@
   resize: none;
 }
 
-/* use psuedoselector for scrollbar (not supported by all browsers) */
-
-/* .page::-webkit-scrollbar {
-  width: .75em;
+.page_title {
+  font-size: 1.5em;
+  font-weight: 800;
+  margin-bottom: 1em;
 }
-
-.page::-webkit-scrollbar-track {
-  background: var(--backgroundTwo);
-}
-
-.page::-webkit-scrollbar-button {
-  background: var(--background);
-  color: red;
-}
-
-.page::-webkit-scrollbar-corner {
-  background: var(--background);
-} */
-
-/* thumb refers to the bar on the slider */
-/* .page::-webkit-scrollbar-thumb {
-  background-image: linear-gradient(var(--), var(--primary));
-  border-radius: 25px;
-} */
 
 .container {
   width: 100%;
-  max-width: 1080px;
 }

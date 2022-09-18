@@ -10,12 +10,9 @@ body {
   height: 100%;
   padding: 0;
   margin: 0;
-  background-color: var(--background);
   font-family: open-sans;
-  overflow-x:hidden;
+  overflow-x: hidden;
   color: var(--secondary);
-  font-weight: 100;
-  overflow: hidden;
 }
 
 h3 {

@@ -1,9 +1,10 @@
 import { useStore } from '../../store';
 import { notify }   from '../../store/features/snackbar';
 
-import Chip   from '../Chip/Chip';
-import Input  from '../Input/Input';
-import Button from '../Button/Button';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+
+import Chip          from '../Chip/Chip';
+import IconTextField from '../IconTextField/IconTextField';
 
 import { useEffect, useState } from 'react';
 
@@ -106,19 +107,15 @@ function ChipForm( props ) {
         {chips}
       </div>
       <div className={styles.inputContainer}>
-        <Input
-          placeholder={props.itemKey}
+        <IconTextField
+          label={`Add ${ props.itemName }`}
           value={input}
           onChange={( e ) => setInput( e.target.value )}
           onKeyPress={handleEnter}
-        />
-        <Button
-          variant='outlined'
-          name="submit"
-          size="medium"
-          onClick={handleSubmit}
-          text="add"
-          customClass={styles.addButton}
+          size="small"
+          Icon={AddCircleIcon}
+          onIconClick={handleSubmit}
+          // className={styles.input}
         />
       </div>
     </div>
@@ -126,3 +123,23 @@ function ChipForm( props ) {
 }
 
 export default ChipForm;
+
+
+const events = {
+  'September 2022': [
+    {
+      title: 'First Event Title',
+      date: 'September 12th 2022, at 5:30pm EST',
+      description: 'This is a good event. This will take place when it happens',
+      src: './images/event-image.jpg'
+    }
+  ],
+  'October 2022': [
+    {
+      title: 'First Event Title',
+      date: 'September 12th 2022, at 5:30pm EST',
+      description: 'This is a good event. This will take place when it happens',
+      src: './images/event-image.jpg'
+    }
+  ]
+};

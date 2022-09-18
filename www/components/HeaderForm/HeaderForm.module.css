@@ -3,6 +3,16 @@
 }
 
 .form {
+  margin-top: .5em;
   width: 100%;
   display: flex;
+}
+
+.name_field {
+  width: 35%;
+}
+
+.date_picker {
+  margin-left: auto;
+  width: 35%;
 }
