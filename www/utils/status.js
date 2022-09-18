@@ -32,21 +32,7 @@ const statusActions = {
   },
   completed: {
     color: 'primary',
-    actions: [
-      {
-        name: 'Trash Meeting',
-        newStatus: 'trashed'
-      }
-    ]
-  },
-  trashed: {
-    color: 'red',
-    actions: [
-      {
-        name: 'Restore Meeting',
-        newStatus: 'completed'
-      }
-    ]
+    actions: []
   }
 };
 

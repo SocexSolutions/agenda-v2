@@ -2,8 +2,8 @@ import { toggleDrawer } from '../../store/features/drawer';
 
 import classNames from 'classnames';
 
-import Button     from '../Button/Button';
-import DropDown   from '../DropDown/DropDown';
+import Button    from '../Button/Button';
+import DropDown  from '../DropDown/DropDown';
 
 import meetingAPI from '../../api/meeting';
 
@@ -149,7 +149,7 @@ const Nav = () => {
               onClick={ () => create_meeting()}
               icon={<AddToPhotosOutlinedIcon />}
               text="create"
-              variant="outlined"
+              variant="text"
               hollow={true}
             />
           </div>
