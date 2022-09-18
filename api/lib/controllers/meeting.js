@@ -199,6 +199,28 @@ module.exports = {
     const participants = await Participant.find({ meeting_id: _id });
 
     return res.status( 200 ).send( participants );
+  },
+
+  /**
+   * Change a meeting's status potentially triggering lifecycle events
+   * @param {string} req.body.status - new status
+   * @param {Object} req.params._id - meeting id
+   */
+  async updateStatus( req, res ) {
+    const { params: { _id }, body: { status } } = req;
+
+    await authUtils.checkOwner( _id, 'meetings', req.credentials );
+
+    const meeting = await Meeting.findOneAndUpdate(
+      { _id },
+      { status },
+      { new: true }
+    );
+
+    // TODO send notification to participants when status changes from
+    // draft to sent.
+
+    return res.status( 200 ).send( meeting );
   }
 
 };

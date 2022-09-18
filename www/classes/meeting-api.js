@@ -101,6 +101,32 @@ class MeetingAPI extends RestAPI {
       }) );
     }
   }
+
+  /**
+   * @description Update a meetings status triggering other lifecycle events
+   * such as notifying users.
+   *
+   * @param {String} id - meeting._id to search with
+   * @param {String} status - new status to set
+   *
+   * @returns {Promise<Meeting>}
+   */
+  async updateStatus( id, status ) {
+    try {
+      const res = await client.patch(
+        `/meeting/${ id }/status`,
+        { status }
+      );
+
+      return res.data;
+    } catch ( err ) {
+      store().dispatch( notify({
+        message: `Failed to update meeting status (${ err.message })`,
+        type: 'danger'
+      }) );
+    }
+  }
+
 }
 
 export default MeetingAPI;

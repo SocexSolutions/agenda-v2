@@ -501,4 +501,39 @@ describe( 'lib/controllers/meeting', () => {
 
   });
 
+  describe( '#updateStatus', () => {
+
+    beforeEach( async() => {
+      const meeting = fakeMeeting({
+        owner_id: this.user._id,
+        status: 'draft'
+      });
+
+      this.meeting = await Meeting.create( meeting );
+    });
+
+    it( 'should update a meetings status', async() => {
+      const res = await client.patch(
+        `/meeting/${ this.meeting._id }/status`,
+        { status: 'sent' }
+      );
+
+      assert.equal( res.status, 200 );
+      assert.equal( res.data.status, 'sent' );
+    });
+
+    it( 'should 403 if not meeting owner', async() => {
+      client.defaults.headers.common['Authorization'] = this.token2;
+
+      await assert.isRejected(
+        client.patch(
+          `/meeting/${ this.meeting._id }/status`,
+          { status: 'sent' }
+        ),
+        'Request failed with status code 403'
+      );
+    });
+
+  });
+
 });

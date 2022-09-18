@@ -15,6 +15,10 @@ const meetingSchema = new Schema(
     date: {
       type: String,
       required: true
+    },
+    status: {
+      type: String,
+      default: 'draft'
     }
   },
   {
