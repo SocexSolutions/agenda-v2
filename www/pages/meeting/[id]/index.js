@@ -44,10 +44,7 @@ const Meeting = ( props ) => {
   }, [ user, props.store, router.query.id ] );
 
   const updateMeeting = ({ name, date }) => {
-    meetingAPI.update( meeting_id, {
-      name,
-      date
-    });
+    meetingAPI.update( meeting_id, { name, date } );
 
     setName( name );
     setDate( date );

@@ -1,9 +1,9 @@
 import client from '../api/client';
 import { store } from '../store';
 import { notify } from '../store/features/snackbar';
+import debounce from '../utils/debounce';
 
 class RestAPI {
-
   /**
    * Create an instance of the RestAPI which includes crud operational methods
    * for a given type/controller. By default there are `get`, `create`,
@@ -15,6 +15,16 @@ class RestAPI {
    */
   constructor( type ) {
     this.type = type;
+
+    for ( const property of Object.keys( this ) ) {
+      if (
+        property !== 'constructor' &&
+        property !== 'type' &&
+        typeof this[ property ] === 'function'
+      ) {
+        this[ property ] = debounce( this[ property ], 300 );
+      }
+    }
   }
 
   /**
@@ -30,10 +40,12 @@ class RestAPI {
 
       return res.data;
     } catch ( err ) {
-      store().dispatch( notify({
-        message: `Failed to get ${ this.type } (${ err.message } )`,
-        type: 'danger'
-      }) );
+      store().dispatch(
+        notify({
+          message: `Failed to get ${ this.type } (${ err.message } )`,
+          type: 'danger'
+        })
+      );
     }
   }
 
@@ -50,10 +62,12 @@ class RestAPI {
 
       return res.data;
     } catch ( err ) {
-      store().dispatch( notify({
-        message: `Failed to create ${ this.type } (${ err.message } )`,
-        type: 'danger'
-      }) );
+      store().dispatch(
+        notify({
+          message: `Failed to create ${ this.type } (${ err.message } )`,
+          type: 'danger'
+        })
+      );
     }
   }
 
@@ -71,10 +85,12 @@ class RestAPI {
 
       return res.data;
     } catch ( err ) {
-      store().dispatch( notify({
-        message: `Failed to update ${ this.type } (${ err.message } )`,
-        type: 'danger'
-      }) );
+      store().dispatch(
+        notify({
+          message: `Failed to update ${ this.type } (${ err.message } )`,
+          type: 'danger'
+        })
+      );
 
       return {};
     }
@@ -91,13 +107,14 @@ class RestAPI {
     try {
       await client.delete( `${ this.type }/${ id }` );
     } catch ( err ) {
-      store().dispatch( notify({
-        message: `Failed to delete ${ this.type } (${ err.message } )`,
-        type: 'danger'
-      }) );
+      store().dispatch(
+        notify({
+          message: `Failed to delete ${ this.type } (${ err.message } )`,
+          type: 'danger'
+        })
+      );
     }
   }
-
 }
 
 export default RestAPI;
