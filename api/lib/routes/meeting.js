@@ -11,5 +11,6 @@ router.get( '/:_id/aggregate', wrapped.aggregate );
 router.post( '/aggregate', wrapped.aggregateSave );
 router.get( '/:_id/topics', wrapped.getTopics );
 router.get( '/:_id/participants', wrapped.getParticipants );
+router.patch( '/:_id/status', wrapped.updateStatus );
 
 module.exports = router;

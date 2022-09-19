@@ -1,29 +1,31 @@
-import HeaderForm  from '../../../components/HeaderForm/HeaderForm';
-import CardBoard   from '../../../components/CardBoard/CardBoard';
-import ChipForm    from '../../../components/ChipForm/ChipForm';
+import HeaderForm from '../../../components/HeaderForm/HeaderForm';
+import CardBoard from '../../../components/CardBoard/CardBoard';
+import ChipForm from '../../../components/ChipForm/ChipForm';
 import LoadingIcon from '../../../components/LoadingIcon/LoadingIcon';
-import Hr          from '../../../components/Hr/Hr';
+import Hr from '../../../components/Hr/Hr';
+import StatusButton from '../../../components/StatusButton/StatusButton';
 
-import meetingAPI     from '../../../api/meeting';
-import topicAPI       from '../../../api/topic';
+import meetingAPI from '../../../api/meeting';
+import topicAPI from '../../../api/topic';
 import participantAPI from '../../../api/participant';
 
-import { useRouter }           from 'next/router';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { useSelector }         from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import styles from '../../../styles/pages/meeting/[id]/index.module.css';
 import shared from '../../../styles/Shared.module.css';
 
 const Meeting = ( props ) => {
   const router = useRouter();
-  const user   = useSelector( ( state ) => state.user );
+  const user = useSelector( ( state ) => state.user );
 
   const meeting_id = router.query.id;
 
   const [ initLoad, setInitLoad ] = useState( true );
-  const [ name, setName ]         = useState('');
-  const [ date, setDate ]         = useState('');
+  const [ name, setName ] = useState('');
+  const [ date, setDate ] = useState('');
+  const [ status, setStatus ] = useState('');
 
   useEffect( () => {
     const loadMeeting = async() => {
@@ -31,6 +33,7 @@ const Meeting = ( props ) => {
 
       setName( res.name );
       setDate( res.date );
+      setStatus( res.status );
 
       setInitLoad( false );
     };
@@ -41,16 +44,19 @@ const Meeting = ( props ) => {
   }, [ user, props.store, router.query.id ] );
 
   const updateMeeting = ({ name, date }) => {
-    meetingAPI.update(
-      meeting_id,
-      {
-        name,
-        date
-      }
-    );
+    meetingAPI.update( meeting_id, {
+      name,
+      date
+    });
 
     setName( name );
     setDate( date );
+  };
+
+  const updateMeetingStatus = ({ status }) => {
+    meetingAPI.updateStatus( meeting_id, status );
+
+    setStatus( status );
   };
 
   if ( initLoad ) {
@@ -60,9 +66,15 @@ const Meeting = ( props ) => {
   return (
     <div className={shared.page}>
       <div className={shared.container}>
-        <h2 className={shared.page_title}>Edit Meeting: {name}</h2>
+        <section className={styles.header}>
+          <h2 className={shared.page_title}>Edit Meeting: {name}</h2>
+          <StatusButton
+            status={status}
+            setMeetingStatus={( status ) => updateMeetingStatus({ status })}
+          />
+        </section>
         <Hr />
-        <div className={shared.card + ' ' + styles.section}>
+        <section className={shared.card + ' ' + styles.section}>
           <h3 className={styles.card_title}>Meeting Details</h3>
           <HeaderForm
             meetingName={name}
@@ -72,8 +84,8 @@ const Meeting = ( props ) => {
             meetingDate={date}
             setMeetingDate={( e ) => updateMeeting({ name, date: e.$d })}
           />
-        </div>
-        <div className={shared.card + ' ' + styles.section}>
+        </section>
+        <section className={shared.card + ' ' + styles.section}>
           <h3>Participants</h3>
           <ChipForm
             change={meeting_id}
@@ -88,8 +100,8 @@ const Meeting = ( props ) => {
             }
             destroy={( id ) => participantAPI.destroy( id )}
           />
-        </div>
-        <div className={shared.card + ' ' + styles.section}>
+        </section>
+        <section className={shared.card + ' ' + styles.section}>
           <h3>Topics</h3>
           <CardBoard
             change={meeting_id}
@@ -104,7 +116,7 @@ const Meeting = ( props ) => {
             destroy={( id ) => topicAPI.destroy( id )}
             itemName={'topic'}
           />
-        </div>
+        </section>
       </div>
     </div>
   );

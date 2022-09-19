@@ -8,7 +8,8 @@
     "setup": "bash scripts/setup.sh",
     "test": "bash scripts/test.sh",
     "coverage": "nyc npm run test",
-    "keygen": "node scripts/keygen.js"
+    "keygen": "node scripts/keygen.js",
+    "autopopulate": "NODE_ENV=dev node scripts/autopopulate.js"
   },
   "repository": {
     "type": "git",
@@ -43,7 +44,5 @@
   ],
   "nyc": {
     "include": "api/lib/**/*.js"
-  },
-  "dependencies": {
   }
 }

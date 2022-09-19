@@ -129,7 +129,8 @@ async function populate_fake_topics( meetings, users, user_id ) {
         owner_id: user_id,
         topic_id: topic._id,
         name: faker.random.words( rand_int( 5 ) ),
-        description: faker.lorem.paragraphs( rand_int( 3 ) )
+        description: faker.lorem.paragraphs( rand_int( 3 ) ),
+        meeting_id: topic.meeting_id
       });
     });
   }
