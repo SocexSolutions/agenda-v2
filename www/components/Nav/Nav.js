@@ -5,14 +5,11 @@ import classNames from 'classnames';
 import Button    from '../Button/Button';
 import DropDown  from '../DropDown/DropDown';
 
-import meetingAPI from '../../api/meeting';
-
-import MenuIcon                from '@mui/icons-material/Menu';
-import HomeOutlinedIcon        from '@mui/icons-material/HomeOutlined';
-import AddToPhotosOutlinedIcon from '@mui/icons-material/AddToPhotosOutlined';
-import AccountCircleIcon       from '@mui/icons-material/AccountCircle';
-import ArrowBackIcon           from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon        from '@mui/icons-material/ArrowForward';
+import MenuIcon          from '@mui/icons-material/Menu';
+import HomeOutlinedIcon  from '@mui/icons-material/HomeOutlined';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ArrowBackIcon     from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon  from '@mui/icons-material/ArrowForward';
 
 import { useEffect, useState }      from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -35,14 +32,6 @@ const Nav = () => {
   const [ forwardPressed, setForwardPressed ] = useState( false );
 
   const homeHref = user && user._id ? `/user/${ user._id }` : `/login`;
-
-  const create_meeting = async() => {
-    // create a draft meeting before redirect so that created participants
-    // and topics have a meeting_id to reference
-    const res = await meetingAPI.create({ name: 'Draft', date: new Date() });
-
-    router.push( `/meeting/${ res._id }` );
-  };
 
   useEffect( () => {
     // match browser behavior of removing history when user is within their
@@ -116,7 +105,7 @@ const Nav = () => {
     return (
       <>
         <nav className={classNames( styles.nav, styles.nav_logged_in )}>
-          <div className={styles.first_third}>
+          <div className={styles.start}>
             <Button
               icon={<MenuIcon />}
               variant="icon"
@@ -144,16 +133,7 @@ const Nav = () => {
               }}
             />
           </div>
-          <div className={styles.center_third}>
-            <Button
-              onClick={ () => create_meeting()}
-              icon={<AddToPhotosOutlinedIcon />}
-              text="create"
-              variant="text"
-              hollow={true}
-            />
-          </div>
-          <div className={styles.last_third}>
+          <div className={styles.end}>
             <Button
               id="dropDownButton"
               text={user.username}

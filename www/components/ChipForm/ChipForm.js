@@ -85,7 +85,7 @@ function ChipForm( props ) {
 
   const chips = [];
 
-  if ( items.length ) {
+  if ( items?.length ) {
     for ( let i = 0; i < items.length; i++ ) {
       const item = items[ i ];
 
@@ -115,7 +115,6 @@ function ChipForm( props ) {
           size="small"
           Icon={AddCircleIcon}
           onIconClick={handleSubmit}
-          // className={styles.input}
         />
       </div>
     </div>
@@ -123,23 +122,3 @@ function ChipForm( props ) {
 }
 
 export default ChipForm;
-
-
-const events = {
-  'September 2022': [
-    {
-      title: 'First Event Title',
-      date: 'September 12th 2022, at 5:30pm EST',
-      description: 'This is a good event. This will take place when it happens',
-      src: './images/event-image.jpg'
-    }
-  ],
-  'October 2022': [
-    {
-      title: 'First Event Title',
-      date: 'September 12th 2022, at 5:30pm EST',
-      description: 'This is a good event. This will take place when it happens',
-      src: './images/event-image.jpg'
-    }
-  ]
-};

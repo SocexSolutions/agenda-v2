@@ -71,12 +71,12 @@
   color: var(--secondary);
   justify-content: flex-start;
   align-items: left;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .menu:hover {
   background-color: var(--secondary);
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .topic {
