@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useSelector }         from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import Inbox       from '../../../components/Inbox/Inbox';
+import Inbox from '../../../components/Inbox/Inbox';
 import LoadingIcon from '../../../components/LoadingIcon/LoadingIcon';
+import CreateFab from '../../../components/CreateFab/CreateFab';
 
 import client from '../../../api/client';
 
@@ -11,13 +12,12 @@ import styles from '../../../styles/pages/user/[id]/index.module.css';
 
 import { notify } from '../../../store/features/snackbar';
 
-
 const User = ( props ) => {
-  const [ loading, setLoading ]                    = useState( true );
-  const [ ownedMeetings, setOwnedMeetings ]        = useState([]);
+  const [ loading, setLoading ] = useState( true );
+  const [ ownedMeetings, setOwnedMeetings ] = useState([]);
   const [ participantMeetings, setParticMeetings ] = useState([]);
 
-  const user = useSelector( state => state.user );
+  const user = useSelector( ( state ) => state.user );
 
   useEffect( () => {
     async function load() {
@@ -60,10 +60,9 @@ const User = ( props ) => {
     <div className={shared.page}>
       <div className={shared.container}>
         <h2 className={styles.page_title}>My Meetings</h2>
-        <Inbox
-          meetings={ meetings }
-        />
+        <Inbox meetings={meetings} />
       </div>
+      <CreateFab />
     </div>
   );
 };

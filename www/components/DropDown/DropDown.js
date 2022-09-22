@@ -20,14 +20,14 @@ const DropDown = () => {
     <>
       <div className={styles.container}>
         <Button
-          iconStart={<AccountCircleIcon />}
+          startIcon={<AccountCircleIcon />}
           className={styles.button}
           variant="text"
         >
           Profile
         </Button>
         <Button
-          iconStart={<LogoutIcon />}
+          startIcon={<LogoutIcon />}
           onClick={() => logout()}
           variant="text"
           className={styles.button}
