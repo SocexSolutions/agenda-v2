@@ -4,11 +4,15 @@ import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown';
 import GroupsIcon       from '@mui/icons-material/Groups';
 import CreateSharpIcon  from '@mui/icons-material/CreateSharp';
 
+import { useRouter } from 'next/router';
+
 import Button from '../Button/Button';
 
 import styles from './Inbox.module.css';
 
 const Inbox = ({ meetings, emptyMessage }) => {
+  const router = useRouter();
+
   const lineItems = meetings.map( meeting => {
     return (
       <Link
@@ -17,27 +21,24 @@ const Inbox = ({ meetings, emptyMessage }) => {
       >
         <div className={styles.item}>
           <p>{meeting.name}</p>
-          <Link  href={ `/meeting/${ meeting._id }`}>
-            <Button
-              icon={<CreateSharpIcon/>}
-              size='medium'
-              variant='hollow'
-            />
-          </Link>
-          <Link  href={ `/meeting/${ meeting._id }/voting`}>
-            <Button
-              icon={<ThumbsUpDownIcon/>}
-              size='medium'
-              variant='hollow'
-            />
-          </Link>
-          <Link href={ `/meeting/${ meeting._id }/meet`}>
-            <Button
-              icon={<GroupsIcon/>}
-              size='medium'
-              variant='hollow'
-            />
-          </Link>
+          <Button
+            onClick={() => router.push( `/meeting/${ meeting._id }` )}
+            icon={<CreateSharpIcon/>}
+            size='medium'
+            variant='hollow'
+          />
+          <Button
+            icon={<ThumbsUpDownIcon/>}
+            onClick={() => router.push( `/meeting/${ meeting._id }/voting` )}
+            size='medium'
+            variant='hollow'
+          />
+          <Button
+            icon={<GroupsIcon/>}
+            onClick={() => router.push( `/meeting/${ meeting._id }/meet` )}
+            size='medium'
+            variant='hollow'
+          />
         </div>
       </Link>
     );

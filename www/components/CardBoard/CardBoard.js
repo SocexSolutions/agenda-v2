@@ -77,7 +77,7 @@ const CardBoard = ( props ) => {
       const editing = editingId === item._id;
       if ( editing ) {
         itemCards.push(
-          <div className={styles.card_container}>
+          <div className={styles.card_container} key={item._id}>
             <Card
               setEditing={setEditingId}
               editing={ editingId === item._id }
@@ -90,7 +90,7 @@ const CardBoard = ( props ) => {
         );
       } else {
         itemCards.push(
-          <div className={styles.card_container}>
+          <div className={styles.card_container} key={item._id}>
             <Card
               setEditing={setEditingId}
               key={item._id}

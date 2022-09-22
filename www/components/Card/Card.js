@@ -19,8 +19,8 @@ const Card = ({
   updateItem,
   destroyItem
 }) => {
-  const [ name, setName ]               = useState( item.name || null );
-  const [ description, setDescription ] = useState( item.description || null );
+  const [ name, setName ]               = useState( item.name || '' );
+  const [ description, setDescription ] = useState( item.description || '' );
 
   const onUpdate = () => {
     updateItem({ ...item, name, description });
