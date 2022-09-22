@@ -6,7 +6,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: var(--background);
 }
 
 .form_container form {
