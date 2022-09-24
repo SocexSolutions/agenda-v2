@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import Fade from '@mui/material/Fade';
 
 import Inbox from '../../../components/Inbox/Inbox';
 import LoadingIcon from '../../../components/LoadingIcon/LoadingIcon';
@@ -46,24 +47,18 @@ const User = ( props ) => {
     }
   }, [ user ] );
 
-  if ( loading ) {
-    return (
-      <>
-        <LoadingIcon size="large" />
-      </>
-    );
-  }
-
   const meetings = ownedMeetings.concat( participantMeetings );
 
   return (
-    <div className={shared.page}>
-      <div className={shared.container}>
-        <h2 className={styles.page_title}>My Meetings</h2>
-        <Inbox meetings={meetings} />
+    <Fade in={!loading}>
+      <div className={shared.page}>
+        <div className={shared.container}>
+          <h2 className={styles.page_title}>My Meetings</h2>
+          <Inbox meetings={meetings} />
+        </div>
+        <CreateFab />
       </div>
-      <CreateFab />
-    </div>
+    </Fade>
   );
 };
 

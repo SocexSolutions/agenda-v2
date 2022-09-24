@@ -1,0 +1,48 @@
+.container {
+  color: var(--darkText);
+  margin-bottom: 1em;
+  padding: 1.5em 1em 1em 1em;
+  border-radius: 5px;
+  width: 100%;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 70%;
+  }
+
+  h3 {
+    margin: 0;
+  }
+
+  p {
+    white-space: pre-wrap;
+  }
+
+  button {
+    margin-top: 1rem;
+    margin-left: auto;
+  }
+
+  &.editing {
+    cursor: initial;
+  }
+
+  &.editing:hover {
+    opacity: 100%;
+  }
+
+  .description {
+    display: block;
+    margin-top: 1em;
+  }
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.buttonContainer button {
+  margin-left: .25rem;
+  display: flex;
+}

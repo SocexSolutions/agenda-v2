@@ -15,7 +15,7 @@ import { notify } from '../../../store/features/snackbar';
 import client from '../../../api/client';
 
 import styles       from '../../../styles/pages/meeting/[id]/meet.module.css';
-import sharedStyles from '../../../styles/Shared.module.css';
+import shared from '../../../styles/Shared.module.css';
 
 const Meet = ( props ) => {
   const [ meetingLoading, setMeetingLoading ] = useState( true );
@@ -186,7 +186,7 @@ const Meet = ( props ) => {
   const openCards = open.map( t => {
     return (
       <div
-        className={sharedStyles.card + ' ' + styles.card} key={ t.name }
+        className={shared.card + ' ' + styles.card} key={ t.name }
         onClick={ () => setSwitchingTopics( t._id ) }
       >
         <p>{t.name}</p>
@@ -197,7 +197,7 @@ const Meet = ( props ) => {
   const closedCards = closed.map( t => {
     return (
       <div
-        className={sharedStyles.card + ' ' + styles.card} key={ t.name }
+        className={shared.card + ' ' + styles.card} key={ t.name }
         onClick={ () => setSwitchingTopics( t._id ) }
       >
         <p>{t.name}</p>
@@ -206,7 +206,7 @@ const Meet = ( props ) => {
   });
 
   return (
-    <div className={sharedStyles.page}>
+    <div className={shared.page}>
       <h2 className={styles.page_title}>Live Meeting: {meeting.name}</h2>
       <Hr />
       <div className={styles.container}>
@@ -218,7 +218,7 @@ const Meet = ( props ) => {
           <h3>Under Discussion</h3>
           <div className={styles.discussion_container}>
             { live &&
-            <div className={sharedStyles.card + ' ' + styles.discussion_card }>
+            <div className={shared.card + ' ' + styles.discussion_card }>
               <h3>{live.name}</h3>
               <p>{live.description}</p>
               <Button

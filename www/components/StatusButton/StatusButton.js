@@ -26,6 +26,10 @@ export default function StatusButton({ status, setMeetingStatus }) {
 
   const statusInfo = getStatusInfo({ status });
 
+  if ( !statusInfo ) {
+    return;
+  }
+
   return (
     <React.Fragment>
       <Button

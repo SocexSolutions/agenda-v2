@@ -1,4 +1,4 @@
-import Card   from '../Card/Card';
+import Card   from '../CardForm/CardForm';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Button        from '@mui/material/Button';
@@ -40,10 +40,12 @@ const CardBoard = ( props ) => {
       setInitLoad( false );
     };
 
-    if ( initLoad ) {
+    // check that the change prop exists before attempting to load since we
+    // know the component is dependant on it
+    if ( initLoad && props.change ) {
       load();
     }
-  }, [ initLoad ] );
+  }, [ initLoad, props.change ] );
 
   const createItem = async() => {
     const { _id } = await props.create({

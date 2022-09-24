@@ -38,7 +38,9 @@ function ChipForm( props ) {
       setInitLoad( false );
     };
 
-    if ( initLoad ) {
+    // check that the change prop exists before attempting to load since we
+    // know the component is dependant on it
+    if ( initLoad && props.change ) {
       loadItems();
     }
   });
