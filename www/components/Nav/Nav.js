@@ -1,34 +1,27 @@
 import { toggleDrawer } from '../../store/features/drawer';
-
 import classNames from 'classnames';
-
-import Button    from '../Button/Button';
-import DropDown  from '../DropDown/DropDown';
-
-import MenuIcon          from '@mui/icons-material/Menu';
-import HomeOutlinedIcon  from '@mui/icons-material/HomeOutlined';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import ArrowBackIcon     from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon  from '@mui/icons-material/ArrowForward';
-
-import { useEffect, useState }      from 'react';
+import Button from '../Button/Button';
+import ProfileButton from '../ProfileButton/ProfileButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-
-import Link          from 'next/link';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
-
 import styles from './Nav.module.css';
 
-const selectUser = state => state.user;
+const selectUser = ( state ) => state.user;
 
 const Nav = () => {
-  const router   = useRouter();
+  const router = useRouter();
   const dispatch = useDispatch();
-  const user     = useSelector( selectUser );
+  const user = useSelector( selectUser );
 
-  const [ history, setHistory ]               = useState([]);
+  const [ history, setHistory ] = useState([]);
   const [ whereInHistory, setWhereInHistory ] = useState( -1 );
-  const [ backPressed, setBackPressed ]       = useState( false );
+  const [ backPressed, setBackPressed ] = useState( false );
   const [ forwardPressed, setForwardPressed ] = useState( false );
 
   const homeHref = user && user._id ? `/user/${ user._id }` : `/login`;
@@ -53,7 +46,7 @@ const Nav = () => {
       if ( whereInHistory < history.length - 1 ) {
         clearForwardHistory();
       } else {
-        setHistory( arr => [ ...arr, router.asPath ] );
+        setHistory( ( arr ) => [ ...arr, router.asPath ] );
         setWhereInHistory( whereInHistory + 1 );
       }
     };
@@ -79,7 +72,7 @@ const Nav = () => {
         <nav className={styles.nav}>
           <Link href="/">
             <div className={styles.agenda}>
-              <img src='./logo.png' alt="Agenda" className={styles.logo}/>
+              <img src="./logo.png" alt="Agenda" className={styles.logo} />
             </div>
           </Link>
           <div className={styles.login}>
@@ -134,15 +127,7 @@ const Nav = () => {
             />
           </div>
           <div className={styles.end}>
-            <Button
-              id="dropDownButton"
-              text={user.username}
-              icon={<AccountCircleIcon />}
-              variant="icon"
-              size="medium"
-            >
-              <DropDown />
-            </Button>
+            <ProfileButton />
           </div>
         </nav>
       </>

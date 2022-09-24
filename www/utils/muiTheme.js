@@ -45,6 +45,9 @@ const theme = createTheme({
     grey: {
       main: '#6a737d',
       contrastText: '#fff'
+    },
+    white: {
+      main: '#fff'
     }
   }
 });
