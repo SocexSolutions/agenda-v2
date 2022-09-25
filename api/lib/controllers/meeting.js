@@ -2,6 +2,7 @@ const mongoose    = require('mongoose');
 const Meeting     = require('../models/meeting');
 const Topic       = require('../models/topic.js');
 const Participant = require('../models/participant');
+const User        = require('../models/user');
 const ObjectID    = require('mongoose').Types.ObjectId;
 const jobi        = require('@starryinternet/jobi');
 const authUtils   = require('../util/authorization');
@@ -224,69 +225,77 @@ module.exports = {
   },
 
   async getAllMeetings( req, res ) {
+    const subject_email = req.credentials.user.email;
     const subject_id = req.credentials.sub;
-    const { skip, limit } = req.params;
+    const { limit = 0, skip = 0 } = req.query; // Thanks tom
 
-    console.log('ah shit here we go again');
-    const queries = [];
-    console.log( subject_id );
-    const pipeline2 = [
-      {
-        $match: {
-          // $or: [
-          //   {
-          //     $and: [
-          //       { _id: { '$in': new ObjectID() } },
-          //       ...queries
-          //     ]
-          //   },
-          //{
-          $and: [
-            { owner_id: subject_id },
-            ...queries
-          ]
+    try {
+      const pipeline = [
+        {
+          $match: { _id: ObjectID( subject_id ) }
+        },
+        {
+          $lookup: {
+            from: 'meetings',
+            localField: '_id',
+            foreignField: 'owner_id',
+            as: 'owned_meetings'
+          }
+        },
+        {
+          $lookup: {
+            from: 'participants',
+            pipeline: [
+              { $match: { email: subject_email } },
+              {
+                $lookup: {
+                  from: 'meetings',
+                  localField: 'meeting_id',
+                  foreignField: '_id',
+                  as: 'meetings'
+                }
+              },
+              {
+                $project: {
+                  meeting: { $arrayElemAt: [ '$meetings', 0 ] }
+                }
+              },
+              {
+                $replaceRoot: {
+                  newRoot: '$meeting'
+                }
+              }
+            ],
+            as: 'participating_meetings'
+          }
+        },
+        {
+          $project: {
+            meetings: {
+              $concatArrays: [ '$participating_meetings', '$owned_meetings' ]
+            }
+          }
+        },
+        { $unwind: '$meetings' },
+        { $sort: { 'meetings.createdAt': -1 } },
+        { $skip: parseInt( skip ) },
+        { $limit: parseInt( limit ) },
+        {
+          $group: {
+            _id: '$_id',
+            meetings: { $push: '$meetings' }
+          }
         }
+      ];
 
-        //          ]
-      }
-      //}//,
-      // {
-      //   $lookup: {
-      //     from: 'users',
-      //     localField: 'owner_id',
-      //     foreignField: '_id',
-      //     let: { email: '$email' }
-      //   }
-      // }//,
-      // {
-      //   $lookup: {
-      //     from: 'participants',
-      //     foreignField: { $eq: [ '$email', '$$email' ] },
-      //     let: { meetingIds: '$meeting_id' }
-      //   }
-      // }
-    ];
+      const meetings = await User.aggregate( pipeline );
 
-    const pipeline = [
-      {
-        $match: {
-          $and: [
-            { owner_id: subject_id },
-            ...queries
-          ]
-        }
-      }
-    ];
+      return res.status( 200 ).send( meetings );
+    } catch ( err ) {
 
-    const test = await Meeting.find({ owner_id: subject_id });
-    console.log( test );
 
-    console.log('this query hard');
-    console.log( JSON.stringify( pipeline ) );
-    const meetings = await Meeting.aggregate( pipeline );
-    console.log( meetings );
-
-    return res.status( 200 ).send( meetings );
+      return res.status( 500 ).send( err );
+    }
   }
 
 };

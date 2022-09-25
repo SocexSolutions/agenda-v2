@@ -204,20 +204,45 @@ describe( 'lib/controllers/meeting', () => {
       }
     });
 
-    it.only( 'should get a users owned and participating meetings', async() => {
-      const ownedMeeting = fakeMeeting({ owner_id: this.user._id });
-      const includedMeeting = fakeMeeting();
+    it( 'should get a users owned and participating meetings', async() => {
+      const ownedMeeting = fakeMeeting({
+        owner_id: this.user._id,
+        name: 'meeting 1',
+        createdAt: new Date('05 October 2011 14:48 UTC').toISOString()
+      });
+      const ownedMeeting2 = fakeMeeting({
+        owner_id: this.user._id,
+        name: 'meeting 2',
+        createdAt: new Date('01 January 1990 01:22 UTC').toISOString()
+      });
+      const ownedMeeting3 = fakeMeeting({
+        owner_id: this.user._id,
+        name: 'meeting 3',
+        createdAt: new Date('05 October 2500 14:48 UTC').toISOString()
+      });
+      const ownedMeeting4 = fakeMeeting({
+        owner_id: this.user._id,
+        name: 'meeting 4',
+        createdAt: new Date('25 December 1995 01:22 UTC').toISOString()
+      });
 
-      const ownedRes = await Meeting.create( ownedMeeting );
+      const includedMeeting = fakeMeeting({ name: 'participant meeting' });
+
+      await Meeting.create( ownedMeeting );
+      await Meeting.create( ownedMeeting2 ); //we will limit before getting to this oldest meeting
+      await Meeting.create( ownedMeeting3 ); //we will skip this newest meeting for pagenation test
+      await Meeting.create( ownedMeeting4 );
       const includedRes = await Meeting.create( includedMeeting );
 
-      const participant = fakeParticipant({ meeting_id: includedRes._id });
+      const participant = fakeParticipant({ meeting_id: includedRes._id, email: this.user.email });
 
-      const participantRes = await Participant.create( participant );
+      await Participant.create( participant );
 
-      const { data } = await client.get(`/meeting/`);
+      const { data } = await client.get(`/meeting/?skip=1&limit=3`);
 
-      assert.strictEqual( data.meetings.length, 2 );
+      assert.strictEqual( data[ 0 ].meetings.length, 3 );
+      assert.strictEqual( data[ 0 ].meetings[ 0 ].name, 'participant meeting' ); //Second newest meeting first
+      assert.strictEqual( data[ 0 ].meetings[ 2 ].name, 'meeting 4' ); //Second oldest meeting last
     });
 
   });
