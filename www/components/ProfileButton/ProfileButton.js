@@ -10,6 +10,7 @@ import { AccountCircle, Logout } from '@mui/icons-material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { userLogout } from '../../store/features/user';
+
 export default function ProfileButton() {
   const [ anchor, setAnchor ] = useState( null );
   const dispatch = useDispatch();
