@@ -39,6 +39,7 @@ const CardForm = ({ editing, setEditing, item, updateItem, destroyItem }) => {
   return (
     <Paper elevation={2} className={styles.container + ' ' + styles.editing}>
       <TextField
+        className={styles.title_input}
         size="small"
         label="Title"
         onChange={( e ) => setName( e.target.value )}

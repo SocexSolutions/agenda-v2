@@ -5,9 +5,10 @@
   border-radius: 5px;
   width: 100%;
   cursor: pointer;
+  transition: background 0.1s ease-in-out;
 
   &:hover {
-    opacity: 70%;
+    background: var(--background);
   }
 
   h3 {
@@ -28,13 +29,17 @@
   }
 
   &.editing:hover {
-    opacity: 100%;
+    background: #fff;
   }
 
   .description {
     display: block;
     margin-top: 1em;
   }
+}
+
+.title_input {
+  width: 350px;
 }
 
 .buttonContainer {
