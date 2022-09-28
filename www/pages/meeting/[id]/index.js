@@ -60,7 +60,7 @@ const Meeting = ( props ) => {
   return (
     <Fade in={!initLoad}>
       <div className={shared.page}>
-        <div className={shared.container}>
+        <div className={styles.container}>
           <section className={styles.header}>
             <h2 className={shared.page_title}>Edit Meeting: {name}</h2>
             <StatusButton
