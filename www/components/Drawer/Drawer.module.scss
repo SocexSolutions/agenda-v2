@@ -7,7 +7,7 @@
     width: 17em;
     transition: width 200ms ease;
     overflow: hidden;
-    border-right: 1px solid var(--border);
+    background: var(--primary);
   }
 
   .closed {
@@ -15,18 +15,18 @@
   }
 
   .icon_button {
-    font-size: 22px;
+    font-size: 20px;
     text-transform: capitalize;
     width: 100%;
     padding: 0.5em 0em 0.5em 2em;
     justify-content: flex-start;
-    color: var(--midText);
-    font-weight: 400;
+    color: var(--white);
+    font-weight: 200;
     border-radius: 0;
 
     &:hover {
-      background-color: var(--backgroundHighlight);
-      color: var(--darkText);
+      background-color: var(--primary-hover);
+      color: var(--white);
     }
 
     svg {

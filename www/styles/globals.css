@@ -59,6 +59,7 @@ p {
 /* THEMES */
 
 .default {
+
   --primary: #3A3C45;
   --primary-hover: #1d1e23;
   --background: #f5f5f5;
@@ -74,6 +75,7 @@ p {
   --success: #9bc333;
   --successText: #ffffff;
   --successBackground: #95da00;
+  --white: #fff;
   --yellow: #f6e336;
   --orange: #f69100;
   --green: #45a749;
