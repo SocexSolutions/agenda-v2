@@ -1,8 +1,5 @@
 import Nav from '../Nav/Nav';
 import Drawer from '../Drawer/Drawer';
-import Fab from '../Fab/Fab';
-import meetingAPI from '../../api/meeting';
-import AddIcon from '@mui/icons-material/Add';
 
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
@@ -30,14 +27,6 @@ const Layout = ( props ) => {
     themeRefresh();
   }, [ user ] );
 
-  const createMeeting = async() => {
-    // create a draft meeting before redirect so that created participants
-    // and topics have a meeting_id to reference
-    const res = await meetingAPI.create({ name: 'Draft', date: new Date() });
-
-    router.push( `/meeting/${ res._id }` );
-  };
-
   return (
     <>
       <Nav drawerOpen={drawerOpen} />
@@ -47,17 +36,6 @@ const Layout = ( props ) => {
           <content>{props.children}</content>
         </main>
       </div>
-      { user._id &&
-        <Fab
-          color="primary"
-          variant="contained"
-          size="large"
-          startIcon={<AddIcon />}
-          onClick={() => createMeeting()}
-        >
-            Create
-        </Fab>
-      }
     </>
   );
 };

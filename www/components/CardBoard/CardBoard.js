@@ -1,4 +1,4 @@
-import Card   from '../Card/Card';
+import Card   from '../CardForm/CardForm';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Button        from '@mui/material/Button';
@@ -40,10 +40,12 @@ const CardBoard = ( props ) => {
       setInitLoad( false );
     };
 
-    if ( initLoad ) {
+    // check that the change prop exists before attempting to load since we
+    // know the component is dependant on it
+    if ( initLoad && props.change ) {
       load();
     }
-  }, [ initLoad ] );
+  }, [ initLoad, props.change ] );
 
   const createItem = async() => {
     const { _id } = await props.create({
@@ -77,7 +79,7 @@ const CardBoard = ( props ) => {
       const editing = editingId === item._id;
       if ( editing ) {
         itemCards.push(
-          <div className={styles.card_container}>
+          <div className={styles.card_container} key={item._id}>
             <Card
               setEditing={setEditingId}
               editing={ editingId === item._id }
@@ -90,7 +92,7 @@ const CardBoard = ( props ) => {
         );
       } else {
         itemCards.push(
-          <div className={styles.card_container}>
+          <div className={styles.card_container} key={item._id}>
             <Card
               setEditing={setEditingId}
               key={item._id}

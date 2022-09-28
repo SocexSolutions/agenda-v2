@@ -1,0 +1,53 @@
+.container {
+  color: var(--darkText);
+  margin-bottom: 1em;
+  padding: 1.5em 1em 1em 1em;
+  border-radius: 5px;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.1s ease-in-out;
+
+  &:hover {
+    background: var(--background);
+  }
+
+  h3 {
+    margin: 0;
+  }
+
+  p {
+    white-space: pre-wrap;
+  }
+
+  button {
+    margin-top: 1rem;
+    margin-left: auto;
+  }
+
+  &.editing {
+    cursor: initial;
+  }
+
+  &.editing:hover {
+    background: #fff;
+  }
+
+  .description {
+    display: block;
+    margin-top: 1em;
+  }
+}
+
+.title_input {
+  width: 350px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.buttonContainer button {
+  margin-left: .25rem;
+  display: flex;
+}

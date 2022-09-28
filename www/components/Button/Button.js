@@ -101,7 +101,7 @@ const Button = ({
   useClickAway( buttonRef, () => setOpen( false ) );
 
   return (
-    <div ref={buttonRef} onClick={() => setOpen( true )}>
+    <div onClick={() => setOpen( true )}>
       <button className={button_styles} onClick={onClick} disabled={disabled}>
         {
           icon &&
