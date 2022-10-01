@@ -1,0 +1,45 @@
+@use '../../../../styles/colors.scss';
+
+.meet_revamp {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+};
+
+.side_bar_container {
+  grid-column: 1;
+  width: 100%;
+}
+
+.main_container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  grid-column-gap: 1em;
+  grid-row-gap: 1em;
+  width: 100%;
+
+  .topic_container {
+    grid-column: 1 / span 3;
+    grid-row: 1;
+    box-shadow: 0 1px 6px 0 rgb(32 33 36 / 28%);
+    border-bottom: 1px solid colors.$border;
+    padding: 1em;
+  }
+
+  .takeaways_container {
+    padding-left: 1em;
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+  }
+
+  .actions_container {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+  }
+}
+
+.board_background {
+  background-color: colors.$background;
+  border-radius: 6px;
+  padding: 1em;
+}
