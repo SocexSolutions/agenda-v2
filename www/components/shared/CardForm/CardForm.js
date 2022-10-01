@@ -19,6 +19,8 @@ const CardForm = ({ editing, setEditing, item, updateItem, destroyItem }) => {
     updateItem({ ...item, name, description });
   };
 
+  console.log( 'item', description );
+
   const onDestroy = () => {
     destroyItem( item );
   };
@@ -53,6 +55,7 @@ const CardForm = ({ editing, setEditing, item, updateItem, destroyItem }) => {
         size="small"
         label="Description"
         onChange={( e ) => setDescription( e.target.value )}
+        value={description}
       />
       <div className={styles.buttonContainer}>
         <Button onClick={() => onDestroy()} size="small" color={'red'}>

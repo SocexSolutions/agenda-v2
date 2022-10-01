@@ -22,7 +22,6 @@ import styles from './CardBoard.module.css';
  * corresponding item
  */
 const CardBoard = ( props ) => {
-  const [ initLoad, setInitLoad ]   = useState( true );
   const [ items, setItems ]         = useState([]);
   const [ editingId, setEditingId ] = useState('');
 
@@ -37,15 +36,14 @@ const CardBoard = ( props ) => {
   useEffect( () => {
     const load = async() => {
       await fetchItems();
-      setInitLoad( false );
     };
 
-    // check that the change prop exists before attempting to load since we
-    // know the component is dependant on it
-    if ( initLoad && props.change ) {
+    // Check that the change prop exists before attempting to load since we
+    // know the component is dependant on it.
+    if ( props.change ) {
       load();
     }
-  }, [ initLoad, props.change ] );
+  }, [ props.change ] );
 
   const createItem = async() => {
     const { _id } = await props.create({

@@ -1,261 +1,123 @@
-import LoadingIcon from '../../../components/shared/LoadingIcon/LoadingIcon';
-import Button      from '../../../components/shared/Button/Button';
-import CardBoard   from '../../../components/shared/CardBoard/CardBoard';
-import Hr          from '../../../components/shared/Hr/Hr';
+import SideBar from '../../../components/pages/Meet/SideBar/SideBar';
+import TopicDisplay from '../../../components/pages/Meet/TopicDisplay/TopicDisplay';
+import CardBoard from '../../../components/shared/CardBoard/CardBoard';
 
+import meetingAPI from '../../../api/meeting';
+import topicAPI from '../../../api/topic';
 import takeawayAPI from '../../../api/takeaway';
-import topicAPI    from '../../../api/topic';
-import meetingAPI  from '../../../api/meeting';
 
 import { useEffect, useState } from 'react';
-import { useRouter }           from 'next/router';
+import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 
-import { notify } from '../../../store/features/snackbar';
+import styles from '../../../styles/pages/meeting/[id]/meet.module.scss';
 
-import client from '../../../api/client';
+export default function MeetRevamp() {
+  const router = useRouter();
+  const user = useSelector( ( state ) => state.user );
 
-import styles       from '../../../styles/pages/meeting/[id]/meet.module.css';
-import shared from '../../../styles/Shared.module.css';
+  const meeting_id = router.query.id;
 
-const Meet = ( props ) => {
-  const [ meetingLoading, setMeetingLoading ] = useState( true );
-  const [ topicsLoading, setTopicsLoading ]   = useState( true );
+  const [ name, setName ] = useState('');
+  const [ date, setDate ] = useState( null );
+  const [ topics, setTopics ] = useState([]);
 
-  const [ meeting, setMeeting ] = useState( null );
-  const [ topics, setTopics ]   = useState([]);
+  const loadMeeting = async( meeting_id ) => {
+    const meeting = await meetingAPI.get( meeting_id );
 
-  const [ switchingTopics, setSwitchingTopics ] = useState( null );
-  const [ closingTopic, setClosingTopic ]       = useState( null );
-
-  const router     = useRouter();
-  const meeting_id = router.query.id ?? null;
-
-  useEffect( () => {
-    const loadTopics = async() => {
-      const topics = await meetingAPI.getTopics( meeting_id );
-
-      setTopics( topics );
-      setTopicsLoading( false );
-    };
-
-    if ( topicsLoading && meeting_id ) {
-      loadTopics();
-    }
-  }, [ router.query.id, topicsLoading ] );
-
-  useEffect( () => {
-    const loadMeeting = async() => {
-      const meeting = await meetingAPI.get( meeting_id );
-      setMeeting( meeting );
-      setMeetingLoading( false );
-    };
-
-    if ( meeting_id && meetingLoading ) {
-      loadMeeting();
-    }
-  }, [ router.query.id, meetingLoading, props.store ] );
-
-  useEffect( () => {
-    const switchTopics = async() => {
-      try {
-        const promises = [];
-
-        const tmp = topics.map( t => {
-          if ( t.status === 'live' ) {
-            promises.push(
-              client.patch(
-                `topic/${ t._id }/status`,
-                { status: 'open' }
-              )
-            );
-
-            return { ...t, status: 'open' };
-
-          } else if ( t._id === switchingTopics ) {
-            promises.push(
-              client.patch(
-                `topic/${ t._id }/status`,
-                { status: 'live' }
-              )
-            );
-
-            return { ...t, status: 'live' };
-
-          } else {
-            return t;
-          }
-        });
-
-        setTopics( tmp );
-        setSwitchingTopics( null );
-
-        await Promise.all( promises );
-
-      } catch ( err ) {
-        props.store.dispatch(
-          notify({
-            message: 'Failed to switch topics: ' + err.message,
-            type: 'danger'
-          })
-        );
-      }
-    };
-
-    if ( switchingTopics ) {
-      switchTopics();
-    }
-  }, [ switchingTopics ] );
-
-  useEffect( () => {
-    const closeTopic = async() => {
-      try {
-        const res = await client.patch(
-          `/topic/${ closingTopic }/status`,
-          { status: 'closed' }
-        );
-
-        if ( res.status === 200 ) {
-          const tmp = topics.map( t => {
-            if ( t.status === 'live' ) {
-              return { ...t, status: 'closed' };
-            } else {
-              return t;
-            }
-          });
-
-          setTopics( tmp );
-          setClosingTopic( null );
-        }
-
-      } catch ( err ) {
-        props.store.dispatch(
-          notify({
-            message: 'Failed to close topic: ' + err.message,
-            type: 'danger'
-          })
-        );
-      }
-    };
-
-    if ( closingTopic ) {
-      closeTopic();
-    }
-  }, [ closingTopic ] );
-
-  if ( !meeting || topicsLoading ) {
-    return (
-      <div className={styles.loadingContainer}>
-        <LoadingIcon />
-      </div>
-    );
-  }
-
-  let live;
-  let closed = [];
-  let open   = [];
-
-  const sortedByLikesInsert = ( topicArray, topic ) => {
-    const tmp = [ ...topicArray ];
-
-    for ( let i = 0; i < topicArray.length; i++ ) {
-      if ( topic.likes >= tmp[ i ].likes ) {
-        tmp.splice( i, 0, topic );
-        return tmp;
-      }
-    }
-
-    tmp.push( topic );
-
-    return tmp;
+    setName( meeting.name );
+    setDate( meeting.date );
   };
 
-  for ( const topic of topics ) {
-    switch ( topic.status ) {
-      case 'open':
-        open = sortedByLikesInsert( open, topic );
-        break;
-      case 'closed':
-        closed = sortedByLikesInsert( closed, topic );
-        break;
-      default:
-        live = topic;
-        break;
+  const loadTopics = async( meeting_id ) => {
+    const res = await meetingAPI.getTopics( meeting_id );
+
+    setTopics( res );
+  };
+
+  const switchToTopic = async( topic_id ) => {
+    await topicAPI.switch( topic_id );
+
+    loadTopics( meeting_id );
+  };
+
+  const closeTopic = async( topic_id ) => {
+    await topicAPI.close( topic_id );
+
+    loadTopics( meeting_id );
+  };
+
+  useEffect( () => {
+    if ( meeting_id ) {
+      loadMeeting( meeting_id );
+      loadTopics( meeting_id );
     }
-  }
+  }, [ user, meeting_id ] );
 
-  const openCards = open.map( t => {
-    return (
-      <div
-        className={shared.card + ' ' + styles.card} key={ t.name }
-        onClick={ () => setSwitchingTopics( t._id ) }
-      >
-        <p>{t.name}</p>
-      </div>
-    );
-  });
-
-  const closedCards = closed.map( t => {
-    return (
-      <div
-        className={shared.card + ' ' + styles.card} key={ t.name }
-        onClick={ () => setSwitchingTopics( t._id ) }
-      >
-        <p>{t.name}</p>
-      </div>
-    );
-  });
+  const liveTopic = topics.find( ( topic ) => topic.status === 'live' );
 
   return (
-    <div className={shared.page}>
-      <h2 className={styles.page_title}>Live Meeting: {meeting.name}</h2>
-      <Hr />
-      <div className={styles.container}>
-        <div className={styles.side_container}>
-          <h3>Open Topics</h3>
-          { openCards }
-        </div>
-        <div className={styles.main_container}>
-          <h3>Under Discussion</h3>
-          <div className={styles.discussion_container}>
-            { live &&
-            <div className={shared.card + ' ' + styles.discussion_card }>
-              <h3>{live.name}</h3>
-              <p>{live.description}</p>
-              <Button
-                onClick={() => setClosingTopic( live._id )}
-                variant='outlined'
-                text='close'
-              />
-            </div>
-            }
-          </div>
-
-          { live &&
-          <>
+    <div className={styles.meet_revamp}>
+      <nav className={styles.side_bar_container}>
+        <SideBar
+          meetingName={name}
+          topics={topics}
+          switchToTopic={switchToTopic}
+        />
+      </nav>
+      <div className={styles.main_container}>
+        <section className={styles.topic_container}>
+          {liveTopic ? (
+            <TopicDisplay topic={topics[ 0 ]} closeTopic={closeTopic} />
+          ) : (
+            <p>No topic selected. Select a topic on the left to begin.</p>
+          )}
+        </section>
+        <section className={styles.takeaways_container}>
+          <div className={styles.board_background}>
             <h3>Takeaways</h3>
-            <div className={styles.takeaway_container}>
+            {liveTopic ? (
               <CardBoard
-                key={ live._id }
-                getAll={ () => topicAPI.getTakeaways( live._id )}
-                create={ ( payload ) => takeawayAPI.create({
-                  topic_id: live._id,
-                  meeting_id: meeting._id,
-                  ...payload
-                })}
-                update={ ( id, payload ) => takeawayAPI.update( id, payload ) }
-                destroy={ ( id ) => takeawayAPI.destroy( id )}
+                change={liveTopic._id}
+                getAll={() => topicAPI.getTakeaways( liveTopic._id )}
+                create={( payload ) =>
+                  takeawayAPI.create({
+                    topic_id: liveTopic._id,
+                    meeting_id,
+                    ...payload
+                  })
+                }
+                update={( id, payload ) => takeawayAPI.update( id, payload )}
+                destroy={( id ) => takeawayAPI.destroy( id )}
               />
-            </div>
-          </>
-          }
-        </div>
-        <div className={styles.side_container}>
-          <h3>Closed Topics</h3>
-          { closedCards }
-        </div>
+            ) : (
+              <p>Select a topic to view takeaways.</p>
+            )}
+          </div>
+        </section>
+        <section className={styles.actions_container}>
+          <div className={styles.board_background}>
+            <h3>Action Items</h3>
+            {liveTopic ? (
+              <CardBoard
+                change={liveTopic._id}
+                getAll={() => topicAPI.getTakeaways( liveTopic._id )}
+                create={( payload ) =>
+                  takeawayAPI.create({
+                    topic_id: liveTopic._id,
+                    meeting_id,
+                    ...payload
+                  })
+                }
+                update={( id, payload ) => takeawayAPI.update( id, payload )}
+                destroy={( id ) => takeawayAPI.destroy( id )}
+              />
+            ) : (
+              <p>Select a topic to view action items.</p>
+            )}
+          </div>
+        </section>
       </div>
     </div>
   );
-};
-
-export default Meet;
+}
