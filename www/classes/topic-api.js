@@ -53,6 +53,39 @@ class TopicAPI extends RestAPI {
       }) );
     }
   }
+
+  /**
+   * Switch between topics by setting the given topic to live and the current
+   * topic to closed (if any).
+   *
+   * @param {string} id - topic id
+   */
+  async switch( id ) {
+    try {
+      await client.patch( `topic/${ id }/switch` );
+    } catch ( err ) {
+      store().dispatch( notify({
+        message: `Failed to switch topics (${ err.message })`,
+        type: 'danger'
+      }) );
+    }
+  }
+
+  /**
+   * Close the given topic by setting its status to closed
+   *
+   * @param {string} id - topic id
+   */
+  async close( id ) {
+    try {
+      await client.patch( `topic/${ id }/close` );
+    } catch ( err ) {
+      store().dispatch( notify({
+        message: `Failed to close topic (${ err.message })`,
+        type: 'danger'
+      }) );
+    }
+  }
 }
 
 export default TopicAPI;
