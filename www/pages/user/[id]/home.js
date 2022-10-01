@@ -2,14 +2,13 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Fade from '@mui/material/Fade';
 
-import Inbox from '../../../components/Inbox/Inbox';
-import LoadingIcon from '../../../components/LoadingIcon/LoadingIcon';
-import CreateFab from '../../../components/CreateFab/CreateFab';
+import Inbox from '../../../components/pages/Home/Inbox/Inbox';
+import CreateFab from '../../../components/shared/CreateFab/CreateFab';
 
 import client from '../../../api/client';
 
 import shared from '../../../styles/Shared.module.css';
-import styles from '../../../styles/pages/user/[id]/index.module.css';
+import styles from '../../../styles/pages/user/[id]/home.module.css';
 
 import { notify } from '../../../store/features/snackbar';
 

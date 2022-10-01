@@ -1,6 +1,6 @@
-import LoadingIcon from '../../../components/LoadingIcon/LoadingIcon';
-import Button      from '../../../components/Button/Button';
-import Hr          from '../../../components/Hr/Hr';
+import LoadingIcon from '../../../components/shared/LoadingIcon/LoadingIcon';
+import Button      from '../../../components/shared/Button/Button';
+import Hr          from '../../../components/shared/Hr/Hr';
 
 import ArrowCircleUp from '@mui/icons-material/ThumbUp';
 
@@ -16,7 +16,7 @@ import { useRouter }           from 'next/router';
 
 const selectUser = state => state.user;
 
-const Voting = ( props ) => {
+const Vote = ( props ) => {
   const [ liking, setLiking ]   = useState('');
   const [ loading, setLoading ] = useState( true );
   const [ meeting, setMeeting ] = useState( null );
@@ -113,4 +113,4 @@ const Voting = ( props ) => {
   );
 };
 
-export default Voting;
+export default Vote;

@@ -6,7 +6,7 @@ import CreateSharpIcon  from '@mui/icons-material/CreateSharp';
 
 import { useRouter } from 'next/router';
 
-import Button from '../Button/Button';
+import Button from '../../../shared/Button/Button';
 
 import styles from './Inbox.module.css';
 
@@ -17,19 +17,19 @@ const Inbox = ({ meetings, emptyMessage }) => {
     return (
       <Link
         key={meeting._id}
-        href={ `/meeting/${ meeting._id }`}
+        href={ `/meeting/${ meeting._id }/edit`}
       >
         <div className={styles.item}>
           <p>{meeting.name}</p>
           <Button
-            onClick={() => router.push( `/meeting/${ meeting._id }` )}
+            onClick={() => router.push( `/meeting/${ meeting._id }/edit` )}
             icon={<CreateSharpIcon/>}
             size='medium'
             variant='hollow'
           />
           <Button
             icon={<ThumbsUpDownIcon/>}
-            onClick={() => router.push( `/meeting/${ meeting._id }/voting` )}
+            onClick={() => router.push( `/meeting/${ meeting._id }/vote` )}
             size='medium'
             variant='hollow'
           />

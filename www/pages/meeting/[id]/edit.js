@@ -1,8 +1,8 @@
-import HeaderForm from '../../../components/HeaderForm/HeaderForm';
-import CardBoard from '../../../components/CardBoard/CardBoard';
-import ChipForm from '../../../components/ChipForm/ChipForm';
-import Hr from '../../../components/Hr/Hr';
-import StatusButton from '../../../components/StatusButton/StatusButton';
+import HeaderForm from '../../../components/pages/edit/HeaderForm/HeaderForm';
+import StatusButton from '../../../components/pages/edit/StatusButton/StatusButton';
+import CardBoard from '../../../components/shared/CardBoard/CardBoard';
+import ChipForm from '../../../components/shared/ChipForm/ChipForm';
+import Hr from '../../../components/shared/Hr/Hr';
 
 import { Fade } from '@mui/material';
 
@@ -14,7 +14,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import styles from '../../../styles/pages/meeting/[id]/index.module.scss';
+import styles from '../../../styles/pages/meeting/[id]/edit.module.scss';
 import shared from '../../../styles/Shared.module.css';
 
 const Meeting = ( props ) => {

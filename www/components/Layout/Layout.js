@@ -1,5 +1,5 @@
-import Nav from '../Nav/Nav';
-import Drawer from '../Drawer/Drawer';
+import Nav from './Nav/Nav';
+import Drawer from './Drawer/Drawer';
 
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';

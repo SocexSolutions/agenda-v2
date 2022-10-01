@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { useRef, useState } from 'react';
 
-import useClickAway from '../../utils/clickAway';
+import useClickAway from '../../../utils/clickAway';
 
 import styles from './Button.module.css';
 

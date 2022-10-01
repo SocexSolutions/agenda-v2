@@ -26,7 +26,7 @@ const Drawer = () => {
           variant="text"
           size="large"
           className={styles.icon_button + ' ' + styles.blue}
-          onClick={() => router.push( `/user/${ user._id }` )}
+          onClick={() => router.push( `/user/${ user._id }/home` )}
         >
           Upcoming
         </Button>

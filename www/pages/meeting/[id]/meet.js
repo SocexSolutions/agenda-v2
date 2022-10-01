@@ -1,7 +1,7 @@
-import LoadingIcon from '../../../components/LoadingIcon/LoadingIcon';
-import Button      from '../../../components/Button/Button';
-import CardBoard   from '../../../components/CardBoard/CardBoard';
-import Hr          from '../../../components/Hr/Hr';
+import LoadingIcon from '../../../components/shared/LoadingIcon/LoadingIcon';
+import Button      from '../../../components/shared/Button/Button';
+import CardBoard   from '../../../components/shared/CardBoard/CardBoard';
+import Hr          from '../../../components/shared/Hr/Hr';
 
 import takeawayAPI from '../../../api/takeaway';
 import topicAPI    from '../../../api/topic';

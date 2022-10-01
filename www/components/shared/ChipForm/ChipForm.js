@@ -1,5 +1,5 @@
-import { useStore } from '../../store';
-import { notify }   from '../../store/features/snackbar';
+import { useStore } from '../../../store';
+import { notify }   from '../../../store/features/snackbar';
 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 

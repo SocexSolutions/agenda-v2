@@ -1,6 +1,6 @@
-import { toggleDrawer } from '../../store/features/drawer';
+import { toggleDrawer } from '../../../store/features/drawer';
 import classNames from 'classnames';
-import Button from '../Button/Button';
+import Button from '../../shared/Button/Button';
 import ProfileButton from '../ProfileButton/ProfileButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import styles from './Nav.module.css';
+import styles from './Nav.module.scss';
 
 const selectUser = ( state ) => state.user;
 
@@ -24,7 +24,7 @@ const Nav = () => {
   const [ backPressed, setBackPressed ] = useState( false );
   const [ forwardPressed, setForwardPressed ] = useState( false );
 
-  const homeHref = user && user._id ? `/user/${ user._id }` : `/login`;
+  const homeHref = user && user._id ? `/user/${ user._id }/home` : `/login`;
 
   useEffect( () => {
     // match browser behavior of removing history when user is within their

@@ -1,5 +1,7 @@
+@use '../../../styles/globals.scss';
+
 .nav {
-  height: 4em;
+  height: globals.$nav-height;
   padding: 1em;
   color: var(--lightText);
   background-color: var(--primary);

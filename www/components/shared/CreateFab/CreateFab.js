@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import meetingAPI from '../../api/meeting';
+import meetingAPI from '../../../api/meeting';
 import Fab from '../Fab/Fab';
 import AddIcon from '@mui/icons-material/Add';
 export default function CreateFAB() {
@@ -10,7 +10,7 @@ export default function CreateFAB() {
     // and topics have a meeting_id to reference
     const res = await meetingAPI.create({ name: 'Draft', date: new Date() });
 
-    router.push( `/meeting/${ res._id }` );
+    router.push( `/meeting/${ res._id }/edit` );
   };
 
   return (
