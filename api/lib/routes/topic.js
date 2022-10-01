@@ -8,7 +8,8 @@ router.post( '/', wrapped.create );
 router.patch( '/:_id', wrapped.update );
 router.delete( '/:_id', wrapped.delete );
 router.patch( '/:_id/like', wrapped.like );
-router.patch( '/:_id/status', wrapped.status );
+router.patch( '/:_id/switch', wrapped.switch );
+router.patch( '/:_id/close', wrapped.close );
 router.get( '/:_id/takeaways', wrapped.getTakeaways );
 
 module.exports = router;

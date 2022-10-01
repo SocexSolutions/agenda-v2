@@ -1,15 +1,13 @@
 const Topic     = require('../models/topic');
 const Takeaway  = require('../models/takeaway');
 const authUtils = require('../util/authorization');
+const ObjectId  = require('mongoose').Types.ObjectId;
 
 module.exports = {
   create: async( req, res ) => {
     const new_topic = req.body;
 
-    await authUtils.checkParticipant(
-      new_topic.meeting_id,
-      req.credentials
-    );
+    await authUtils.checkParticipant( new_topic.meeting_id, req.credentials );
 
     const topic = await Topic.create({
       ...new_topic,
@@ -37,7 +35,7 @@ module.exports = {
   },
 
   delete: async( req, res ) => {
-    const { _id }  = req.params;
+    const { _id } = req.params;
 
     await authUtils.checkOwner( _id, 'topics', req.credentials );
 
@@ -47,7 +45,7 @@ module.exports = {
   },
 
   like: async( req, res ) => {
-    const { _id }   = req.params;
+    const { _id } = req.params;
     const { email } = req.body;
 
     const topic = await Topic.findOne({ _id });
@@ -57,7 +55,7 @@ module.exports = {
     if ( !topic.likes.includes( email ) ) {
       topic.likes.push( email );
     } else {
-      topic.likes = topic.likes.filter( email => {
+      topic.likes = topic.likes.filter( ( email ) => {
         return email !== email;
       });
     }
@@ -71,9 +69,8 @@ module.exports = {
     return res.status( 200 ).send( updated );
   },
 
-  status: async( req, res ) => {
-    const { _id }    = req.params;
-    const { status } = req.body;
+  close: async( req, res ) => {
+    const { _id } = req.params;
 
     const topic = await Topic.findOne({ _id });
 
@@ -81,7 +78,31 @@ module.exports = {
 
     const updated = await Topic.findOneAndUpdate(
       { _id },
-      { status },
+      { status: 'closed' },
+      { new: true }
+    );
+
+    return res.status( 200 ).send( updated );
+  },
+
+  switch: async( req, res ) => {
+    const { _id } = req.params;
+
+    const topic = await Topic.findOne({ _id });
+
+    await authUtils.checkParticipant( topic.meeting_id, req.credentials );
+
+    // Making two queries isn't ideal but this does avoid the potential for
+    // multiple topics to be live at once; a state that would be difficult to
+    // recover from.
+    await Topic.updateMany(
+      { meeting_id: topic.meeting_id, status: 'live' },
+      { status: 'open' }
+    );
+
+    const updated = await Topic.findOneAndUpdate(
+      { _id },
+      { status: 'live' },
       { new: true }
     );
 
