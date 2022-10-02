@@ -1,3 +1,5 @@
+@use '../../../styles/colors.scss';
+
 .container {
   display: flex;
   flex-direction: row;
@@ -7,7 +9,8 @@
     width: 17em;
     transition: width 200ms ease;
     overflow: hidden;
-    background: var(--primary);
+    border-top: 1px solid colors.$primary-border;
+    background: colors.$primary;
   }
 
   .closed {
