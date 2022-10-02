@@ -1,7 +1,6 @@
 const Topic     = require('../models/topic');
 const Takeaway  = require('../models/takeaway');
 const authUtils = require('../util/authorization');
-const ObjectId  = require('mongoose').Types.ObjectId;
 
 module.exports = {
   create: async( req, res ) => {

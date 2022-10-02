@@ -8,6 +8,7 @@ const fakeTopic    = require('../../fakes/topic');
 const fakeMeeting  = require('../../fakes/meeting');
 const Takeaway     = require('../../../lib/models/takeaway');
 
+// TODO add tests that cover participant access
 describe( 'lib/controllers/takeaway', () => {
 
   before( async() => {
