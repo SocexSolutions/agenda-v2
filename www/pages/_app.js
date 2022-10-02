@@ -13,13 +13,20 @@ import theme from '../utils/muiTheme';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
-import Snackbar from '../components/Snackbar/Snackbar';
+import Snackbar from '../components/Shared/Snackbar/Snackbar';
 import Layout from '../components/Layout/Layout';
 
 import '../styles/globals.css';
 import Script from 'next/script';
 
-const pagesNeedingAuth = new Set([ 'meeting', 'user', '[id]' ]);
+const pagesNeedingAuth = new Set([
+  'meeting',
+  'user',
+  'meet',
+  'edit',
+  'voting',
+  'home'
+]);
 
 const App = ( props ) => {
   const store = useStore();

@@ -1,0 +1,57 @@
+@use '../../../styles/colors.scss';
+
+.container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+
+  .drawer {
+    width: 17em;
+    transition: width 200ms ease;
+    overflow: hidden;
+    border-top: 1px solid colors.$primary-border;
+    background: colors.$primary;
+  }
+
+  .closed {
+    width: 0em;
+  }
+
+  .icon_button {
+    font-size: 20px;
+    text-transform: capitalize;
+    width: 100%;
+    padding: 0.5em 0em 0.5em 2em;
+    justify-content: flex-start;
+    color: var(--white);
+    font-weight: 200;
+    border-radius: 0;
+
+    &:hover {
+      background-color: var(--primary-hover);
+      color: var(--white);
+    }
+
+    svg {
+      font-size: 30px;
+    }
+
+    &.blue {
+      svg {
+        color: var(--blue);
+      }
+    }
+
+    &.green {
+      svg {
+        color: var(--green);
+      }
+    }
+
+    &.purple {
+      svg {
+        color: var(--purple);
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+@use '../../../../styles/colors.scss';
+@use '../../../../styles/globals.scss';
+
+.side_bar {
+  width: 100%;
+  height: calc(100vh - globals.$nav-height);
+  padding: 1em;
+  border-right: 1px solid colors.$border;
+}
+
+.button_container {
+  margin-top: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}

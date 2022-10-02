@@ -39,7 +39,7 @@ const Login = ( props ) => {
 
         const user = props.store.getState().user;
 
-        router.push( `/user/${ user._id }` );
+        router.push( `/user/${ user._id }/home` );
 
       } catch ( err ) {
         await props.store.dispatch(
