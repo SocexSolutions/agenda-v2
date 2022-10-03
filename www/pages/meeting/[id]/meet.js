@@ -5,6 +5,7 @@ import CardBoard from '../../../components/shared/CardBoard/CardBoard';
 import meetingAPI from '../../../api/meeting';
 import topicAPI from '../../../api/topic';
 import takeawayAPI from '../../../api/takeaway';
+import actionItemAPI from '../../../api/action-item';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -101,16 +102,16 @@ export default function MeetRevamp() {
             {liveTopic ? (
               <CardBoard
                 change={liveTopic._id}
-                getAll={() => topicAPI.getTakeaways( liveTopic._id )}
+                getAll={() => topicAPI.getActionItems( liveTopic._id )}
                 create={( payload ) =>
-                  takeawayAPI.create({
+                  actionItemAPI.create({
                     topic_id: liveTopic._id,
                     meeting_id,
                     ...payload
                   })
                 }
-                update={( id, payload ) => takeawayAPI.update( id, payload )}
-                destroy={( id ) => takeawayAPI.destroy( id )}
+                update={( id, payload ) => actionItemAPI.update( id, payload )}
+                destroy={( id ) => actionItemAPI.destroy( id )}
               />
             ) : (
               <p>Select a topic to view action items.</p>

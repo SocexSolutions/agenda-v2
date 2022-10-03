@@ -37,6 +37,28 @@ class TopicAPI extends RestAPI {
   }
 
   /**
+   * Fetch the action items for a given topic
+   *
+   * @param {string} id - topic id to get action items for
+   *
+   * @returns {Promise<ActionItem[]>} - array of related action items
+   */
+  async getActionItems( id ) {
+    try {
+      const res = await client.get( `topic/${ id }/action-items` );
+
+      return res.data;
+    } catch ( err ) {
+      store().dispatch( notify({
+        message: `Failed to get action items for topic (${ err.message })`,
+        type: 'danger'
+      }) );
+
+      return [];
+    }
+  }
+
+  /**
    * Add or remove a like from a topic with the given email
    *
    * @param {String} id - topic id
