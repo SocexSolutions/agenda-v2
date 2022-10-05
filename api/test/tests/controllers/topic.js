@@ -1,14 +1,16 @@
-const { assert }   = require('chai');
-const dbUtils      = require('../../utils/db');
-const db           = require('../../../lib/db');
-const api          = require('../../utils/api');
-const Topic        = require('../../../lib/models/topic');
-const Takeaway     = require('../../../lib/models/takeaway');
-const Meeting      = require('../../../lib/models/meeting');
-const fakeTopic    = require('../../fakes/topic');
-const fakeTakeaway = require('../../fakes/takeaway');
-const fakeMeeting  = require('../../fakes/meeting');
-const rewire       = require('rewire');
+const { assert }     = require('chai');
+const dbUtils        = require('../../utils/db');
+const db             = require('../../../lib/db');
+const api            = require('../../utils/api');
+const Topic          = require('../../../lib/models/topic');
+const Takeaway       = require('../../../lib/models/takeaway');
+const Meeting        = require('../../../lib/models/meeting');
+const ActionItem     = require('../../../lib/models/action-item');
+const fakeTopic      = require('../../fakes/topic');
+const fakeTakeaway   = require('../../fakes/takeaway');
+const fakeActionItem = require('../../fakes/action-item');
+const fakeMeeting    = require('../../fakes/meeting');
+const rewire         = require('rewire');
 
 describe( 'lib/controllers/topic', () => {
   before( async() => {
@@ -300,6 +302,43 @@ describe( 'lib/controllers/topic', () => {
 
       await assert.isRejected(
         this.client.get( '/topic/' + this.inserted_topic._id + '/takeaways' ),
+        'Request failed with status code 403'
+      );
+    });
+  });
+
+  describe( '#getActionItems', () => {
+    beforeEach( async() => {
+      this.topic = await Topic.create(
+        fakeTopic({ meeting_id: this.meeting._id })
+      );
+    });
+
+    it( 'should get topic\'s action items', async() => {
+      const actionItem = fakeActionItem({
+        topic_id: this.topic._id.toString(),
+        owner_id: this.user._id
+      });
+
+      await ActionItem.create( actionItem );
+
+      const {
+        data: [ foundActionItem ]
+      } = await this.client.get(
+        '/topic/' + this.topic._id + '/action-items'
+      );
+
+      assert.strictEqual( actionItem.name, foundActionItem.name );
+      assert.strictEqual( actionItem.description, foundActionItem.description );
+      assert.strictEqual( actionItem.topic_id, foundActionItem.topic_id );
+      assert.strictEqual( actionItem.owner_id, foundActionItem.owner_id );
+    });
+
+    it( 'should 403 if not owner or participant', async() => {
+      this.client.defaults.headers.common['Authorization'] = this.token2;
+
+      await assert.isRejected(
+        this.client.get( '/topic/' + this.topic._id + '/action-items' ),
         'Request failed with status code 403'
       );
     });

@@ -11,5 +11,6 @@ router.patch( '/:_id/like', wrapped.like );
 router.patch( '/:_id/switch', wrapped.switch );
 router.patch( '/:_id/close', wrapped.close );
 router.get( '/:_id/takeaways', wrapped.getTakeaways );
+router.get( '/:_id/action-items', wrapped.getActionItems );
 
 module.exports = router;

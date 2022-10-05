@@ -1,7 +1,7 @@
-const Topic     = require('../models/topic');
-const Takeaway  = require('../models/takeaway');
-const authUtils = require('../util/authorization');
-const ObjectId  = require('mongoose').Types.ObjectId;
+const Topic      = require('../models/topic');
+const Takeaway   = require('../models/takeaway');
+const ActionItem = require('../models/action-item');
+const authUtils  = require('../util/authorization');
 
 module.exports = {
   create: async( req, res ) => {
@@ -119,5 +119,17 @@ module.exports = {
     const takeaways = await Takeaway.find({ topic_id: _id });
 
     res.status( 200 ).send( takeaways );
+  },
+
+  getActionItems: async( req, res ) => {
+    const { _id } = req.params;
+
+    const topic = await Topic.findOne({ _id });
+
+    await authUtils.checkParticipant( topic.meeting_id, req.credentials );
+
+    const actionItems = await ActionItem.find({ topic_id: _id });
+
+    res.status( 200 ).send( actionItems );
   }
 };
