@@ -44,10 +44,5 @@
   ],
   "nyc": {
     "include": "api/lib/**/*.js"
-<<<<<<< HEAD
   }
-=======
-  },
-  "dependencies": {}
->>>>>>> 424cc2a (wrote test and start query build)
 }

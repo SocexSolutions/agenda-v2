@@ -5,7 +5,7 @@ const { wrapController } = require('../util/error-wrapper');
 const wrapped = wrapController( meetingController );
 
 router.get( '/:_id', wrapped.get );
-router.get( '/', wrapped.getAllMeetings );
+router.get( '/', wrapped.index );
 router.post( '/', wrapped.create );
 router.patch( '/:_id', wrapped.update );
 router.get( '/:_id/aggregate', wrapped.aggregate );

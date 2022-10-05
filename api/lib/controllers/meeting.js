@@ -224,7 +224,7 @@ module.exports = {
     return res.status( 200 ).send( meeting );
   },
 
-  async getAllMeetings( req, res ) {
+  async index( req, res ) {
     const subject_email = req.credentials.user.email;
     const subject_id = req.credentials.sub;
     const { limit = 0, skip = 0 } = req.query; // Thanks tom
@@ -277,15 +277,10 @@ module.exports = {
           }
         },
         { $unwind: '$meetings' },
-        { $sort: { 'meetings.createdAt': -1 } },
+        { $replaceRoot: { newRoot: '$meetings' } },
+        { $sort: { 'date': -1 } },
         { $skip: parseInt( skip ) },
-        { $limit: parseInt( limit ) },
-        {
-          $group: {
-            _id: '$_id',
-            meetings: { $push: '$meetings' }
-          }
-        }
+        { $limit: parseInt( limit ) }
       ];
 
       const meetings = await User.aggregate( pipeline );
