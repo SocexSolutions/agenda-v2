@@ -2,6 +2,7 @@ const mongoose    = require('mongoose');
 const Meeting     = require('../models/meeting');
 const Topic       = require('../models/topic.js');
 const Participant = require('../models/participant');
+const User        = require('../models/user');
 const ObjectID    = require('mongoose').Types.ObjectId;
 const jobi        = require('@starryinternet/jobi');
 const authUtils   = require('../util/authorization');
@@ -221,6 +222,75 @@ module.exports = {
     // draft to sent.
 
     return res.status( 200 ).send( meeting );
+  },
+
+  async index( req, res ) {
+    const subject_email = req.credentials.user.email;
+    const subject_id = req.credentials.sub;
+    const { limit = 0, skip = 0 } = req.query; // Thanks tom
+
+    try {
+      const pipeline = [
+        {
+          $match: { _id: ObjectID( subject_id ) }
+        },
+        {
+          $lookup: {
+            from: 'meetings',
+            localField: '_id',
+            foreignField: 'owner_id',
+            as: 'owned_meetings'
+          }
+        },
+        {
+          $lookup: {
+            from: 'participants',
+            pipeline: [
+              { $match: { email: subject_email } },
+              {
+                $lookup: {
+                  from: 'meetings',
+                  localField: 'meeting_id',
+                  foreignField: '_id',
+                  as: 'meetings'
+                }
+              },
+              {
+                $project: {
+                  meeting: { $arrayElemAt: [ '$meetings', 0 ] }
+                }
+              },
+              {
+                $replaceRoot: {
+                  newRoot: '$meeting'
+                }
+              }
+            ],
+            as: 'participating_meetings'
+          }
+        },
+        {
+          $project: {
+            meetings: {
+              $concatArrays: [ '$participating_meetings', '$owned_meetings' ]
+            }
+          }
+        },
+        { $unwind: '$meetings' },
+        { $replaceRoot: { newRoot: '$meetings' } },
+        { $sort: { 'date': -1 } },
+        { $skip: parseInt( skip ) },
+        { $limit: parseInt( limit ) }
+      ];
+
+      const meetings = await User.aggregate( pipeline );
+
+      return res.status( 200 ).send( meetings );
+    } catch ( err ) {
+
+
+      return res.status( 500 ).send( err );
+    }
   }
 
 };

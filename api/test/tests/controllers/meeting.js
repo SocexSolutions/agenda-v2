@@ -70,7 +70,7 @@ describe( 'lib/controllers/meeting', () => {
 
       assert.strictEqual( res.name, created.name );
       assert.strictEqual( res._id, created._id.toString() );
-      assert.strictEqual( res.date, created.date );
+      assert.strictEqual( res.date, created.date.toISOString() );
     });
 
     it( 'should 403 if not meeting owner or participant', async() => {
@@ -106,7 +106,7 @@ describe( 'lib/controllers/meeting', () => {
       assert.strictEqual( found.name, meeting.name );
       assert.strictEqual( res.owner_id, this.user._id.toString() );
       assert.strictEqual( found._id.toString(), res._id );
-      assert.strictEqual( found.date, meeting.date.toISOString() );
+      assert.strictEqual( found.date.toISOString(), meeting.date.toISOString() );
     });
 
   });
@@ -134,7 +134,7 @@ describe( 'lib/controllers/meeting', () => {
       assert.strictEqual( found.name, 'new name' );
       assert.strictEqual( res.owner_id, this.user._id.toString() );
       assert.strictEqual( found._id.toString(), res._id );
-      assert.strictEqual( found.date, newDate );
+      assert.strictEqual( found.date.toISOString(), newDate );
     });
 
     it( 'should 403 if not meeting owner', async() => {
@@ -181,7 +181,7 @@ describe( 'lib/controllers/meeting', () => {
         data.meeting,
         {
           name: meeting.name,
-          date: meeting.date.toString(),
+          date: meeting.date.toISOString(),
           owner_id: this.user._id.toString()
         }
       );
@@ -203,7 +203,49 @@ describe( 'lib/controllers/meeting', () => {
         assert.strictEqual( err.response.data, 'unauthorized' );
       }
     });
+  });
 
+  describe( '#index', () => {
+    it( 'should get a users owned and participating meetings', async() => {
+      const ownedMeeting = fakeMeeting({
+        owner_id: this.user._id,
+        name: 'meeting 1',
+        date: new Date('05 October 2011 14:48 UTC')
+      });
+      const ownedMeeting2 = fakeMeeting({
+        owner_id: this.user._id,
+        name: 'meeting 2',
+        date: new Date('01 January 1990 01:22 UTC')
+      });
+      const ownedMeeting3 = fakeMeeting({
+        owner_id: this.user._id,
+        name: 'meeting 3',
+        date: new Date('05 October 2500 14:48 UTC')
+      });
+      const ownedMeeting4 = fakeMeeting({
+        owner_id: this.user._id,
+        name: 'meeting 4',
+        date: new Date('25 December 1995 01:22 UTC')
+      });
+
+      const includedMeeting = fakeMeeting({ name: 'participant meeting' });
+
+      await Meeting.create( ownedMeeting );
+      await Meeting.create( ownedMeeting2 ); //we will limit before getting to this oldest meeting
+      await Meeting.create( ownedMeeting3 ); //we will skip this newest meeting for pagenation test
+      await Meeting.create( ownedMeeting4 );
+      const includedRes = await Meeting.create( includedMeeting );
+
+      const participant = fakeParticipant({ meeting_id: includedRes._id, email: this.user.email });
+
+      await Participant.create( participant );
+
+      const { data } = await client.get(`/meeting/?skip=1&limit=3`);
+
+      assert.strictEqual( data.length, 3 );
+      assert.strictEqual( data[ 0 ].name, 'participant meeting' ); //Second newest meeting first
+      assert.strictEqual( data[ 2 ].name, 'meeting 4' ); //Second oldest meeting last
+    });
   });
 
   describe( '#aggregateSave', () => {
@@ -220,7 +262,11 @@ describe( 'lib/controllers/meeting', () => {
 
       assert.equal( res_meeting.name, meeting.name );
 
-      const createdMeeting = await Meeting.findById( res_meeting._id );
+      const createdMeeting = JSON.parse(
+        JSON.stringify(
+          await Meeting.findById( res_meeting._id )
+        )
+      );
 
       assert.containSubset(
         createdMeeting,
@@ -313,7 +359,7 @@ describe( 'lib/controllers/meeting', () => {
       );
 
       assert.strictEqual( update.name, updated.name );
-      assert.strictEqual( update.date, updated.date );
+      assert.strictEqual( update.date, updated.date.toISOString() );
     });
 
     it( 'should update a meetings topics', async() => {
