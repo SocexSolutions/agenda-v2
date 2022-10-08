@@ -31,7 +31,7 @@ export default function StatusButton({ status, setMeetingStatus }) {
   }
 
   return (
-    <React.Fragment>
+    <>
       <Button
         variant="contained"
         ref={anchorRef}
@@ -77,6 +77,6 @@ export default function StatusButton({ status, setMeetingStatus }) {
           );
         })}
       </Menu>
-    </React.Fragment>
+    </>
   );
 }
