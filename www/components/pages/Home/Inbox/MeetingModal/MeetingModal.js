@@ -3,10 +3,17 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import { useRouter } from 'next/router';
-import MeetingAPI from '../../../../../api/meeting';
+import meetingAPI from '../../../../../api/meeting';
 import styles from './MeetingModal.module.scss';
 
-export default function MeetingModal({ meeting, open, setOpen }) {
+/**
+ * A modal the provides a brief overview of a meeting
+ * @param {Object} meeting - a meeting
+ * @param {boolean} open - whether the meeting modal is open
+ * @param {Function} setOpen - set function for `open`
+ * @param {Function} refresh - tell the home page to refresh meetings
+ */
+export default function MeetingModal({ meeting, open, setOpen, refresh }) {
   const router = useRouter();
 
   const displayDate = new Date( meeting.date ).toLocaleDateString();
@@ -19,7 +26,11 @@ export default function MeetingModal({ meeting, open, setOpen }) {
         'to anyone.'
       )
     ) {
-      await MeetingAPI.destroy( meeting._id );
+      await meetingAPI.destroy( meeting._id );
+
+      refresh();
+
+      setOpen( false );
     }
   };
 
