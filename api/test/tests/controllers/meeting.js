@@ -8,9 +8,13 @@ const ObjectID        = require('mongoose').Types.ObjectId;
 const Meeting         = require('../../../lib/models/meeting');
 const Participant     = require('../../../lib/models/participant');
 const Topic           = require('../../../lib/models/topic');
+const Takeaway        = require('../../../lib/models/takeaway');
+const ActionItem      = require('../../../lib/models/action-item');
 const fakeTopic       = require('../../fakes/topic');
 const fakeParticipant = require('../../fakes/participant');
 const fakeMeeting     = require('../../fakes/meeting');
+const fakeTakeaway    = require('../../fakes/takeaway');
+const fakeActionItem  = require('../../fakes/action-item');
 
 chai.use( chaiSubset );
 
@@ -576,6 +580,147 @@ describe( 'lib/controllers/meeting', () => {
           `/meeting/${ this.meeting._id }/status`,
           { status: 'sent' }
         ),
+        'Request failed with status code 403'
+      );
+    });
+
+  });
+
+  describe( '#delete', () => {
+
+    it( 'should delete the meeting itself', async() => {
+      const meeting = await Meeting.create(
+        fakeMeeting({
+          owner_id: this.user._id
+        })
+      );
+
+      const res = await client.delete( `/meeting/${ meeting._id }` );
+
+      assert.equal( res.status, 204 );
+
+      const found = await Meeting.findById( meeting._id );
+
+      assert.isNull( found );
+    });
+
+    it( 'should delete related participants', async() => {
+      const meeting = await Meeting.create(
+        fakeMeeting({
+          owner_id: this.user._id
+        })
+      );
+
+      await Participant.create( fakeParticipant({
+        meeting_id: meeting._id
+      }) );
+
+      await Participant.create( fakeParticipant({
+        meeting_id: meeting._id
+      }) );
+
+      await Participant.create( fakeParticipant({
+        meeting_id: new ObjectID,
+        email: 'unrelated@unrelated.com'
+      }) );
+
+      await client.delete( `/meeting/${ meeting._id }` );
+
+      const found_participants = await Participant.find();
+
+      assert.equal( found_participants.length, 1 );
+      assert.equal( found_participants[ 0 ].email, 'unrelated@unrelated.com' );
+    });
+
+    it( 'should delete related topics', async() => {
+      const meeting = await Meeting.create(
+        fakeMeeting({
+          owner_id: this.user._id
+        })
+      );
+
+      await Topic.create( fakeTopic({
+        meeting_id: meeting._id
+      }) );
+
+      await Topic.create( fakeTopic({
+        meeting_id: meeting._id
+      }) );
+
+      await Topic.create( fakeTopic({
+        meeting_id: new ObjectID,
+        name: 'unrelated'
+      }) );
+
+      await client.delete( `/meeting/${ meeting._id }` );
+
+      const found_topics = await Topic.find();
+
+      assert.equal( found_topics.length, 1 );
+      assert.equal( found_topics[ 0 ].name, 'unrelated' );
+    });
+
+    it( 'should delete related takeaways', async() => {
+      const meeting = await Meeting.create(
+        fakeMeeting({
+          owner_id: this.user._id
+        })
+      );
+
+      await Takeaway.create( fakeTakeaway({
+        meeting_id: meeting._id
+      }) );
+
+      await Takeaway.create( fakeTakeaway({
+        meeting_id: meeting._id
+      }) );
+
+      await Takeaway.create( fakeTakeaway({
+        meeting_id: new ObjectID,
+        name: 'unrelated'
+      }) );
+
+      await client.delete( `/meeting/${ meeting._id }` );
+
+      const found_takeaways = await Takeaway.find();
+
+      assert.equal( found_takeaways.length, 1 );
+      assert.equal( found_takeaways[ 0 ].name, 'unrelated' );
+    });
+
+    it( 'should delete related action items', async() => {
+      const meeting = await Meeting.create(
+        fakeMeeting({
+          owner_id: this.user._id
+        })
+      );
+
+      await ActionItem.create( fakeActionItem({
+        meeting_id: meeting._id
+      }) );
+
+      await ActionItem.create( fakeActionItem({
+        meeting_id: meeting._id
+      }) );
+
+      await ActionItem.create( fakeActionItem({
+        meeting_id: new ObjectID,
+        name: 'unrelated'
+      }) );
+
+      await client.delete( `/meeting/${ meeting._id }` );
+
+      const found_action_items = await ActionItem.find();
+
+      assert.equal( found_action_items.length, 1 );
+      assert.equal( found_action_items[ 0 ].name, 'unrelated' );
+    });
+
+    it( 'should 403 if not meeting owner', async() => {
+      const meeting = await Meeting.create( fakeMeeting() );
+
+      return assert.isRejected(
+        client.delete( `/meeting/${ meeting._id }` ),
         'Request failed with status code 403'
       );
     });
