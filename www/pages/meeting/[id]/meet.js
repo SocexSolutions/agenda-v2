@@ -75,48 +75,44 @@ export default function MeetRevamp() {
           )}
         </section>
         <section className={styles.takeaways_container}>
-          <div className={styles.board_background}>
-            <h3>Takeaways</h3>
-            {liveTopic ? (
-              <CardBoard
-                change={liveTopic._id}
-                getAll={() => topicAPI.getTakeaways( liveTopic._id )}
-                create={( payload ) =>
-                  takeawayAPI.create({
-                    topic_id: liveTopic._id,
-                    meeting_id,
-                    ...payload
-                  })
-                }
-                update={( id, payload ) => takeawayAPI.update( id, payload )}
-                destroy={( id ) => takeawayAPI.destroy( id )}
-              />
-            ) : (
-              <p>Select a topic to view takeaways.</p>
-            )}
-          </div>
+          <h3>Takeaways</h3>
+          {liveTopic ? (
+            <CardBoard
+              change={liveTopic._id}
+              getAll={() => topicAPI.getTakeaways( liveTopic._id )}
+              create={( payload ) =>
+                takeawayAPI.create({
+                  topic_id: liveTopic._id,
+                  meeting_id,
+                  ...payload
+                })
+              }
+              update={( id, payload ) => takeawayAPI.update( id, payload )}
+              destroy={( id ) => takeawayAPI.destroy( id )}
+            />
+          ) : (
+            <p>Select a topic to view takeaways.</p>
+          )}
         </section>
         <section className={styles.actions_container}>
-          <div className={styles.board_background}>
-            <h3>Action Items</h3>
-            {liveTopic ? (
-              <CardBoard
-                change={liveTopic._id}
-                getAll={() => topicAPI.getActionItems( liveTopic._id )}
-                create={( payload ) =>
-                  actionItemAPI.create({
-                    topic_id: liveTopic._id,
-                    meeting_id,
-                    ...payload
-                  })
-                }
-                update={( id, payload ) => actionItemAPI.update( id, payload )}
-                destroy={( id ) => actionItemAPI.destroy( id )}
-              />
-            ) : (
-              <p>Select a topic to view action items.</p>
-            )}
-          </div>
+          <h3>Action Items</h3>
+          {liveTopic ? (
+            <CardBoard
+              change={liveTopic._id}
+              getAll={() => topicAPI.getActionItems( liveTopic._id )}
+              create={( payload ) =>
+                actionItemAPI.create({
+                  topic_id: liveTopic._id,
+                  meeting_id,
+                  ...payload
+                })
+              }
+              update={( id, payload ) => actionItemAPI.update( id, payload )}
+              destroy={( id ) => actionItemAPI.destroy( id )}
+            />
+          ) : (
+            <p>Select a topic to view action items.</p>
+          )}
         </section>
       </div>
     </div>

@@ -2,6 +2,10 @@
 
 .table {
   width: 100%;
+  border: 1px solid colors.$border;
+  background: colors.$foreground;
+  border-radius: 6px;
+  padding: .5em 1em;
 }
 
 .row {
@@ -13,8 +17,8 @@
     margin: 0;
   }
 
-  &:last-child {
-    border-bottom: 1px solid colors.$border;
+  &:first-child {
+    border-top: none;
   }
 
   &:hover {

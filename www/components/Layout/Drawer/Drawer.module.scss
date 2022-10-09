@@ -9,8 +9,8 @@
     width: 17em;
     transition: width 200ms ease;
     overflow: hidden;
-    border-top: 1px solid colors.$primary-border;
-    background: colors.$primary;
+    background: colors.$foreground;
+    border-right: 1px solid colors.$border;
   }
 
   .closed {
@@ -23,14 +23,8 @@
     width: 100%;
     padding: 0.5em 0em 0.5em 2em;
     justify-content: flex-start;
-    color: var(--white);
-    font-weight: 200;
+    color: colors.$midText;
     border-radius: 0;
-
-    &:hover {
-      background-color: var(--primary-hover);
-      color: var(--white);
-    }
 
     svg {
       font-size: 30px;

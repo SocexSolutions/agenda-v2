@@ -1,7 +1,8 @@
 .card {
   color: var(--darkText);
   border: 1px solid var(--border);
-  border-radius: .5em;
+  background: var(--foreground);
+  border-radius: 6px;
   padding: 1em;
 }
 
@@ -46,9 +47,9 @@
 .page_title {
   font-size: 1.5em;
   font-weight: 400;
-  margin-bottom: 1em;
 }
 
 .container {
   width: 100%;
+  max-width: 1200px;
 }

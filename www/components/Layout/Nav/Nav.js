@@ -2,6 +2,7 @@ import { toggleDrawer } from '../../../store/features/drawer';
 import classNames from 'classnames';
 import Button from '../../shared/Button/Button';
 import ProfileButton from '../ProfileButton/ProfileButton';
+import { IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -97,34 +98,34 @@ const Nav = () => {
       <>
         <nav className={classNames( styles.nav, styles.nav_logged_in )}>
           <div className={styles.start}>
-            <Button
-              icon={<MenuIcon />}
-              variant="icon"
+            <IconButton
               onClick={() => dispatch( toggleDrawer() )}
-            />
-            <Button
-              icon={<HomeOutlinedIcon />}
+            >
+              <MenuIcon />
+            </IconButton>
+            <IconButton
               onClick={() => router.push( homeHref )}
-              variant="icon"
-            />
-            <Button
+            >
+              <HomeOutlinedIcon />
+            </IconButton>
+            <IconButton
               disabled={whereInHistory < 1}
-              icon={<ArrowBackIcon />}
-              variant="icon"
               onClick={() => {
                 setBackPressed( true );
                 router.push( history[ whereInHistory - 1 ] );
               }}
-            />
-            <Button
+            >
+              <ArrowBackIcon />
+            </IconButton>
+            <IconButton
               disabled={whereInHistory >= history.length - 1}
-              icon={<ArrowForwardIcon />}
-              variant="icon"
               onClick={() => {
                 setForwardPressed( true );
                 router.push( history[ whereInHistory + 1 ] );
               }}
-            />
+            >
+              <ArrowForwardIcon />
+            </IconButton>
           </div>
           <div className={styles.end}>
             <ProfileButton />

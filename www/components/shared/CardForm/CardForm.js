@@ -32,7 +32,7 @@ const CardForm = ({ editing, setEditing, item, updateItem, destroyItem }) => {
         onClick={() => setEditing( item._id )}
         className={styles.container}
       >
-        <h3>{name}</h3>
+        <h4>{name}</h4>
         <p>{description}</p>
       </Paper>
     );

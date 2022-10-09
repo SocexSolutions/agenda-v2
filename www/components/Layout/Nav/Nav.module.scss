@@ -4,7 +4,8 @@
   height: globals.$nav-height;
   padding: 1em;
   color: var(--lightText);
-  background-color: var(--primary);
+  background-color: var(--foreground);
+  border-bottom: 1px solid var(--border);
   display: flex;
 }
 
@@ -53,11 +54,6 @@
 
 .nav_button {
   margin-left: 1em;
-  color: white;
-}
-
-.icon_button {
-  color: white;
 }
 
 .logo {

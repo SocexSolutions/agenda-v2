@@ -1,8 +1,7 @@
 import LoadingIcon from '../../../components/shared/LoadingIcon/LoadingIcon';
 import Button      from '../../../components/shared/Button/Button';
-import Hr          from '../../../components/shared/Hr/Hr';
 
-import ArrowCircleUp from '@mui/icons-material/ThumbUp';
+import ThumbsUpIcon from '@mui/icons-material/ThumbUp';
 
 import styles from '../../../styles/pages/meeting/[id]/voting.module.css';
 import shared from '../../../styles/Shared.module.css';
@@ -91,7 +90,7 @@ const Vote = ( props ) => {
           className={styles.like}
           variant='icon'
           icon={
-            <ArrowCircleUp
+            <ThumbsUpIcon
               fontSize='large'
               className={classNames}
               onClick={() => onLike( t._id )}
@@ -106,7 +105,6 @@ const Vote = ( props ) => {
     <div className={shared.page}>
       <div className={shared.container}>
         <h2>Voting For: {meeting.meeting.name}</h2>
-        <Hr />
         { topicCards }
       </div>
     </div>

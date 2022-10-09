@@ -20,7 +20,6 @@ export default function ProfileButton() {
       <IconButton
         size="large"
         onClick={( e ) => setAnchor( e.currentTarget )}
-        color="white"
         disableFocusRipple
       >
         <AccountCircle />

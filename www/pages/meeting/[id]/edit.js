@@ -2,7 +2,6 @@ import HeaderForm from '../../../components/pages/edit/HeaderForm/HeaderForm';
 import StatusButton from '../../../components/pages/edit/StatusButton/StatusButton';
 import CardBoard from '../../../components/shared/CardBoard/CardBoard';
 import ChipForm from '../../../components/shared/ChipForm/ChipForm';
-import Hr from '../../../components/shared/Hr/Hr';
 
 import { Fade } from '@mui/material';
 
@@ -68,7 +67,6 @@ const Meeting = ( props ) => {
               setMeetingStatus={( status ) => updateMeetingStatus({ status })}
             />
           </section>
-          <Hr />
           <section className={shared.card + ' ' + styles.section}>
             <h3 className={styles.card_title}>Meeting Details</h3>
             <HeaderForm

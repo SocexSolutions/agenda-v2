@@ -6,6 +6,7 @@
   height: calc(100vh - globals.$nav-height);
   padding: 1em;
   border-right: 1px solid colors.$border;
+  background: colors.$foreground;
 }
 
 .button_container {
