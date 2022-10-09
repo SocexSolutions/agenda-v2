@@ -10,7 +10,7 @@ export default function SideBarButton({ topic, name, ...buttonProps }) {
 
   let abbreviation;
   if ( name.length > 30 ) {
-    abbreviation = name.slice( 0, 30 ) + '...';
+    abbreviation = name.slice( 0, 25 ) + '...';
   }
 
   const button = (
@@ -19,6 +19,7 @@ export default function SideBarButton({ topic, name, ...buttonProps }) {
       size="small"
       disabled={disabled}
       variant={variant}
+      disableElevation
       {...buttonProps}
       endIcon={<CircleIcon className={styles.icon} />}
     >
