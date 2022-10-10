@@ -19,28 +19,28 @@ const User = ( props ) => {
 
   const user = useSelector( ( state ) => state.user );
 
-  useEffect( () => {
-    async function load() {
-      try {
-        const res = await Promise.all([
-          client.get( `participant/meetings/${ user.email }` ),
-          client.get( `user/meetings/${ user._id }` )
-        ]);
+  async function load() {
+    try {
+      const res = await Promise.all([
+        client.get( `participant/meetings/${ user.email }` ),
+        client.get( `user/meetings/${ user._id }` )
+      ]);
 
-        setParticMeetings( res[ 0 ].data );
-        setOwnedMeetings( res[ 1 ].data );
+      setParticMeetings( res[ 0 ].data );
+      setOwnedMeetings( res[ 1 ].data );
 
-        setLoading( false );
-      } catch ( err ) {
-        props.store.dispatch(
-          notify({
-            message: 'Failed to fetch meeting: ' + err.message,
-            type: 'danger'
-          })
-        );
-      }
+      setLoading( false );
+    } catch ( err ) {
+      props.store.dispatch(
+        notify({
+          message: 'Failed to fetch meeting: ' + err.message,
+          type: 'danger'
+        })
+      );
     }
+  }
 
+  useEffect( () => {
     if ( user._id ) {
       load();
     }
@@ -53,7 +53,7 @@ const User = ( props ) => {
       <div className={shared.page}>
         <div className={shared.container}>
           <h2 className={styles.page_title}>My Meetings</h2>
-          <Inbox meetings={meetings} />
+          <Inbox meetings={meetings} refresh={load}/>
         </div>
         <CreateFab />
       </div>

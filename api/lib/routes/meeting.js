@@ -8,6 +8,7 @@ router.get( '/:_id', wrapped.get );
 router.get( '/', wrapped.index );
 router.post( '/', wrapped.create );
 router.patch( '/:_id', wrapped.update );
+router.delete( '/:_id', wrapped.delete );
 router.get( '/:_id/aggregate', wrapped.aggregate );
 router.post( '/aggregate', wrapped.aggregateSave );
 router.get( '/:_id/topics', wrapped.getTopics );

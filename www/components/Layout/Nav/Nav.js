@@ -1,8 +1,7 @@
 import { toggleDrawer } from '../../../store/features/drawer';
 import classNames from 'classnames';
-import Button from '../../shared/Button/Button';
 import ProfileButton from '../ProfileButton/ProfileButton';
-import { IconButton } from '@mui/material';
+import { IconButton, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -79,16 +78,23 @@ const Nav = () => {
           <div className={styles.login}>
             <Button
               onClick={() => router.push('/login')}
-              variant="outlined"
+              color="blue"
+              variant="text"
               text="Login"
-              customClass={styles.nav_button}
-            />
+              className={styles.nav_button}
+              disableElevation
+            >
+              Login
+            </Button>
             <Button
               onClick={() => router.push('/register')}
-              variant="outlined"
+              variant="contained"
               text="Sign Up"
-              customClass={styles.nav_button}
-            />
+              className={styles.nav_button}
+              disableElevation
+            >
+              Sign Up
+            </Button>
           </div>
         </nav>
       </>

@@ -2,6 +2,8 @@ const mongoose    = require('mongoose');
 const Meeting     = require('../models/meeting');
 const Topic       = require('../models/topic.js');
 const Participant = require('../models/participant');
+const ActionItem  = require('../models/action-item');
+const Takeaway    = require('../models/takeaway');
 const User        = require('../models/user');
 const ObjectID    = require('mongoose').Types.ObjectId;
 const jobi        = require('@starryinternet/jobi');
@@ -287,9 +289,42 @@ module.exports = {
 
       return res.status( 200 ).send( meetings );
     } catch ( err ) {
-
-
       return res.status( 500 ).send( err );
+    }
+  },
+
+  /**
+   * Delete a meeting and all related data to it
+   * @param {string} req.params._id - _id of meeting to delete
+   */
+  async delete( req, res ) {
+    const meeting_id = req.params._id;
+
+    await authUtils.checkOwner( meeting_id, 'meetings', req.credentials );
+
+    let session;
+
+    try {
+      session = await mongoose.connection.startSession();
+
+      await session.withTransaction( async() => {
+        await Promise.all([
+          Meeting.deleteOne({ _id: meeting_id }),
+          Participant.deleteMany({ meeting_id }),
+          Topic.deleteMany({ meeting_id }),
+          Takeaway.deleteMany({ meeting_id }),
+          ActionItem.deleteMany({ meeting_id })
+        ]);
+      });
+
+      res.status( 204 ).send();
+    } catch ( err ) {
+      jobi.error( err.message );
+
+      res.status( 500 ).send('Failed to delete meeting.');
+
+    } finally {
+      session.endSession();
     }
   }
 
