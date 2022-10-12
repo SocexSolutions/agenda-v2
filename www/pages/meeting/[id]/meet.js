@@ -69,7 +69,7 @@ export default function MeetRevamp() {
       <div className={styles.main_container}>
         <section className={styles.topic_container}>
           {liveTopic ? (
-            <TopicDisplay topic={topics[ 0 ]} closeTopic={closeTopic} />
+            <TopicDisplay topic={liveTopic} closeTopic={closeTopic} />
           ) : (
             <p>No topic selected. Select a topic on the left to begin.</p>
           )}
