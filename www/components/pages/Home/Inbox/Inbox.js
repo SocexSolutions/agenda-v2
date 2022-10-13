@@ -1,8 +1,9 @@
-import { Button } from "@mui/material";
-import InboxRow from "./InboxRow/InboxRow";
-import meetingAPI from "../../../../api/meeting";
-import { useRouter } from "next/router";
-import styles from "./Inbox.module.scss";
+import { Button, TextField } from '@mui/material';
+import InboxRow from './InboxRow/InboxRow';
+import meetingAPI from '../../../../api/meeting';
+import { useRouter } from 'next/router';
+import styles from './Inbox.module.scss';
+import FilterListIcon from '@mui/icons-material/FilterList';
 
 /**
  * Table that displays users meetings
@@ -23,8 +24,16 @@ export default function Inbox({ meetings, refresh }) {
     );
   });
 
-  if (lineItems.length) {
-    return <div className={styles.table}>{lineItems}</div>;
+  if ( lineItems.length ) {
+    return (
+      <div className={styles.table}>
+        <div className={styles.filter_box}>
+          <TextField placeholder='Search' variant='standard' size='small'></TextField>
+          <Button endIcon={<FilterListIcon />} >Filters</ Button>
+        </div>
+        {lineItems}
+      </div>
+    );
   }
 
   const createMeeting = async () => {
