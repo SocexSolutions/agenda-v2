@@ -51,7 +51,8 @@ describe( 'lib/controllers/meeting', () => {
       'participants',
       'topics',
       'meetings',
-      'takeaways'
+      'takeaways',
+      'actionitems'
     ]);
   });
 
@@ -163,21 +164,38 @@ describe( 'lib/controllers/meeting', () => {
 
   describe( '#aggregate', () => {
 
-    it( 'should fetch meeting with participants and topics', async() => {
+    it( 'should fetch meeting with related data', async() => {
       const meeting = fakeMeeting({ owner_id: this.user._id });
 
       const { _id } = await Meeting.create( meeting );
 
+      const takeaways = [];
+      const actionItems = [];
+
       const topics = Array.from({ length: 3 }).map( () => {
-        return fakeTopic({ meeting_id: _id });
+        const topic = fakeTopic({ meeting_id: _id, _id: new ObjectID() });
+
+        takeaways.push(
+          fakeTakeaway({ meeting_id: _id, topic_id: topic._id })
+        );
+
+        actionItems.push(
+          fakeActionItem({ meeting_id: _id, topic_id: topic._id })
+        );
+
+        return topic;
       });
 
       const participants = Array.from({ length: 3 }).map( () => {
         return fakeParticipant({ meeting_id: _id });
       });
 
-      await Topic.insertMany( topics );
-      await Participant.insertMany( participants );
+      await Promise.all([
+        Topic.insertMany( topics ),
+        Participant.insertMany( participants ),
+        Takeaway.insertMany( takeaways ),
+        ActionItem.insertMany( actionItems )
+      ]);
 
       const { data } = await client.get( `/meeting/${ _id }/aggregate` );
 
@@ -192,9 +210,14 @@ describe( 'lib/controllers/meeting', () => {
 
       assert.strictEqual( data.topics.length, 3 );
       assert.strictEqual( data.participants.length, 3 );
+
+      data.topics.forEach( t => {
+        assert.lengthOf( t.actionItems, 1 );
+        assert.lengthOf( t.takeaways, 1 );
+      });
     });
 
-    it( 'should 403 if not meeting owner', async() => {
+    it( 'should 403 if not participant or owner', async() => {
       const meeting = fakeMeeting();
 
       const { _id } = await Meeting.create( meeting );
@@ -207,6 +230,7 @@ describe( 'lib/controllers/meeting', () => {
         assert.strictEqual( err.response.data, 'unauthorized' );
       }
     });
+
   });
 
   describe( '#index', () => {

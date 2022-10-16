@@ -67,11 +67,11 @@ module.exports = {
    * @param {string} req.params._id - meeting _id
    */
   aggregate: async( req, res ) => {
-    const { _id }    = req.params;
+    const { _id } = req.params;
 
     await authUtils.checkParticipant( _id, req.credentials );
 
-    const [ agg ] = await Meeting.aggregate([
+    const [ queryResult ] = await Meeting.aggregate([
       {
         $match: {
           _id: new ObjectID( _id )
@@ -90,17 +90,35 @@ module.exports = {
           from: 'topics',
           localField: '_id',
           foreignField: 'meeting_id',
+          pipeline: [
+            {
+              $lookup: {
+                from: 'actionitems',
+                localField: '_id',
+                foreignField: 'topic_id',
+                as: 'actionItems'
+              }
+            },
+            {
+              $lookup: {
+                from: 'takeaways',
+                localField: '_id',
+                foreignField: 'topic_id',
+                as: 'takeaways'
+              }
+            }
+          ],
           as: 'topics'
         }
       }
     ]);
 
-    const { _id: agg_id, name, date, owner_id } = agg;
+    const { _id: agg_id, name, date, owner_id } = queryResult;
 
     return res.status( 200 ).send({
       meeting: { _id: agg_id, name, date, owner_id },
-      participants: agg.participants,
-      topics: agg.topics
+      participants: queryResult.participants,
+      topics: queryResult.topics
     });
   },
 
@@ -109,6 +127,8 @@ module.exports = {
    * @param {Meeting} req.body.meeting - meeting
    * @param {Topic[]} req.body.topics - array of Topics
    * @param {Participant[]} req.body.participants - array of Participants
+   *
+   * @deprecated
    */
   aggregateSave: async( req, res ) => {
     let session;
