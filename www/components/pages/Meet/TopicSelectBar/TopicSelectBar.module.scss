@@ -3,14 +3,14 @@
 
 .side_bar {
   width: 100%;
-  height: calc(100vh - globals.$nav-height);
-  padding: 1em;
-  border-right: 1px solid colors.$border;
+  padding: .5em;
+  border: 1px solid colors.$border;
   background: colors.$foreground;
+  border-radius: 6px;
 }
 
 .button_container {
-  margin-top: 1em;
+  margin-top: .5em;
   display: flex;
   flex-direction: column;
   align-items: center;

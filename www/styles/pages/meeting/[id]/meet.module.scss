@@ -1,45 +1,27 @@
 @use '../../../../styles/colors.scss';
 
-.meet_revamp {
+.container {
+  width: 100%;
+  max-width: 1400px;
+}
+
+.main_grid {
   display: grid;
-  grid-template-columns: 300px 1fr;
-};
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-column-gap: 1em;
+  grid-row-gap: 1em;
+  width: 100%;
+}
 
 .side_bar_container {
   grid-column: 1;
   width: 100%;
 }
 
-.main_container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto 1fr;
-  grid-column-gap: 1em;
-  grid-row-gap: 1em;
-  width: 100%;
+.takeaways_container {
+  margin-top: 1em;
 
-  .topic_container {
-    grid-column: 1 / span 3;
-    grid-row: 1;
-    border-bottom: 1px solid colors.$border;
-    background: colors.$foreground;
-    padding: 1em;
+  h3 {
+    margin-bottom: 1em;
   }
-
-  .takeaways_container {
-    padding-left: 1em;
-    grid-column: 1 / 2;
-    grid-row: 2 / 3;
-  }
-
-  .actions_container {
-    grid-column: 2 / 3;
-    grid-row: 2 / 3;
-  }
-}
-
-.board_background {
-  background-color: colors.$background;
-  border-radius: 6px;
-  padding: 1em;
 }

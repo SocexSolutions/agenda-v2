@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
 
-import { Paper, TextField, Button } from '@mui/material';
+import { TextField, Button } from '@mui/material';
 
 import { useState } from 'react';
 
 import styles from './CardForm.module.scss';
+import shared from '../../../styles/Shared.module.css';
 
 /**
  * @param {Object} item             - item that to display
@@ -19,29 +20,29 @@ const CardForm = ({ editing, setEditing, item, updateItem, destroyItem }) => {
     updateItem({ ...item, name, description });
   };
 
-  console.log( 'item', description );
-
   const onDestroy = () => {
     destroyItem( item );
   };
 
   if ( !editing ) {
     return (
-      <Paper
-        elevation={2}
+      <div
+        className={shared.card + ' ' + styles.container}
         onClick={() => setEditing( item._id )}
-        className={styles.container}
       >
-        <h4>{name}</h4>
-        <p>{description}</p>
-      </Paper>
+        <h4 className={styles.name}>{name}</h4>
+        <p className={styles.description}>{description}</p>
+      </div>
     );
   }
 
   return (
-    <Paper elevation={2} className={styles.container + ' ' + styles.editing}>
+    <div
+      className={shared.card + ' ' + styles.container + ' ' + styles.editing}
+      elevation={1}
+    >
       <TextField
-        className={styles.title_input}
+        className={styles.name_input}
         size="small"
         label="Title"
         onChange={( e ) => setName( e.target.value )}
@@ -50,14 +51,14 @@ const CardForm = ({ editing, setEditing, item, updateItem, destroyItem }) => {
       <TextField
         className={styles.description}
         multiline
-        rows={2}
+        rows={3}
         fullWidth
         size="small"
         label="Description"
         onChange={( e ) => setDescription( e.target.value )}
         value={description}
       />
-      <div className={styles.buttonContainer}>
+      <div className={styles.button_container}>
         <Button onClick={() => onDestroy()} size="small" color={'red'}>
           delete
         </Button>
@@ -70,7 +71,7 @@ const CardForm = ({ editing, setEditing, item, updateItem, destroyItem }) => {
           save
         </Button>
       </div>
-    </Paper>
+    </div>
   );
 };
 

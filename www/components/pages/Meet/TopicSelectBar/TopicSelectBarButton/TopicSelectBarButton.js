@@ -1,30 +1,30 @@
-import { Button } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import CircleIcon from '@mui/icons-material/Circle';
 
-import styles from './SideBarButton.module.scss';
+import styles from './TopicSelectBarButton.module.scss';
 
 export default function SideBarButton({ topic, name, ...buttonProps }) {
-  const disabled = topic.status === 'closed';
-  const variant = topic.status === 'live' ? 'contained' : 'text';
+  const classes = [ styles.side_bar_button ];
+
+  if ( topic.status === 'closed' ) {
+    classes.push( styles.closed );
+  }
+
+  if ( topic.status === 'live' ) {
+    classes.push( styles.live );
+  }
 
   let abbreviation;
+
   if ( name.length > 30 ) {
-    abbreviation = name.slice( 0, 25 ) + '...';
+    abbreviation = name.slice( 0, 23 ) + '...';
   }
 
   const button = (
-    <Button
-      className={styles.side_bar_button}
-      size="small"
-      disabled={disabled}
-      variant={variant}
-      disableElevation
-      {...buttonProps}
-      endIcon={<CircleIcon className={styles.icon} />}
-    >
+    <button className={classes.join(' ')} {...buttonProps}>
       <p className={styles.button_text}>{abbreviation || name }</p>
-    </Button>
+      <CircleIcon className={styles.icon}/>
+    </button>
   );
 
   // Only need tooltip if the name is too long

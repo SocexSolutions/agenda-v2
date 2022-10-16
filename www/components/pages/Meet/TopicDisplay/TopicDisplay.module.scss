@@ -1,5 +1,11 @@
-.topic_container {
+@use '../../../../styles/colors.scss';
+
+.topic_card {
   width: 100%;
+  background: colors.$foreground;
+  border: 1px solid colors.$border;
+  border-radius: 6px;
+  padding: 1em;
 }
 
 .topic {

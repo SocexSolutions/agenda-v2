@@ -1,17 +1,19 @@
-import SideBar from '../../../components/pages/Meet/SideBar/SideBar';
+import TopicSelectBar from '../../../components/pages/Meet/TopicSelectBar/TopicSelectBar';
+import ActionItemBar from '../../../components/pages/Meet/ActionItemBar/ActionItemBar';
 import TopicDisplay from '../../../components/pages/Meet/TopicDisplay/TopicDisplay';
 import CardBoard from '../../../components/shared/CardBoard/CardBoard';
+import CardForm from '../../../components/shared/CardForm/CardForm';
 
 import meetingAPI from '../../../api/meeting';
 import topicAPI from '../../../api/topic';
 import takeawayAPI from '../../../api/takeaway';
-import actionItemAPI from '../../../api/action-item';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
 import styles from '../../../styles/pages/meeting/[id]/meet.module.scss';
+import shared from '../../../styles/Shared.module.css';
 
 export default function MeetRevamp() {
   const router = useRouter();
@@ -58,62 +60,53 @@ export default function MeetRevamp() {
   const liveTopic = topics.find( ( topic ) => topic.status === 'live' );
 
   return (
-    <div className={styles.meet_revamp}>
-      <nav className={styles.side_bar_container}>
-        <SideBar
-          meetingName={name}
-          topics={topics}
-          switchToTopic={switchToTopic}
-        />
-      </nav>
-      <div className={styles.main_container}>
-        <section className={styles.topic_container}>
-          {liveTopic ? (
-            <TopicDisplay topic={liveTopic} closeTopic={closeTopic} />
-          ) : (
-            <p>No topic selected. Select a topic on the left to begin.</p>
-          )}
-        </section>
-        <section className={styles.takeaways_container}>
-          <h3>Takeaways</h3>
-          {liveTopic ? (
-            <CardBoard
-              change={liveTopic._id}
-              getAll={() => topicAPI.getTakeaways( liveTopic._id )}
-              create={( payload ) =>
-                takeawayAPI.create({
-                  topic_id: liveTopic._id,
-                  meeting_id,
-                  ...payload
-                })
-              }
-              update={( id, payload ) => takeawayAPI.update( id, payload )}
-              destroy={( id ) => takeawayAPI.destroy( id )}
+    <div className={shared.page}>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <h2>Meet: {name}</h2>
+        </div>
+        <div className={styles.main_grid}>
+          <div>
+            <TopicSelectBar
+              meetingName={name}
+              topics={topics}
+              switchToTopic={switchToTopic}
             />
-          ) : (
-            <p>Select a topic to view takeaways.</p>
-          )}
-        </section>
-        <section className={styles.actions_container}>
-          <h3>Action Items</h3>
-          {liveTopic ? (
-            <CardBoard
-              change={liveTopic._id}
-              getAll={() => topicAPI.getActionItems( liveTopic._id )}
-              create={( payload ) =>
-                actionItemAPI.create({
-                  topic_id: liveTopic._id,
-                  meeting_id,
-                  ...payload
-                })
-              }
-              update={( id, payload ) => actionItemAPI.update( id, payload )}
-              destroy={( id ) => actionItemAPI.destroy( id )}
+          </div>
+          <div>
+            {liveTopic ? (
+              <TopicDisplay topic={liveTopic} closeTopic={closeTopic} />
+            ) : (
+              <p>No topic selected. Select a topic on the left to begin.</p>
+            )}
+            <div className={styles.takeaways_container}>
+              <h3>Takeaways</h3>
+              {liveTopic ? (
+                <CardBoard
+                  change={liveTopic._id}
+                  getAll={() => topicAPI.getTakeaways( liveTopic._id )}
+                  create={( payload ) =>
+                    takeawayAPI.create({
+                      topic_id: liveTopic._id,
+                      meeting_id,
+                      ...payload
+                    })
+                  }
+                  update={( id, payload ) => takeawayAPI.update( id, payload )}
+                  destroy={( id ) => takeawayAPI.destroy( id )}
+                  Card={CardForm}
+                />
+              ) : (
+                <p>Select a topic to view takeaways.</p>
+              )}
+            </div>
+          </div>
+          <div>
+            <ActionItemBar
+              meetingId={meeting_id}
             />
-          ) : (
-            <p>Select a topic to view action items.</p>
-          )}
-        </section>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,3 @@
-import Card   from '../CardForm/CardForm';
-
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Button        from '@mui/material/Button';
 
@@ -11,22 +9,24 @@ import styles from './CardBoard.module.css';
  * General board component that displays a list of crud cards
  *
  * @param {Object} props
- * @property {String} change - key used to determine if board should reload
- * @property {Function} getAll - async function that gets all items to be
+ * @param {string} change - key used to determine if board should reload
+ * @param {Function} getAll - async function that gets all items to be
  * displayed on board
- * @property {Function} create - function that takes a payload and creates
+ * @param {Function} create - function that takes a payload and creates
  * a new item
- * @property {Function} update - function that takes an id and payload and
+ * @param {Function} update - function that takes an id and payload and
  * updates the corresponding item
- * @property {Function} destroy - function the takes an id and deletes the
+ * @param {Function} destroy - function the takes an id and deletes the
  * corresponding item
+ * @param {Component} Card - card to use
+ * @param {string} itemName - name of item (ie 'takeaway', 'action item')
  */
-const CardBoard = ( props ) => {
+const CardBoard = ({ change, getAll, create, update, destroy, Card, itemName }) => {
   const [ items, setItems ]         = useState([]);
   const [ editingId, setEditingId ] = useState('');
 
   const fetchItems = async() => {
-    const res = await props.getAll();
+    const res = await getAll();
 
     if ( Array.isArray( res ) ) {
       setItems( res );
@@ -40,13 +40,13 @@ const CardBoard = ( props ) => {
 
     // Check that the change prop exists before attempting to load since we
     // know the component is dependant on it.
-    if ( props.change ) {
+    if ( change ) {
       load();
     }
-  }, [ props.change ] );
+  }, [ change ] );
 
   const createItem = async() => {
-    const { _id } = await props.create({
+    const { _id } = await create({
       name: '',
       description: ''
     });
@@ -59,13 +59,13 @@ const CardBoard = ( props ) => {
   const updateItem = async( takeaway ) => {
     setEditingId( null );
 
-    await props.update( takeaway._id, takeaway );
+    await update( takeaway._id, takeaway );
 
     fetchItems();
   };
 
   const destroyItem = async( takeaway ) => {
-    await props.destroy( takeaway._id );
+    await destroy( takeaway._id );
 
     fetchItems();
   };
@@ -116,7 +116,7 @@ const CardBoard = ( props ) => {
           startIcon={<AddCircleIcon className={styles.add_icon} />}
           disableElevation
         >
-          Add {props.itemName}
+          Add {itemName}
         </Button>
       </div>
     </>
