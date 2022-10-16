@@ -225,6 +225,21 @@ module.exports = {
   },
 
   /**
+   * Get a meeting's related action items. This route requires that the user
+   * is a participant of the meeting.
+   * @param {string} _id - meeting id to search for
+   */
+  async getActionItems( req, res ) {
+    const { _id } = req.params;
+
+    await authUtils.checkParticipant( _id, req.credentials );
+
+    const actionItems = await ActionItem.find({ meeting_id: _id });
+
+    return res.status( 200 ).send( actionItems );
+  },
+
+  /**
    * Change a meeting's status potentially triggering lifecycle events
    * @param {string} req.body.status - new status
    * @param {Object} req.params._id - meeting id

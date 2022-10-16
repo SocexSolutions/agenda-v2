@@ -21,26 +21,27 @@ chai.use( chaiSubset );
 const assert = chai.assert;
 
 describe( 'lib/controllers/meeting', () => {
-
   before( async() => {
     await api.start();
     await db.connect();
     await dbUtils.clean();
 
-    const res = await client.post(
-      '/user/register',
-      { username: 'user', password: 'pass', email: 'email' }
-    );
+    const res = await client.post( '/user/register', {
+      username: 'user',
+      password: 'pass',
+      email: 'email'
+    });
 
-    this.user  = res.data.user;
+    this.user = res.data.user;
     this.token = res.data.token;
 
-    const res2 = await client.post(
-      '/user/register',
-      { username: 'user2', password: 'pass2', email: 'email2' }
-    );
+    const res2 = await client.post( '/user/register', {
+      username: 'user2',
+      password: 'pass2',
+      email: 'email2'
+    });
 
-    this.user2  = res2.data.user;
+    this.user2 = res2.data.user;
     this.token2 = res2.data.token;
   });
 
@@ -62,7 +63,6 @@ describe( 'lib/controllers/meeting', () => {
   });
 
   describe( '#get', () => {
-
     it( 'should fetch a meeting', async() => {
       const meeting = fakeMeeting({
         name: 'meeting 1',
@@ -92,11 +92,9 @@ describe( 'lib/controllers/meeting', () => {
         assert.strictEqual( err.response.data, 'unauthorized' );
       }
     });
-
   });
 
   describe( '#create', () => {
-
     it( 'should create a meeting', async() => {
       const meeting = fakeMeeting({ owner_id: this.user._id });
 
@@ -113,11 +111,9 @@ describe( 'lib/controllers/meeting', () => {
       assert.strictEqual( found._id.toString(), res._id );
       assert.strictEqual( found.date.toISOString(), meeting.date.toISOString() );
     });
-
   });
 
   describe( '#update', () => {
-
     it( 'should update a meeting', async() => {
       const meeting = fakeMeeting({ owner_id: this.user._id });
 
@@ -125,10 +121,11 @@ describe( 'lib/controllers/meeting', () => {
 
       const newDate = new Date( 0 ).toISOString();
 
-      const { data: res } = await client.patch(
-        `/meeting/${ created._id }`,
-        { ...meeting, name: 'new name', date: newDate }
-      );
+      const { data: res } = await client.patch( `/meeting/${ created._id }`, {
+        ...meeting,
+        name: 'new name',
+        date: newDate
+      });
 
       assert.strictEqual( res.name, 'new name' );
       assert.strictEqual( res.owner_id, this.user._id.toString() );
@@ -148,10 +145,10 @@ describe( 'lib/controllers/meeting', () => {
       const created = await Meeting.create( meeting );
 
       try {
-        await client.patch(
-          `/meeting/${ created._id }`,
-          { ...meeting, name: 'new name' }
-        );
+        await client.patch( `/meeting/${ created._id }`, {
+          ...meeting,
+          name: 'new name'
+        });
 
         assert.fail('accepted wrong owner');
       } catch ( err ) {
@@ -159,11 +156,9 @@ describe( 'lib/controllers/meeting', () => {
         assert.strictEqual( err.response.data, 'unauthorized' );
       }
     });
-
   });
 
   describe( '#aggregate', () => {
-
     it( 'should fetch meeting with related data', async() => {
       const meeting = fakeMeeting({ owner_id: this.user._id });
 
@@ -175,9 +170,7 @@ describe( 'lib/controllers/meeting', () => {
       const topics = Array.from({ length: 3 }).map( () => {
         const topic = fakeTopic({ meeting_id: _id, _id: new ObjectID() });
 
-        takeaways.push(
-          fakeTakeaway({ meeting_id: _id, topic_id: topic._id })
-        );
+        takeaways.push( fakeTakeaway({ meeting_id: _id, topic_id: topic._id }) );
 
         actionItems.push(
           fakeActionItem({ meeting_id: _id, topic_id: topic._id })
@@ -199,19 +192,16 @@ describe( 'lib/controllers/meeting', () => {
 
       const { data } = await client.get( `/meeting/${ _id }/aggregate` );
 
-      assert.containSubset(
-        data.meeting,
-        {
-          name: meeting.name,
-          date: meeting.date.toISOString(),
-          owner_id: this.user._id.toString()
-        }
-      );
+      assert.containSubset( data.meeting, {
+        name: meeting.name,
+        date: meeting.date.toISOString(),
+        owner_id: this.user._id.toString()
+      });
 
       assert.strictEqual( data.topics.length, 3 );
       assert.strictEqual( data.participants.length, 3 );
 
-      data.topics.forEach( t => {
+      data.topics.forEach( ( t ) => {
         assert.lengthOf( t.actionItems, 1 );
         assert.lengthOf( t.takeaways, 1 );
       });
@@ -230,7 +220,6 @@ describe( 'lib/controllers/meeting', () => {
         assert.strictEqual( err.response.data, 'unauthorized' );
       }
     });
-
   });
 
   describe( '#index', () => {
@@ -264,7 +253,10 @@ describe( 'lib/controllers/meeting', () => {
       await Meeting.create( ownedMeeting4 );
       const includedRes = await Meeting.create( includedMeeting );
 
-      const participant = fakeParticipant({ meeting_id: includedRes._id, email: this.user.email });
+      const participant = fakeParticipant({
+        meeting_id: includedRes._id,
+        email: this.user.email
+      });
 
       await Participant.create( participant );
 
@@ -277,32 +269,25 @@ describe( 'lib/controllers/meeting', () => {
   });
 
   describe( '#aggregateSave', () => {
-
     it( 'should create meeting', async() => {
       const meeting = fakeMeeting({
         owner_id: this.user._id
       });
 
-      const { data: { meeting: res_meeting } } = await client.post(
-        '/meeting/aggregate',
-        { meeting }
-      );
+      const {
+        data: { meeting: res_meeting }
+      } = await client.post( '/meeting/aggregate', { meeting } );
 
       assert.equal( res_meeting.name, meeting.name );
 
       const createdMeeting = JSON.parse(
-        JSON.stringify(
-          await Meeting.findById( res_meeting._id )
-        )
+        JSON.stringify( await Meeting.findById( res_meeting._id ) )
       );
 
-      assert.containSubset(
-        createdMeeting,
-        {
-          name: meeting.name,
-          date: meeting.date.toISOString()
-        }
-      );
+      assert.containSubset( createdMeeting, {
+        name: meeting.name,
+        date: meeting.date.toISOString()
+      });
     });
 
     it( 'should create meeting with participants', async() => {
@@ -312,13 +297,10 @@ describe( 'lib/controllers/meeting', () => {
         return fakeParticipant({ meeting_id: meeting._id });
       });
 
-      const { data } = await client.post(
-        '/meeting/aggregate',
-        {
-          meeting,
-          participants
-        }
-      );
+      const { data } = await client.post( '/meeting/aggregate', {
+        meeting,
+        participants
+      });
 
       assert.strictEqual( data.participants.length, 3 );
 
@@ -334,13 +316,10 @@ describe( 'lib/controllers/meeting', () => {
 
       const topic = fakeTopic({ meeting_id: meeting._id });
 
-      const { data } = await client.post(
-        '/meeting/aggregate',
-        {
-          meeting,
-          topics: [ topic ]
-        }
-      );
+      const { data } = await client.post( '/meeting/aggregate', {
+        meeting,
+        topics: [ topic ]
+      });
 
       assert.strictEqual( data.topics.length, 1 );
 
@@ -365,18 +344,13 @@ describe( 'lib/controllers/meeting', () => {
         date: new Date().toISOString()
       };
 
-      const { data } = await client.post(
-        '/meeting/aggregate',
-        { meeting: update }
-      );
+      const { data } = await client.post( '/meeting/aggregate', {
+        meeting: update
+      });
 
       assert.strictEqual( data.meeting.name, update.name );
       assert.strictEqual( data.meeting.date, update.date );
-      assert.strictEqual(
-        data.meeting._id,
-        update._id,
-        'bad meeting id'
-      );
+      assert.strictEqual( data.meeting._id, update._id, 'bad meeting id' );
 
       const [ updated ] = await Meeting.find({ _id });
 
@@ -392,30 +366,33 @@ describe( 'lib/controllers/meeting', () => {
 
     it( 'should update a meetings topics', async() => {
       const meeting = fakeMeeting({
-        _id: new ObjectID,
+        _id: new ObjectID(),
         owner_id: this.user._id
       });
 
       const { _id } = await Meeting.create( meeting );
 
-      const new_topic = ( await Topic.create(
-        fakeTopic({ owner_id: this.user._id, meeting_id: _id })
-      ) )._doc;
+      const new_topic = (
+        await Topic.create(
+          fakeTopic({ owner_id: this.user._id, meeting_id: _id })
+        )
+      )._doc;
 
       const topic = { ...new_topic };
 
-      topic.name  = 'new topic name';
+      topic.name = 'new topic name';
       topic.likes = [ this.user.email.toString() ];
 
       const payload = {
-        meeting: {  _id: _id.toString() },
+        meeting: { _id: _id.toString() },
         topics: [ topic ]
       };
 
-      const { data: { topics: [ doc ] } } = await client.post(
-        '/meeting/aggregate',
-        payload
-      );
+      const {
+        data: {
+          topics: [ doc ]
+        }
+      } = await client.post( '/meeting/aggregate', payload );
 
       assert.strictEqual( doc._id, topic._id.toString() );
       assert.strictEqual( doc.meeting_id, topic.meeting_id.toString() );
@@ -441,10 +418,7 @@ describe( 'lib/controllers/meeting', () => {
         topics: []
       };
 
-      const { data } = await client.post(
-        '/meeting/aggregate',
-        payload
-      );
+      const { data } = await client.post( '/meeting/aggregate', payload );
 
       assert.strictEqual( data.topics.length, 0 );
 
@@ -467,10 +441,7 @@ describe( 'lib/controllers/meeting', () => {
         participants: []
       };
 
-      const { data } = await client.post(
-        '/meeting/aggregate',
-        payload
-      );
+      const { data } = await client.post( '/meeting/aggregate', payload );
 
       assert.strictEqual( data.participants.length, 0 );
 
@@ -487,10 +458,9 @@ describe( 'lib/controllers/meeting', () => {
       const { _id } = created;
 
       try {
-        await client.post(
-          `/meeting/aggregate`,
-          { meeting: { ...created, _id } }
-        );
+        await client.post( `/meeting/aggregate`, {
+          meeting: { ...created, _id }
+        });
 
         assert.fail('accepted request from unauthorized user');
       } catch ( err ) {
@@ -498,11 +468,9 @@ describe( 'lib/controllers/meeting', () => {
         assert.strictEqual( err.response.data, 'unauthorized' );
       }
     });
-
   });
 
   describe( '#getTopics', () => {
-
     beforeEach( async() => {
       const meeting = fakeMeeting({
         owner_id: this.user._id
@@ -528,17 +496,13 @@ describe( 'lib/controllers/meeting', () => {
       client.defaults.headers.common['Authorization'] = this.token2;
 
       await assert.isRejected(
-        client.get(
-          `/meeting/${ this.meeting._id }/topics`
-        ),
+        client.get( `/meeting/${ this.meeting._id }/topics` ),
         'Request failed with status code 403'
       );
     });
-
   });
 
   describe( '#getParticipants', () => {
-
     beforeEach( async() => {
       const meeting = fakeMeeting({
         owner_id: this.user._id
@@ -554,9 +518,7 @@ describe( 'lib/controllers/meeting', () => {
 
       await Participant.insertMany( participants );
 
-      const res = await client.get(
-        `/meeting/${ this.meeting._id }/participants`
-      );
+      const res = await client.get( `/meeting/${ this.meeting._id }/participants` );
 
       assert.equal( res.status, 200 );
       assert.equal( res.data.length, 3 );
@@ -566,17 +528,45 @@ describe( 'lib/controllers/meeting', () => {
       client.defaults.headers.common['Authorization'] = this.token2;
 
       await assert.isRejected(
-        client.get(
-          `/meeting/${ this.meeting._id }/topics`
-        ),
+        client.get( `/meeting/${ this.meeting._id }/topics` ),
         'Request failed with status code 403'
       );
     });
+  });
 
+  describe( '#getActionItems', () => {
+    beforeEach( async() => {
+      const meeting = fakeMeeting({
+        owner_id: this.user._id
+      });
+
+      this.meeting = await Meeting.create( meeting );
+    });
+
+    it( 'should return a meetings action items', async() => {
+      const actionItems = Array.from({ length: 3 }).map( () => {
+        return fakeActionItem({ meeting_id: this.meeting._id });
+      });
+
+      await ActionItem.insertMany( actionItems );
+
+      const res = await client.get( `/meeting/${ this.meeting._id }/actionitems` );
+
+      assert.equal( res.status, 200 );
+      assert.equal( res.data.length, 3 );
+    });
+
+    it( 'should 403 if not owner or participant', async() => {
+      client.defaults.headers.common['Authorization'] = this.token2;
+
+      await assert.isRejected(
+        client.get( `/meeting/${ this.meeting._id }/actionitems` ),
+        'Request failed with status code 403'
+      );
+    });
   });
 
   describe( '#updateStatus', () => {
-
     beforeEach( async() => {
       const meeting = fakeMeeting({
         owner_id: this.user._id,
@@ -587,10 +577,9 @@ describe( 'lib/controllers/meeting', () => {
     });
 
     it( 'should update a meetings status', async() => {
-      const res = await client.patch(
-        `/meeting/${ this.meeting._id }/status`,
-        { status: 'sent' }
-      );
+      const res = await client.patch( `/meeting/${ this.meeting._id }/status`, {
+        status: 'sent'
+      });
 
       assert.equal( res.status, 200 );
       assert.equal( res.data.status, 'sent' );
@@ -600,18 +589,13 @@ describe( 'lib/controllers/meeting', () => {
       client.defaults.headers.common['Authorization'] = this.token2;
 
       await assert.isRejected(
-        client.patch(
-          `/meeting/${ this.meeting._id }/status`,
-          { status: 'sent' }
-        ),
+        client.patch( `/meeting/${ this.meeting._id }/status`, { status: 'sent' } ),
         'Request failed with status code 403'
       );
     });
-
   });
 
   describe( '#delete', () => {
-
     it( 'should delete the meeting itself', async() => {
       const meeting = await Meeting.create(
         fakeMeeting({
@@ -635,18 +619,24 @@ describe( 'lib/controllers/meeting', () => {
         })
       );
 
-      await Participant.create( fakeParticipant({
-        meeting_id: meeting._id
-      }) );
+      await Participant.create(
+        fakeParticipant({
+          meeting_id: meeting._id
+        })
+      );
 
-      await Participant.create( fakeParticipant({
-        meeting_id: meeting._id
-      }) );
+      await Participant.create(
+        fakeParticipant({
+          meeting_id: meeting._id
+        })
+      );
 
-      await Participant.create( fakeParticipant({
-        meeting_id: new ObjectID,
-        email: 'unrelated@unrelated.com'
-      }) );
+      await Participant.create(
+        fakeParticipant({
+          meeting_id: new ObjectID(),
+          email: 'unrelated@unrelated.com'
+        })
+      );
 
       await client.delete( `/meeting/${ meeting._id }` );
 
@@ -663,18 +653,24 @@ describe( 'lib/controllers/meeting', () => {
         })
       );
 
-      await Topic.create( fakeTopic({
-        meeting_id: meeting._id
-      }) );
+      await Topic.create(
+        fakeTopic({
+          meeting_id: meeting._id
+        })
+      );
 
-      await Topic.create( fakeTopic({
-        meeting_id: meeting._id
-      }) );
+      await Topic.create(
+        fakeTopic({
+          meeting_id: meeting._id
+        })
+      );
 
-      await Topic.create( fakeTopic({
-        meeting_id: new ObjectID,
-        name: 'unrelated'
-      }) );
+      await Topic.create(
+        fakeTopic({
+          meeting_id: new ObjectID(),
+          name: 'unrelated'
+        })
+      );
 
       await client.delete( `/meeting/${ meeting._id }` );
 
@@ -691,18 +687,24 @@ describe( 'lib/controllers/meeting', () => {
         })
       );
 
-      await Takeaway.create( fakeTakeaway({
-        meeting_id: meeting._id
-      }) );
+      await Takeaway.create(
+        fakeTakeaway({
+          meeting_id: meeting._id
+        })
+      );
 
-      await Takeaway.create( fakeTakeaway({
-        meeting_id: meeting._id
-      }) );
+      await Takeaway.create(
+        fakeTakeaway({
+          meeting_id: meeting._id
+        })
+      );
 
-      await Takeaway.create( fakeTakeaway({
-        meeting_id: new ObjectID,
-        name: 'unrelated'
-      }) );
+      await Takeaway.create(
+        fakeTakeaway({
+          meeting_id: new ObjectID(),
+          name: 'unrelated'
+        })
+      );
 
       await client.delete( `/meeting/${ meeting._id }` );
 
@@ -719,18 +721,24 @@ describe( 'lib/controllers/meeting', () => {
         })
       );
 
-      await ActionItem.create( fakeActionItem({
-        meeting_id: meeting._id
-      }) );
+      await ActionItem.create(
+        fakeActionItem({
+          meeting_id: meeting._id
+        })
+      );
 
-      await ActionItem.create( fakeActionItem({
-        meeting_id: meeting._id
-      }) );
+      await ActionItem.create(
+        fakeActionItem({
+          meeting_id: meeting._id
+        })
+      );
 
-      await ActionItem.create( fakeActionItem({
-        meeting_id: new ObjectID,
-        name: 'unrelated'
-      }) );
+      await ActionItem.create(
+        fakeActionItem({
+          meeting_id: new ObjectID(),
+          name: 'unrelated'
+        })
+      );
 
       await client.delete( `/meeting/${ meeting._id }` );
 
@@ -748,7 +756,5 @@ describe( 'lib/controllers/meeting', () => {
         'Request failed with status code 403'
       );
     });
-
   });
-
 });
