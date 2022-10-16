@@ -42,6 +42,7 @@ const CardForm = ({ editing, setEditing, item, updateItem, destroyItem }) => {
       elevation={1}
     >
       <TextField
+        autoFocus
         className={styles.name_input}
         size="small"
         label="Title"
