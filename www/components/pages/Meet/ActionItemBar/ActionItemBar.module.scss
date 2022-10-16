@@ -1,0 +1,12 @@
+@use '../../../../styles/colors.scss';
+
+.action_item_bar {
+  border-radius: 6px;
+  border: 1px solid colors.$border;
+  background: colors.$foreground;
+  padding: .5em;
+}
+
+.action_item {
+  display: flex;
+}
