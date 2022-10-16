@@ -6,12 +6,11 @@ import { notify } from '../store/features/snackbar';
 /**
  * @typedef {Object} AggregateMeeting
  * @property {Meeting} meeting - meeting object
- * @property {Topic[]} topics - array of meeting's topics
- * @property {Participant[]} participants - array of meeting's participants
+ * @property {Topic[]} topics - array of meeting's topics topics will have array
+ * s of takeaways and action items nested within them
+ * @property {participant[]} participants - array of meeting's participants
  */
-
 class MeetingAPI extends RestAPI {
-
   /**
    * Create a MeetingAPI Instance
    *
@@ -56,6 +55,26 @@ class MeetingAPI extends RestAPI {
     } catch ( err ) {
       store().dispatch( notify({
         message: `Failed to fetch participants for meeting (${ err.message })`,
+        type: 'danger'
+      }) );
+    }
+  }
+
+  /**
+   * @description Get a meeting's participants
+   *
+   * @param {String} id - meeting._id to search with
+   *
+   * @returns {Promise<Participant[]} - meeting's participants
+   */
+  async getActionItems( id ) {
+    try {
+      const res = await client.get( `/meeting/${ id }/actionitems` );
+
+      return res.data;
+    } catch ( err ) {
+      store().dispatch( notify({
+        message: `Failed to fetch action items for meeting (${ err.message })`,
         type: 'danger'
       }) );
     }
