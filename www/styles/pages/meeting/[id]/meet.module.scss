@@ -1,45 +1,28 @@
 @use '../../../../styles/colors.scss';
 
-.meet_revamp {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-};
-
-.side_bar_container {
-  grid-column: 1;
+.container {
   width: 100%;
+  max-width: 1400px;
 }
 
-.main_container {
+.main_grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr 3fr 1fr;
   grid-column-gap: 1em;
   grid-row-gap: 1em;
   width: 100%;
-
-  .topic_container {
-    grid-column: 1 / span 3;
-    grid-row: 1;
-    border-bottom: 1px solid colors.$border;
-    background: colors.$foreground;
-    padding: 1em;
-  }
-
-  .takeaways_container {
-    padding-left: 1em;
-    grid-column: 1 / 2;
-    grid-row: 2 / 3;
-  }
-
-  .actions_container {
-    grid-column: 2 / 3;
-    grid-row: 2 / 3;
-  }
 }
 
-.board_background {
-  background-color: colors.$background;
-  border-radius: 6px;
-  padding: 1em;
+.tabs_container {
+  margin-top: 1em;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button_group {
+  background: colors.$foreground;
+  margin-bottom: .5em;
 }

@@ -2,6 +2,7 @@ import HeaderForm from '../../../components/pages/edit/HeaderForm/HeaderForm';
 import StatusButton from '../../../components/pages/edit/StatusButton/StatusButton';
 import CardBoard from '../../../components/shared/CardBoard/CardBoard';
 import ChipForm from '../../../components/shared/ChipForm/ChipForm';
+import CardForm from '../../../components/shared/CardForm/CardForm';
 
 import { Fade } from '@mui/material';
 
@@ -112,6 +113,7 @@ const Meeting = ( props ) => {
               update={( id, payload ) => topicAPI.update( id, payload )}
               destroy={( id ) => topicAPI.destroy( id )}
               itemName={'topic'}
+              Card={CardForm}
             />
           </section>
         </div>

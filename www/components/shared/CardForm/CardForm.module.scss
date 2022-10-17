@@ -38,16 +38,16 @@
   }
 }
 
-.title_input {
+.name_input {
   width: 350px;
 }
 
-.buttonContainer {
+.button_container {
   display: flex;
   justify-content: flex-end;
-}
 
-.buttonContainer button {
-  margin-left: .25rem;
-  display: flex;
+  button {
+    margin-left: .25rem;
+    display: flex;
+  }
 }
