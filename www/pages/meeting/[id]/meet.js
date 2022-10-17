@@ -1,12 +1,14 @@
 import TopicSelectBar from '../../../components/pages/Meet/TopicSelectBar/TopicSelectBar';
 import ActionItemBar from '../../../components/pages/Meet/ActionItemBar/ActionItemBar';
 import TopicDisplay from '../../../components/pages/Meet/TopicDisplay/TopicDisplay';
-import CardBoard from '../../../components/shared/CardBoard/CardBoard';
-import CardForm from '../../../components/shared/CardForm/CardForm';
+import TakeawayBoard from '../../../components/pages/Meet/TakeawayBoard/TakeawayBoard';
+import ActionItemBoard from '../../../components/pages/Meet/ActionItemBoard/ActionItemBoard';
 
 import meetingAPI from '../../../api/meeting';
 import topicAPI from '../../../api/topic';
-import takeawayAPI from '../../../api/takeaway';
+
+import { ToggleButtonGroup } from '@mui/material';
+import { ToggleButton } from '@mui/material';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
@@ -21,15 +23,14 @@ export default function MeetRevamp() {
 
   const meeting_id = router.query.id;
 
+  const [ tab, setTab ] = useState('Takeaways');
   const [ name, setName ] = useState('');
-  const [ date, setDate ] = useState( null );
   const [ topics, setTopics ] = useState([]);
 
   const loadMeeting = async( meeting_id ) => {
     const meeting = await meetingAPI.get( meeting_id );
 
     setName( meeting.name );
-    setDate( meeting.date );
   };
 
   const loadTopics = async( meeting_id ) => {
@@ -79,32 +80,34 @@ export default function MeetRevamp() {
             ) : (
               <p>No topic selected. Select a topic on the left to begin.</p>
             )}
-            <div className={styles.takeaways_container}>
-              <h3>Takeaways</h3>
-              {liveTopic ? (
-                <CardBoard
-                  change={liveTopic._id}
-                  getAll={() => topicAPI.getTakeaways( liveTopic._id )}
-                  create={( payload ) =>
-                    takeawayAPI.create({
-                      topic_id: liveTopic._id,
-                      meeting_id,
-                      ...payload
-                    })
-                  }
-                  update={( id, payload ) => takeawayAPI.update( id, payload )}
-                  destroy={( id ) => takeawayAPI.destroy( id )}
-                  Card={CardForm}
+            {liveTopic && (
+              <div className={styles.tabs_container}>
+                <ToggleButtonGroup
+                  className={styles.button_group}
+                  size="small"
+                  color="primary"
+                  value={tab}
+                  exclusive
+                  onChange={( _, tab ) => setTab( tab )}
+                >
+                  <ToggleButton value="Takeaways">Takeaways</ToggleButton>
+                  <ToggleButton value="Action Items">Action Items</ToggleButton>
+                </ToggleButtonGroup>
+                <TakeawayBoard
+                  hidden={tab !== 'Takeaways'}
+                  liveTopic={liveTopic}
+                  meetingId={meeting_id}
                 />
-              ) : (
-                <p>Select a topic to view takeaways.</p>
-              )}
-            </div>
+                <ActionItemBoard
+                  hidden={tab !== 'Action Items'}
+                  liveTopic={liveTopic}
+                  meetingId={meeting_id}
+                />
+              </div>
+            )}
           </div>
           <div>
-            <ActionItemBar
-              meetingId={meeting_id}
-            />
+            <ActionItemBar meetingId={meeting_id} />
           </div>
         </div>
       </div>

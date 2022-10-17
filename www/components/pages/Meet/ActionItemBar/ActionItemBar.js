@@ -9,13 +9,13 @@ import styles from './ActionItemBar.module.scss';
 
 export default function ActionItemBar({ meetingId }) {
   const [ actionItems, setActionItems ] = useState([]);
-  const [ initialLoad, setInitialLoad ] = useState( true );
+
+  // TODO use store or context to share action items
 
   const loadActionItems = async( meetingId ) => {
     const res = await meetingAPI.getActionItems( meetingId );
 
     setActionItems( res );
-    setInitialLoad( false );
   };
 
   const setCompletion = async( actionItemId, completed ) => {
@@ -51,7 +51,7 @@ export default function ActionItemBar({ meetingId }) {
 
   return (
     <div className={styles.action_item_bar}>
-      <h3>Action Items</h3>
+      <h3>Meeting Action Items</h3>
       {actionItemsMarkup}
     </div>
   );

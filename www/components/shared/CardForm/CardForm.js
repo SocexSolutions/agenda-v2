@@ -8,8 +8,8 @@ import styles from './CardForm.module.scss';
 import shared from '../../../styles/Shared.module.css';
 
 /**
- * @param {Object} item             - item that to display
- * @param {Function} updateItem   - save function for an item
+ * @param {Object} item          - item that to display
+ * @param {Function} updateItem  - save function for an item
  * @param {Function} destroyItem - delete function (called with items _id)
  */
 const CardForm = ({ editing, setEditing, item, updateItem, destroyItem }) => {

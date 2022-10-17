@@ -8,7 +8,7 @@ export default function SideBar({ topics, meetingName, switchToTopic }) {
   return (
     <Fade in={!!topics && !!meetingName}>
       <div className={styles.side_bar}>
-        <h3>Topics</h3>
+        <h3>Meeting Topics</h3>
         <div className={styles.button_container}>
           {topics.map( ( topic ) => {
             return (
