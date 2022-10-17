@@ -27,6 +27,14 @@ export default function MeetRevamp() {
   const [ name, setName ] = useState('');
   const [ topics, setTopics ] = useState([]);
 
+  const changeTab = ( t ) => {
+    if ( !t ) {
+      return;
+    }
+
+    setTab( t );
+  };
+
   const loadMeeting = async( meeting_id ) => {
     const meeting = await meetingAPI.get( meeting_id );
 
@@ -88,7 +96,7 @@ export default function MeetRevamp() {
                   color="primary"
                   value={tab}
                   exclusive
-                  onChange={( _, tab ) => setTab( tab )}
+                  onChange={( _, ta ) => changeTab( ta )}
                 >
                   <ToggleButton value="Takeaways">Takeaways</ToggleButton>
                   <ToggleButton value="Action Items">Action Items</ToggleButton>
