@@ -12,10 +12,14 @@ import styles from "../../../styles/pages/user/[id]/home.module.css";
 
 import { notify } from "../../../store/features/snackbar";
 
-const User = (props) => {
-  const [loading, setLoading] = useState(true);
-  const [ownedMeetings, setOwnedMeetings] = useState([]);
-  const [participantMeetings, setParticMeetings] = useState([]);
+const User = ( props ) => {
+
+  const filtersConstuctor = { owner: '' };
+
+  const [ loading, setLoading ] = useState( true );
+  const [ ownedMeetings, setOwnedMeetings ] = useState([]);
+  const [ participantMeetings, setParticMeetings ] = useState([]);
+  const [ filters, setFilters ] = useState( filtersConstuctor );
 
   const user = useSelector((state) => state.user);
 
@@ -53,7 +57,7 @@ const User = (props) => {
       <div className={shared.page}>
         <div className={shared.container}>
           <h2 className={styles.page_title}>My Meetings</h2>
-          <Inbox meetings={meetings} refresh={load} />
+          <Inbox meetings={meetings} refresh={load} filters={filters}/>
         </div>
         <CreateFab />
       </div>

@@ -18,6 +18,8 @@ export default function Inbox({ meetings, refresh }) {
 
   const [ filtersOpen, setFiltersOpen ] = useState( false );
 
+  console.log(meetings)
+
   const lineItems = meetings.map( ( meeting ) => {
     return (
       <InboxRow
@@ -52,7 +54,11 @@ export default function Inbox({ meetings, refresh }) {
             </ Button>
           </ div>
           <div className={styles.hidden}>
-            <Autocomplete options={top100Films} sx={{ width: 200, height: 100 }} renderInput={( params ) => <TextField {...params} size='small' label="Owner" />} />
+            <Autocomplete
+              options={top100Films}
+              sx={{ width: 200, height: 100 }}
+              renderInput={( params ) => <TextField {...params} size='small' label="Owner" />}
+            />
           </div>
         </div>
         {lineItems}
