@@ -30,11 +30,11 @@ const User = ( props ) => {
         client.get(`user/meetings/${user._id}`),
       ]);
 
-      setParticMeetings(res[0].data);
-      setOwnedMeetings(res[1].data);
-
-      setLoading(false);
-    } catch (err) {
+      setParticMeetings( res[ 0 ].data );
+      setOwnedMeetings( res[ 1 ].data );
+ 
+      setLoading( false );
+    } catch ( err ) {
       props.store.dispatch(
         notify({
           message: "Failed to fetch meeting: " + err.message,

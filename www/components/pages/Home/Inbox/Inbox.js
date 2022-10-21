@@ -18,8 +18,6 @@ export default function Inbox({ meetings, refresh }) {
 
   const [ filtersOpen, setFiltersOpen ] = useState( false );
 
-  console.log(meetings)
-
   const lineItems = meetings.map( ( meeting ) => {
     return (
       <InboxRow
@@ -31,15 +29,10 @@ export default function Inbox({ meetings, refresh }) {
     );
   });
 
-  const top100Films = [
-    { label: 'Rimp', year: 1994 },
-    { label: 'Jogn', year: 1972 },
-    { label: 'Mercedes', year: 1974 },
-    { label: 'David', year: 2008 },
-    { label: 'Alison', year: 1957 },
-    { label: 'Zach', year: 1993 },
-    { label: 'Tom', year: 1994 }
-  ];
+  const users = [ ...new Set( meetings.map( item => item.owner_id ) ) ];
+
+  console.log( users );
+  console.log( meetings );
 
   if ( lineItems.length ) {
     return (
@@ -55,7 +48,7 @@ export default function Inbox({ meetings, refresh }) {
           </ div>
           <div className={styles.hidden}>
             <Autocomplete
-              options={top100Films}
+              options={users}
               sx={{ width: 200, height: 100 }}
               renderInput={( params ) => <TextField {...params} size='small' label="Owner" />}
             />
