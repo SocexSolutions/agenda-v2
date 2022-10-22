@@ -1,3 +1,3 @@
-import TopicAPI from '../classes/topic-api';
+import TopicAPI from "../classes/topic-api";
 
 export default new TopicAPI();

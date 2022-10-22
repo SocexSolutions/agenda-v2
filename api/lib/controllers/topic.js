@@ -1,29 +1,29 @@
-const Topic      = require('../models/topic');
-const Takeaway   = require('../models/takeaway');
-const ActionItem = require('../models/action-item');
-const authUtils  = require('../util/authorization');
+const Topic = require("../models/topic");
+const Takeaway = require("../models/takeaway");
+const ActionItem = require("../models/action-item");
+const authUtils = require("../util/authorization");
 
 module.exports = {
-  create: async( req, res ) => {
+  create: async (req, res) => {
     const new_topic = req.body;
 
-    await authUtils.checkParticipant( new_topic.meeting_id, req.credentials );
+    await authUtils.checkParticipant(new_topic.meeting_id, req.credentials);
 
     const topic = await Topic.create({
       ...new_topic,
-      owner_id: req.credentials.sub
+      owner_id: req.credentials.sub,
     });
 
-    return res.status( 201 ).send( topic );
+    return res.status(201).send(topic);
   },
 
-  update: async( req, res ) => {
+  update: async (req, res) => {
     const updates = req.body;
     const { _id } = req.params;
 
     const sub_id = req.credentials.sub;
 
-    await authUtils.checkOwner( _id, 'topics', req.credentials );
+    await authUtils.checkOwner(_id, "topics", req.credentials);
 
     const topic_updated = await Topic.findOneAndUpdate(
       { _id },
@@ -31,31 +31,31 @@ module.exports = {
       { new: true }
     );
 
-    res.status( 200 ).send( topic_updated );
+    res.status(200).send(topic_updated);
   },
 
-  delete: async( req, res ) => {
+  delete: async (req, res) => {
     const { _id } = req.params;
 
-    await authUtils.checkOwner( _id, 'topics', req.credentials );
+    await authUtils.checkOwner(_id, "topics", req.credentials);
 
     await Topic.deleteOne({ _id });
 
-    return res.status( 204 ).send();
+    return res.status(204).send();
   },
 
-  like: async( req, res ) => {
+  like: async (req, res) => {
     const { _id } = req.params;
     const { email } = req.body;
 
     const topic = await Topic.findOne({ _id });
 
-    await authUtils.checkParticipant( topic.meeting_id, req.credentials );
+    await authUtils.checkParticipant(topic.meeting_id, req.credentials);
 
-    if ( !topic.likes.includes( email ) ) {
-      topic.likes.push( email );
+    if (!topic.likes.includes(email)) {
+      topic.likes.push(email);
     } else {
-      topic.likes = topic.likes.filter( ( email ) => {
+      topic.likes = topic.likes.filter((email) => {
         return email !== email;
       });
     }
@@ -66,70 +66,70 @@ module.exports = {
       { new: true }
     );
 
-    return res.status( 200 ).send( updated );
+    return res.status(200).send(updated);
   },
 
-  close: async( req, res ) => {
+  close: async (req, res) => {
     const { _id } = req.params;
 
     const topic = await Topic.findOne({ _id });
 
-    await authUtils.checkParticipant( topic.meeting_id, req.credentials );
+    await authUtils.checkParticipant(topic.meeting_id, req.credentials);
 
     const updated = await Topic.findOneAndUpdate(
       { _id },
-      { status: 'closed' },
+      { status: "closed" },
       { new: true }
     );
 
-    return res.status( 200 ).send( updated );
+    return res.status(200).send(updated);
   },
 
-  switch: async( req, res ) => {
+  switch: async (req, res) => {
     const { _id } = req.params;
 
     const topic = await Topic.findOne({ _id });
 
-    await authUtils.checkParticipant( topic.meeting_id, req.credentials );
+    await authUtils.checkParticipant(topic.meeting_id, req.credentials);
 
     // Making two queries isn't ideal but this does avoid the potential for
     // multiple topics to be live at once; a state that would be difficult to
     // recover from.
     await Topic.updateMany(
-      { meeting_id: topic.meeting_id, status: 'live' },
-      { status: 'open' }
+      { meeting_id: topic.meeting_id, status: "live" },
+      { status: "open" }
     );
 
     const updated = await Topic.findOneAndUpdate(
       { _id },
-      { status: 'live' },
+      { status: "live" },
       { new: true }
     );
 
-    return res.status( 200 ).send( updated );
+    return res.status(200).send(updated);
   },
 
-  getTakeaways: async( req, res ) => {
+  getTakeaways: async (req, res) => {
     const { _id } = req.params;
 
     const topic = await Topic.findOne({ _id });
 
-    await authUtils.checkParticipant( topic.meeting_id, req.credentials );
+    await authUtils.checkParticipant(topic.meeting_id, req.credentials);
 
     const takeaways = await Takeaway.find({ topic_id: _id });
 
-    res.status( 200 ).send( takeaways );
+    res.status(200).send(takeaways);
   },
 
-  getActionItems: async( req, res ) => {
+  getActionItems: async (req, res) => {
     const { _id } = req.params;
 
     const topic = await Topic.findOne({ _id });
 
-    await authUtils.checkParticipant( topic.meeting_id, req.credentials );
+    await authUtils.checkParticipant(topic.meeting_id, req.credentials);
 
     const actionItems = await ActionItem.find({ topic_id: _id });
 
-    res.status( 200 ).send( actionItems );
-  }
+    res.status(200).send(actionItems);
+  },
 };

@@ -1,8 +1,7 @@
-const http = require('http');
+const http = require("http");
 
-const hostname = 'localhost';
-const port     = 4000;
-
+const hostname = "localhost";
+const port = 4000;
 
 module.exports = {
   /**
@@ -10,18 +9,18 @@ module.exports = {
    * @param {String} path - url path
    * @returns {Promise} - request response in json
    */
-  async get( path ) {
+  async get(path) {
     const options = {
       hostname,
       port,
       path,
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json'
-      }
+        "Content-Type": "application/json",
+      },
     };
 
-    return await makeRequest( options );
+    return await makeRequest(options);
   },
 
   /**
@@ -30,24 +29,22 @@ module.exports = {
    * @param {String} path - url path in api
    * @returns {Promise} - request response in json
    */
-  async post( data, path ) {
-    const base64Encoded = new TextEncoder().encode(
-      JSON.stringify( data )
-    );
+  async post(data, path) {
+    const base64Encoded = new TextEncoder().encode(JSON.stringify(data));
 
     const options = {
       hostname,
       port,
       path,
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': base64Encoded.length
-      }
+        "Content-Type": "application/json",
+        "Content-Length": base64Encoded.length,
+      },
     };
 
-    return await makeRequest( options, base64Encoded );
-  }
+    return await makeRequest(options, base64Encoded);
+  },
 };
 
 /**
@@ -56,28 +53,28 @@ module.exports = {
  * @param {Buffer} data - base64 encoded data
  * @returns {Promise} promisified response
  */
-function makeRequest( options, data ) {
-  return new Promise( ( resolve, reject ) => {
-    let payload = '';
+function makeRequest(options, data) {
+  return new Promise((resolve, reject) => {
+    let payload = "";
 
-    const req = http.request( options, ( res ) => {
-      res.setEncoding('utf8');
+    const req = http.request(options, (res) => {
+      res.setEncoding("utf8");
 
-      res.on( 'data', ( chunk ) => {
+      res.on("data", (chunk) => {
         payload = payload + chunk;
       });
 
-      res.on( 'end', () => {
-        resolve( payload );
+      res.on("end", () => {
+        resolve(payload);
       });
 
-      res.on( 'error', ( error ) => {
-        reject( error );
+      res.on("error", (error) => {
+        reject(error);
       });
     });
 
-    if ( data ) {
-      req.write( data );
+    if (data) {
+      req.write(data);
     }
 
     req.end();

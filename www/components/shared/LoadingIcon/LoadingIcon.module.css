@@ -38,7 +38,7 @@
 }
 
 .ticks {
-  position:absolute;
+  position: absolute;
   height: 5%;
   width: 1%;
   background-color: var(--darkText);
@@ -46,7 +46,6 @@
   margin-left: 49%;
   transform: translate(0, -850%);
 }
-
 
 @keyframes spin {
   from {
@@ -56,7 +55,6 @@
     transform: rotate(360deg) translate(0, -50%);
   }
 }
-
 
 .minuteHand {
 }

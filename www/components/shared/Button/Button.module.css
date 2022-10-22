@@ -5,7 +5,7 @@
   flex-direction: row;
   align-items: center;
   cursor: pointer;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
   transition: background 0.2s ease;
 }
 
@@ -20,13 +20,13 @@
 }
 
 .medium {
-  padding: .4em .7em;
+  padding: 0.4em 0.7em;
   font-size: 1.05rem;
 }
 
 .small {
-  padding: .4rem;
-  font-size: .8rem;
+  padding: 0.4rem;
+  font-size: 0.8rem;
 }
 
 .icon {
@@ -53,9 +53,8 @@
   opacity: 50%;
 }
 
-
 .icon_container {
-  padding-right: .5em;
+  padding-right: 0.5em;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -95,7 +94,6 @@
   border: none;
   background-color: transparent;
   color: var(--primary);
-
 }
 
 .hollow:hover {

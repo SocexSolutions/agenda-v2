@@ -1,12 +1,11 @@
-const express   = require('express');
-const apiRouter = require('../../lib/routes');
+const express = require("express");
+const apiRouter = require("../../lib/routes");
 
 const app = express();
 
 let server;
 
 const api = {
-
   /**
    * Start a new server, (defaults to full api if no params)
    *
@@ -15,21 +14,21 @@ const api = {
    *
    * @returns {Promise<undefined>}
    */
-  start: async( urlPath, router ) => {
+  start: async (urlPath, router) => {
     try {
-      app.use( express.json() );
-      app.use( express.urlencoded({ extended: true }) );
+      app.use(express.json());
+      app.use(express.urlencoded({ extended: true }));
 
-      const basePath   = urlPath || '/api';
+      const basePath = urlPath || "/api";
       const baseRouter = router || apiRouter;
 
-      app.use( basePath, baseRouter );
+      app.use(basePath, baseRouter);
 
       const port = process.env.PORT || 5000;
 
-      server = app.listen( port );
-    } catch ( error ) {
-      console.error( 'agenda api failed to start: ' + error.message );
+      server = app.listen(port);
+    } catch (error) {
+      console.error("agenda api failed to start: " + error.message);
     }
   },
 
@@ -38,13 +37,13 @@ const api = {
    *
    * @returns {Promise<undefined>}
    */
-  stop: async() => {
+  stop: async () => {
     try {
       server.close();
-    } catch ( error ) {
-      console.error( 'agenda api failed to stop: ' + error.message );
+    } catch (error) {
+      console.error("agenda api failed to stop: " + error.message);
     }
-  }
+  },
 };
 
 module.exports = api;

@@ -1,10 +1,10 @@
-const ObjectId = require('mongoose').Types.ObjectId;
+const ObjectId = require("mongoose").Types.ObjectId;
 
-const participant = ( opts ) => {
+const participant = (opts) => {
   return {
-    email: 'thudson@socnet.com',
-    meeting_id: new ObjectId,
-    ...opts
+    email: "thudson@socnet.com",
+    meeting_id: new ObjectId(),
+    ...opts,
   };
 };
 

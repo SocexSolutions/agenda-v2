@@ -1,14 +1,12 @@
-import styles from './Modal.module.css';
+import styles from "./Modal.module.css";
 
-const Modal = ( props ) => {
+const Modal = (props) => {
   return (
     <div
       className={styles.blurBackground}
-      onClick={( e ) => props.closeListener( e )}
+      onClick={(e) => props.closeListener(e)}
     >
-      <div className={styles.container}>
-        {props.children}
-      </div>
+      <div className={styles.container}>{props.children}</div>
     </div>
   );
 };

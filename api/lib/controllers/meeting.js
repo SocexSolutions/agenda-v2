@@ -1,25 +1,25 @@
-const mongoose    = require('mongoose');
-const Meeting     = require('../models/meeting');
-const Topic       = require('../models/topic.js');
-const Participant = require('../models/participant');
-const ActionItem  = require('../models/action-item');
-const Takeaway    = require('../models/takeaway');
-const User        = require('../models/user');
-const ObjectID    = require('mongoose').Types.ObjectId;
-const jobi        = require('@starryinternet/jobi');
-const authUtils   = require('../util/authorization');
+const mongoose = require("mongoose");
+const Meeting = require("../models/meeting");
+const Topic = require("../models/topic.js");
+const Participant = require("../models/participant");
+const ActionItem = require("../models/action-item");
+const Takeaway = require("../models/takeaway");
+const User = require("../models/user");
+const ObjectID = require("mongoose").Types.ObjectId;
+const jobi = require("@starryinternet/jobi");
+const authUtils = require("../util/authorization");
 
 module.exports = {
   /**
    * Get a meeting
    * @param {String} req.params._id - meeting id
    */
-  get: async( req, res ) => {
-    const { _id }  = req.params;
+  get: async (req, res) => {
+    const { _id } = req.params;
 
-    const meeting = await authUtils.checkParticipant( _id, req.credentials );
+    const meeting = await authUtils.checkParticipant(_id, req.credentials);
 
-    res.status( 200 ).send( meeting );
+    res.status(200).send(meeting);
   },
 
   /**
@@ -27,18 +27,18 @@ module.exports = {
    * @param {String} req.body.name - meeting name
    * @param {Date}   req.body.date - meeting date
    */
-  create: async( req, res ) => {
+  create: async (req, res) => {
     const { name, date } = req.body;
 
-    await authUtils.checkUser( req.credentials );
+    await authUtils.checkUser(req.credentials);
 
     const meeting = await Meeting.create({
       name,
       date,
-      owner_id: req.credentials.sub
+      owner_id: req.credentials.sub,
     });
 
-    res.status( 200 ).send( meeting );
+    res.status(200).send(meeting);
   },
 
   /**
@@ -47,11 +47,11 @@ module.exports = {
    * @param {Date}   req.body.date  - meeting date
    * @param {String} req.params._id - meeting id
    */
-  update: async( req, res ) => {
+  update: async (req, res) => {
     const { name, date } = req.body;
-    const _id            = req.params._id;
+    const _id = req.params._id;
 
-    await authUtils.checkOwner( _id, 'meetings', req.credentials );
+    await authUtils.checkOwner(_id, "meetings", req.credentials);
 
     const updated = await Meeting.findOneAndUpdate(
       { _id },
@@ -59,66 +59,66 @@ module.exports = {
       { new: true }
     );
 
-    res.status( 200 ).send( updated );
+    res.status(200).send(updated);
   },
 
   /**
    * Get all related meeting data (topics, participants)
    * @param {string} req.params._id - meeting _id
    */
-  aggregate: async( req, res ) => {
+  aggregate: async (req, res) => {
     const { _id } = req.params;
 
-    await authUtils.checkParticipant( _id, req.credentials );
+    await authUtils.checkParticipant(_id, req.credentials);
 
-    const [ queryResult ] = await Meeting.aggregate([
+    const [queryResult] = await Meeting.aggregate([
       {
         $match: {
-          _id: new ObjectID( _id )
-        }
+          _id: new ObjectID(_id),
+        },
       },
       {
         $lookup: {
-          from: 'participants',
-          localField: '_id',
-          foreignField: 'meeting_id',
-          as: 'participants'
-        }
+          from: "participants",
+          localField: "_id",
+          foreignField: "meeting_id",
+          as: "participants",
+        },
       },
       {
         $lookup: {
-          from: 'topics',
-          localField: '_id',
-          foreignField: 'meeting_id',
+          from: "topics",
+          localField: "_id",
+          foreignField: "meeting_id",
           pipeline: [
             {
               $lookup: {
-                from: 'actionitems',
-                localField: '_id',
-                foreignField: 'topic_id',
-                as: 'actionItems'
-              }
+                from: "actionitems",
+                localField: "_id",
+                foreignField: "topic_id",
+                as: "actionItems",
+              },
             },
             {
               $lookup: {
-                from: 'takeaways',
-                localField: '_id',
-                foreignField: 'topic_id',
-                as: 'takeaways'
-              }
-            }
+                from: "takeaways",
+                localField: "_id",
+                foreignField: "topic_id",
+                as: "takeaways",
+              },
+            },
           ],
-          as: 'topics'
-        }
-      }
+          as: "topics",
+        },
+      },
     ]);
 
     const { _id: agg_id, name, date, owner_id } = queryResult;
 
-    return res.status( 200 ).send({
+    return res.status(200).send({
       meeting: { _id: agg_id, name, date, owner_id },
       participants: queryResult.participants,
-      topics: queryResult.topics
+      topics: queryResult.topics,
     });
   },
 
@@ -130,7 +130,7 @@ module.exports = {
    *
    * @deprecated
    */
-  aggregateSave: async( req, res ) => {
+  aggregateSave: async (req, res) => {
     let session;
 
     try {
@@ -139,33 +139,32 @@ module.exports = {
       const meeting_id = req.body.meeting?._id || new ObjectID();
       const subject_id = req.credentials.sub;
 
-      let topics       = req.body.topics || null;
+      let topics = req.body.topics || null;
       let participants = req.body.participants || null;
 
       let meeting = await Meeting.findOne({ _id: meeting_id });
 
-      if ( meeting && ( meeting.owner_id.toString() !== subject_id ) ) {
-        return res.status( 403 ).send('unauthorized');
+      if (meeting && meeting.owner_id.toString() !== subject_id) {
+        return res.status(403).send("unauthorized");
       }
 
       session = await mongoose.connection.startSession();
 
-      await session.withTransaction( async() => {
-
+      await session.withTransaction(async () => {
         meeting = await Meeting.findOneAndUpdate(
           { _id: meeting_id },
           { name, owner_id, date },
           {
             upsert: true,
-            new: true
+            new: true,
           }
         );
 
-        if ( topics ) {
+        if (topics) {
           topics = await Topic.saveMeetingTopics({
             meeting_id: meeting._id,
             savedTopics: topics,
-            subject_id
+            subject_id,
           });
         } else {
           await Topic.deleteMany({ meeting_id: meeting._id });
@@ -175,53 +174,52 @@ module.exports = {
 
         await Participant.deleteMany({ meeting_id: meeting._id });
 
-        if ( participants ) {
-          const formattedParticipants = participants.map( participant => {
+        if (participants) {
+          const formattedParticipants = participants.map((participant) => {
             return {
               email: participant.email,
-              meeting_id: meeting._id
+              meeting_id: meeting._id,
             };
           });
 
-          await Participant.insertMany( formattedParticipants );
+          await Participant.insertMany(formattedParticipants);
         }
 
         participants = await Participant.find({ meeting_id: meeting._id });
       });
 
-      res.status( 201 ).send({
+      res.status(201).send({
         meeting,
         topics,
-        participants
+        participants,
       });
+    } catch (error) {
+      jobi.error(error.message);
 
-    } catch ( error ) {
-      jobi.error( error.message );
-
-      res.status( 500 ).send( error.message );
+      res.status(500).send(error.message);
     } finally {
       session.endSession();
     }
   },
 
-  async getTopics( req, res ) {
-    const { _id }  = req.params;
+  async getTopics(req, res) {
+    const { _id } = req.params;
 
-    await authUtils.checkParticipant( _id, req.credentials );
+    await authUtils.checkParticipant(_id, req.credentials);
 
     const topics = await Topic.find({ meeting_id: _id });
 
-    return res.status( 200 ).send( topics );
+    return res.status(200).send(topics);
   },
 
-  async getParticipants( req, res ) {
-    const { _id }  = req.params;
+  async getParticipants(req, res) {
+    const { _id } = req.params;
 
-    await authUtils.checkParticipant( _id, req.credentials );
+    await authUtils.checkParticipant(_id, req.credentials);
 
     const participants = await Participant.find({ meeting_id: _id });
 
-    return res.status( 200 ).send( participants );
+    return res.status(200).send(participants);
   },
 
   /**
@@ -229,14 +227,14 @@ module.exports = {
    * is a participant of the meeting.
    * @param {string} _id - meeting id to search for
    */
-  async getActionItems( req, res ) {
+  async getActionItems(req, res) {
     const { _id } = req.params;
 
-    await authUtils.checkParticipant( _id, req.credentials );
+    await authUtils.checkParticipant(_id, req.credentials);
 
     const actionItems = await ActionItem.find({ meeting_id: _id });
 
-    return res.status( 200 ).send( actionItems );
+    return res.status(200).send(actionItems);
   },
 
   /**
@@ -244,10 +242,13 @@ module.exports = {
    * @param {string} req.body.status - new status
    * @param {Object} req.params._id - meeting id
    */
-  async updateStatus( req, res ) {
-    const { params: { _id }, body: { status } } = req;
+  async updateStatus(req, res) {
+    const {
+      params: { _id },
+      body: { status },
+    } = req;
 
-    await authUtils.checkOwner( _id, 'meetings', req.credentials );
+    await authUtils.checkOwner(_id, "meetings", req.credentials);
 
     const meeting = await Meeting.findOneAndUpdate(
       { _id },
@@ -258,10 +259,10 @@ module.exports = {
     // TODO send notification to participants when status changes from
     // draft to sent.
 
-    return res.status( 200 ).send( meeting );
+    return res.status(200).send(meeting);
   },
 
-  async index( req, res ) {
+  async index(req, res) {
     const subject_email = req.credentials.user.email;
     const subject_id = req.credentials.sub;
     const { limit = 0, skip = 0 } = req.query; // Thanks tom
@@ -269,62 +270,62 @@ module.exports = {
     try {
       const pipeline = [
         {
-          $match: { _id: ObjectID( subject_id ) }
+          $match: { _id: ObjectID(subject_id) },
         },
         {
           $lookup: {
-            from: 'meetings',
-            localField: '_id',
-            foreignField: 'owner_id',
-            as: 'owned_meetings'
-          }
+            from: "meetings",
+            localField: "_id",
+            foreignField: "owner_id",
+            as: "owned_meetings",
+          },
         },
         {
           $lookup: {
-            from: 'participants',
+            from: "participants",
             pipeline: [
               { $match: { email: subject_email } },
               {
                 $lookup: {
-                  from: 'meetings',
-                  localField: 'meeting_id',
-                  foreignField: '_id',
-                  as: 'meetings'
-                }
+                  from: "meetings",
+                  localField: "meeting_id",
+                  foreignField: "_id",
+                  as: "meetings",
+                },
               },
               {
                 $project: {
-                  meeting: { $arrayElemAt: [ '$meetings', 0 ] }
-                }
+                  meeting: { $arrayElemAt: ["$meetings", 0] },
+                },
               },
               {
                 $replaceRoot: {
-                  newRoot: '$meeting'
-                }
-              }
+                  newRoot: "$meeting",
+                },
+              },
             ],
-            as: 'participating_meetings'
-          }
+            as: "participating_meetings",
+          },
         },
         {
           $project: {
             meetings: {
-              $concatArrays: [ '$participating_meetings', '$owned_meetings' ]
-            }
-          }
+              $concatArrays: ["$participating_meetings", "$owned_meetings"],
+            },
+          },
         },
-        { $unwind: '$meetings' },
-        { $replaceRoot: { newRoot: '$meetings' } },
-        { $sort: { 'date': -1 } },
-        { $skip: parseInt( skip ) },
-        { $limit: parseInt( limit ) }
+        { $unwind: "$meetings" },
+        { $replaceRoot: { newRoot: "$meetings" } },
+        { $sort: { date: -1 } },
+        { $skip: parseInt(skip) },
+        { $limit: parseInt(limit) },
       ];
 
-      const meetings = await User.aggregate( pipeline );
+      const meetings = await User.aggregate(pipeline);
 
-      return res.status( 200 ).send( meetings );
-    } catch ( err ) {
-      return res.status( 500 ).send( err );
+      return res.status(200).send(meetings);
+    } catch (err) {
+      return res.status(500).send(err);
     }
   },
 
@@ -332,35 +333,33 @@ module.exports = {
    * Delete a meeting and all related data to it
    * @param {string} req.params._id - _id of meeting to delete
    */
-  async delete( req, res ) {
+  async delete(req, res) {
     const meeting_id = req.params._id;
 
-    await authUtils.checkOwner( meeting_id, 'meetings', req.credentials );
+    await authUtils.checkOwner(meeting_id, "meetings", req.credentials);
 
     let session;
 
     try {
       session = await mongoose.connection.startSession();
 
-      await session.withTransaction( async() => {
+      await session.withTransaction(async () => {
         await Promise.all([
           Meeting.deleteOne({ _id: meeting_id }),
           Participant.deleteMany({ meeting_id }),
           Topic.deleteMany({ meeting_id }),
           Takeaway.deleteMany({ meeting_id }),
-          ActionItem.deleteMany({ meeting_id })
+          ActionItem.deleteMany({ meeting_id }),
         ]);
       });
 
-      res.status( 204 ).send();
-    } catch ( err ) {
-      jobi.error( err.message );
+      res.status(204).send();
+    } catch (err) {
+      jobi.error(err.message);
 
-      res.status( 500 ).send('Failed to delete meeting.');
-
+      res.status(500).send("Failed to delete meeting.");
     } finally {
       session.endSession();
     }
-  }
-
+  },
 };

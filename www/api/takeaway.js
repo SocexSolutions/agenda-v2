@@ -1,3 +1,3 @@
-import RestAPI from '../classes/rest-api';
+import RestAPI from "../classes/rest-api";
 
-export default new RestAPI('takeaway');
+export default new RestAPI("takeaway");

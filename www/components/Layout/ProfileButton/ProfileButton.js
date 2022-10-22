@@ -4,29 +4,29 @@ import {
   Menu,
   MenuItem,
   MenuList,
-  IconButton
-} from '@mui/material';
-import { AccountCircle, Logout } from '@mui/icons-material';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { userLogout } from '../../../store/features/user';
+  IconButton,
+} from "@mui/material";
+import { AccountCircle, Logout } from "@mui/icons-material";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { userLogout } from "../../../store/features/user";
 
 export default function ProfileButton() {
-  const [ anchor, setAnchor ] = useState( null );
+  const [anchor, setAnchor] = useState(null);
   const dispatch = useDispatch();
 
   return (
     <>
       <IconButton
         size="large"
-        onClick={( e ) => setAnchor( e.currentTarget )}
+        onClick={(e) => setAnchor(e.currentTarget)}
         disableFocusRipple
       >
         <AccountCircle />
       </IconButton>
-      <Menu anchorEl={anchor} open={!!anchor} onClose={() => setAnchor( null )}>
+      <Menu anchorEl={anchor} open={!!anchor} onClose={() => setAnchor(null)}>
         <MenuList dense>
-          <MenuItem onClick={() => dispatch( userLogout() )}>
+          <MenuItem onClick={() => dispatch(userLogout())}>
             <ListItemIcon>
               <Logout />
             </ListItemIcon>

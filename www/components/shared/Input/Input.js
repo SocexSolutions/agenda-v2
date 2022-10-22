@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-import styles from './Input.module.css';
+import styles from "./Input.module.css";
 
 const Input = ({
   label,
@@ -20,59 +20,58 @@ const Input = ({
   multiLine,
   customClass,
   rows,
-  cols
+  cols,
 }) => {
-
-  let classNames = '';
+  let classNames = "";
 
   //size cases
-  switch ( size ) {
-    case 'xs':
-      size = '15';
+  switch (size) {
+    case "xs":
+      size = "15";
       break;
-    case 'small':
-      size = '20';
+    case "small":
+      size = "20";
       break;
-    case 'medium':
-      size = '30';
+    case "medium":
+      size = "30";
       break;
-    case 'large':
-      size = '40';
+    case "large":
+      size = "40";
       break;
-    case 'xl':
-      size = '50';
+    case "xl":
+      size = "50";
       break;
   }
 
   //required cases
-  switch ( required ) {
+  switch (required) {
     case true:
-      required = ' *';
+      required = " *";
       break;
     case false:
-      required = '';
+      required = "";
       break;
   }
 
   //variant cases
-  switch ( variant ) {
-    case 'default':
-      classNames += ' ' + styles.default;
+  switch (variant) {
+    case "default":
+      classNames += " " + styles.default;
       break;
-    case 'outlined':
-      classNames += ' ' + styles.outlined;
+    case "outlined":
+      classNames += " " + styles.outlined;
       break;
   }
 
-  if ( errorMessage ) {
-    classNames += ' ' + styles.error;
+  if (errorMessage) {
+    classNames += " " + styles.error;
   }
 
-  if ( customClass ) {
-    classNames += ' ' + customClass;
+  if (customClass) {
+    classNames += " " + customClass;
   }
 
-  if ( !multiLine ) {
+  if (!multiLine) {
     return (
       <div className={styles.wrapper}>
         <label>
@@ -90,16 +89,14 @@ const Input = ({
           className={classNames}
           onKeyPress={onKeyPress}
         />
-        { errorMessage &&
-        <p>{errorMessage}</p>
-        }
+        {errorMessage && <p>{errorMessage}</p>}
       </div>
     );
   }
 
-  switch ( multiLine ) {
+  switch (multiLine) {
     case true:
-      classNames += ' ' + styles.multiLine;
+      classNames += " " + styles.multiLine;
       break;
     case false:
       break;
@@ -124,9 +121,7 @@ const Input = ({
         rows={rows}
         cols={cols}
       />
-      { errorMessage &&
-        <p>{errorMessage}</p>
-      }
+      {errorMessage && <p>{errorMessage}</p>}
     </div>
   );
 };
@@ -140,16 +135,16 @@ Input.propTypes = {
   required: PropTypes.bool,
   variant: PropTypes.string,
   type: PropTypes.string,
-  multiLine: PropTypes.bool
+  multiLine: PropTypes.bool,
 };
 
 Input.defaultProps = {
-  type: '',
-  label: '',
-  placeholder: '',
-  size: '20',
-  variant: 'default',
-  multiLine: false
+  type: "",
+  label: "",
+  placeholder: "",
+  size: "20",
+  variant: "default",
+  multiLine: false,
 };
 
 export default Input;

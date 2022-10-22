@@ -1,17 +1,16 @@
-import RestAPI from './rest-api';
-import client from '../api/client';
-import { store } from '../store';
-import { notify } from '../store/features/snackbar';
+import RestAPI from "./rest-api";
+import client from "../api/client";
+import { store } from "../store";
+import { notify } from "../store/features/snackbar";
 
 class TopicAPI extends RestAPI {
-
   /**
    * Create an instance of TopicAPI
    *
    * @returns {TopicAPI}
    */
   constructor() {
-    super('topic');
+    super("topic");
   }
 
   /**
@@ -21,16 +20,18 @@ class TopicAPI extends RestAPI {
    *
    * @returns {Promise<Takeaway[]>} - array of related takeaways
    */
-  async getTakeaways( id ) {
+  async getTakeaways(id) {
     try {
-      const res = await client.get( `topic/${ id }/takeaways` );
+      const res = await client.get(`topic/${id}/takeaways`);
 
       return res.data;
-    } catch ( err ) {
-      store().dispatch( notify({
-        message: `Failed to get takeaways for topic (${ err.message })`,
-        type: 'danger'
-      }) );
+    } catch (err) {
+      store().dispatch(
+        notify({
+          message: `Failed to get takeaways for topic (${err.message})`,
+          type: "danger",
+        })
+      );
 
       return [];
     }
@@ -43,16 +44,18 @@ class TopicAPI extends RestAPI {
    *
    * @returns {Promise<ActionItem[]>} - array of related action items
    */
-  async getActionItems( id ) {
+  async getActionItems(id) {
     try {
-      const res = await client.get( `topic/${ id }/action-items` );
+      const res = await client.get(`topic/${id}/action-items`);
 
       return res.data;
-    } catch ( err ) {
-      store().dispatch( notify({
-        message: `Failed to get action items for topic (${ err.message })`,
-        type: 'danger'
-      }) );
+    } catch (err) {
+      store().dispatch(
+        notify({
+          message: `Failed to get action items for topic (${err.message})`,
+          type: "danger",
+        })
+      );
 
       return [];
     }
@@ -65,14 +68,16 @@ class TopicAPI extends RestAPI {
    *
    * @param {String} email - email of user/participant to like with
    */
-  async like( id, email ) {
+  async like(id, email) {
     try {
-      await client.patch( `topic/${ id }/like`, { email } );
-    } catch ( err ) {
-      store().dispatch( notify({
-        message: `Failed to like topic (${ err.message })`,
-        type: 'danger'
-      }) );
+      await client.patch(`topic/${id}/like`, { email });
+    } catch (err) {
+      store().dispatch(
+        notify({
+          message: `Failed to like topic (${err.message})`,
+          type: "danger",
+        })
+      );
     }
   }
 
@@ -82,14 +87,16 @@ class TopicAPI extends RestAPI {
    *
    * @param {string} id - topic id
    */
-  async switch( id ) {
+  async switch(id) {
     try {
-      await client.patch( `topic/${ id }/switch` );
-    } catch ( err ) {
-      store().dispatch( notify({
-        message: `Failed to switch topics (${ err.message })`,
-        type: 'danger'
-      }) );
+      await client.patch(`topic/${id}/switch`);
+    } catch (err) {
+      store().dispatch(
+        notify({
+          message: `Failed to switch topics (${err.message})`,
+          type: "danger",
+        })
+      );
     }
   }
 
@@ -98,14 +105,16 @@ class TopicAPI extends RestAPI {
    *
    * @param {string} id - topic id
    */
-  async close( id ) {
+  async close(id) {
     try {
-      await client.patch( `topic/${ id }/close` );
-    } catch ( err ) {
-      store().dispatch( notify({
-        message: `Failed to close topic (${ err.message })`,
-        type: 'danger'
-      }) );
+      await client.patch(`topic/${id}/close`);
+    } catch (err) {
+      store().dispatch(
+        notify({
+          message: `Failed to close topic (${err.message})`,
+          type: "danger",
+        })
+      );
     }
   }
 }

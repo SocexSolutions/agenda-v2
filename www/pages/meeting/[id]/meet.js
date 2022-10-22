@@ -1,72 +1,72 @@
-import TopicSelectBar from '../../../components/pages/Meet/TopicSelectBar/TopicSelectBar';
-import ActionItemBar from '../../../components/pages/Meet/ActionItemBar/ActionItemBar';
-import TopicDisplay from '../../../components/pages/Meet/TopicDisplay/TopicDisplay';
-import TakeawayBoard from '../../../components/pages/Meet/TakeawayBoard/TakeawayBoard';
-import ActionItemBoard from '../../../components/pages/Meet/ActionItemBoard/ActionItemBoard';
+import TopicSelectBar from "../../../components/pages/Meet/TopicSelectBar/TopicSelectBar";
+import ActionItemBar from "../../../components/pages/Meet/ActionItemBar/ActionItemBar";
+import TopicDisplay from "../../../components/pages/Meet/TopicDisplay/TopicDisplay";
+import TakeawayBoard from "../../../components/pages/Meet/TakeawayBoard/TakeawayBoard";
+import ActionItemBoard from "../../../components/pages/Meet/ActionItemBoard/ActionItemBoard";
 
-import meetingAPI from '../../../api/meeting';
-import topicAPI from '../../../api/topic';
+import meetingAPI from "../../../api/meeting";
+import topicAPI from "../../../api/topic";
 
-import { ToggleButtonGroup } from '@mui/material';
-import { ToggleButton } from '@mui/material';
+import { ToggleButtonGroup } from "@mui/material";
+import { ToggleButton } from "@mui/material";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 
-import styles from '../../../styles/pages/meeting/[id]/meet.module.scss';
-import shared from '../../../styles/Shared.module.css';
+import styles from "../../../styles/pages/meeting/[id]/meet.module.scss";
+import shared from "../../../styles/Shared.module.css";
 
 export default function MeetRevamp() {
   const router = useRouter();
-  const user = useSelector( ( state ) => state.user );
+  const user = useSelector((state) => state.user);
 
   const meeting_id = router.query.id;
 
-  const [ tab, setTab ] = useState('Takeaways');
-  const [ name, setName ] = useState('');
-  const [ topics, setTopics ] = useState([]);
+  const [tab, setTab] = useState("Takeaways");
+  const [name, setName] = useState("");
+  const [topics, setTopics] = useState([]);
 
-  const changeTab = ( t ) => {
-    if ( !t ) {
+  const changeTab = (t) => {
+    if (!t) {
       return;
     }
 
-    setTab( t );
+    setTab(t);
   };
 
-  const loadMeeting = async( meeting_id ) => {
-    const meeting = await meetingAPI.get( meeting_id );
+  const loadMeeting = async (meeting_id) => {
+    const meeting = await meetingAPI.get(meeting_id);
 
-    setName( meeting.name );
+    setName(meeting.name);
   };
 
-  const loadTopics = async( meeting_id ) => {
-    const res = await meetingAPI.getTopics( meeting_id );
+  const loadTopics = async (meeting_id) => {
+    const res = await meetingAPI.getTopics(meeting_id);
 
-    setTopics( res );
+    setTopics(res);
   };
 
-  const switchToTopic = async( topic_id ) => {
-    await topicAPI.switch( topic_id );
+  const switchToTopic = async (topic_id) => {
+    await topicAPI.switch(topic_id);
 
-    loadTopics( meeting_id );
+    loadTopics(meeting_id);
   };
 
-  const closeTopic = async( topic_id ) => {
-    await topicAPI.close( topic_id );
+  const closeTopic = async (topic_id) => {
+    await topicAPI.close(topic_id);
 
-    loadTopics( meeting_id );
+    loadTopics(meeting_id);
   };
 
-  useEffect( () => {
-    if ( meeting_id ) {
-      loadMeeting( meeting_id );
-      loadTopics( meeting_id );
+  useEffect(() => {
+    if (meeting_id) {
+      loadMeeting(meeting_id);
+      loadTopics(meeting_id);
     }
-  }, [ user, meeting_id ] );
+  }, [user, meeting_id]);
 
-  const liveTopic = topics.find( ( topic ) => topic.status === 'live' );
+  const liveTopic = topics.find((topic) => topic.status === "live");
 
   return (
     <div className={shared.page}>
@@ -96,18 +96,18 @@ export default function MeetRevamp() {
                   color="primary"
                   value={tab}
                   exclusive
-                  onChange={( _, ta ) => changeTab( ta )}
+                  onChange={(_, ta) => changeTab(ta)}
                 >
                   <ToggleButton value="Takeaways">Takeaways</ToggleButton>
                   <ToggleButton value="Action Items">Action Items</ToggleButton>
                 </ToggleButtonGroup>
                 <TakeawayBoard
-                  hidden={tab !== 'Takeaways'}
+                  hidden={tab !== "Takeaways"}
                   liveTopic={liveTopic}
                   meetingId={meeting_id}
                 />
                 <ActionItemBoard
-                  hidden={tab !== 'Action Items'}
+                  hidden={tab !== "Action Items"}
                   liveTopic={liveTopic}
                   meetingId={meeting_id}
                 />

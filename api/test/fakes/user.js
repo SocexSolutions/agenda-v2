@@ -1,9 +1,9 @@
-module.exports = ( overrides ) => {
+module.exports = (overrides) => {
   return {
-    email: 'brian@brian.com',
-    username: 'brian',
-    hash: 'hash',
-    salt: 'salt',
-    ...overrides
+    email: "brian@brian.com",
+    username: "brian",
+    hash: "hash",
+    salt: "salt",
+    ...overrides,
   };
 };

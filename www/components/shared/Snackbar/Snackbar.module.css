@@ -2,10 +2,10 @@
   position: fixed;
   bottom: -150px;
   width: 40vw;
-  left: calc( 50vw - 20vw );
+  left: calc(50vw - 20vw);
   padding: 0rem 1.5rem;
   border-radius: 7px;
-  transition: bottom .5s ease-in-out;
+  transition: bottom 0.5s ease-in-out;
 }
 
 .snackbar p {
@@ -17,7 +17,7 @@
 
 .open {
   bottom: 50px;
-  transition: bottom .5s ease-in-out;
+  transition: bottom 0.5s ease-in-out;
 }
 
 .success {

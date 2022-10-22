@@ -1,14 +1,14 @@
-export default function debounce( fn, delay ) {
+export default function debounce(fn, delay) {
   let timer = null;
 
-  return function() {
+  return function () {
     const args = arguments;
     const context = this;
 
-    clearTimeout( timer );
+    clearTimeout(timer);
 
-    timer = setTimeout( () => {
-      fn.apply( context, args );
-    }, delay );
+    timer = setTimeout(() => {
+      fn.apply(context, args);
+    }, delay);
   };
 }

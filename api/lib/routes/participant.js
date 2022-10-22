@@ -1,11 +1,11 @@
-const router                = require('express').Router();
-const participantController = require('../controllers/participant');
-const { wrapController }    = require('../util/error-wrapper');
+const router = require("express").Router();
+const participantController = require("../controllers/participant");
+const { wrapController } = require("../util/error-wrapper");
 
-const wrapped = wrapController( participantController );
+const wrapped = wrapController(participantController);
 
-router.post( '/', wrapped.create );
-router.delete( '/:id', wrapped.delete );
-router.get( '/meetings/:email', wrapped.getMeetings );
+router.post("/", wrapped.create);
+router.delete("/:id", wrapped.delete);
+router.get("/meetings/:email", wrapped.getMeetings);
 
 module.exports = router;

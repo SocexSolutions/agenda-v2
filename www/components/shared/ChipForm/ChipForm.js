@@ -1,14 +1,14 @@
-import { useStore } from '../../../store';
-import { notify }   from '../../../store/features/snackbar';
+import { useStore } from "../../../store";
+import { notify } from "../../../store/features/snackbar";
 
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
-import Chip          from '../Chip/Chip';
-import IconTextField from '../IconTextField/IconTextField';
+import Chip from "../Chip/Chip";
+import IconTextField from "../IconTextField/IconTextField";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import styles from './ChipForm.module.css';
+import styles from "./ChipForm.module.css";
 
 /**
  * Form for editing chip arrays
@@ -23,81 +23,83 @@ import styles from './ChipForm.module.css';
  * @param {Function} destroy - async function to delete an item in the form
  * given an `id` as a param
  */
-function ChipForm( props ) {
+function ChipForm(props) {
   const store = useStore();
 
-  const [ input, setInput ]       = useState('');
-  const [ items, setItems ]       = useState([]);
-  const [ initLoad, setInitLoad ] = useState( true );
+  const [input, setInput] = useState("");
+  const [items, setItems] = useState([]);
+  const [initLoad, setInitLoad] = useState(true);
 
-  useEffect( () => {
-    const loadItems = async() => {
+  useEffect(() => {
+    const loadItems = async () => {
       const res = await props.getAll();
-      setItems( res );
+      setItems(res);
 
-      setInitLoad( false );
+      setInitLoad(false);
     };
 
     // check that the change prop exists before attempting to load since we
     // know the component is dependant on it
-    if ( initLoad && props.change ) {
+    if (initLoad && props.change) {
       loadItems();
     }
   });
 
-  const createChip = async( key ) => {
-    const duplicates = items.filter( item => {
-      return item[ props.itemKey ] === key;
+  const createChip = async (key) => {
+    const duplicates = items.filter((item) => {
+      return item[props.itemKey] === key;
     });
 
-    if ( duplicates.length ) {
-      store.dispatch( notify({
-        message: `${ props.itemName }s with duplicate ${ props.itemKey }s`,
-        type: 'danger'
-      }) );
+    if (duplicates.length) {
+      store.dispatch(
+        notify({
+          message: `${props.itemName}s with duplicate ${props.itemKey}s`,
+          type: "danger",
+        })
+      );
 
       return;
     }
 
-    const res = await props.create({ [ props.itemKey ]: key });
+    const res = await props.create({ [props.itemKey]: key });
 
-    items.unshift( res );
-    setItems([ ...items ]);
+    items.unshift(res);
+    setItems([...items]);
   };
 
-  function destroyChip( index ) {
-    const [ toDelete ] = items.splice( index, 1 );
-    setItems([ ...items ]);
+  function destroyChip(index) {
+    const [toDelete] = items.splice(index, 1);
+    setItems([...items]);
 
-    props.destroy( toDelete._id );
+    props.destroy(toDelete._id);
   }
 
-  function handleEnter( event ) {
-    if ( event.key === 'Enter' ) {
+  function handleEnter(event) {
+    if (event.key === "Enter") {
       handleSubmit();
     }
   }
 
   function handleSubmit() {
-    if ( input ) {
-      createChip( input );
-      setInput('');
+    if (input) {
+      createChip(input);
+      setInput("");
     }
   }
 
   const chips = [];
 
-  if ( items?.length ) {
-    for ( let i = 0; i < items.length; i++ ) {
-      const item = items[ i ];
+  if (items?.length) {
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
 
       chips.push(
         <Chip
           index={i}
           editing={true}
-          text={item[ props.itemKey ]}
-          key={item[ props.itemKey ]}
-          deleteFunc={() => destroyChip( i )}
+          text={item[props.itemKey]}
+          key={item[props.itemKey]}
+          deleteFunc={() => destroyChip(i)}
         />
       );
     }
@@ -105,14 +107,12 @@ function ChipForm( props ) {
 
   return (
     <div className={styles.chipForm}>
-      <div className={styles.chipContainer}>
-        {chips}
-      </div>
+      <div className={styles.chipContainer}>{chips}</div>
       <div className={styles.inputContainer}>
         <IconTextField
-          label={`Add ${ props.itemName }`}
+          label={`Add ${props.itemName}`}
           value={input}
-          onChange={( e ) => setInput( e.target.value )}
+          onChange={(e) => setInput(e.target.value)}
           onKeyPress={handleEnter}
           size="small"
           Icon={AddCircleIcon}

@@ -1,11 +1,10 @@
 const initialState = {
-  open: false
+  open: false,
 };
 
-export default ( state = initialState, action ) => {
-  switch ( action.type ) {
-
-    case 'ui/toggleDrawer':
+export default (state = initialState, action) => {
+  switch (action.type) {
+    case "ui/toggleDrawer":
       return { state, open: !state.open };
 
     default:
@@ -13,12 +12,11 @@ export default ( state = initialState, action ) => {
   }
 };
 
-
 /**
  * Open or close the drawer
  */
 export const toggleDrawer = () => {
-  return function toggleDrawer( dispatch, getState ) {
-    dispatch({ type: 'ui/toggleDrawer', payload: {} });
+  return function toggleDrawer(dispatch, getState) {
+    dispatch({ type: "ui/toggleDrawer", payload: {} });
   };
 };

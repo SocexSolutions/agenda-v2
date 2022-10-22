@@ -1,11 +1,10 @@
-import CancelIcon        from '@mui/icons-material/Cancel';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import CancelIcon from "@mui/icons-material/Cancel";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-import styles from './Chip.module.css';
+import styles from "./Chip.module.css";
 
 const Chip = ({ text, editing, deleteFunc, icon }) => {
-
-  if ( icon ) {
+  if (icon) {
     icon = <AccountCircleIcon className={styles.icons} />;
   }
 
@@ -13,12 +12,9 @@ const Chip = ({ text, editing, deleteFunc, icon }) => {
     <div className={styles.container}>
       {icon}
       <p>{text}</p>
-      { editing &&
-        <CancelIcon
-          className={styles.deleteIcon}
-          onClick={deleteFunc}
-        />
-      }
+      {editing && (
+        <CancelIcon className={styles.deleteIcon} onClick={deleteFunc} />
+      )}
     </div>
   );
 };

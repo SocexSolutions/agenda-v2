@@ -1,8 +1,8 @@
-const ObjectID = require('mongoose').Types.ObjectId;
+const ObjectID = require("mongoose").Types.ObjectId;
 
-module.exports = ( user_id ) => {
+module.exports = () => {
   return {
-    theme:   'default',
-    user_id: new ObjectID
+    theme: "default",
+    user_id: new ObjectID(),
   };
 };

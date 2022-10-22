@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+const crypto = require("crypto");
 
 module.exports = {
   /**
@@ -11,15 +11,11 @@ module.exports = {
    * @param {String} salt - hash from db
    * @return {Boolean} - validation was succesful
    */
-  validatePassword( password, hash, salt ) {
+  validatePassword(password, hash, salt) {
     // generate hash with given login password and salt
-    const reqHash = crypto.pbkdf2Sync(
-      password,
-      salt,
-      10000,
-      64,
-      'sha512'
-    ).toString('hex');
+    const reqHash = crypto
+      .pbkdf2Sync(password, salt, 10000, 64, "sha512")
+      .toString("hex");
 
     return reqHash === hash;
   },
@@ -29,23 +25,19 @@ module.exports = {
    *
    * @param {String} password - users new password
    * @return {Object} - object containing salt and hash
-  */
-  genPassword( password ) {
+   */
+  genPassword(password) {
     // create salt (random information)
-    const salt = crypto.randomBytes( 32 ).toString('hex');
+    const salt = crypto.randomBytes(32).toString("hex");
 
     // generate hash with new password and salt
-    const hash = crypto.pbkdf2Sync(
-      password,
-      salt,
-      10000,
-      64,
-      'sha512'
-    ).toString('hex');
+    const hash = crypto
+      .pbkdf2Sync(password, salt, 10000, 64, "sha512")
+      .toString("hex");
 
     return {
       salt,
-      hash
+      hash,
     };
-  }
+  },
 };

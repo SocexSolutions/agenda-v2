@@ -1,13 +1,13 @@
-import { TextField }         from '@mui/material';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { TextField } from "@mui/material";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 
-import styles from './HeaderForm.module.css';
+import styles from "./HeaderForm.module.css";
 
 function HeaderForm({
   meetingName,
   setMeetingName,
   meetingDate,
-  setMeetingDate
+  setMeetingDate,
 }) {
   return (
     <div className={styles.meetingBar}>
@@ -25,16 +25,9 @@ function HeaderForm({
           label="Meeting Date"
           value={meetingDate}
           onChange={setMeetingDate}
-          renderInput={
-            ( params ) => {
-              return (
-                <TextField
-                  {...params}
-                  size="small"
-                />
-              );
-            }
-          }
+          renderInput={(params) => {
+            return <TextField {...params} size="small" />;
+          }}
         />
       </form>
     </div>

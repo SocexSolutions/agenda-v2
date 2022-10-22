@@ -1,6 +1,6 @@
-const router   = require('express').Router();
-const sendGrid = require('../sendGrid/sendGrid');
+const router = require("express").Router();
+const sendGrid = require("../sendGrid/sendGrid");
 
-router.post( '/welcomeemail', sendGrid.sendWelcomeEmail );
+router.post("/welcomeemail", sendGrid.sendWelcomeEmail);
 
 module.exports = router;

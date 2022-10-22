@@ -1,7 +1,7 @@
-import client from '../api/client';
-import { store } from '../store';
-import { notify } from '../store/features/snackbar';
-import debounce from '../utils/debounce';
+import client from "../api/client";
+import { store } from "../store";
+import { notify } from "../store/features/snackbar";
+import debounce from "../utils/debounce";
 
 class RestAPI {
   /**
@@ -13,16 +13,16 @@ class RestAPI {
    *
    * @returns {RestAPI}
    */
-  constructor( type ) {
+  constructor(type) {
     this.type = type;
 
-    for ( const property of Object.keys( this ) ) {
+    for (const property of Object.keys(this)) {
       if (
-        property !== 'constructor' &&
-        property !== 'type' &&
-        typeof this[ property ] === 'function'
+        property !== "constructor" &&
+        property !== "type" &&
+        typeof this[property] === "function"
       ) {
-        this[ property ] = debounce( this[ property ], 300 );
+        this[property] = debounce(this[property], 300);
       }
     }
   }
@@ -34,16 +34,16 @@ class RestAPI {
    *
    * @returns {Promise<Object|undefined>} - retrieved object
    */
-  async get( id ) {
+  async get(id) {
     try {
-      const res = await client.get( `${ this.type }/${ id }` );
+      const res = await client.get(`${this.type}/${id}`);
 
       return res.data;
-    } catch ( err ) {
+    } catch (err) {
       store().dispatch(
         notify({
-          message: `Failed to get ${ this.type } (${ err.message } )`,
-          type: 'danger'
+          message: `Failed to get ${this.type} (${err.message} )`,
+          type: "danger",
         })
       );
     }
@@ -56,16 +56,16 @@ class RestAPI {
    *
    * @returns {Promise<Object|undefined>} - created object
    */
-  async create( payload ) {
+  async create(payload) {
     try {
-      const res = await client.post( this.type, payload );
+      const res = await client.post(this.type, payload);
 
       return res.data;
-    } catch ( err ) {
+    } catch (err) {
       store().dispatch(
         notify({
-          message: `Failed to create ${ this.type } (${ err.message } )`,
-          type: 'danger'
+          message: `Failed to create ${this.type} (${err.message} )`,
+          type: "danger",
         })
       );
     }
@@ -79,16 +79,16 @@ class RestAPI {
    *
    * @returns {Promise<Object|undefined>} - updated object
    */
-  async update( id, payload ) {
+  async update(id, payload) {
     try {
-      const res = await client.patch( `${ this.type }/${ id }`, payload );
+      const res = await client.patch(`${this.type}/${id}`, payload);
 
       return res.data;
-    } catch ( err ) {
+    } catch (err) {
       store().dispatch(
         notify({
-          message: `Failed to update ${ this.type } (${ err.message } )`,
-          type: 'danger'
+          message: `Failed to update ${this.type} (${err.message} )`,
+          type: "danger",
         })
       );
 
@@ -103,14 +103,14 @@ class RestAPI {
    *
    * @returns {Promise<undefined>}
    */
-  async destroy( id ) {
+  async destroy(id) {
     try {
-      await client.delete( `${ this.type }/${ id }` );
-    } catch ( err ) {
+      await client.delete(`${this.type}/${id}`);
+    } catch (err) {
       store().dispatch(
         notify({
-          message: `Failed to delete ${ this.type } (${ err.message } )`,
-          type: 'danger'
+          message: `Failed to delete ${this.type} (${err.message} )`,
+          type: "danger",
         })
       );
     }

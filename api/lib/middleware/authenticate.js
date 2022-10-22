@@ -1,17 +1,17 @@
-const JWTUtils    = require('../util/jwt');
-const jobi        = require('@starryinternet/jobi');
-const User        = require('../models/user');
-const Participant = require('../models/user');
+const JWTUtils = require("../util/jwt");
+const jobi = require("@starryinternet/jobi");
+const User = require("../models/user");
+const Participant = require("../models/user");
 
-const authenticate = async( req, res, next ) => {
-  jobi.debug('authenticating');
+const authenticate = async (req, res, next) => {
+  jobi.debug("authenticating");
 
   try {
     const auth = req.headers.authorization;
 
-    const decoded = JWTUtils.verifyJWT( auth );
+    const decoded = JWTUtils.verifyJWT(auth);
 
-    if ( decoded.usr ) {
+    if (decoded.usr) {
       const { email, username, _id } = await User.findOne({ _id: decoded.sub });
       req.credentials = { ...decoded, user: { email, username, _id } };
     } else {
@@ -20,11 +20,10 @@ const authenticate = async( req, res, next ) => {
     }
 
     next();
+  } catch (err) {
+    jobi.error(err);
 
-  } catch ( err ) {
-    jobi.error( err );
-
-    res.status( 401 ).json({ success: false, msg: 'Forbidden' });
+    res.status(401).json({ success: false, msg: "Forbidden" });
   }
 };
 

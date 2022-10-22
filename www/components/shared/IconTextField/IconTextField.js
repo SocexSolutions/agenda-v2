@@ -1,17 +1,14 @@
-import styles from './IconTextField.module.scss';
+import styles from "./IconTextField.module.scss";
 
-import { TextField }   from '@mui/material';
-import { IconButton } from '@mui/material';
+import { TextField } from "@mui/material";
+import { IconButton } from "@mui/material";
 
 const IconTextField = ({ Icon, onIconClick, className, ...other }) => {
-  const combinedClassName = `${ styles.container } ${ className }`;
+  const combinedClassName = `${styles.container} ${className}`;
 
   return (
     <div className={combinedClassName}>
-      <TextField
-        className={styles.input}
-        {...other}
-      />
+      <TextField className={styles.input} {...other} />
       <IconButton
         className={styles.icon_button}
         onClick={onIconClick}

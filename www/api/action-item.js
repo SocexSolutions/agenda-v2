@@ -1,4 +1,3 @@
+import RestAPI from "../classes/rest-api";
 
-import RestAPI from '../classes/rest-api';
-
-export default new RestAPI('action-item');
+export default new RestAPI("action-item");

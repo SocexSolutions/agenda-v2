@@ -1,3 +1,3 @@
-import RestAPI from '../classes/rest-api';
+import RestAPI from "../classes/rest-api";
 
-export default new RestAPI('participant');
+export default new RestAPI("participant");

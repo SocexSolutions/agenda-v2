@@ -1,6 +1,6 @@
-import styles from './TopicDisplay.module.scss';
+import styles from "./TopicDisplay.module.scss";
 
-import { Fade } from '@mui/material';
+import { Fade } from "@mui/material";
 
 export default function TopicDisplay({ topic }) {
   return (

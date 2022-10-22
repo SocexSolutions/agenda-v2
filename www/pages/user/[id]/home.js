@@ -1,59 +1,59 @@
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import Fade from '@mui/material/Fade';
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import Fade from "@mui/material/Fade";
 
-import Inbox from '../../../components/pages/Home/Inbox/Inbox';
-import CreateFab from '../../../components/shared/CreateFab/CreateFab';
+import Inbox from "../../../components/pages/Home/Inbox/Inbox";
+import CreateFab from "../../../components/shared/CreateFab/CreateFab";
 
-import client from '../../../api/client';
+import client from "../../../api/client";
 
-import shared from '../../../styles/Shared.module.css';
-import styles from '../../../styles/pages/user/[id]/home.module.css';
+import shared from "../../../styles/Shared.module.css";
+import styles from "../../../styles/pages/user/[id]/home.module.css";
 
-import { notify } from '../../../store/features/snackbar';
+import { notify } from "../../../store/features/snackbar";
 
-const User = ( props ) => {
-  const [ loading, setLoading ] = useState( true );
-  const [ ownedMeetings, setOwnedMeetings ] = useState([]);
-  const [ participantMeetings, setParticMeetings ] = useState([]);
+const User = (props) => {
+  const [loading, setLoading] = useState(true);
+  const [ownedMeetings, setOwnedMeetings] = useState([]);
+  const [participantMeetings, setParticMeetings] = useState([]);
 
-  const user = useSelector( ( state ) => state.user );
+  const user = useSelector((state) => state.user);
 
   async function load() {
     try {
       const res = await Promise.all([
-        client.get( `participant/meetings/${ user.email }` ),
-        client.get( `user/meetings/${ user._id }` )
+        client.get(`participant/meetings/${user.email}`),
+        client.get(`user/meetings/${user._id}`),
       ]);
 
-      setParticMeetings( res[ 0 ].data );
-      setOwnedMeetings( res[ 1 ].data );
+      setParticMeetings(res[0].data);
+      setOwnedMeetings(res[1].data);
 
-      setLoading( false );
-    } catch ( err ) {
+      setLoading(false);
+    } catch (err) {
       props.store.dispatch(
         notify({
-          message: 'Failed to fetch meeting: ' + err.message,
-          type: 'danger'
+          message: "Failed to fetch meeting: " + err.message,
+          type: "danger",
         })
       );
     }
   }
 
-  useEffect( () => {
-    if ( user._id ) {
+  useEffect(() => {
+    if (user._id) {
       load();
     }
-  }, [ user ] );
+  }, [user]);
 
-  const meetings = ownedMeetings.concat( participantMeetings );
+  const meetings = ownedMeetings.concat(participantMeetings);
 
   return (
     <Fade in={!loading}>
       <div className={shared.page}>
         <div className={shared.container}>
           <h2 className={styles.page_title}>My Meetings</h2>
-          <Inbox meetings={meetings} refresh={load}/>
+          <Inbox meetings={meetings} refresh={load} />
         </div>
         <CreateFab />
       </div>

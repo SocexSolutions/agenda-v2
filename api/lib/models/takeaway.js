@@ -1,31 +1,34 @@
-const mongoose = require('mongoose');
-const Schema   = mongoose.Schema;
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 const takeawaySchema = new Schema({
   name: {
-    type: String
+    type: String,
   },
   description: {
-    type: String
+    type: String,
   },
   topic_id: {
-    type: Schema.Types.ObjectId, ref: 'Topic',
+    type: Schema.Types.ObjectId,
+    ref: "Topic",
     required: true,
-    index: true
+    index: true,
   },
-  reactions: [ {
-    type: String
-  } ],
+  reactions: [
+    {
+      type: String,
+    },
+  ],
   owner_id: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
+    ref: "User",
+    required: true,
   },
   meeting_id: {
     type: Schema.Types.ObjectId,
-    ref: 'Meeting',
-    required: true
-  }
+    ref: "Meeting",
+    required: true,
+  },
 });
 
-module.exports = mongoose.model( 'Takeaway', takeawaySchema );
+module.exports = mongoose.model("Takeaway", takeawaySchema);

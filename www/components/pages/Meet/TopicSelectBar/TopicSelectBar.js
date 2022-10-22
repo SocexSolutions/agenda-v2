@@ -1,8 +1,8 @@
-import SideBarButton from './TopicSelectBarButton/TopicSelectBarButton';
+import SideBarButton from "./TopicSelectBarButton/TopicSelectBarButton";
 
-import { Fade } from '@mui/material';
+import { Fade } from "@mui/material";
 
-import styles from './TopicSelectBar.module.scss';
+import styles from "./TopicSelectBar.module.scss";
 
 export default function SideBar({ topics, meetingName, switchToTopic }) {
   return (
@@ -10,11 +10,11 @@ export default function SideBar({ topics, meetingName, switchToTopic }) {
       <div className={styles.side_bar}>
         <h3>Meeting Topics</h3>
         <div className={styles.button_container}>
-          {topics.map( ( topic ) => {
+          {topics.map((topic) => {
             return (
               <SideBarButton
                 topic={topic}
-                onClick={() => switchToTopic( topic._id )}
+                onClick={() => switchToTopic(topic._id)}
                 key={topic.name}
                 name={topic.name}
               />

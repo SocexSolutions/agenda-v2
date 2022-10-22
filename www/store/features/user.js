@@ -1,27 +1,26 @@
-import client from '../../api/client';
-import { getCookie, setCookie } from '../../utils/cookie';
-import router from 'next/router';
+import client from "../../api/client";
+import { getCookie, setCookie } from "../../utils/cookie";
+import router from "next/router";
 
 const initialState = {
   token: null,
   _id: null,
   username: null,
-  email: null
+  email: null,
 };
 
-const reducer = ( state = initialState, action ) => {
-  switch ( action.type ) {
-
-    case 'user/register':
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
+    case "user/register":
       return action.payload;
 
-    case 'user/login':
+    case "user/login":
       return action.payload;
 
-    case 'user/refresh':
+    case "user/refresh":
       return action.payload;
 
-    case 'user/logout':
+    case "user/logout":
       return action.payload;
 
     default:
@@ -37,26 +36,24 @@ const reducer = ( state = initialState, action ) => {
  * @returns {Promise<undefined>}
  */
 export const userRegister = ({ email, username, password }) => {
-  return async function registerUser( dispatch, getState ) { // eslint-disable-line
-    const { data } = await client.post(
-      '/user/register',
-      {
-        email,
-        username,
-        password
-      }
-    );
+  return async function registerUser(dispatch, getState) {
+    // eslint-disable-line
+    const { data } = await client.post("/user/register", {
+      email,
+      username,
+      password,
+    });
 
-    setCookie( 'agenda-auth', data.token );
+    setCookie("agenda-auth", data.token);
 
     dispatch({
-      type: 'user/register',
+      type: "user/register",
       payload: {
-        token:    data.token,
-        _id:      data.user._id,
+        token: data.token,
+        _id: data.user._id,
         username: data.user.username,
-        email:    data.user.email
-      }
+        email: data.user.email,
+      },
     });
   };
 };
@@ -68,25 +65,23 @@ export const userRegister = ({ email, username, password }) => {
  * @returns {Promise<undefined>}
  */
 export const userLogin = ({ username, password }) => {
-  return async function loginUser( dispatch, getState ) { // eslint-disable-line
-    const { data } = await client.post(
-      '/user/login',
-      {
-        username,
-        password
-      }
-    );
+  return async function loginUser(dispatch, getState) {
+    // eslint-disable-line
+    const { data } = await client.post("/user/login", {
+      username,
+      password,
+    });
 
-    setCookie( 'agenda-auth', data.token );
+    setCookie("agenda-auth", data.token);
 
     dispatch({
-      type: 'user/login',
+      type: "user/login",
       payload: {
-        token:    data.token,
-        _id:      data.user._id,
+        token: data.token,
+        _id: data.user._id,
         username: data.user.username,
-        email:    data.user.email
-      }
+        email: data.user.email,
+      },
     });
   };
 };
@@ -96,30 +91,27 @@ export const userLogin = ({ username, password }) => {
  * @returns {Promise<undefined>}
  */
 export const userRefresh = () => {
-  return async function refreshUser( dispatch, getState ) { // eslint-disable-line
-    const token = getCookie('agenda-auth');
+  return async function refreshUser(dispatch, getState) {
+    // eslint-disable-line
+    const token = getCookie("agenda-auth");
 
-    if ( token ) {
+    if (token) {
       try {
-        const { data } = await client.get(
-          'user/refresh',
-          {
-            headers: { 'authorization': token }
-          }
-        );
-
-        dispatch({
-          type: 'user/refresh',
-          payload: {
-            token,
-            _id:      data.user._id,
-            username: data.user.username,
-            email:    data.user.email
-          }
+        const { data } = await client.get("user/refresh", {
+          headers: { authorization: token },
         });
 
-      } catch ( err ) {
-        console.error( err );
+        dispatch({
+          type: "user/refresh",
+          payload: {
+            token,
+            _id: data.user._id,
+            username: data.user.username,
+            email: data.user.email,
+          },
+        });
+      } catch (err) {
+        console.error(err);
       }
     }
   };
@@ -130,16 +122,17 @@ export const userRefresh = () => {
  * @returns {Promise<undefined>}
  */
 export const userLogout = () => {
-  return async function logoutUser( dispatch, getState ) { // eslint-disable-line
-    setCookie( 'agenda-auth', '' );
-    localStorage.removeItem('theme');
+  return async function logoutUser(dispatch, getState) {
+    // eslint-disable-line
+    setCookie("agenda-auth", "");
+    localStorage.removeItem("theme");
 
     dispatch({
-      type: 'user/logout',
-      payload: {}
+      type: "user/logout",
+      payload: {},
     });
 
-    router.push('/');
+    router.push("/");
   };
 };
 

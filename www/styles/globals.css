@@ -1,19 +1,19 @@
 @font-face {
-  font-family: 'Open Sans';
+  font-family: "Open Sans";
   font-weight: 400;
-  src: url('../public/font/OpenSans-Regular.ttf');
+  src: url("../public/font/OpenSans-Regular.ttf");
 }
 
 @font-face {
-  font-family: 'Open Sans';
+  font-family: "Open Sans";
   font-weight: 700;
-  src: url('../public/font/OpenSans-Bold.ttf');
+  src: url("../public/font/OpenSans-Bold.ttf");
 }
 
 @font-face {
-  font-family: 'Open Sans';
+  font-family: "Open Sans";
   font-weight: 300;
-  src: url('../public/font/OpenSans-Light.ttf');
+  src: url("../public/font/OpenSans-Light.ttf");
 }
 
 html,
@@ -21,7 +21,7 @@ body {
   height: 100%;
   padding: 0;
   margin: 0;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   overflow-x: hidden;
   color: var(--primary);
 }
@@ -60,19 +60,19 @@ a {
 }
 
 p {
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 
 /* THEMES */
 
 .default {
-  --primary: #3A3C45;
+  --primary: #3a3c45;
   --primary-hover: #1d1e23;
   --background: #f5f5f5;
   --backgroundHighlight: #e6e6e6;
   --foreground: #fff;
   --border: #c9c9c9;
-  --darkText: #3A3C45;
+  --darkText: #3a3c45;
   --midText: #6a737d;
   --lightText: #fff;
   --danger: #df1405;
@@ -89,5 +89,5 @@ p {
   --indigo: #394bad;
   --purple: #9697e6;
   --pink: #e01b5c;
-  --boxShadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  --boxShadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }

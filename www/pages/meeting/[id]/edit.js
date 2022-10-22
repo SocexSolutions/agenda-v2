@@ -1,60 +1,60 @@
-import HeaderForm from '../../../components/pages/edit/HeaderForm/HeaderForm';
-import StatusButton from '../../../components/pages/edit/StatusButton/StatusButton';
-import CardBoard from '../../../components/shared/CardBoard/CardBoard';
-import ChipForm from '../../../components/shared/ChipForm/ChipForm';
-import CardForm from '../../../components/shared/CardForm/CardForm';
+import HeaderForm from "../../../components/pages/Edit/HeaderForm/HeaderForm";
+import StatusButton from "../../../components/pages/Edit/StatusButton/StatusButton";
+import CardBoard from "../../../components/shared/CardBoard/CardBoard";
+import ChipForm from "../../../components/shared/ChipForm/ChipForm";
+import CardForm from "../../../components/shared/CardForm/CardForm";
 
-import { Fade } from '@mui/material';
+import { Fade } from "@mui/material";
 
-import meetingAPI from '../../../api/meeting';
-import topicAPI from '../../../api/topic';
-import participantAPI from '../../../api/participant';
+import meetingAPI from "../../../api/meeting";
+import topicAPI from "../../../api/topic";
+import participantAPI from "../../../api/participant";
 
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
-import styles from '../../../styles/pages/meeting/[id]/edit.module.scss';
-import shared from '../../../styles/Shared.module.css';
+import styles from "../../../styles/pages/meeting/[id]/edit.module.scss";
+import shared from "../../../styles/Shared.module.css";
 
-const Meeting = ( props ) => {
+const Meeting = (props) => {
   const router = useRouter();
-  const user = useSelector( ( state ) => state.user );
+  const user = useSelector((state) => state.user);
 
   const meeting_id = router.query.id;
 
-  const [ initLoad, setInitLoad ] = useState( true );
-  const [ name, setName ] = useState('');
-  const [ date, setDate ] = useState('');
-  const [ status, setStatus ] = useState('');
+  const [initLoad, setInitLoad] = useState(true);
+  const [name, setName] = useState("");
+  const [date, setDate] = useState("");
+  const [status, setStatus] = useState("");
 
-  useEffect( () => {
-    const loadMeeting = async() => {
-      const res = await meetingAPI.get( meeting_id );
+  useEffect(() => {
+    const loadMeeting = async () => {
+      const res = await meetingAPI.get(meeting_id);
 
-      setName( res.name );
-      setDate( res.date );
-      setStatus( res.status );
+      setName(res.name);
+      setDate(res.date);
+      setStatus(res.status);
 
-      setInitLoad( false );
+      setInitLoad(false);
     };
 
-    if ( initLoad && meeting_id ) {
+    if (initLoad && meeting_id) {
       loadMeeting();
     }
-  }, [ user, props.store, router.query.id ] );
+  }, [user, props.store, router.query.id]);
 
   const updateMeeting = ({ name, date }) => {
-    meetingAPI.update( meeting_id, { name, date } );
+    meetingAPI.update(meeting_id, { name, date });
 
-    setName( name );
-    setDate( date );
+    setName(name);
+    setDate(date);
   };
 
   const updateMeetingStatus = ({ status }) => {
-    meetingAPI.updateStatus( meeting_id, status );
+    meetingAPI.updateStatus(meeting_id, status);
 
-    setStatus( status );
+    setStatus(status);
   };
 
   return (
@@ -65,54 +65,54 @@ const Meeting = ( props ) => {
             <h2 className={shared.page_title}>Edit Meeting: {name}</h2>
             <StatusButton
               status={status}
-              setMeetingStatus={( status ) => updateMeetingStatus({ status })}
+              setMeetingStatus={(status) => updateMeetingStatus({ status })}
             />
           </section>
-          <section className={shared.card + ' ' + styles.section}>
+          <section className={shared.card + " " + styles.section}>
             <h3 className={styles.card_title}>Meeting Details</h3>
             <HeaderForm
               meetingName={name}
-              setMeetingName={( e ) =>
+              setMeetingName={(e) =>
                 updateMeeting({ name: e.target.value, date })
               }
               meetingDate={date}
-              setMeetingDate={( e ) => updateMeeting({ name, date: e.$d })}
+              setMeetingDate={(e) => updateMeeting({ name, date: e.$d })}
             />
           </section>
-          <section className={shared.card + ' ' + styles.section}>
+          <section className={shared.card + " " + styles.section}>
             <h3>Participants</h3>
             <ChipForm
               change={meeting_id}
-              itemKey={'email'}
-              itemName={'participant'}
-              getAll={() => meetingAPI.getParticipants( meeting_id )}
-              create={( payload ) =>
+              itemKey={"email"}
+              itemName={"participant"}
+              getAll={() => meetingAPI.getParticipants(meeting_id)}
+              create={(payload) =>
                 participantAPI.create({
                   meeting_id,
-                  ...payload
+                  ...payload,
                 })
               }
-              destroy={( id ) => participantAPI.destroy( id )}
+              destroy={(id) => participantAPI.destroy(id)}
             />
           </section>
           <section
             className={
-              shared.card + ' ' + styles.section + ' ' + styles.background
+              shared.card + " " + styles.section + " " + styles.background
             }
           >
             <h3>Topics</h3>
             <CardBoard
               change={meeting_id}
-              getAll={() => meetingAPI.getTopics( meeting_id )}
-              create={( payload ) =>
+              getAll={() => meetingAPI.getTopics(meeting_id)}
+              create={(payload) =>
                 topicAPI.create({
                   meeting_id,
-                  ...payload
+                  ...payload,
                 })
               }
-              update={( id, payload ) => topicAPI.update( id, payload )}
-              destroy={( id ) => topicAPI.destroy( id )}
-              itemName={'topic'}
+              update={(id, payload) => topicAPI.update(id, payload)}
+              destroy={(id) => topicAPI.destroy(id)}
+              itemName={"topic"}
               Card={CardForm}
             />
           </section>

@@ -1,4 +1,4 @@
-@use '../../../../styles/colors.scss';
+@use "../../../../styles/colors.scss";
 
 .container {
   width: 100%;
@@ -24,5 +24,5 @@
 
 .button_group {
   background: colors.$foreground;
-  margin-bottom: .5em;
+  margin-bottom: 0.5em;
 }

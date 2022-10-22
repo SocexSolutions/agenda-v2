@@ -19,21 +19,21 @@
 }
 
 .like {
-  padding: .25em;
+  padding: 0.25em;
   overflow: visible;
   height: 1.1em;
   width: 1.1em;
-  border-radius: .5em;
+  border-radius: 0.5em;
   cursor: pointer;
   color: var(--midText);
 }
 
 .dislike {
-  padding: .25em;
+  padding: 0.25em;
   overflow: visible;
   height: 1.1em;
   width: 1.1em;
-  border-radius: .25em;
+  border-radius: 0.25em;
   cursor: pointer;
   color: var(--successText);
   background-color: var(--successBackground);

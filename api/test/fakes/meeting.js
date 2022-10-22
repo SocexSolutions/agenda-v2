@@ -1,12 +1,12 @@
-const ObjectId = require('mongoose').Types.ObjectId;
+const ObjectId = require("mongoose").Types.ObjectId;
 
-const meeting = ( opts ) => {
+const meeting = (opts) => {
   return {
-    name: 'meeting about something',
-    owner_id: new ObjectId,
+    name: "meeting about something",
+    owner_id: new ObjectId(),
     date: new Date(),
-    status: 'draft',
-    ...opts
+    status: "draft",
+    ...opts,
   };
 };
 

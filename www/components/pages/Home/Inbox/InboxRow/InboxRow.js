@@ -1,5 +1,5 @@
-import MeetingModal from '../MeetingModal/MeetingModal';
-import { useState } from 'react';
+import MeetingModal from "../MeetingModal/MeetingModal";
+import { useState } from "react";
 
 /**
  * A row in the inbox component
@@ -8,11 +8,11 @@ import { useState } from 'react';
  * @param {string} classes - custom css class names to be applied to the row
  */
 export default function InboxRow({ meeting, refresh, classes }) {
-  const [ open, setOpen ] = useState( false );
+  const [open, setOpen] = useState(false);
 
   return (
     <div className={classes}>
-      <p onClick={() => setOpen( true )}>{meeting.name}</p>
+      <p onClick={() => setOpen(true)}>{meeting.name}</p>
       <MeetingModal
         meeting={meeting}
         open={open}
