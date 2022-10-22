@@ -265,7 +265,28 @@ module.exports = {
   async index(req, res) {
     const subject_email = req.credentials.user.email;
     const subject_id = req.credentials.sub;
-    const { limit = 0, skip = 0 } = req.query; // Thanks tom
+    const {  filters } = req.query; // Thanks tom
+    const { limit = 0, skip = 0 } = req.query; //will need to change these for total count
+
+    const { owners, name } = JSON.parse( filters );
+
+    const pipelineFilters = [];
+
+    console.log( ObjectID( owners[ 0 ] ) );
+
+    owners.length && pipelineFilters.push({
+      $match:  {
+        owner_id: {
+          $in: owners.map( ( owner ) => ObjectID( owner ) )
+        }
+      }
+    });
+
+    name && pipelineFilters.push({
+      $match: { name: { $regex: name, $options: 'i' } }
+    });
+
+    console.log( JSON.stringify( pipelineFilters ) );
 
     try {
       const pipeline = [
@@ -314,6 +335,7 @@ module.exports = {
             },
           },
         },
+<<<<<<< HEAD
         { $unwind: "$meetings" },
         { $replaceRoot: { newRoot: "$meetings" } },
         { $sort: { date: -1 } },
@@ -326,6 +348,78 @@ module.exports = {
       return res.status(200).send(meetings);
     } catch (err) {
       return res.status(500).send(err);
+=======
+        { $unwind: '$meetings' },
+        { $replaceRoot: { newRoot: '$meetings' } },
+        ...pipelineFilters,
+        { $sort: { 'date': -1 } },
+        { $skip: parseInt( skip ) },
+        { $limit: parseInt( limit ) }
+      ];
+
+      const totalCount = [ //this is more performant than $facet
+        {
+          $match: { _id: ObjectID( subject_id ) }
+        },
+        {
+          $lookup: {
+            from: 'meetings',
+            localField: '_id',
+            foreignField: 'owner_id',
+            as: 'owned_meetings'
+          }
+        },
+        {
+          $lookup: {
+            from: 'participants',
+            pipeline: [
+              { $match: { email: subject_email } },
+              {
+                $lookup: {
+                  from: 'meetings',
+                  localField: 'meeting_id',
+                  foreignField: '_id',
+                  as: 'meetings'
+                }
+              },
+              {
+                $project: {
+                  meeting: { $arrayElemAt: [ '$meetings', 0 ] }
+                }
+              },
+              {
+                $replaceRoot: {
+                  newRoot: '$meeting'
+                }
+              }
+            ],
+            as: 'participating_meetings'
+          }
+        },
+        {
+          $project: {
+            meetings: {
+              $concatArrays: [ '$participating_meetings', '$owned_meetings' ]
+            }
+          }
+        },
+        { $unwind: '$meetings' },
+        { $replaceRoot: { newRoot: '$meetings' } },
+        ...pipelineFilters,
+        {
+          $count: 'count'
+        }
+      ];
+
+      const meetings = await User.aggregate( pipeline );
+      const count = await User.aggregate( totalCount );
+
+      console.log( count[ 0 ].count );
+
+      return res.status( 200 ).send({ meetings, count: count[ 0 ].count }); //idk man 🤮
+    } catch ( err ) {
+      return res.status( 500 ).send( err );
+>>>>>>> 3b83c49 (finished filters and added pagination)
     }
   },
 

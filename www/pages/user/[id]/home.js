@@ -14,25 +14,27 @@ import { notify } from "../../../store/features/snackbar";
 
 const User = ( props ) => {
 
-  const filtersConstuctor = { owner: '' };
+  const filtersConstuctor = { owners: [], name: '' };
 
   const [ loading, setLoading ] = useState( true );
-  const [ ownedMeetings, setOwnedMeetings ] = useState([]);
-  const [ participantMeetings, setParticMeetings ] = useState([]);
+  const [ meetings, setMeetings ] = useState([]);
   const [ filters, setFilters ] = useState( filtersConstuctor );
+  const [ meetingCount, setMeetingCount ] = useState( 0 );
+  const [ skip, setSkip ] = useState( 0 );
 
   const user = useSelector((state) => state.user);
 
   async function load() {
     try {
       const res = await Promise.all([
-        client.get(`participant/meetings/${user.email}`),
-        client.get(`user/meetings/${user._id}`),
+        client.get( `/meeting/?skip=${ skip }&limit=14`, {
+          params: { filters }
+        })
       ]);
 
-      setParticMeetings( res[ 0 ].data );
-      setOwnedMeetings( res[ 1 ].data );
- 
+      setMeetings( res[ 0 ].data.meetings );
+      setMeetingCount( res[ 0 ].data.count );
+
       setLoading( false );
     } catch ( err ) {
       props.store.dispatch(
@@ -48,16 +50,20 @@ const User = ( props ) => {
     if (user._id) {
       load();
     }
-  }, [user]);
-
-  const meetings = ownedMeetings.concat(participantMeetings);
+  }, [ user, filters, skip ] );
 
   return (
     <Fade in={!loading}>
       <div className={shared.page}>
         <div className={shared.container}>
           <h2 className={styles.page_title}>My Meetings</h2>
-          <Inbox meetings={meetings} refresh={load} filters={filters}/>
+          <Inbox
+            meetings={meetings}
+            refresh={load}
+            setFilters={setFilters}
+            filters={filters}
+            totalMeetings={meetingCount}
+            setSkip={setSkip}/>
         </div>
         <CreateFab />
       </div>
