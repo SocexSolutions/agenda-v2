@@ -272,8 +272,6 @@ module.exports = {
 
     const pipelineFilters = [];
 
-    console.log( ObjectID( owners[ 0 ] ) );
-
     owners.length && pipelineFilters.push({
       $match:  {
         owner_id: {
@@ -285,8 +283,6 @@ module.exports = {
     name && pipelineFilters.push({
       $match: { name: { $regex: name, $options: 'i' } }
     });
-
-    console.log( JSON.stringify( pipelineFilters ) );
 
     try {
       const pipeline = [
@@ -413,8 +409,6 @@ module.exports = {
 
       const meetings = await User.aggregate( pipeline );
       const count = await User.aggregate( totalCount );
-
-      console.log( count[ 0 ].count );
 
       return res.status( 200 ).send({ meetings, count: count[ 0 ].count }); //idk man 🤮
     } catch ( err ) {

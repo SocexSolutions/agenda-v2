@@ -1,11 +1,14 @@
 import { Button, TextField, Autocomplete, Pagination } from '@mui/material';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import InboxRow from './InboxRow/InboxRow';
+
 import meetingAPI from '../../../../api/meeting';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+
 import styles from './Inbox.module.scss';
 import classNames from 'classnames';
-import FilterListIcon from '@mui/icons-material/FilterList';
+
 
 import { height } from '@mui/system';
 
@@ -31,9 +34,6 @@ export default function Inbox({
 
   const [ filtersOpen, setFiltersOpen ] = useState( false );
 
-  console.log( totalMeetings );
-  const itemsPerPage = 14;
-
   const lineItems = meetings.map( ( meeting ) => {
     return (
       <InboxRow
@@ -54,6 +54,8 @@ export default function Inbox({
   };
 
   const users = [ ...new Set( meetings.map( item => item.owner_id ) ) ];
+
+  const itemsPerPage = 14;
 
   if ( lineItems.length || filters.name ) {
     return (
