@@ -24,6 +24,15 @@ const CardForm = ({ editing, setEditing, item, updateItem, destroyItem }) => {
     destroyItem(item);
   };
 
+  /**
+   * Handles keyboard shortcuts for quickly saving or exiting from a card.
+   */
+  const maybeHandleShortcut = (e) => {
+    if (e.key === "Enter" && e.metaKey) {
+      onUpdate();
+    }
+  };
+
   if (!editing) {
     return (
       <div
@@ -31,7 +40,7 @@ const CardForm = ({ editing, setEditing, item, updateItem, destroyItem }) => {
         onClick={() => setEditing(item._id)}
       >
         <h4 className={styles.name}>{name}</h4>
-        <p className={styles.description}>{description}</p>
+        {description && <p className={styles.description}>{description}</p>}
       </div>
     );
   }
@@ -47,6 +56,7 @@ const CardForm = ({ editing, setEditing, item, updateItem, destroyItem }) => {
         size="small"
         label="Title"
         onChange={(e) => setName(e.target.value)}
+        onKeyDown={(e) => maybeHandleShortcut(e)}
         value={name}
       />
       <TextField
@@ -57,6 +67,7 @@ const CardForm = ({ editing, setEditing, item, updateItem, destroyItem }) => {
         size="small"
         label="Description"
         onChange={(e) => setDescription(e.target.value)}
+        onKeyDown={(e) => maybeHandleShortcut(e)}
         value={description}
       />
       <div className={styles.button_container}>
