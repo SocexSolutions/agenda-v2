@@ -1,10 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-import meetingApi from "../../api/meeting";
 import topicApi from "../../api/topic";
 
 const topicsSlice = createSlice({
-  name: "topics",
+  name: "topic",
   initialState: {},
   reducers: {
     create: (state, action) => {
@@ -18,7 +16,12 @@ const topicsSlice = createSlice({
       const { _id } = action.payload;
 
       // merge to avoid overwriting action items or takeaways
-      state[_id] = { ...state[_id], ...action.payload };
+      state[_id] = {
+        takeways: [],
+        actionItems: [],
+        ...state[_id],
+        ...action.payload,
+      };
     },
     delete: (state, action) => {
       delete state[action.payload._id];
@@ -71,76 +74,77 @@ const topicsSlice = createSlice({
   },
 });
 
+/**
+ * Create a topic
+ * @param {Topic} topic
+ */
 export const create = (topic) => {
-  return async function create() {
+  return async function create(dispatch) {
     const createdTopic = await topicApi.create(topic);
 
-    return (dispatch) => {
-      dispatch({
-        type: "topic/create",
-        payload: createdTopic,
-      });
-      dispatch({
-        type: "meeting/createTopic",
-        payload: {
-          _id: createdTopic.meeting_id,
-          topicId: createdTopic._id,
-        },
-      });
-    };
+    dispatch({
+      type: "topic/create",
+      payload: createdTopic,
+    });
+    dispatch({
+      type: "meeting/createTopic",
+      payload: {
+        _id: createdTopic.meeting_id,
+        topicId: createdTopic._id,
+      },
+    });
   };
 };
 
-export const update = (id, updates) => {
-  return async function update() {
-    const updatedTopic = await topicApi.update(id, updates);
+/**
+ * Update a topic
+ * @param {Topic} topic
+ */
+export const update = (topic) => {
+  return async function update(dispatch) {
+    const updatedTopic = await topicApi.update(topic._id, topic);
 
-    return (dispatch) => {
-      dispatch({
-        type: "topic/update",
-        payload: updatedTopic,
-      });
-    };
+    dispatch({
+      type: "topic/update",
+      payload: updatedTopic,
+    });
   };
 };
 
+/**
+ * Delete a topic
+ * @param {Topic} topic
+ */
 export const destroy = (topic) => {
-  return async function destroy() {
+  return async function destroy(dispatch) {
     await topicApi.destroy(topic._id);
 
-    return (dispatch) => {
-      dispatch({
-        type: "topic/delete",
-        payload: topic,
-      });
-      dispatch({
-        type: "meeting/deleteTopic",
-        payload: {
-          _id: topic.meeting_id,
-          topicId: topic._id,
-        },
-      });
-    };
+    dispatch({
+      type: "topic/delete",
+      payload: topic,
+    });
+    dispatch({
+      type: "meeting/deleteTopic",
+      payload: {
+        _id: topic.meeting_id,
+        topicId: topic._id,
+      },
+    });
   };
 };
 
-export const getMeetingTopics = (meeting_id) => {
-  return async function getTopics() {
-    const topics = await meetingApi.getTopics(meeting_id);
+/**
+ * Like a topic
+ * @param {Topic} topic
+ */
+export const like = (topic) => {
+  return async function like(dispatch) {
+    const updatedTopic = await topicApi.like(topic._id);
 
-    return (dispatch) => {
-      dispatch({
-        type: "topic/updateMany",
-        payload: { topics },
-      });
-      dispatch({
-        type: "meeting/setTopics",
-        payload: {
-          _id: topics[0].meeting_id,
-          topicsIds: topics.map((topic) => topic._id),
-        },
-      });
-    };
+    dispatch({
+      type: "topic/update",
+      payload: updatedTopic,
+    });
   };
 };
 

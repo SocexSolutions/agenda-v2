@@ -15,9 +15,7 @@ class TopicAPI extends RestAPI {
 
   /**
    * Fetch the takeaways for a given topic
-   *
-   * @param {String} id - topic id to get takeaways for
-   *
+   * @param {string} id - topic id to get takeaways for
    * @returns {Promise<Takeaway[]>} - array of related takeaways
    */
   async getTakeaways(id) {
@@ -39,9 +37,7 @@ class TopicAPI extends RestAPI {
 
   /**
    * Fetch the action items for a given topic
-   *
    * @param {string} id - topic id to get action items for
-   *
    * @returns {Promise<ActionItem[]>} - array of related action items
    */
   async getActionItems(id) {
@@ -63,14 +59,14 @@ class TopicAPI extends RestAPI {
 
   /**
    * Add or remove a like from a topic with the given email
-   *
-   * @param {String} id - topic id
-   *
-   * @param {String} email - email of user/participant to like with
+   * @param {string} id - topic id
+   * @param {string} email - email of user/participant to like with
    */
   async like(id, email) {
     try {
-      await client.patch(`topic/${id}/like`, { email });
+      const res = await client.patch(`topic/${id}/like`, { email });
+
+      return res.data;
     } catch (err) {
       store().dispatch(
         notify({
@@ -84,12 +80,13 @@ class TopicAPI extends RestAPI {
   /**
    * Switch between topics by setting the given topic to live and the current
    * topic to closed (if any).
-   *
    * @param {string} id - topic id
    */
   async switch(id) {
     try {
-      await client.patch(`topic/${id}/switch`);
+      const res = await client.patch(`topic/${id}/switch`);
+
+      return res.data;
     } catch (err) {
       store().dispatch(
         notify({
@@ -102,12 +99,13 @@ class TopicAPI extends RestAPI {
 
   /**
    * Close the given topic by setting its status to closed
-   *
    * @param {string} id - topic id
    */
   async close(id) {
     try {
-      await client.patch(`topic/${id}/close`);
+      const res = await client.patch(`topic/${id}/close`);
+
+      return res.data;
     } catch (err) {
       store().dispatch(
         notify({

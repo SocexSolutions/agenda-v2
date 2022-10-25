@@ -132,4 +132,11 @@ export const userLogout = () => {
   };
 };
 
+/**
+ * Select the user from the store
+ */
+export const selectUser = (state) => {
+  return state.user;
+};
+
 export default reducer;
