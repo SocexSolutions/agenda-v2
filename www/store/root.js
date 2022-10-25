@@ -4,14 +4,16 @@ import userReducer from "./features/user";
 import themeReducer from "./features/theme";
 import drawerReducer from "./features/drawer";
 import snackbarReducer from "./features/snackbar";
-import topicsReducer from "./features/topics";
+import topicReducer from "./features/topic";
+import meetingReducer from "./features/meeting";
 
 const rootReducer = combineReducers({
   user: userReducer,
   theme: themeReducer,
   drawer: drawerReducer,
   snackbar: snackbarReducer,
-  topics: topicsReducer,
+  topic: topicReducer,
+  meeting: meetingReducer,
 });
 
 export default rootReducer;
