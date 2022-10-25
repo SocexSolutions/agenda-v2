@@ -265,7 +265,7 @@ module.exports = {
   async index(req, res) {
     const subject_email = req.credentials.user.email;
     const subject_id = req.credentials.sub;
-    const {  filters } = req.query; // Thanks tom
+    const {  filters = `{ "owners": [], "name": ""}` } = req.query; // Thanks tom
     const { limit = 0, skip = 0 } = req.query; //will need to change these for total count
 
     const { owners, name } = JSON.parse( filters );

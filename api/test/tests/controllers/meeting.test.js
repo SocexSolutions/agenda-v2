@@ -262,9 +262,11 @@ describe("lib/controllers/meeting", () => {
 
       const { data } = await client.get(`/meeting/?skip=1&limit=3`);
 
-      assert.strictEqual(data.length, 3);
-      assert.strictEqual(data[0].name, "participant meeting"); //Second newest meeting first
-      assert.strictEqual(data[2].name, "meeting 4"); //Second oldest meeting last
+      console.log( data );
+
+      assert.strictEqual( data.meetings.length, 3 );
+      assert.strictEqual( data.meetings[ 0 ].name, 'participant meeting' ); //Second newest meeting first
+      assert.strictEqual( data.meetings[ 2 ].name, 'meeting 4' ); //Second oldest meeting last
     });
   });
 
