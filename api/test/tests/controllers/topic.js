@@ -159,40 +159,36 @@ describe("lib/controllers/topic", () => {
     });
 
     it("should add a topic like", async () => {
-      const res = await this.client.patch(
-        "/topic/" + this.topic._id + "/like",
-        { email: "thudson@agenda.com" }
-      );
+      const res = await this.client.patch("/topic/" + this.topic._id + "/like");
 
       assert.strictEqual(res.status, 200);
-      assert.isTrue(res.data.likes.includes("thudson@agenda.com"));
+      assert.isTrue(res.data.likes.includes(this.user.email));
 
       const [topic] = await Topic.find({});
 
-      assert.isTrue(topic.likes.includes("thudson@agenda.com"));
+      assert.isTrue(topic.likes.includes(this.user.email));
     });
 
     it("should remove a topic like", async () => {
-      const res = await this.client.patch(
-        "/topic/" + this.topic._id + "/like",
-        { email: "bryan@bacon.com" }
+      this.topic = await Topic.create(
+        fakeTopic({ meeting_id: this.meeting._id, likes: [this.user.email] })
       );
 
+      const res = await this.client.patch("/topic/" + this.topic._id + "/like");
+
       assert.strictEqual(res.status, 200);
-      assert.isFalse(res.data.likes.includes("bryan@bacon.com"));
+      assert.isFalse(res.data.likes.includes(this.user.email));
 
       const [topic] = await Topic.find({});
 
-      assert.isFalse(topic.likes.includes("bryan@bacon.com"));
+      assert.isFalse(topic.likes.includes(this.user.email));
     });
 
     it("should 403 if not owner or participant", async () => {
       this.client.defaults.headers.common["Authorization"] = this.token2;
 
       await assert.isRejected(
-        this.client.patch("/topic/" + this.topic._id + "/like", {
-          email: "bryan@bacon.com",
-        }),
+        this.client.patch("/topic/" + this.topic._id + "/like"),
         "Request failed with status code 403"
       );
     });

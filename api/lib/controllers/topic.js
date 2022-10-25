@@ -46,17 +46,18 @@ module.exports = {
 
   like: async (req, res) => {
     const { _id } = req.params;
-    const { email } = req.body;
 
     const topic = await Topic.findOne({ _id });
 
     await authUtils.checkParticipant(topic.meeting_id, req.credentials);
 
+    const email = req.credentials.user.email;
+
     if (!topic.likes.includes(email)) {
       topic.likes.push(email);
     } else {
-      topic.likes = topic.likes.filter((email) => {
-        return email !== email;
+      topic.likes = topic.likes.filter((e) => {
+        return e !== email;
       });
     }
 
