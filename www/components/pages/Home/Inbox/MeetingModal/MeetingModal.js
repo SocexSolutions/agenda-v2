@@ -3,6 +3,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 import meetingAPI from "../../../../../api/meeting";
 import styles from "./MeetingModal.module.scss";
 
@@ -15,6 +16,9 @@ import styles from "./MeetingModal.module.scss";
  */
 export default function MeetingModal({ meeting, open, setOpen, refresh }) {
   const router = useRouter();
+  const user = useSelector((state) => state.user);
+
+  const isOwner = meeting.owner_id === user._id;
 
   const displayDate = new Date(meeting.date).toLocaleDateString();
 
@@ -43,14 +47,18 @@ export default function MeetingModal({ meeting, open, setOpen, refresh }) {
             <p className={styles.display_date}>{displayDate}</p>
           </div>
           <div className={styles.actions_container}>
-            <IconButton
-              onClick={() => router.push(`/meeting/${meeting._id}/edit`)}
-            >
-              <EditIcon />
-            </IconButton>
-            <IconButton onClick={() => onDelete()}>
-              <DeleteIcon />
-            </IconButton>
+            {isOwner && (
+              <IconButton
+                onClick={() => router.push(`/meeting/${meeting._id}/edit`)}
+              >
+                <EditIcon />
+              </IconButton>
+            )}
+            {isOwner && (
+              <IconButton onClick={() => onDelete()}>
+                <DeleteIcon />
+              </IconButton>
+            )}
             <IconButton onClick={() => setOpen(false)}>
               <CloseIcon />
             </IconButton>
