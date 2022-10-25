@@ -1,14 +1,15 @@
-import { applyMiddleware, createStore } from "redux";
+import { configureStore } from "@reduxjs/toolkit";
 import { useMemo } from "react";
-import thunkMiddleware from "redux-thunk";
-import rootReducer from "./rootReducer";
+import thunk from "redux-thunk";
+import root from "./root";
 
 let _store;
 
-const composedEnhancer = applyMiddleware(thunkMiddleware);
-
-function initStore(initialState) {
-  return createStore(rootReducer, initialState, composedEnhancer);
+function initStore() {
+  return configureStore({
+    reducer: root,
+    middleware: [thunk],
+  });
 }
 
 export const initializeStore = (preloadedState) => {
