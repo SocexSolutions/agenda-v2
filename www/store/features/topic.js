@@ -1,13 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import topicApi from "../../api/topic";
-import { generateSlice } from "../../classes/slice-generator";
-import { generateActions } from "../../classes/slice-generator";
+import { generateSlice } from "../utils/slice-generator";
+import { generateActions } from "../utils/slice-generator";
+import { generateSelectors } from "../utils/slice-generator";
 
 const topicSchema = {
   name: "topic",
   references: {
-    actionItems: "actionItem._id",
-    takeaways: "takeaway._id",
+    actionItems: "actionItem",
+    takeaways: "takeaway",
   },
   dependencies: {
     meeting: "meeting_id",
@@ -16,7 +17,7 @@ const topicSchema = {
 
 export const { reducer } = createSlice(generateSlice(topicSchema));
 export const actions = generateActions(topicSchema);
-export const selectors = {};
+export const selectors = generateSelectors(topicSchema);
 
 /**
  * Like a topic
@@ -25,6 +26,36 @@ export const selectors = {};
 actions.like = (topic) => {
   return async function like(dispatch) {
     const updatedTopic = await topicApi.like(topic._id);
+
+    dispatch({
+      type: "topic/update",
+      payload: updatedTopic,
+    });
+  };
+};
+
+/**
+ * Switch to a different topic
+ * @param {Topic} topic
+ */
+actions.switch = (topic) => {
+  return async function switchTopic(dispatch) {
+    const updatedTopic = await topicApi.switch(topic._id);
+
+    dispatch({
+      type: "topic/update",
+      payload: updatedTopic,
+    });
+  };
+};
+
+/**
+ * Close a topic
+ * @param {Topic} topic
+ */
+actions.close = (topic) => {
+  return async function closeTopic(dispatch) {
+    const updatedTopic = await topicApi.close(topic._id);
 
     dispatch({
       type: "topic/update",

@@ -14,7 +14,7 @@ export default function SideBar({ topics, meetingName, switchToTopic }) {
             return (
               <SideBarButton
                 topic={topic}
-                onClick={() => switchToTopic(topic._id)}
+                onClick={() => switchToTopic(topic)}
                 key={topic.name}
                 name={topic.name}
               />

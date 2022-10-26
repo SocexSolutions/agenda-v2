@@ -2,6 +2,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Button from "@mui/material/Button";
 
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 import styles from "./CardBoard.module.css";
 
@@ -9,20 +10,18 @@ import styles from "./CardBoard.module.css";
  * General board component that displays a list of crud cards
  *
  * @param {Object} props
- * @param {string} change - key used to determine if board should reload
- * @param {Function} getAll - async function that gets all items to be
- * displayed on board
+ * @param {Function} getAll - function to retrieve data
+ * @param {Function} selector - selector function to get data from store
  * @param {Function} create - function that takes a payload and creates
- * a new item
- * @param {Function} update - function that takes an id and payload and
- * updates the corresponding item
- * @param {Function} destroy - function the takes an id and deletes the
- * corresponding item
+ * a new item using the payload
+ * @param {Function} update - function that takes a new version of an item and
+ * updates it
+ * @param {Function} destroy - function the takes an item and deletes it
  * @param {Component} Card - card to use
  * @param {string} itemName - name of item (ie 'takeaway', 'action item')
  */
 const CardBoard = ({
-  change,
+  selector,
   getAll,
   create,
   update,
@@ -30,52 +29,27 @@ const CardBoard = ({
   Card,
   itemName,
 }) => {
-  const [items, setItems] = useState([]);
+  const items = useSelector(selector);
+
   const [editingId, setEditingId] = useState("");
-
-  const fetchItems = async () => {
-    const res = await getAll();
-
-    if (Array.isArray(res)) {
-      setItems(res);
-    }
-  };
+  const [initailized, setInitialized] = useState(false);
 
   useEffect(() => {
-    const load = async () => {
-      await fetchItems();
-    };
-
-    // Check that the change prop exists before attempting to load since we
-    // know the component is dependant on it.
-    if (change) {
-      load();
+    if (!initailized) {
+      getAll();
+      setInitialized(true);
     }
-  }, [change]);
+  }, [initailized, getAll]);
 
   const createItem = async () => {
-    const { _id } = await create({
-      name: "",
-      description: "",
-    });
-
-    setEditingId(_id);
-
-    fetchItems();
+    // TODO handle editing id changes (maybe just store an array of ids in store)
+    create({ name: "", description: "" });
   };
 
   const updateItem = async (takeaway) => {
     setEditingId(null);
 
-    await update(takeaway._id, takeaway);
-
-    fetchItems();
-  };
-
-  const destroyItem = async (takeaway) => {
-    await destroy(takeaway._id);
-
-    fetchItems();
+    update(takeaway);
   };
 
   const itemCards = [];
@@ -92,7 +66,7 @@ const CardBoard = ({
               key={item._id}
               item={item}
               updateItem={updateItem}
-              destroyItem={destroyItem}
+              destroyItem={destroy}
             />
           </div>
         );
@@ -104,7 +78,7 @@ const CardBoard = ({
               key={item._id}
               item={item}
               updateItem={updateItem}
-              destroyItem={destroyItem}
+              destroyItem={destroy}
             />
           </div>
         );

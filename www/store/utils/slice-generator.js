@@ -1,4 +1,4 @@
-import api from "../api";
+import api from "../../api";
 
 const capitalize = (s) => s[0].toUpperCase() + s.slice(1);
 
@@ -12,6 +12,8 @@ function generateReducers(schema) {
   }, {});
 
   reducers.create = (state, action) => {
+    // Add references on init so that modifications to reference array don't
+    // blow up.
     state[action.payload._id] = {
       ...refs,
       ...action.payload,
@@ -21,6 +23,7 @@ function generateReducers(schema) {
   reducers.update = (state, action) => {
     const { _id } = action.payload;
 
+    // References still necessary here since `get` actions use update.
     state[_id] = { ...refs, ...state[_id], ...action.payload };
   };
 
@@ -32,27 +35,31 @@ function generateReducers(schema) {
     action.payload.forEach((item) => {
       const { _id } = item;
 
+      // Update many can be called instead of create, so add references here as
+      // well.
       state[_id] = { ...refs, ...state[_id], ...item };
     });
   };
 
   Object.entries(schema.references).forEach(([k, v]) => {
-    const refName = capitalize(v.split(".")[0]);
+    const dispName = capitalize(v);
 
-    reducers[`set${refName}s`] = (state, action) => {
-      const { _id, [`${k}Ids`]: refIds } = action.payload;
+    reducers[`set${capitalize(k)}`] = (state, action) => {
+      const { _id, [`${v}Ids`]: refIds } = action.payload;
+
+      console.log(schema.name, `set${capitalize(k)}`, refIds);
 
       state[_id][k] = refIds;
     };
 
-    reducers[`create${refName}`] = (state, action) => {
-      const { _id, [`${k}Id`]: refId } = action.payload;
+    reducers[`create${dispName}`] = (state, action) => {
+      const { _id, [`${v}Id`]: refId } = action.payload;
 
-      state[_id][k] = state[_id][k].push(refId);
+      state[_id][k].push(refId);
     };
 
-    reducers[`delete${refName}`] = (state, action) => {
-      const { _id, [`${k}Id`]: refId } = action.payload;
+    reducers[`delete${dispName}`] = (state, action) => {
+      const { _id, [`${v}Id`]: refId } = action.payload;
 
       state[_id][k] = state[_id][k].filter((id) => id !== refId);
     };
@@ -80,12 +87,15 @@ export function generateActions(schema) {
     return async function createItem(dispatch) {
       const createdItem = await api[schema.name].create(item);
 
+      // We must create item before adding it to reference arrays of ther items
+      // or it may be referenced before it exists.
       dispatch({
         type: `${schema.name}/create`,
         payload: createdItem,
       });
 
       Object.entries(schema.dependencies).forEach(([k, v]) => {
+        console.log(`${k}/create${itemName}`, schema.name, createdItem._id);
         dispatch({
           type: `${k}/create${itemName}`,
           payload: {
@@ -101,12 +111,10 @@ export function generateActions(schema) {
     return async function deleteItem(dispatch) {
       await api[schema.name].destroy(item._id);
 
-      dispatch({
-        type: `${schema.name}/delete`,
-        payload: item,
-      });
-
+      // Remove references to the item before deleting it to avoid race
+      // condition
       Object.entries(schema.dependencies).forEach(([k, v]) => {
+        console.log(`${k}/delete${itemName}`, schema.name, item._id);
         dispatch({
           type: `${k}/delete${itemName}`,
           payload: {
@@ -115,12 +123,17 @@ export function generateActions(schema) {
           },
         });
       });
+
+      dispatch({
+        type: `${schema.name}/delete`,
+        payload: item,
+      });
     };
   };
 
   actions.update = (item) => {
     return async function updateItem(dispatch) {
-      const updatedItem = await api[schema.name].update(item);
+      const updatedItem = await api[schema.name].update(item._id, item);
 
       dispatch({
         type: `${schema.name}/update`,
@@ -131,21 +144,28 @@ export function generateActions(schema) {
 
   Object.entries(schema.references).forEach(([k, v]) => {
     const functionName = `get${capitalize(k)}`;
-    const refStore = v.split(".")[0];
 
     actions[functionName] = (id) => {
-      return async function getReferces(dispatch) {
+      return async function getReferences(dispatch) {
         const references = await api[schema.name][functionName](id);
 
         dispatch({
-          type: `${refStore}/updateMany`,
+          type: `${v}/updateMany`,
           payload: references,
         });
+
+        console.log("dispatching", `${schema.name}/set${capitalize(k)}`, id, {
+          payload: {
+            _id: id,
+            [`${v}Ids`]: references.map((r) => r._id),
+          },
+        });
+
         dispatch({
           type: `${schema.name}/set${capitalize(k)}`,
           payload: {
             _id: id,
-            [`${k}Ids`]: references.map((r) => r._id),
+            [`${v}Ids`]: references.map((r) => r._id),
           },
         });
       };
@@ -171,8 +191,6 @@ export function generateSelectors(schema) {
   };
 
   Object.entries(schema.references).forEach(([k, v]) => {
-    const name = v.split(".")[0];
-
     selectors[k] = (state, id) => {
       if (!id || !state[schema.name][id]) {
         return [];
@@ -180,7 +198,9 @@ export function generateSelectors(schema) {
 
       const ids = state[schema.name][id][k];
 
-      return ids.map((id) => state[name][id]);
+      console.log(schema.name, k, ids);
+
+      return ids.map((id) => state[v][id]).filter(Boolean);
     };
   });
 
@@ -188,6 +208,9 @@ export function generateSelectors(schema) {
 }
 
 export function generateSlice(schema) {
+  schema.references = schema.references || {};
+  schema.dependencies = schema.dependencies || {};
+
   const reducers = generateReducers(schema);
 
   return {

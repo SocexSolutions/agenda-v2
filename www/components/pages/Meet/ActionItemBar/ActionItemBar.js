@@ -2,33 +2,26 @@ import { useEffect, useState } from "react";
 
 import { Checkbox } from "@mui/material";
 
-import meetingAPI from "../../../../api/meeting";
-import actionItemAPI from "../../../../api/action-item";
+import { useSelector, useDispatch } from "react-redux";
+
+import actionItemStore from "../../../../store/features/action-item";
+import meetingStore from "../../../../store/features/meeting";
 
 import styles from "./ActionItemBar.module.scss";
 
 export default function ActionItemBar({ meetingId }) {
-  const [actionItems, setActionItems] = useState([]);
+  const dispatch = useDispatch();
 
-  // TODO use store or context to share action items
+  const [initialized, setInitialized] = useState(false);
 
-  const loadActionItems = async (meetingId) => {
-    const res = await meetingAPI.getActionItems(meetingId);
-
-    setActionItems(res);
-  };
-
-  const setCompletion = async (actionItemId, completed) => {
-    await actionItemAPI.update(actionItemId, {
-      completed,
-    });
-
-    loadActionItems(meetingId);
-  };
+  const actionItems = useSelector((state) =>
+    meetingStore.selectors.actionItems(state, meetingId)
+  );
 
   useEffect(() => {
-    if (meetingId) {
-      loadActionItems(meetingId);
+    if (!initialized && meetingId) {
+      dispatch(meetingStore.actions.getActionItems(meetingId));
+      setInitialized(true);
     }
   }, [meetingId]);
 
@@ -38,7 +31,14 @@ export default function ActionItemBar({ meetingId }) {
         return (
           <div className={styles.action_item} key={actionItem._id}>
             <Checkbox
-              onClick={(e) => setCompletion(actionItem._id, e.target.checked)}
+              onClick={(e) =>
+                dispatch(
+                  actionItemStore.actions.update({
+                    ...actionItem,
+                    completed: e.target.checked,
+                  })
+                )
+              }
               checked={actionItem.completed}
             />
             <p>{actionItem.name}</p>

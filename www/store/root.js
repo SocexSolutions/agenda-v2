@@ -6,6 +6,8 @@ import drawerReducer from "./features/drawer";
 import snackbarReducer from "./features/snackbar";
 import topic from "./features/topic";
 import meeting from "./features/meeting";
+import actionItem from "./features/action-item";
+import takeaway from "./features/takeaway";
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -14,6 +16,8 @@ const rootReducer = combineReducers({
   snackbar: snackbarReducer,
   topic: topic.reducer,
   meeting: meeting.reducer,
+  takeaway: takeaway.reducer,
+  actionItem: actionItem.reducer,
 });
 
 export default rootReducer;

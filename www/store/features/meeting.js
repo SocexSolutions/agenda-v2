@@ -1,13 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { generateSlice } from "../../classes/slice-generator";
-import { generateActions } from "../../classes/slice-generator";
-import { generateSelectors } from "../../classes/slice-generator";
+import { generateSlice } from "../utils/slice-generator";
+import { generateActions } from "../utils/slice-generator";
+import { generateSelectors } from "../utils/slice-generator";
 
 const meetingSchema = {
   name: "meeting",
   references: {
-    topics: "topic._id",
-    participants: "participant._id",
+    topics: "topic",
+    participants: "participant",
+    actionItems: "actionItem",
   },
 };
 
