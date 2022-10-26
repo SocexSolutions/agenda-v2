@@ -2,31 +2,14 @@ import api from "../api";
 
 const capitalize = (s) => s[0].toUpperCase() + s.slice(1);
 
-const meetingSchema = {
-  name: "meeting",
-  references: {
-    topics: "topic._id",
-    participants: "participant._id",
-  },
-};
-
-const topicSchema = {
-  itemName: "topic",
-  references: {
-    actionItems: "actionItem._id",
-    takeaways: "takeaway._id",
-  },
-  dependencies: {
-    meeting: "meeting_id",
-  },
-};
-
-function createReducers(schema) {
+function generateReducers(schema) {
   const reducers = {};
 
   const refs = Object.keys(schema.references).reduce((acc, k) => {
     acc[k] = [];
-  });
+
+    return acc;
+  }, {});
 
   reducers.create = (state, action) => {
     state[action.payload._id] = {
@@ -43,6 +26,14 @@ function createReducers(schema) {
 
   reducers.delete = (state, action) => {
     delete state[action.payload._id];
+  };
+
+  reducers.updateMany = (state, action) => {
+    action.payload.forEach((item) => {
+      const { _id } = item;
+
+      state[_id] = { ...refs, ...state[_id], ...item };
+    });
   };
 
   Object.entries(schema.references).forEach(([k, v]) => {
@@ -66,24 +57,26 @@ function createReducers(schema) {
       state[_id][k] = state[_id][k].filter((id) => id !== refId);
     };
   });
+
+  return reducers;
 }
 
-function createActions(schema) {
+export function generateActions(schema) {
   const actions = {};
   const itemName = capitalize(schema.name);
 
-  actions[`get${itemName}`] = (id) => {
+  actions.get = (id) => {
     return async function getItem(dispatch) {
       const item = await api[schema.name].get(id);
 
       dispatch({
         type: `${schema.name}/update`,
-        payload: { [schema.name]: item },
+        payload: item,
       });
     };
   };
 
-  actions[`create${itemName}`] = (item) => {
+  actions.create = (item) => {
     return async function createItem(dispatch) {
       const createdItem = await api[schema.name].create(item);
 
@@ -104,7 +97,7 @@ function createActions(schema) {
     };
   };
 
-  actions[`delete${itemName}`] = (item) => {
+  actions.delete = (item) => {
     return async function deleteItem(dispatch) {
       await api[schema.name].destroy(item._id);
 
@@ -125,7 +118,7 @@ function createActions(schema) {
     };
   };
 
-  actions[`update${itemName}`] = (item) => {
+  actions.update = (item) => {
     return async function updateItem(dispatch) {
       const updatedItem = await api[schema.name].update(item);
 
@@ -137,15 +130,23 @@ function createActions(schema) {
   };
 
   Object.entries(schema.references).forEach(([k, v]) => {
-    const functionName = `get${itemName}${capitalize(k)}s`;
+    const functionName = `get${capitalize(k)}`;
+    const refStore = v.split(".")[0];
 
     actions[functionName] = (id) => {
       return async function getReferces(dispatch) {
-        const topics = await api[schema.name][functionName](id);
+        const references = await api[schema.name][functionName](id);
 
         dispatch({
-          type: `${k}/updateMany`,
-          payload: topics,
+          type: `${refStore}/updateMany`,
+          payload: references,
+        });
+        dispatch({
+          type: `${schema.name}/set${capitalize(k)}`,
+          payload: {
+            _id: id,
+            [`${k}Ids`]: references.map((r) => r._id),
+          },
         });
       };
     };
@@ -154,14 +155,44 @@ function createActions(schema) {
   return actions;
 }
 
-export default function createSlice(schema) {
-  const reducers = createReducers(schema);
-  const actions = createActions(schema);
+export function generateSelectors(schema) {
+  const selectors = {};
+
+  selectors.get = (state, id) => {
+    if (!id || !state[schema.name][id]) {
+      return null;
+    }
+
+    return state[schema.name][id];
+  };
+
+  selectors.getAll = (state) => {
+    return Object.values(state[schema.name]);
+  };
+
+  Object.entries(schema.references).forEach(([k, v]) => {
+    const name = v.split(".")[0];
+
+    selectors[k] = (state, id) => {
+      if (!id || !state[schema.name][id]) {
+        return [];
+      }
+
+      const ids = state[schema.name][id][k];
+
+      return ids.map((id) => state[name][id]);
+    };
+  });
+
+  return selectors;
+}
+
+export function generateSlice(schema) {
+  const reducers = generateReducers(schema);
 
   return {
     name: schema.name,
     initialState: {},
     reducers,
-    actions,
   };
 }

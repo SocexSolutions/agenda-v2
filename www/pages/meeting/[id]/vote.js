@@ -11,13 +11,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import { selectUser } from "../../../store/features/user";
-import {
-  getMeeting,
-  getMeetingTopics,
-  selectMeeting,
-  selectMeetingTopics,
-} from "../../../store/features/meeting";
-import { like } from "../../../store/features/topic";
+import meetingStore from "../../../store/features/meeting";
+import topicStore from "../../../store/features/topic";
 
 const Vote = () => {
   const router = useRouter();
@@ -28,20 +23,23 @@ const Vote = () => {
   const meeting_id = router.query.id;
 
   const user = useSelector(selectUser);
-  const topics = useSelector((state) => selectMeetingTopics(state, meeting_id));
-  const meeting = useSelector((state) => selectMeeting(state, meeting_id));
+  const meeting = useSelector((state) =>
+    meetingStore.selectors.get(state, meeting_id)
+  );
+  const topics = useSelector((state) =>
+    meetingStore.selectors.topics(state, meeting_id)
+  );
 
   const loading = !meeting || !topics || !user;
 
   const onLike = (topic) => {
-    console.log("like", topic);
-    dispatch(like(topic));
+    dispatch(topicStore.actions.like(topic));
   };
 
   useEffect(() => {
     if (!initialized && meeting_id) {
-      dispatch(getMeeting(meeting_id));
-      dispatch(getMeetingTopics(meeting_id));
+      dispatch(meetingStore.actions.get(meeting_id));
+      dispatch(meetingStore.actions.getTopics(meeting_id));
       setInitialized(true);
     }
   }, [user, meeting_id, initialized, dispatch]);
