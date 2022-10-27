@@ -284,6 +284,9 @@ module.exports = {
       $match: { name: { $regex: name, $options: 'i' } }
     });
 
+    const sliceStart = parseInt( skip );
+    const sliceEnd = parseInt( limit ) + sliceStart - 1;
+
     try {
       const pipeline = [
         {
@@ -291,11 +294,12 @@ module.exports = {
         },
         {
           $lookup: {
-            from: "meetings",
-            localField: "_id",
-            foreignField: "owner_id",
-            as: "owned_meetings",
-          },
+            from: 'meetings',
+            localField: '_id',
+            foreignField: 'owner_id',
+            pipeline: pipelineFilters,
+            as: 'owned_meetings'
+          }
         },
         {
           $lookup: {
@@ -304,11 +308,12 @@ module.exports = {
               { $match: { email: subject_email } },
               {
                 $lookup: {
-                  from: "meetings",
-                  localField: "meeting_id",
-                  foreignField: "_id",
-                  as: "meetings",
-                },
+                  from: 'meetings',
+                  localField: 'meeting_id',
+                  foreignField: '_id',
+                  pipeline: pipelineFilters,
+                  as: 'meetings'
+                }
               },
               {
                 $project: {
@@ -331,89 +336,34 @@ module.exports = {
             },
           },
         },
-<<<<<<< HEAD
-        { $unwind: "$meetings" },
-        { $replaceRoot: { newRoot: "$meetings" } },
-        { $sort: { date: -1 } },
-        { $skip: parseInt(skip) },
-        { $limit: parseInt(limit) },
-      ];
 
-      const meetings = await User.aggregate(pipeline);
-
-      return res.status(200).send(meetings);
-    } catch (err) {
-      return res.status(500).send(err);
-=======
-        { $unwind: '$meetings' },
-        { $replaceRoot: { newRoot: '$meetings' } },
-        ...pipelineFilters,
-        { $sort: { 'date': -1 } },
-        { $skip: parseInt( skip ) },
-        { $limit: parseInt( limit ) }
-      ];
-
-      const totalCount = [ //this is more performant than $facet
         {
-          $match: { _id: ObjectID( subject_id ) }
-        },
-        {
-          $lookup: {
-            from: 'meetings',
-            localField: '_id',
-            foreignField: 'owner_id',
-            as: 'owned_meetings'
-          }
-        },
-        {
-          $lookup: {
-            from: 'participants',
-            pipeline: [
-              { $match: { email: subject_email } },
-              {
-                $lookup: {
-                  from: 'meetings',
-                  localField: 'meeting_id',
-                  foreignField: '_id',
-                  as: 'meetings'
-                }
-              },
-              {
-                $project: {
-                  meeting: { $arrayElemAt: [ '$meetings', 0 ] }
-                }
-              },
-              {
-                $replaceRoot: {
-                  newRoot: '$meeting'
-                }
+          $project: {
+            meetings: {
+              $sortArray: {
+                input: '$meetings',
+                sortBy: { date: -1 }
               }
-            ],
-            as: 'participating_meetings'
+            },
+            count: { $size: '$meetings' }
           }
         },
         {
           $project: {
             meetings: {
-              $concatArrays: [ '$participating_meetings', '$owned_meetings' ]
-            }
+              $slice: [ '$meetings', sliceStart, sliceEnd ]
+            },
+            count: 1
           }
-        },
-        { $unwind: '$meetings' },
-        { $replaceRoot: { newRoot: '$meetings' } },
-        ...pipelineFilters,
-        {
-          $count: 'count'
         }
       ];
 
-      const meetings = await User.aggregate( pipeline );
-      const count = await User.aggregate( totalCount );
+      const [ { meetings, count } ] = await User.aggregate( pipeline );
 
-      return res.status( 200 ).send({ meetings, count: count[ 0 ].count }); //idk man 🤮
+      return res.status( 200 ).send({ meetings, count }); //idk man 🤮
     } catch ( err ) {
       return res.status( 500 ).send( err );
->>>>>>> 3b83c49 (finished filters and added pagination)
+
     }
   },
 
