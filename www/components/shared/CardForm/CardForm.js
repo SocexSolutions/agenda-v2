@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 
 import { TextField, Button } from "@mui/material";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import styles from "./CardForm.module.scss";
 import shared from "../../../styles/Shared.module.css";
@@ -12,11 +12,20 @@ import shared from "../../../styles/Shared.module.css";
  * @param {Function} updateItem  - save function for an item
  * @param {Function} destroyItem - delete function (called with items _id)
  */
-const CardForm = ({ editing, setEditing, item, updateItem, destroyItem }) => {
+const CardForm = ({ item, updateItem, destroyItem }) => {
   const [name, setName] = useState(item.name || "");
   const [description, setDescription] = useState(item.description || "");
+  const [editing, setEditing] = useState(false);
+
+  useEffect(() => {
+    // Assume new item if no name (save button will be disabled without one)
+    if (!name) {
+      setEditing(true);
+    }
+  });
 
   const onUpdate = () => {
+    setEditing(false);
     updateItem({ ...item, name, description });
   };
 
@@ -75,6 +84,7 @@ const CardForm = ({ editing, setEditing, item, updateItem, destroyItem }) => {
           delete
         </Button>
         <Button
+          disabled={!name} // Disable save button if no name (its how we tell if its a new item)
           onClick={() => onUpdate()}
           size="small"
           variant="contained"

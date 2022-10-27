@@ -18,6 +18,7 @@ const meetingSchema = new Schema(
     },
     status: {
       type: String,
+      enum: ["draft", "sent", "live", "closed"],
       default: "draft",
     },
   },

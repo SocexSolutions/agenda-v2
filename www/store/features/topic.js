@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import topicApi from "../../api/topic";
 import { generateSlice } from "../utils/slice-generator";
-import { generateActions } from "../utils/slice-generator";
-import { generateSelectors } from "../utils/slice-generator";
+import topicApi from "../../api/topic";
 
 const topicSchema = {
   name: "topic",
@@ -15,9 +13,7 @@ const topicSchema = {
   },
 };
 
-export const { reducer } = createSlice(generateSlice(topicSchema));
-export const actions = generateActions(topicSchema);
-export const selectors = generateSelectors(topicSchema);
+const { reducers, actions, selectors } = generateSlice(topicSchema);
 
 /**
  * Like a topic
@@ -40,11 +36,16 @@ actions.like = (topic) => {
  */
 actions.switch = (topic) => {
   return async function switchTopic(dispatch) {
-    const updatedTopic = await topicApi.switch(topic._id);
+    const { switchedTo, switchedFrom } = await topicApi.switch(topic._id);
 
     dispatch({
       type: "topic/update",
-      payload: updatedTopic,
+      payload: switchedTo,
+    });
+
+    dispatch({
+      type: "topic/update",
+      payload: switchedFrom,
     });
   };
 };
@@ -63,6 +64,12 @@ actions.close = (topic) => {
     });
   };
 };
+
+export const { reducer } = createSlice({
+  name: topicSchema.name,
+  initialState: {},
+  reducers,
+});
 
 export default {
   actions,

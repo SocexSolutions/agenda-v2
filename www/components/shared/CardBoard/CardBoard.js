@@ -31,7 +31,6 @@ const CardBoard = ({
 }) => {
   const items = useSelector(selector);
 
-  const [editingId, setEditingId] = useState("");
   const [initailized, setInitialized] = useState(false);
 
   useEffect(() => {
@@ -42,47 +41,23 @@ const CardBoard = ({
   }, [initailized, getAll]);
 
   const createItem = async () => {
-    // TODO handle editing id changes (maybe just store an array of ids in store)
     create({ name: "", description: "" });
-  };
-
-  const updateItem = async (takeaway) => {
-    setEditingId(null);
-
-    update(takeaway);
   };
 
   const itemCards = [];
 
   if (items.length) {
     for (const item of items) {
-      const editing = editingId === item._id;
-      if (editing) {
-        itemCards.push(
-          <div className={styles.card_container} key={item._id}>
-            <Card
-              setEditing={setEditingId}
-              editing={editingId === item._id}
-              key={item._id}
-              item={item}
-              updateItem={updateItem}
-              destroyItem={destroy}
-            />
-          </div>
-        );
-      } else {
-        itemCards.push(
-          <div className={styles.card_container} key={item._id}>
-            <Card
-              setEditing={setEditingId}
-              key={item._id}
-              item={item}
-              updateItem={updateItem}
-              destroyItem={destroy}
-            />
-          </div>
-        );
-      }
+      itemCards.push(
+        <div className={styles.card_container} key={item._id}>
+          <Card
+            key={item._id}
+            item={item}
+            updateItem={update}
+            destroyItem={destroy}
+          />
+        </div>
+      );
     }
   }
 

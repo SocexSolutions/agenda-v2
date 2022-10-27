@@ -2,7 +2,7 @@ import api from "../../api";
 
 const capitalize = (s) => s[0].toUpperCase() + s.slice(1);
 
-function generateReducers(schema) {
+export function generateReducers(schema) {
   const reducers = {};
 
   const refs = Object.keys(schema.references).reduce((acc, k) => {
@@ -211,11 +211,11 @@ export function generateSlice(schema) {
   schema.references = schema.references || {};
   schema.dependencies = schema.dependencies || {};
 
-  const reducers = generateReducers(schema);
-
   return {
     name: schema.name,
     initialState: {},
-    reducers,
+    reducers: generateReducers(schema),
+    actions: generateActions(schema),
+    selectors: generateSelectors(schema),
   };
 }
