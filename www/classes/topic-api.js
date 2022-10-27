@@ -60,11 +60,10 @@ class TopicAPI extends RestAPI {
   /**
    * Add or remove a like from a topic with the given email
    * @param {string} id - topic id
-   * @param {string} email - email of user/participant to like with
    */
-  async like(id, email) {
+  async like(id) {
     try {
-      const res = await client.patch(`topic/${id}/like`, { email });
+      const res = await client.patch(`topic/${id}/like`);
 
       return res.data;
     } catch (err) {

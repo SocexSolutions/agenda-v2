@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { TextField, Button } from "@mui/material";
 
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { notify } from "../../../store/features/snackbar";
 
 import styles from "./CardForm.module.scss";
 import shared from "../../../styles/Shared.module.css";
@@ -13,6 +15,8 @@ import shared from "../../../styles/Shared.module.css";
  * @param {Function} destroyItem - delete function (called with items _id)
  */
 const CardForm = ({ item, updateItem, destroyItem }) => {
+  const dispatch = useDispatch();
+
   const [name, setName] = useState(item.name || "");
   const [description, setDescription] = useState(item.description || "");
   const [editing, setEditing] = useState(false);
@@ -26,7 +30,17 @@ const CardForm = ({ item, updateItem, destroyItem }) => {
 
   const onUpdate = () => {
     setEditing(false);
-    updateItem({ ...item, name, description });
+
+    if (!name) {
+      dispatch(
+        notify({
+          message: `Name is required.`,
+          type: "danger",
+        })
+      );
+    } else {
+      updateItem({ ...item, name, description });
+    }
   };
 
   const onDestroy = () => {
@@ -63,7 +77,7 @@ const CardForm = ({ item, updateItem, destroyItem }) => {
         autoFocus
         className={styles.name_input}
         size="small"
-        label="Title"
+        label="Name"
         onChange={(e) => setName(e.target.value)}
         onKeyDown={(e) => maybeHandleShortcut(e)}
         value={name}

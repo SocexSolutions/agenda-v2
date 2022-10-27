@@ -47,8 +47,6 @@ export function generateReducers(schema) {
     reducers[`set${capitalize(k)}`] = (state, action) => {
       const { _id, [`${v}Ids`]: refIds } = action.payload;
 
-      console.log(schema.name, `set${capitalize(k)}`, refIds);
-
       state[_id][k] = refIds;
     };
 
@@ -95,7 +93,6 @@ export function generateActions(schema) {
       });
 
       Object.entries(schema.dependencies).forEach(([k, v]) => {
-        console.log(`${k}/create${itemName}`, schema.name, createdItem._id);
         dispatch({
           type: `${k}/create${itemName}`,
           payload: {
@@ -114,7 +111,6 @@ export function generateActions(schema) {
       // Remove references to the item before deleting it to avoid race
       // condition
       Object.entries(schema.dependencies).forEach(([k, v]) => {
-        console.log(`${k}/delete${itemName}`, schema.name, item._id);
         dispatch({
           type: `${k}/delete${itemName}`,
           payload: {
@@ -154,13 +150,6 @@ export function generateActions(schema) {
           payload: references,
         });
 
-        console.log("dispatching", `${schema.name}/set${capitalize(k)}`, id, {
-          payload: {
-            _id: id,
-            [`${v}Ids`]: references.map((r) => r._id),
-          },
-        });
-
         dispatch({
           type: `${schema.name}/set${capitalize(k)}`,
           payload: {
@@ -197,8 +186,6 @@ export function generateSelectors(schema) {
       }
 
       const ids = state[schema.name][id][k];
-
-      console.log(schema.name, k, ids);
 
       return ids.map((id) => state[v][id]).filter(Boolean);
     };
