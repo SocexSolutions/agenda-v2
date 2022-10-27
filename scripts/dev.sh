@@ -13,7 +13,7 @@ if [ ! "$( docker ps -q -f name=mongo )" ]; then
 
     printf "\n creating new mongo container \n";
 
-    docker container run -d -p 27017:27017 --name=mongo mongo
+    docker container run -d -p 27017:27017 --name=mongo mongo:6.0
 
   fi
 
