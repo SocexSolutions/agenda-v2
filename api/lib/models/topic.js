@@ -23,9 +23,9 @@ const topicSchema = new mongoose.Schema(
       required: true,
     },
     likes: [String],
-    // can be 'open', 'live', or 'closed'
     status: {
       type: String,
+      enum: ["open", "live", "closed"],
       default: "open",
       required: true,
     },

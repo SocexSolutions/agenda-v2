@@ -12,6 +12,8 @@ const fakeActionItem = require("../../fakes/action-item");
 const fakeMeeting = require("../../fakes/meeting");
 const rewire = require("rewire");
 
+const clone = (obj) => JSON.parse(JSON.stringify(obj));
+
 describe("lib/controllers/topic", () => {
   before(async () => {
     this.client = rewire("../../utils/client");
@@ -159,40 +161,36 @@ describe("lib/controllers/topic", () => {
     });
 
     it("should add a topic like", async () => {
-      const res = await this.client.patch(
-        "/topic/" + this.topic._id + "/like",
-        { email: "thudson@agenda.com" }
-      );
+      const res = await this.client.patch("/topic/" + this.topic._id + "/like");
 
       assert.strictEqual(res.status, 200);
-      assert.isTrue(res.data.likes.includes("thudson@agenda.com"));
+      assert.isTrue(res.data.likes.includes(this.user.email));
 
       const [topic] = await Topic.find({});
 
-      assert.isTrue(topic.likes.includes("thudson@agenda.com"));
+      assert.isTrue(topic.likes.includes(this.user.email));
     });
 
     it("should remove a topic like", async () => {
-      const res = await this.client.patch(
-        "/topic/" + this.topic._id + "/like",
-        { email: "bryan@bacon.com" }
+      this.topic = await Topic.create(
+        fakeTopic({ meeting_id: this.meeting._id, likes: [this.user.email] })
       );
 
+      const res = await this.client.patch("/topic/" + this.topic._id + "/like");
+
       assert.strictEqual(res.status, 200);
-      assert.isFalse(res.data.likes.includes("bryan@bacon.com"));
+      assert.isFalse(res.data.likes.includes(this.user.email));
 
       const [topic] = await Topic.find({});
 
-      assert.isFalse(topic.likes.includes("bryan@bacon.com"));
+      assert.isFalse(topic.likes.includes(this.user.email));
     });
 
     it("should 403 if not owner or participant", async () => {
       this.client.defaults.headers.common["Authorization"] = this.token2;
 
       await assert.isRejected(
-        this.client.patch("/topic/" + this.topic._id + "/like", {
-          email: "bryan@bacon.com",
-        }),
+        this.client.patch("/topic/" + this.topic._id + "/like"),
         "Request failed with status code 403"
       );
     });
@@ -203,6 +201,10 @@ describe("lib/controllers/topic", () => {
       this.topic = await Topic.create(
         fakeTopic({ meeting_id: this.meeting._id, status: "open" })
       );
+
+      this.topic2 = await Topic.create(
+        fakeTopic({ meeting_id: this.meeting._id, status: "live" })
+      );
     });
 
     it("should set the selected topic to live", async () => {
@@ -211,7 +213,6 @@ describe("lib/controllers/topic", () => {
       );
 
       assert.strictEqual(res.status, 200);
-      assert.strictEqual(res.data.status, "live");
 
       const [topic] = await Topic.find({ _id: this.topic._id });
 
@@ -220,15 +221,21 @@ describe("lib/controllers/topic", () => {
     });
 
     it("should update any live topics to open", async () => {
-      this.topic2 = await Topic.create(
-        fakeTopic({ meeting_id: this.meeting._id, status: "live" })
-      );
-
       await this.client.patch("/topic/" + this.topic._id + "/switch");
 
       const [topic2] = await Topic.find({ _id: this.topic2._id });
 
       assert.strictEqual(topic2.status, "open");
+    });
+
+    it("should return topic switchedTo and switchedFrom", async () => {
+      const res = await this.client.patch(
+        "/topic/" + this.topic._id + "/switch"
+      );
+
+      assert.strictEqual(res.status, 200);
+      assert.strictEqual(res.data.switchedTo._id, clone(this.topic._id));
+      assert.strictEqual(res.data.switchedFrom._id, clone(this.topic2._id));
     });
 
     it("should 403 if not owner or participant", async () => {

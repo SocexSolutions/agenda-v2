@@ -7,18 +7,22 @@ import CardForm from "../../../components/shared/CardForm/CardForm";
 import { Fade } from "@mui/material";
 
 import meetingAPI from "../../../api/meeting";
-import topicAPI from "../../../api/topic";
 import participantAPI from "../../../api/participant";
+
+import meetingStore from "../../../store/features/meeting";
+import topicStore from "../../../store/features/topic";
 
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import styles from "../../../styles/pages/meeting/[id]/edit.module.scss";
 import shared from "../../../styles/Shared.module.css";
 
 const Meeting = (props) => {
   const router = useRouter();
+  const dispatch = useDispatch();
+
   const user = useSelector((state) => state.user);
 
   const meeting_id = router.query.id;
@@ -102,18 +106,24 @@ const Meeting = (props) => {
           >
             <h3>Topics</h3>
             <CardBoard
-              change={meeting_id}
-              getAll={() => meetingAPI.getTopics(meeting_id)}
-              create={(payload) =>
-                topicAPI.create({
-                  meeting_id,
-                  ...payload,
-                })
+              selector={(state) =>
+                meetingStore.selectors.topics(state, meeting_id)
               }
-              update={(id, payload) => topicAPI.update(id, payload)}
-              destroy={(id) => topicAPI.destroy(id)}
-              itemName={"topic"}
+              getAll={() =>
+                dispatch(meetingStore.actions.getTopics(meeting_id))
+              }
+              create={(payload) =>
+                dispatch(
+                  topicStore.actions.create({
+                    meeting_id,
+                    ...payload,
+                  })
+                )
+              }
+              update={(item) => dispatch(topicStore.actions.update(item))}
+              destroy={(item) => dispatch(topicStore.actions.delete(item))}
               Card={CardForm}
+              itemName={"Action Item"}
             />
           </section>
         </div>

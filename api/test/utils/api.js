@@ -24,7 +24,7 @@ const api = {
 
       app.use(basePath, baseRouter);
 
-      const port = process.env.PORT || 5000;
+      const port = process.env.PORT || 5555;
 
       server = app.listen(port);
     } catch (error) {

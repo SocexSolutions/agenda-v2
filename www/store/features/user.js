@@ -37,7 +37,6 @@ const reducer = (state = initialState, action) => {
  */
 export const userRegister = ({ email, username, password }) => {
   return async function registerUser(dispatch, getState) {
-    // eslint-disable-line
     const { data } = await client.post("/user/register", {
       email,
       username,
@@ -66,7 +65,6 @@ export const userRegister = ({ email, username, password }) => {
  */
 export const userLogin = ({ username, password }) => {
   return async function loginUser(dispatch, getState) {
-    // eslint-disable-line
     const { data } = await client.post("/user/login", {
       username,
       password,
@@ -92,7 +90,6 @@ export const userLogin = ({ username, password }) => {
  */
 export const userRefresh = () => {
   return async function refreshUser(dispatch, getState) {
-    // eslint-disable-line
     const token = getCookie("agenda-auth");
 
     if (token) {
@@ -123,7 +120,6 @@ export const userRefresh = () => {
  */
 export const userLogout = () => {
   return async function logoutUser(dispatch, getState) {
-    // eslint-disable-line
     setCookie("agenda-auth", "");
     localStorage.removeItem("theme");
 
@@ -134,6 +130,13 @@ export const userLogout = () => {
 
     router.push("/");
   };
+};
+
+/**
+ * Select the user from the store
+ */
+export const selectUser = (state) => {
+  return state.user;
 };
 
 export default reducer;

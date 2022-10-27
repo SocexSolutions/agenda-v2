@@ -32,8 +32,6 @@ export default function Inbox({ meetings, refresh }) {
     // and topics have a meeting_id to reference
     const res = await meetingAPI.create({ name: "Draft", date: new Date() });
 
-    console.log("create res", res);
-
     router.push(`/meeting/${res._id}/edit`);
   };
 

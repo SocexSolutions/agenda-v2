@@ -7,7 +7,7 @@ module.exports = {
 
     await authUtils.checkParticipant(meeting_id, req.credentials);
 
-    const takeaway = await ActionItem.create({
+    const actionItem = await ActionItem.create({
       name,
       description,
       topic_id,
@@ -16,7 +16,7 @@ module.exports = {
       ...{ assigned_to },
     });
 
-    res.status(201).send(takeaway);
+    res.status(201).send(actionItem);
   },
 
   update: async (req, res) => {

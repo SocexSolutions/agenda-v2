@@ -46,17 +46,18 @@ module.exports = {
 
   like: async (req, res) => {
     const { _id } = req.params;
-    const { email } = req.body;
 
     const topic = await Topic.findOne({ _id });
 
     await authUtils.checkParticipant(topic.meeting_id, req.credentials);
 
+    const email = req.credentials.user.email;
+
     if (!topic.likes.includes(email)) {
       topic.likes.push(email);
     } else {
-      topic.likes = topic.likes.filter((email) => {
-        return email !== email;
+      topic.likes = topic.likes.filter((e) => {
+        return e !== email;
       });
     }
 
@@ -95,18 +96,19 @@ module.exports = {
     // Making two queries isn't ideal but this does avoid the potential for
     // multiple topics to be live at once; a state that would be difficult to
     // recover from.
-    await Topic.updateMany(
+    const switchedFrom = await Topic.findOneAndUpdate(
       { meeting_id: topic.meeting_id, status: "live" },
-      { status: "open" }
+      { status: "open" },
+      { new: true }
     );
 
-    const updated = await Topic.findOneAndUpdate(
+    const switchedTo = await Topic.findOneAndUpdate(
       { _id },
       { status: "live" },
       { new: true }
     );
 
-    return res.status(200).send(updated);
+    return res.status(200).send({ switchedFrom, switchedTo });
   },
 
   getTakeaways: async (req, res) => {
