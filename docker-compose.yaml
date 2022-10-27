@@ -3,7 +3,7 @@ version: "4.0.0"
 services:
 
   mongodb:
-    image: mongo:latest
+    image: mongo:6.0
     container_name: agenda.mongo
     volumes:
       - mongodb-data:/data/db
