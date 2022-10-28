@@ -26,14 +26,15 @@ const User = ( props ) => {
 
   async function load() {
     try {
-      const res = await Promise.all([
-        client.get( `/meeting/?skip=${ skip }&limit=14`, {
-          params: { filters }
-        })
-      ]);
+      console.log( filters );
+      const res = await client.get( `/meeting/?skip=${ skip }&limit=14`, {
+        params: filters
+      });
 
-      setMeetings( res[ 0 ].data.meetings );
-      setMeetingCount( res[ 0 ].data.count );
+      console.log( res );
+
+      setMeetings( res.data.meetings );
+      setMeetingCount( res.data.count );
 
       setLoading( false );
     } catch ( err ) {
