@@ -68,9 +68,3 @@ More information specific to the api and server containers can be found in the R
 
 - [Project Kanban](https://thomashudsonnotes.notion.site/a1f3e7cd3bf74c62b06dbda78b2c9c7c?v=43d3f2b9730045f691cd254967c6949d)
 - [Icons](https://v4.mui.com/components/material-icons/)
-
-# Technical Decisions
-
-## Service Architecture
-
-![image](https://user-images.githubusercontent.com/54583311/120655368-db876780-c43f-11eb-9ccc-5ea9deba79fe.png)
