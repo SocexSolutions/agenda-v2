@@ -17,9 +17,6 @@ import { height } from '@mui/system';
  * @param {Object[]} meetings - meetings to display
  * @param {Function} refresh - a function that refreshes the meetings
  */
-<<<<<<< HEAD
-export default function Inbox({ meetings, refresh }) {
-=======
 export default function Inbox({
   meetings,
   emptyMessage,
@@ -29,7 +26,6 @@ export default function Inbox({
   totalMeetings,
   setSkip
 }) {
->>>>>>> 3b83c49 (finished filters and added pagination)
   const router = useRouter();
 
   const [ filtersOpen, setFiltersOpen ] = useState( false );
