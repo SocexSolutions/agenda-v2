@@ -14,7 +14,7 @@ import { notify } from "../../../store/features/snackbar";
 
 const User = ( props ) => {
 
-  const filtersConstuctor = { owners: [], name: '' };
+  const initialFilters = { owners: [], name: '' };
 
   const [ loading, setLoading ] = useState( true );
   const [ meetings, setMeetings ] = useState([]);
@@ -26,12 +26,9 @@ const User = ( props ) => {
 
   async function load() {
     try {
-      console.log( filters );
       const res = await client.get( `/meeting/?skip=${ skip }&limit=14`, {
         params: filters
       });
-
-      console.log( res );
 
       setMeetings( res.data.meetings );
       setMeetingCount( res.data.count );
