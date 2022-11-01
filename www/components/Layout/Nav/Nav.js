@@ -25,30 +25,60 @@ const Nav = () => {
 
   const homeHref = user && user._id ? `/user/${user._id}/home` : `/login`;
 
-  useEffect(() => {
-    // match browser behavior of removing history when user is within their
-    // history and move to a new page breaking their timeline
-    const clearForwardHistory = () => {
-      const tempArr = history;
+  // Set the history state making sure that there are now duplicates. If there
+  // are duplicates, the history position will be adjusted to reflect the
+  // removal of the duplicates.
+  const safeSetHistory = (history) => {
+    let newPosition = whereInHistory;
 
-      tempArr.splice(
-        whereInHistory + 1,
-        tempArr.length - whereInHistory - 1,
-        router.asPath
-      );
+    const deduped = history.reduce((acc, curr, i) => {
+      if (acc.length === 0) {
+        acc.push(curr);
+      } else if (acc[acc.length - 1] !== curr) {
+        acc.push(curr);
+      } else if (i < whereInHistory) {
+        newPosition--;
+      }
 
-      setHistory(tempArr);
-      setWhereInHistory(tempArr.length - 1);
-    };
+      return acc;
+    }, []);
 
-    const handleHistoryWhenButtonsNotPressed = () => {
-      if (whereInHistory < history.length - 1) {
-        clearForwardHistory();
-      } else {
-        setHistory((arr) => [...arr, router.asPath]);
+    setWhereInHistory(newPosition);
+    setHistory(deduped);
+  };
+
+  // match browser behavior of removing history when user is within their
+  // history and move to a new page breaking their timeline
+  const clearForwardHistory = () => {
+    const tempArr = history;
+
+    tempArr.splice(
+      whereInHistory + 1,
+      tempArr.length - whereInHistory,
+      router.asPath
+    );
+
+    safeSetHistory(tempArr);
+    setWhereInHistory(tempArr.length - 1);
+  };
+
+  const handleHistoryWhenButtonsNotPressed = () => {
+    if (whereInHistory < history.length - 1) {
+      clearForwardHistory();
+    } else {
+      if (history[whereInHistory] !== router.asPath) {
+        safeSetHistory([...history, router.asPath]);
         setWhereInHistory(whereInHistory + 1);
       }
-    };
+    }
+  };
+
+  useEffect(() => {
+    // when router is not ready the asPath will not include interpolated params
+    // so we cannot use it
+    if (!router.isReady) {
+      return;
+    }
 
     if (!backPressed && !forwardPressed) {
       handleHistoryWhenButtonsNotPressed();
