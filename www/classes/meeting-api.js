@@ -39,6 +39,8 @@ class MeetingAPI extends RestAPI {
           type: "danger",
         })
       );
+
+      return null;
     }
   }
 
@@ -61,6 +63,8 @@ class MeetingAPI extends RestAPI {
           type: "danger",
         })
       );
+
+      return null;
     }
   }
 
@@ -83,6 +87,8 @@ class MeetingAPI extends RestAPI {
           type: "danger",
         })
       );
+
+      return null;
     }
   }
 
@@ -105,6 +111,8 @@ class MeetingAPI extends RestAPI {
           type: "danger",
         })
       );
+
+      return null;
     }
   }
 
@@ -128,6 +136,8 @@ class MeetingAPI extends RestAPI {
           type: "danger",
         })
       );
+
+      return null;
     }
   }
 
@@ -152,6 +162,8 @@ class MeetingAPI extends RestAPI {
           type: "danger",
         })
       );
+
+      return null;
     }
   }
 }

@@ -46,6 +46,8 @@ class RestAPI {
           type: "danger",
         })
       );
+
+      return null;
     }
   }
 
@@ -68,6 +70,8 @@ class RestAPI {
           type: "danger",
         })
       );
+
+      return null;
     }
   }
 
@@ -92,7 +96,7 @@ class RestAPI {
         })
       );
 
-      return {};
+      return null;
     }
   }
 
@@ -106,6 +110,8 @@ class RestAPI {
   async destroy(id) {
     try {
       await client.delete(`${this.type}/${id}`);
+
+      return id;
     } catch (err) {
       store().dispatch(
         notify({
@@ -113,6 +119,8 @@ class RestAPI {
           type: "danger",
         })
       );
+
+      return null;
     }
   }
 }

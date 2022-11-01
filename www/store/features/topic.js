@@ -23,6 +23,10 @@ actions.like = (topic) => {
   return async function like(dispatch) {
     const updatedTopic = await topicApi.like(topic._id);
 
+    if (!updatedTopic) {
+      return;
+    }
+
     dispatch({
       type: "topic/update",
       payload: updatedTopic,
@@ -36,16 +40,20 @@ actions.like = (topic) => {
  */
 actions.switch = (topic) => {
   return async function switchTopic(dispatch) {
-    const { switchedTo, switchedFrom } = await topicApi.switch(topic._id);
+    const res = await topicApi.switch(topic._id);
+
+    if (!res || res?.switchedTo?._id === res?.switchedFrom?._id) {
+      return;
+    }
 
     dispatch({
       type: "topic/update",
-      payload: switchedTo,
+      payload: res.switchedTo,
     });
 
     dispatch({
       type: "topic/update",
-      payload: switchedFrom,
+      payload: res.switchedFrom,
     });
   };
 };
@@ -56,11 +64,15 @@ actions.switch = (topic) => {
  */
 actions.close = (topic) => {
   return async function closeTopic(dispatch) {
-    const updatedTopic = await topicApi.close(topic._id);
+    const updated = await topicApi.close(topic._id);
+
+    if (!updated) {
+      return;
+    }
 
     dispatch({
       type: "topic/update",
-      payload: updatedTopic,
+      payload: updated,
     });
   };
 };
