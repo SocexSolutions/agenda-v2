@@ -7,11 +7,9 @@ import LoadingIcon from "../../../components/shared/LoadingIcon/LoadingIcon";
 
 import { Fade } from "@mui/material";
 
-import meetingAPI from "../../../api/meeting";
-import participantAPI from "../../../api/participant";
-
 import meetingStore from "../../../store/features/meeting";
 import topicStore from "../../../store/features/topic";
+import participantStore from "../../../store/features/participant";
 
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -96,17 +94,25 @@ const Meeting = (props) => {
           <section className={shared.card + " " + styles.section}>
             <h3>Participants</h3>
             <ChipForm
-              change={meeting_id}
+              selector={(state) =>
+                meetingStore.selectors.participants(state, meeting_id)
+              }
               itemKey={"email"}
               itemName={"participant"}
-              getAll={() => meetingAPI.getParticipants(meeting_id)}
-              create={(payload) =>
-                participantAPI.create({
-                  meeting_id,
-                  ...payload,
-                })
+              getAll={() =>
+                dispatch(meetingStore.actions.getParticipants(meeting_id))
               }
-              destroy={(id) => participantAPI.destroy(id)}
+              create={(item) =>
+                dispatch(
+                  participantStore.actions.create({
+                    meeting_id,
+                    ...item,
+                  })
+                )
+              }
+              destroy={(item) =>
+                dispatch(participantStore.actions.delete(item))
+              }
             />
           </section>
           <section

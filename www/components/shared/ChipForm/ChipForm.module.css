@@ -1,13 +1,5 @@
-.topics {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.topics >* {
-  margin-right: .5rem;
-}
-
-.chipContainer {
+.chip_container {
+  margin-top: 1em;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -16,12 +8,16 @@
   min-height: 45px;
 }
 
-.inputContainer {
-  margin-top: 1rem;
+.chip {
+  margin-right: 5px;
+}
+
+.input_container {
+  margin-top: 0.5em;
   display: flex;
   align-items: flex-start;
 }
 
-.addButton {
-  margin-left: 1rem;
+.add_button {
+  margin-left: 1em;
 }
