@@ -18,12 +18,14 @@
 .form_title {
   width: 100%;
   color: var(--secondary);
-  margin-bottom: 5px;
+  /* Extra space for error messages */
+  margin-bottom: 10px;
 }
 
 .text_field {
   width: 100%;
-  margin-bottom: 25px;
+  /* Extra space for error messages */
+  margin-bottom: 30px;
 }
 
 .login_button_container {

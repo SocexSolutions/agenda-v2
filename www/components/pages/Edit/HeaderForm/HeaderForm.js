@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 
-import debounce from "../../../../utils/debounce";
+import useDebounce from "../../../../hooks/use-debounce";
 
 import meetingStore from "../../../../store/features/meeting";
 
@@ -9,10 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 
 import styles from "./HeaderForm.module.css";
-
-const debouncedUpdate = debounce((data, dispatch) => {
-  dispatch(meetingStore.actions.update(data));
-}, 250);
 
 function HeaderForm({ meetingId }) {
   const dispatch = useDispatch();
@@ -25,6 +21,8 @@ function HeaderForm({ meetingId }) {
   const [date, setDate] = useState("");
   const [initialized, setInitialized] = useState(false);
 
+  const debouncedName = useDebounce(name, 250);
+
   useEffect(() => {
     if (!initialized && meeting) {
       setName(meeting.name);
@@ -33,9 +31,9 @@ function HeaderForm({ meetingId }) {
     }
   }, [meeting]);
 
-  const updateMeeting = () => {
-    debouncedUpdate({ _id: meetingId, name, date }, dispatch);
-  };
+  useEffect(() => {
+    dispatch(meetingStore.actions.update({ date, name }));
+  }, [debouncedName]);
 
   return (
     <div className={styles.meetingBar}>
@@ -46,23 +44,14 @@ function HeaderForm({ meetingId }) {
           size="small"
           value={name}
           placeholder="Meeting Name"
-          onChange={(e) => {
-            setName(e.target.value);
-            updateMeeting();
-          }}
+          onChange={(e) => setName(e.target.value)}
         />
         <DesktopDatePicker
           className={styles.date_picker}
           label="Meeting Date"
           inputFormat="MM/DD/YYYY"
           value={date}
-          onChange={(e) => {
-            setDate(e.$d);
-
-            if (e.$d !== "Invalid Date") {
-              updateMeeting({ date: e.$d });
-            }
-          }}
+          onChange={(e) => setDate(e.$d)}
           renderInput={(params) => {
             return <TextField {...params} size="small" />;
           }}
