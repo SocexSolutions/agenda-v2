@@ -8,6 +8,7 @@ import topic from "./features/topic";
 import meeting from "./features/meeting";
 import actionItem from "./features/action-item";
 import takeaway from "./features/takeaway";
+import participant from "./features/participant";
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   snackbar: snackbarReducer,
   topic: topic.reducer,
   meeting: meeting.reducer,
+  participant: participant.reducer,
   takeaway: takeaway.reducer,
   actionItem: actionItem.reducer,
 });

@@ -3,17 +3,18 @@ import { notify } from "../../../store/features/snackbar";
 
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 
-import Chip from "../Chip/Chip";
+import { Chip } from "@mui/material";
+
 import IconTextField from "../IconTextField/IconTextField";
 
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 import styles from "./ChipForm.module.css";
 
 /**
  * Form for editing chip arrays
  *
- * @param {String} change - key used to tell if form should reload
  * @param {String} itemKey - key unique among chips that will be displayed
  * @param {String} itemName - singular type of items (eg. participant)
  * @param {Function} getAll - async function to fetch all items that should be
@@ -23,37 +24,29 @@ import styles from "./ChipForm.module.css";
  * @param {Function} destroy - async function to delete an item in the form
  * given an `id` as a param
  */
-function ChipForm(props) {
+function ChipForm({ itemName, itemKey, selector, getAll, create, destroy }) {
+  const items = useSelector(selector);
   const store = useStore();
 
   const [input, setInput] = useState("");
-  const [items, setItems] = useState([]);
   const [initLoad, setInitLoad] = useState(true);
 
   useEffect(() => {
-    const loadItems = async () => {
-      const res = await props.getAll();
-      setItems(res);
-
+    if (initLoad) {
+      getAll();
       setInitLoad(false);
-    };
-
-    // check that the change prop exists before attempting to load since we
-    // know the component is dependant on it
-    if (initLoad && props.change) {
-      loadItems();
     }
-  });
+  }, [initLoad]);
 
   const createChip = async (key) => {
     const duplicates = items.filter((item) => {
-      return item[props.itemKey] === key;
+      return item[itemKey] === key;
     });
 
     if (duplicates.length) {
       store.dispatch(
         notify({
-          message: `${props.itemName}s with duplicate ${props.itemKey}s`,
+          message: `${itemName}s with duplicate ${itemKey}s`,
           type: "danger",
         })
       );
@@ -61,17 +54,13 @@ function ChipForm(props) {
       return;
     }
 
-    const res = await props.create({ [props.itemKey]: key });
-
-    items.unshift(res);
-    setItems([...items]);
+    create({ [itemKey]: key });
   };
 
   function destroyChip(index) {
     const [toDelete] = items.splice(index, 1);
-    setItems([...items]);
 
-    props.destroy(toDelete._id);
+    destroy(toDelete);
   }
 
   function handleEnter(event) {
@@ -95,22 +84,22 @@ function ChipForm(props) {
 
       chips.push(
         <Chip
-          index={i}
-          editing={true}
-          text={item[props.itemKey]}
-          key={item[props.itemKey]}
-          deleteFunc={() => destroyChip(i)}
+          className={styles.chip}
+          label={item[itemKey]}
+          key={item[itemKey]}
+          variant="outlined"
+          onDelete={() => destroyChip(i)}
         />
       );
     }
   }
 
   return (
-    <div className={styles.chipForm}>
-      <div className={styles.chipContainer}>{chips}</div>
-      <div className={styles.inputContainer}>
+    <>
+      <div className={styles.chip_container}>{chips}</div>
+      <div className={styles.input_container}>
         <IconTextField
-          label={`Add ${props.itemName}`}
+          label={`Add ${itemName}`}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={handleEnter}
@@ -119,7 +108,7 @@ function ChipForm(props) {
           onIconClick={handleSubmit}
         />
       </div>
-    </div>
+    </>
   );
 }
 

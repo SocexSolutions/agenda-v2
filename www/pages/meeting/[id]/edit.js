@@ -3,14 +3,13 @@ import StatusButton from "../../../components/pages/Edit/StatusButton/StatusButt
 import CardBoard from "../../../components/shared/CardBoard/CardBoard";
 import ChipForm from "../../../components/shared/ChipForm/ChipForm";
 import CardForm from "../../../components/shared/CardForm/CardForm";
+import LoadingIcon from "../../../components/shared/LoadingIcon/LoadingIcon";
 
 import { Fade } from "@mui/material";
 
-import meetingAPI from "../../../api/meeting";
-import participantAPI from "../../../api/participant";
-
 import meetingStore from "../../../store/features/meeting";
 import topicStore from "../../../store/features/topic";
+import participantStore from "../../../store/features/participant";
 
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -23,46 +22,55 @@ const Meeting = (props) => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const user = useSelector((state) => state.user);
-
   const meeting_id = router.query.id;
 
-  const [initLoad, setInitLoad] = useState(true);
+  const meeting = useSelector((state) =>
+    meetingStore.selectors.get(state, meeting_id)
+  );
+
+  const [initialized, setInitialized] = useState(false);
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("");
 
   useEffect(() => {
-    const loadMeeting = async () => {
-      const res = await meetingAPI.get(meeting_id);
-
-      setName(res.name);
-      setDate(res.date);
-      setStatus(res.status);
-
-      setInitLoad(false);
-    };
-
-    if (initLoad && meeting_id) {
-      loadMeeting();
+    if (!initialized && meeting_id) {
+      dispatch(meetingStore.actions.get(meeting_id));
+      setInitialized(true);
     }
-  }, [user, props.store, router.query.id]);
+
+    if (meeting) {
+      setName(meeting.name);
+      setDate(meeting.date);
+      setStatus(meeting.status);
+    }
+  }, [meeting, props.store, router.query.id]);
 
   const updateMeeting = ({ name, date }) => {
-    meetingAPI.update(meeting_id, { name, date });
+    dispatch(meetingStore.actions.update({ name, date, _id: meeting_id }));
 
     setName(name);
     setDate(date);
   };
 
   const updateMeetingStatus = ({ status }) => {
-    meetingAPI.updateStatus(meeting_id, status);
+    dispatch(meetingStore.actions.updateStatus(meeting_id, status));
 
     setStatus(status);
   };
 
+  const loading = !meeting || !meeting_id;
+
+  if (loading) {
+    return (
+      <div className={styles.blank_container}>
+        <LoadingIcon />
+      </div>
+    );
+  }
+
   return (
-    <Fade in={!initLoad}>
+    <Fade in={initialized}>
       <div className={shared.page}>
         <div className={styles.container}>
           <section className={styles.header}>
@@ -86,17 +94,25 @@ const Meeting = (props) => {
           <section className={shared.card + " " + styles.section}>
             <h3>Participants</h3>
             <ChipForm
-              change={meeting_id}
+              selector={(state) =>
+                meetingStore.selectors.participants(state, meeting_id)
+              }
               itemKey={"email"}
               itemName={"participant"}
-              getAll={() => meetingAPI.getParticipants(meeting_id)}
-              create={(payload) =>
-                participantAPI.create({
-                  meeting_id,
-                  ...payload,
-                })
+              getAll={() =>
+                dispatch(meetingStore.actions.getParticipants(meeting_id))
               }
-              destroy={(id) => participantAPI.destroy(id)}
+              create={(item) =>
+                dispatch(
+                  participantStore.actions.create({
+                    meeting_id,
+                    ...item,
+                  })
+                )
+              }
+              destroy={(item) =>
+                dispatch(participantStore.actions.delete(item))
+              }
             />
           </section>
           <section

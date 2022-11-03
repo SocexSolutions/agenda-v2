@@ -74,6 +74,10 @@ export function generateActions(schema) {
     return async function getItem(dispatch) {
       const item = await api[schema.name].get(id);
 
+      if (!item) {
+        return;
+      }
+
       dispatch({
         type: `${schema.name}/update`,
         payload: item,
@@ -83,21 +87,25 @@ export function generateActions(schema) {
 
   actions.create = (item) => {
     return async function createItem(dispatch) {
-      const createdItem = await api[schema.name].create(item);
+      const created = await api[schema.name].create(item);
+
+      if (!created) {
+        return;
+      }
 
       // We must create item before adding it to reference arrays of ther items
       // or it may be referenced before it exists.
       dispatch({
         type: `${schema.name}/create`,
-        payload: createdItem,
+        payload: created,
       });
 
       Object.entries(schema.dependencies).forEach(([k, v]) => {
         dispatch({
           type: `${k}/create${itemName}`,
           payload: {
-            _id: createdItem[v],
-            [`${schema.name}Id`]: createdItem._id,
+            _id: created[v],
+            [`${schema.name}Id`]: created._id,
           },
         });
       });
@@ -106,8 +114,11 @@ export function generateActions(schema) {
 
   actions.delete = (item) => {
     return async function deleteItem(dispatch) {
-      await api[schema.name].destroy(item._id);
+      const deleted = await api[schema.name].destroy(item._id);
 
+      if (!deleted) {
+        return;
+      }
       // Remove references to the item before deleting it to avoid race
       // condition
       Object.entries(schema.dependencies).forEach(([k, v]) => {
@@ -129,11 +140,15 @@ export function generateActions(schema) {
 
   actions.update = (item) => {
     return async function updateItem(dispatch) {
-      const updatedItem = await api[schema.name].update(item._id, item);
+      const updated = await api[schema.name].update(item._id, item);
+
+      if (!updated) {
+        return;
+      }
 
       dispatch({
         type: `${schema.name}/update`,
-        payload: updatedItem,
+        payload: updated,
       });
     };
   };
@@ -143,7 +158,15 @@ export function generateActions(schema) {
 
     actions[functionName] = (id) => {
       return async function getReferences(dispatch) {
+        if (!id) {
+          return;
+        }
+
         const references = await api[schema.name][functionName](id);
+
+        if (!references) {
+          return;
+        }
 
         dispatch({
           type: `${v}/updateMany`,

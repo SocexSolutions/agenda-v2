@@ -31,7 +31,7 @@ class TopicAPI extends RestAPI {
         })
       );
 
-      return [];
+      return null;
     }
   }
 
@@ -53,7 +53,7 @@ class TopicAPI extends RestAPI {
         })
       );
 
-      return [];
+      return null;
     }
   }
 
@@ -73,6 +73,8 @@ class TopicAPI extends RestAPI {
           type: "danger",
         })
       );
+
+      return null;
     }
   }
 
@@ -93,6 +95,8 @@ class TopicAPI extends RestAPI {
           type: "danger",
         })
       );
+
+      return null;
     }
   }
 
@@ -112,6 +116,8 @@ class TopicAPI extends RestAPI {
           type: "danger",
         })
       );
+
+      return null;
     }
   }
 }
