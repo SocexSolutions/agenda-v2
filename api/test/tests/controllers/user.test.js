@@ -4,6 +4,8 @@ const api = require("../../utils/api");
 const chai = require("chai");
 const chaiAsPromised = require("chai-as-promised");
 const client = require("../../utils/client");
+const libRewire = require("../../utils/lib-rewire");
+const sinon = require("sinon");
 
 chai.use(chaiAsPromised);
 
@@ -16,13 +18,17 @@ const user = {
 };
 
 describe("lib/controllers/user.js", () => {
+  let mod;
+
   before(async () => {
     await api.start();
     await db.connect();
-    await dbUtils.clean();
   });
 
   beforeEach(async () => {
+    mod = libRewire("lib/controllers/user.js");
+    mod.__set__("sendGrid.sendWelcomeEmail", () => {});
+
     await dbUtils.clean();
   });
 
@@ -85,6 +91,19 @@ describe("lib/controllers/user.js", () => {
       };
 
       return assert.isRejected(client.post(path, invalidUser));
+    });
+
+    it("should send the user a welcome email", async () => {
+      const sendWelcomeStub = sinon.stub().resolves();
+      mod.__set__("sendGrid.sendWelcomeEmail", sendWelcomeStub);
+
+      await client.post(path, user);
+
+      sinon.assert.calledOnceWithExactly(
+        sendWelcomeStub,
+        user.email,
+        user.username
+      );
     });
   });
 
