@@ -2,4 +2,4 @@
 
 npm i
 
-node ./scripts/keygen.js
+bash ./scripts/keygen.sh

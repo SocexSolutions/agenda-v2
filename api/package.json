@@ -10,7 +10,8 @@
     "start": "node lib/index.js",
     "test": "mocha './test/tests/**/*.test.js'",
     "lint": "eslint .",
-    "dev": "nodemon -L lib/index.js"
+    "dev": "nodemon -L lib/index.js",
+    "keygen": "node scripts/keygen.js"
   },
   "repository": {
     "type": "git",
