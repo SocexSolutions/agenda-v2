@@ -3,6 +3,7 @@ const Meeting = require("../models/meeting");
 const passUtils = require("../util/password");
 const jwtUtils = require("../util/jwt");
 const authUtils = require("../util/authorization");
+const sendGrid = require("../sendgrid");
 
 module.exports = {
   async register(req, res) {
@@ -36,6 +37,8 @@ module.exports = {
     const user = await User.create(newUser);
 
     const { token, expiresIn } = jwtUtils.issueJWT(user, true);
+
+    sendGrid.sendWelcomeEmail(email, username);
 
     return res.status(201).json({
       success: true,
