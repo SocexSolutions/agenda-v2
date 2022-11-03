@@ -7,6 +7,7 @@ import LoadingIcon from "../../../components/shared/LoadingIcon/LoadingIcon";
 
 import { ToggleButtonGroup } from "@mui/material";
 import { ToggleButton } from "@mui/material";
+import { Fade } from "@mui/material";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -62,59 +63,63 @@ export default function MeetRevamp() {
   }
 
   return (
-    <div className={shared.page}>
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h2>Meet: {meeting.name}</h2>
-        </div>
-        <div className={styles.main_grid}>
-          <div>
-            <TopicSelectBar
-              meetingName={meeting.name}
-              topics={topics}
-              switchToTopic={(t) => dispatch(topicStore.actions.switch(t))}
-            />
+    <Fade in={true}>
+      <div className={shared.page}>
+        <div className={styles.container}>
+          <div className={styles.header}>
+            <h2>Meet: {meeting.name}</h2>
           </div>
-          <div>
-            {liveTopic ? (
-              <TopicDisplay
-                topic={liveTopic}
-                closeTopic={(t) => dispatch(topicStore.actions.close(t))}
+          <div className={styles.main_grid}>
+            <div>
+              <TopicSelectBar
+                meetingName={meeting.name}
+                topics={topics}
+                switchToTopic={(t) => dispatch(topicStore.actions.switch(t))}
               />
-            ) : (
-              <p>No topic selected. Select a topic on the left to begin.</p>
-            )}
-            {liveTopic && (
-              <div className={styles.tabs_container}>
-                <ToggleButtonGroup
-                  className={styles.button_group}
-                  size="small"
-                  color="primary"
-                  value={tab}
-                  exclusive
-                  onChange={(_, ta) => changeTab(ta)}
-                >
-                  <ToggleButton value="Takeaways">Takeaways</ToggleButton>
-                  <ToggleButton value="Action Items">Action Items</ToggleButton>
-                </ToggleButtonGroup>
-                <TakeawayBoard
-                  hidden={tab !== "Takeaways"}
-                  liveTopic={liveTopic}
-                  meetingId={meeting_id}
+            </div>
+            <div>
+              {liveTopic ? (
+                <TopicDisplay
+                  topic={liveTopic}
+                  closeTopic={(t) => dispatch(topicStore.actions.close(t))}
                 />
-                <ActionItemBoard
-                  hidden={tab !== "Action Items"}
-                  liveTopic={liveTopic}
-                  meetingId={meeting_id}
-                />
-              </div>
-            )}
-          </div>
-          <div>
-            <ActionItemBar meetingId={meeting_id} />
+              ) : (
+                <p>No topic selected. Select a topic on the left to begin.</p>
+              )}
+              {liveTopic && (
+                <div className={styles.tabs_container}>
+                  <ToggleButtonGroup
+                    className={styles.button_group}
+                    size="small"
+                    color="primary"
+                    value={tab}
+                    exclusive
+                    onChange={(_, ta) => changeTab(ta)}
+                  >
+                    <ToggleButton value="Takeaways">Takeaways</ToggleButton>
+                    <ToggleButton value="Action Items">
+                      Action Items
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+                  <TakeawayBoard
+                    hidden={tab !== "Takeaways"}
+                    liveTopic={liveTopic}
+                    meetingId={meeting_id}
+                  />
+                  <ActionItemBoard
+                    hidden={tab !== "Action Items"}
+                    liveTopic={liveTopic}
+                    meetingId={meeting_id}
+                  />
+                </div>
+              )}
+            </div>
+            <div>
+              <ActionItemBar meetingId={meeting_id} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Fade>
   );
 }

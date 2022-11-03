@@ -1,7 +1,6 @@
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Button from "@mui/material/Button";
 
-import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 import styles from "./CardBoard.module.css";
@@ -10,7 +9,6 @@ import styles from "./CardBoard.module.css";
  * General board component that displays a list of crud cards
  *
  * @param {Object} props
- * @param {Function} getAll - function to retrieve data
  * @param {Function} selector - selector function to get data from store
  * @param {Function} create - function that takes a payload and creates
  * a new item using the payload
@@ -20,25 +18,8 @@ import styles from "./CardBoard.module.css";
  * @param {Component} Card - card to use
  * @param {string} itemName - name of item (ie 'takeaway', 'action item')
  */
-const CardBoard = ({
-  selector,
-  getAll,
-  create,
-  update,
-  destroy,
-  Card,
-  itemName,
-}) => {
+const CardBoard = ({ selector, create, update, destroy, Card, itemName }) => {
   const items = useSelector(selector);
-
-  const [initailized, setInitialized] = useState(false);
-
-  useEffect(() => {
-    if (!initailized) {
-      getAll();
-      setInitialized(true);
-    }
-  }, [initailized, getAll]);
 
   const createItem = async () => {
     create({ name: "", description: "" });

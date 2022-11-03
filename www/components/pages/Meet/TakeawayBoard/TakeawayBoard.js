@@ -4,10 +4,18 @@ import CardForm from "../../../shared/CardForm/CardForm";
 import takeawayStore from "../../../../store/features/takeaway";
 import topicStore from "../../../../store/features/topic";
 
+import { useEffect } from "react";
+
 import { useDispatch } from "react-redux";
 
 export default function TakeawayBoard({ liveTopic, meetingId, hidden }) {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (liveTopic) {
+      dispatch(topicStore.actions.getTakeaways(liveTopic._id));
+    }
+  }, [dispatch]);
 
   return (
     <div hidden={hidden}>
@@ -15,7 +23,6 @@ export default function TakeawayBoard({ liveTopic, meetingId, hidden }) {
         selector={(state) =>
           topicStore.selectors.takeaways(state, liveTopic._id)
         }
-        getAll={() => dispatch(topicStore.actions.getTakeaways(liveTopic._id))}
         create={(payload) =>
           dispatch(
             takeawayStore.actions.create({

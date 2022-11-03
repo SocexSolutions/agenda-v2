@@ -4,19 +4,24 @@ import CardForm from "../../../shared/CardForm/CardForm";
 import topicStore from "../../../../store/features/topic";
 import actionItemStore from "../../../../store/features/action-item";
 
+import { useEffect } from "react";
+
 import { useDispatch } from "react-redux";
 
 export default function ActionItemBoard({ liveTopic, meetingId, hidden }) {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (liveTopic) {
+      dispatch(topicStore.actions.getActionItems(liveTopic._id));
+    }
+  }, [dispatch]);
 
   return (
     <div hidden={hidden}>
       <CardBoard
         selector={(state) =>
           topicStore.selectors.actionItems(state, liveTopic._id)
-        }
-        getAll={() =>
-          dispatch(topicStore.actions.getActionItems(liveTopic._id))
         }
         create={(payload) =>
           dispatch(
