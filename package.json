@@ -9,7 +9,7 @@
     "build": "bash scripts/build.sh",
     "test": "bash scripts/test.sh",
     "coverage": "nyc npm run test",
-    "keygen": "node scripts/keygen.js",
+    "keygen": "bash scripts/keygen.sh",
     "autopopulate": "NODE_ENV=dev node scripts/autopopulate.js"
   },
   "repository": {
