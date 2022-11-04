@@ -26,7 +26,7 @@ function HeaderForm({ meetingId }) {
   const debouncedDate = useDebounce(date, 250);
 
   useEffect(() => {
-    if (meeting) {
+    if (!initialized && meeting) {
       setName(meeting.name);
       setDate(meeting.date);
       setInitialized(true);
@@ -42,11 +42,17 @@ function HeaderForm({ meetingId }) {
       // Avoid sending patch after setName and setDate are called during
       // initalization.
       if (updateReady) {
+        const updates = { name };
+
+        // Don't send an update to the backend with a bad date
+        if (debouncedDate && debouncedDate.toString() !== "Invalid Date") {
+          updates.date = debouncedDate;
+        }
+
         dispatch(
           meetingStore.actions.update({
             ...meeting,
-            date: debouncedDate,
-            name: debouncedName,
+            ...updates,
           })
         );
       }
@@ -69,7 +75,11 @@ function HeaderForm({ meetingId }) {
           label="Meeting Date"
           inputFormat="MM/DD/YYYY"
           value={date}
-          onChange={(e) => setDate(e.$d)}
+          onChange={(e) => {
+            if (e) {
+              setDate(e.$d);
+            }
+          }}
           renderInput={(params) => {
             return <TextField {...params} size="small" />;
           }}
