@@ -33,7 +33,7 @@ const Layout = (props) => {
       <div className={styles.container}>
         {showDrawer && <Drawer drawerOpen={drawerOpen} />}
         <main>
-          <content>{props.children}</content>
+          <div className={styles.content}>{props.children}</div>
         </main>
       </div>
     </>

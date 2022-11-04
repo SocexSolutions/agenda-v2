@@ -12,6 +12,6 @@
   overflow-y: auto;
 }
 
-.container content {
+.container .content {
   width: 100%;
 }
