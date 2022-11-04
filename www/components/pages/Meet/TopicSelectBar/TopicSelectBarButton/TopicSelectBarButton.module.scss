@@ -1,4 +1,4 @@
-@use '../../../../../styles/colors.scss';
+@use "../../../../../styles/colors.scss";
 
 .side_bar_button {
   display: flex;
@@ -27,7 +27,7 @@
   &.closed {
     opacity: 70%;
   }
-};
+}
 
 .button_text {
   width: 100%;
@@ -35,10 +35,17 @@
 }
 
 .icon {
-  color: colors.$red;
   font-size: 1em;
 
-  &-red {
+  &_high {
     color: colors.$danger;
+  }
+
+  &_med {
+    color: colors.$orange;
+  }
+
+  &_low {
+    color: colors.$blue;
   }
 }
