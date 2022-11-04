@@ -6,6 +6,8 @@ import TextField from "@mui/material/TextField";
 
 import { notify } from "../store/features/snackbar";
 
+import useDebounce from "../hooks/use-debounce";
+
 import { useState } from "react";
 import { useEffect } from "react";
 import { userRegister } from "../store/features/user";
@@ -14,28 +16,29 @@ import client from "../api/client";
 
 import styles from "../styles/pages/register.module.css";
 
-const initialState = {
-  email: "",
-  username: "",
-  password: "",
-};
-
 const Register = (props) => {
-  const [registering, setRegistering] = useState(false);
-
   const router = useRouter();
-  const [fields, setFields] = useState(initialState);
+
+  const [registering, setRegistering] = useState(false);
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [usernameError, setUsernameError] = useState(false);
 
-  const handleChange = (event) => {
-    setFields({ ...fields, [event.target.name]: event.target.value });
-  };
+  const debouncedEmail = useDebounce(email, 500);
+  const debouncedUsername = useDebounce(username, 500);
 
   useEffect(() => {
     const register = async () => {
       try {
-        await props.store.dispatch(userRegister(fields));
+        await props.store.dispatch(
+          userRegister({
+            email,
+            username,
+            password,
+          })
+        );
 
         await props.store.dispatch(
           notify({
@@ -46,7 +49,7 @@ const Register = (props) => {
 
         const user = props.store.getState().user;
 
-        router.push(`/user/${user._id}/home`);
+        router.replace(`/user/${user._id}/home`);
       } catch (err) {
         await props.store.dispatch(
           notify({
@@ -55,8 +58,6 @@ const Register = (props) => {
             ms: 3000,
           })
         );
-
-        setFields(initialState);
       }
 
       setRegistering(false);
@@ -74,31 +75,39 @@ const Register = (props) => {
 
   useEffect(() => {
     const checkEmail = async () => {
+      if (!email) {
+        return;
+      }
+
       try {
-        await client.post("user/checkexistingemail", { email: fields.email });
+        await client.post("user/checkexistingemail", { email });
 
         if (emailError) {
           setEmailError(false);
         }
       } catch (err) {
         if (err.response.status === 409) {
-          setEmailError("username already in use");
+          setEmailError("email already in use");
         }
       }
     };
 
     checkEmail();
-  }, [fields.email]);
+  }, [debouncedEmail]);
 
   useEffect(() => {
     const checkUsername = async () => {
+      if (!username) {
+        return;
+      }
+
       try {
         await client.post("user/checkexistingusername", {
-          username: fields.username,
+          username: username,
         });
 
         if (usernameError) {
-          setEmailError(false);
+          setUsernameError(false);
         }
       } catch (err) {
         if (err.response.status === 409) {
@@ -106,8 +115,9 @@ const Register = (props) => {
         }
       }
     };
+
     checkUsername();
-  }, [fields.username]);
+  }, [debouncedUsername]);
 
   return (
     <div className={styles.form_container}>
@@ -117,27 +127,27 @@ const Register = (props) => {
           name="email"
           label="email"
           variant="standard"
-          value={fields.email}
-          onChange={handleChange}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className={styles.text_field}
-          error={emailError}
+          helperText={emailError}
         />
         <TextField
           name="username"
           label="username"
           variant="standard"
-          value={fields.username}
-          onChange={handleChange}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           className={styles.text_field}
-          error={usernameError}
+          helperText={usernameError}
         />
         <TextField
           name="password"
           label="password"
           type="password"
           variant="standard"
-          value={fields.password}
-          onChange={handleChange}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           className={styles.text_field}
         />
         <div className={styles.login_button_container}>

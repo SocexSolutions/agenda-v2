@@ -1,7 +1,6 @@
 import client from "../api/client";
 import { store } from "../store";
 import { notify } from "../store/features/snackbar";
-import debounce from "../utils/debounce";
 
 class RestAPI {
   /**
@@ -15,16 +14,6 @@ class RestAPI {
    */
   constructor(type) {
     this.type = type;
-
-    for (const property of Object.keys(this)) {
-      if (
-        property !== "constructor" &&
-        property !== "type" &&
-        typeof this[property] === "function"
-      ) {
-        this[property] = debounce(this[property], 300);
-      }
-    }
   }
 
   /**

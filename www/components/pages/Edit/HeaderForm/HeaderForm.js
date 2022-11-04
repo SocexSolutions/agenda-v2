@@ -1,14 +1,64 @@
 import { TextField } from "@mui/material";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 
+import useDebounce from "../../../../hooks/use-debounce";
+
+import meetingStore from "../../../../store/features/meeting";
+
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+
 import styles from "./HeaderForm.module.css";
 
-function HeaderForm({
-  meetingName,
-  setMeetingName,
-  meetingDate,
-  setMeetingDate,
-}) {
+function HeaderForm({ meetingId }) {
+  const dispatch = useDispatch();
+
+  const meeting = useSelector((state) =>
+    meetingStore.selectors.get(state, meetingId)
+  );
+
+  const [name, setName] = useState("");
+  const [date, setDate] = useState("");
+  const [initialized, setInitialized] = useState(false);
+  const [updateReady, setUpdateReady] = useState(false);
+
+  const debouncedName = useDebounce(name, 250);
+  const debouncedDate = useDebounce(date, 250);
+
+  useEffect(() => {
+    if (!initialized && meeting) {
+      setName(meeting.name);
+      setDate(meeting.date);
+      setInitialized(true);
+    }
+  }, [meeting]);
+
+  useEffect(() => {
+    if (initialized) {
+      if (!updateReady) {
+        setUpdateReady(true);
+      }
+
+      // Avoid sending patch after setName and setDate are called during
+      // initalization.
+      if (updateReady) {
+        const updates = { name };
+
+        // Don't send an update to the backend with a bad date
+        if (debouncedDate && debouncedDate.toString() !== "Invalid Date") {
+          updates.date = debouncedDate;
+        }
+
+        dispatch(
+          meetingStore.actions.update({
+            ...meeting,
+            ...updates,
+          })
+        );
+      }
+    }
+  }, [debouncedName, debouncedDate, dispatch]);
+
   return (
     <div className={styles.meetingBar}>
       <form className={styles.form}>
@@ -16,15 +66,20 @@ function HeaderForm({
           className={styles.name_field}
           label="Meeting Name"
           size="small"
-          value={meetingName}
+          value={name}
           placeholder="Meeting Name"
-          onChange={setMeetingName}
+          onChange={(e) => setName(e.target.value)}
         />
         <DesktopDatePicker
           className={styles.date_picker}
           label="Meeting Date"
-          value={meetingDate}
-          onChange={setMeetingDate}
+          inputFormat="MM/DD/YYYY"
+          value={date}
+          onChange={(e) => {
+            if (e) {
+              setDate(e.$d);
+            }
+          }}
           renderInput={(params) => {
             return <TextField {...params} size="small" />;
           }}

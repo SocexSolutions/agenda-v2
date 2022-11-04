@@ -7,7 +7,7 @@ import { Chip } from "@mui/material";
 
 import IconTextField from "../IconTextField/IconTextField";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 
 import styles from "./ChipForm.module.css";
@@ -17,26 +17,16 @@ import styles from "./ChipForm.module.css";
  *
  * @param {String} itemKey - key unique among chips that will be displayed
  * @param {String} itemName - singular type of items (eg. participant)
- * @param {Function} getAll - async function to fetch all items that should be
- * displayed in the form
  * @param {Function} create - async function to create a new item in the form
  * given a `payload` as a param
  * @param {Function} destroy - async function to delete an item in the form
  * given an `id` as a param
  */
-function ChipForm({ itemName, itemKey, selector, getAll, create, destroy }) {
+function ChipForm({ itemName, itemKey, selector, create, destroy }) {
   const items = useSelector(selector);
   const store = useStore();
 
   const [input, setInput] = useState("");
-  const [initLoad, setInitLoad] = useState(true);
-
-  useEffect(() => {
-    if (initLoad) {
-      getAll();
-      setInitLoad(false);
-    }
-  }, [initLoad]);
 
   const createChip = async (key) => {
     const duplicates = items.filter((item) => {

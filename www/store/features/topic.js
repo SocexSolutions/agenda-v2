@@ -46,15 +46,19 @@ actions.switch = (topic) => {
       return;
     }
 
-    dispatch({
-      type: "topic/update",
-      payload: res.switchedTo,
-    });
+    if (res.switchedTo) {
+      dispatch({
+        type: "topic/update",
+        payload: res.switchedTo,
+      });
+    }
 
-    dispatch({
-      type: "topic/update",
-      payload: res.switchedFrom,
-    });
+    if (res.switchedFrom) {
+      dispatch({
+        type: "topic/update",
+        payload: res.switchedFrom,
+      });
+    }
   };
 };
 

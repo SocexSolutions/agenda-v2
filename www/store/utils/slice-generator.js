@@ -47,19 +47,27 @@ export function generateReducers(schema) {
     reducers[`set${capitalize(k)}`] = (state, action) => {
       const { _id, [`${v}Ids`]: refIds } = action.payload;
 
-      state[_id][k] = refIds;
+      state[_id] = { ...state[_id], [k]: refIds };
     };
 
     reducers[`create${dispName}`] = (state, action) => {
       const { _id, [`${v}Id`]: refId } = action.payload;
 
-      state[_id][k].push(refId);
+      if (Array.isArray(state[_id]?.[k])) {
+        state[_id][k].push(refId);
+      } else {
+        state[_id][k] = [refId];
+      }
     };
 
     reducers[`delete${dispName}`] = (state, action) => {
       const { _id, [`${v}Id`]: refId } = action.payload;
 
-      state[_id][k] = state[_id][k].filter((id) => id !== refId);
+      if (Array.isArray(state[_id]?.[k])) {
+        state[_id][k] = state[_id][k].filter((id) => id !== refId);
+      } else {
+        state[_id][k] = [];
+      }
     };
   });
 
@@ -204,7 +212,7 @@ export function generateSelectors(schema) {
 
   Object.entries(schema.references).forEach(([k, v]) => {
     selectors[k] = (state, id) => {
-      if (!id || !state[schema.name][id]) {
+      if (!id || !state[schema.name]?.[id]?.[k]) {
         return [];
       }
 
