@@ -3,6 +3,7 @@
 .side_bar_button {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   border: none;
   width: 100%;
   text-align: left;
@@ -25,7 +26,7 @@
   }
 
   &.closed {
-    opacity: 70%;
+    opacity: 60%;
   }
 }
 
@@ -35,7 +36,7 @@
 }
 
 .icon {
-  font-size: 1em;
+  font-size: 1.5em;
 
   &_high {
     color: colors.$danger;
