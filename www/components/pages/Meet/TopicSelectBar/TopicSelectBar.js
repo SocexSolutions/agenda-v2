@@ -13,12 +13,14 @@ export default function SideBar({ topics, meetingName, switchToTopic }) {
 
   const avg = totalLikes / topics.length;
 
+  const sorted = topics.sort((a, b) => b.likes.length - a.likes.length);
+
   return (
     <Fade in={!!topics && !!meetingName}>
       <div className={styles.side_bar}>
         <h3>Meeting Topics</h3>
         <div className={styles.button_container}>
-          {topics.map((topic) => {
+          {sorted.map((topic) => {
             const priority = topic.likes.length / avg;
 
             return (
