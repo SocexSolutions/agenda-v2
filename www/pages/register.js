@@ -75,6 +75,10 @@ const Register = (props) => {
 
   useEffect(() => {
     const checkEmail = async () => {
+      if (!email) {
+        return;
+      }
+
       try {
         await client.post("user/checkexistingemail", { email });
 
@@ -93,6 +97,10 @@ const Register = (props) => {
 
   useEffect(() => {
     const checkUsername = async () => {
+      if (!username) {
+        return;
+      }
+
       try {
         await client.post("user/checkexistingusername", {
           username: username,
@@ -107,6 +115,7 @@ const Register = (props) => {
         }
       }
     };
+
     checkUsername();
   }, [debouncedUsername]);
 

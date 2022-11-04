@@ -20,11 +20,13 @@ function HeaderForm({ meetingId }) {
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
   const [initialized, setInitialized] = useState(false);
+  const [updateReady, setUpdateReady] = useState(false);
 
   const debouncedName = useDebounce(name, 250);
+  const debouncedDate = useDebounce(date, 250);
 
   useEffect(() => {
-    if (!initialized && meeting) {
+    if (meeting) {
       setName(meeting.name);
       setDate(meeting.date);
       setInitialized(true);
@@ -32,8 +34,24 @@ function HeaderForm({ meetingId }) {
   }, [meeting]);
 
   useEffect(() => {
-    dispatch(meetingStore.actions.update({ date, name }));
-  }, [debouncedName]);
+    if (initialized) {
+      if (!updateReady) {
+        setUpdateReady(true);
+      }
+
+      // Avoid sending patch after setName and setDate are called during
+      // initalization.
+      if (updateReady) {
+        dispatch(
+          meetingStore.actions.update({
+            ...meeting,
+            date: debouncedDate,
+            name: debouncedName,
+          })
+        );
+      }
+    }
+  }, [debouncedName, debouncedDate, dispatch]);
 
   return (
     <div className={styles.meetingBar}>
