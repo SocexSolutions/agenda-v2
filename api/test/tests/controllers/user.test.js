@@ -63,7 +63,7 @@ describe("lib/controllers/user.js", () => {
 
       const tokenRegex = new RegExp(/^Bearer\s/);
 
-      assert(tokenRegex.test(res.data.token));
+      assert(tokenRegex.test(res.data.access_token));
     });
 
     it("should not register user with invalid email", async () => {
@@ -153,7 +153,7 @@ describe("lib/controllers/user.js", () => {
     beforeEach(async () => {
       const { data } = await client.post("/user/register", user);
 
-      token = data.token;
+      token = data.access_token;
       user_id = data.user._id;
     });
 

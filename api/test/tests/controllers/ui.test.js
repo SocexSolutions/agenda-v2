@@ -23,7 +23,7 @@ describe("lib/controllers/ui", () => {
 
     user_id = res.data.user._id;
 
-    client.defaults.headers.common["Authorization"] = res.data.token;
+    client.defaults.headers.common["Authorization"] = res.data.access_token;
   });
 
   beforeEach(async () => {

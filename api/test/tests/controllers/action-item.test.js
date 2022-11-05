@@ -37,13 +37,13 @@ describe("lib/controllers/action-item", () => {
     ]);
 
     this.user = user1.data.user;
-    this.token = user1.data.token;
+    this.token = user1.data.access_token;
 
     this.user2 = user2.data.user;
-    this.token2 = user2.data.token;
+    this.token2 = user2.data.access_token;
 
     this.participant = participant.data.user;
-    this.participantToken = participant.data.token;
+    this.participantToken = participant.data.access_token;
   });
 
   beforeEach(async () => {
