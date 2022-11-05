@@ -9,4 +9,13 @@
 
 .action_item {
   display: flex;
+  align-items: center;
+
+  p {
+    font-size: 0.9em;
+  }
+}
+
+.checkbox {
+  height: 20px;
 }

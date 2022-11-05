@@ -31,6 +31,7 @@ export default function ActionItemBar({ meetingId }) {
         return (
           <div className={styles.action_item} key={actionItem._id}>
             <Checkbox
+              className={styles.checkbox}
               onClick={(e) =>
                 dispatch(
                   actionItemStore.actions.update({

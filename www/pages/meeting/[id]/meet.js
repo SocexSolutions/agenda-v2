@@ -7,6 +7,7 @@ import LoadingIcon from "../../../components/shared/LoadingIcon/LoadingIcon";
 
 import { ToggleButtonGroup } from "@mui/material";
 import { ToggleButton } from "@mui/material";
+import { Button } from "@mui/material";
 import { Fade } from "@mui/material";
 
 import { useEffect, useState } from "react";
@@ -53,12 +54,47 @@ export default function MeetRevamp() {
   }, [user, meeting_id, initialized, dispatch]);
 
   const liveTopic = topics.find((topic) => topic.status === "live");
+  const allDone = topics.every((t) => t.status === "closed");
 
   if (!meeting || !topics) {
     return (
       <div className={styles.blank_container}>
         <LoadingIcon />
       </div>
+    );
+  }
+
+  let topicDisplay = (
+    <p>No topic selected. Select a topic on the left to begin.</p>
+  );
+
+  if (allDone) {
+    topicDisplay = (
+      <div className={styles.all_done}>
+        <h3>
+          Looks like you have discussed all topics, ready to complete the
+          meeting?
+        </h3>
+        <Button
+          variant="contained"
+          className={styles.complete_button}
+          onClick={() => {
+            dispatch(
+              meetingStore.actions.updateStatus(meeting._id, "completed")
+            );
+            router.push(`/user/${user._id}/home`);
+          }}
+        >
+          Complete Meeting
+        </Button>
+      </div>
+    );
+  } else if (liveTopic) {
+    topicDisplay = (
+      <TopicDisplay
+        topic={liveTopic}
+        closeTopic={(t) => dispatch(topicStore.actions.close(t))}
+      />
     );
   }
 
@@ -78,14 +114,7 @@ export default function MeetRevamp() {
               />
             </div>
             <div>
-              {liveTopic ? (
-                <TopicDisplay
-                  topic={liveTopic}
-                  closeTopic={(t) => dispatch(topicStore.actions.close(t))}
-                />
-              ) : (
-                <p>No topic selected. Select a topic on the left to begin.</p>
-              )}
+              {topicDisplay}
               {liveTopic && (
                 <div className={styles.tabs_container}>
                   <ToggleButtonGroup
