@@ -22,7 +22,7 @@ const start = async () => {
       app.use(cors({ origin: "http://localhost:3000" }));
     }
 
-    app.use("/api", router);
+    app.use("/api/v1", router);
 
     const port = process.env.PORT || 4000;
 

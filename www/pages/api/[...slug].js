@@ -14,10 +14,10 @@ async function proxyRequest(req) {
     headers.authorization = req.cookies["agenda-auth"];
   }
 
-  const url = req.url.split("/api/proxy")[1];
+  const url = req.url.split("/api")[1];
 
   const args = [
-    hostname + "/api" + url,
+    hostname + "/api/v1" + url,
     ...(["GET", "DELETE"].includes(req.method) ? [] : [req.body]),
     {
       params: req.query,
