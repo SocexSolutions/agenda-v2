@@ -1,4 +1,4 @@
-name : Agenda PR Pretest
+name: Agenda PR Pretest
 
 on: [push]
 
@@ -25,3 +25,5 @@ jobs:
       - run: npm i
 
       - run: npm test
+
+      - run: npm run build
