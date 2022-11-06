@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// eslint-disable-next-line
 const hostname = process.env.NEXT_PUBLIC_API_HOSTNAME;
 
 const publicRoutes = ["/api/user/login", "/api/user/register"];
