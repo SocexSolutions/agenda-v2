@@ -8,14 +8,18 @@ const publicRoutes = ["/api/user/login", "/api/user/register"];
 async function proxyRequest(req) {
   delete req.query.slug;
 
+  const headers = {};
+
+  if (req.cookies["agenda-auth"]) {
+    headers.authorization = req.cookies["agenda-auth"];
+  }
+
   const args = [
     hostname + req.url,
     ...(["GET", "DELETE"].includes(req.method) ? [] : [req.body]),
     {
       params: req.query,
-      headers: {
-        authorization: req.cookies["agenda-auth"],
-      },
+      headers,
     },
   ];
 
