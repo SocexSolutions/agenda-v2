@@ -30,18 +30,29 @@ async function proxyRequest(req) {
 
 export default async (req, res) => {
   if (publicRoutes.includes(req.url)) {
-    const data = await proxyRequest(req);
+    try {
+      const data = await proxyRequest(req);
 
-    res.setHeader(`Set-Cookie`, `agenda-auth=${data.token}; path=/; HttpOnly`);
+      res.setHeader(
+        `Set-Cookie`,
+        `agenda-auth=${data.token}; path=/; HttpOnly`
+      );
 
-    return res.status(200).json(data);
+      return res.status(200).json(data);
+    } catch (err) {
+      console.error(err);
+      return res.status(500).send(err);
+    }
   }
 
   try {
     const data = await proxyRequest(req);
 
+    console.log("response:", data);
+
     return res.status(200).json(data);
   } catch (err) {
+    console.error(err);
     return res.status(err.response.status).json(err.response.data);
   }
 };
