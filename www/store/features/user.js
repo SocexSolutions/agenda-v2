@@ -36,14 +36,12 @@ const reducer = (state = initialState, action) => {
  * @returns {Promise<undefined>}
  */
 export const userRegister = ({ email, username, password }) => {
-  return async function registerUser(dispatch, getState) {
+  return async function registerUser(dispatch) {
     const { data } = await client.post("/user/register", {
       email,
       username,
       password,
     });
-
-    setCookie("agenda-auth", data.token);
 
     dispatch({
       type: "user/register",
@@ -64,13 +62,11 @@ export const userRegister = ({ email, username, password }) => {
  * @returns {Promise<undefined>}
  */
 export const userLogin = ({ username, password }) => {
-  return async function loginUser(dispatch, getState) {
+  return async function loginUser(dispatch) {
     const { data } = await client.post("/user/login", {
       username,
       password,
     });
-
-    setCookie("agenda-auth", data.token);
 
     dispatch({
       type: "user/login",
@@ -89,7 +85,7 @@ export const userLogin = ({ username, password }) => {
  * @returns {Promise<undefined>}
  */
 export const userRefresh = () => {
-  return async function refreshUser(dispatch, getState) {
+  return async function refreshUser(dispatch) {
     const token = getCookie("agenda-auth");
 
     if (token) {
@@ -119,9 +115,8 @@ export const userRefresh = () => {
  * @returns {Promise<undefined>}
  */
 export const userLogout = () => {
-  return async function logoutUser(dispatch, getState) {
+  return async function logoutUser(dispatch) {
     setCookie("agenda-auth", "");
-    localStorage.removeItem("theme");
 
     dispatch({
       type: "user/logout",

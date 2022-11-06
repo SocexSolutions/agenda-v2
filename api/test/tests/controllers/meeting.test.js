@@ -33,7 +33,7 @@ describe("lib/controllers/meeting", () => {
     });
 
     this.user = res.data.user;
-    this.token = res.data.token;
+    this.token = res.data.access_token;
 
     const res2 = await client.post("/user/register", {
       username: "user2",
@@ -42,7 +42,7 @@ describe("lib/controllers/meeting", () => {
     });
 
     this.user2 = res2.data.user;
-    this.token2 = res2.data.token;
+    this.token2 = res2.data.access_token;
   });
 
   beforeEach(async () => {

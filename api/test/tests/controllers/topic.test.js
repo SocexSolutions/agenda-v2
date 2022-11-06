@@ -39,10 +39,10 @@ describe("lib/controllers/topic", () => {
     ).data;
 
     this.user = res.user;
-    this.token = res.token;
+    this.token = res.access_token;
 
     this.user2 = res2.user;
-    this.token2 = res2.token;
+    this.token2 = res2.access_token;
   });
 
   beforeEach(async () => {

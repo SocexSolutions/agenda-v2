@@ -47,8 +47,8 @@ module.exports = {
         email: user.email,
         username: user.username,
       },
-      token,
-      expiresIn,
+      access_token: token,
+      expires_in: expiresIn,
     });
   },
 

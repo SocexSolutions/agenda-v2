@@ -33,7 +33,7 @@ describe("lib/controllers/takeaway", () => {
   });
 
   beforeEach(async () => {
-    client.defaults.headers.common["Authorization"] = this.user.token;
+    client.defaults.headers.common["Authorization"] = this.user.access_token;
 
     await dbUtils.clean(["takeaways", "topics"]);
 
@@ -88,7 +88,7 @@ describe("lib/controllers/takeaway", () => {
     it("should 403 if not meeting owner or participant", async () => {
       const takeaway = fakeTakeaway({ topic_id: this.topic._id });
 
-      client.defaults.headers.common["Authorization"] = this.user2.token;
+      client.defaults.headers.common["Authorization"] = this.user2.access_token;
 
       try {
         await client.post(path, takeaway);
@@ -135,7 +135,7 @@ describe("lib/controllers/takeaway", () => {
     });
 
     it("should 403 if not takeaway owner", async () => {
-      client.defaults.headers.common["Authorization"] = this.user2.token;
+      client.defaults.headers.common["Authorization"] = this.user2.access_token;
 
       try {
         await client.patch(path + "/" + this.takeaway._id, {});
@@ -181,7 +181,7 @@ describe("lib/controllers/takeaway", () => {
 
       const resTakeaway = await client.post(path, takeaway);
 
-      client.defaults.headers.common["Authorization"] = this.user2.token;
+      client.defaults.headers.common["Authorization"] = this.user2.access_token;
 
       try {
         await client.delete(path + "/" + resTakeaway.data._id);

@@ -21,7 +21,7 @@ describe("lib/controllers/participant", () => {
     });
 
     this.user = res.data.user;
-    this.token = res.data.token;
+    this.token = res.data.access_token;
   });
 
   beforeEach(async () => {
