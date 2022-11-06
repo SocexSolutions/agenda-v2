@@ -1,10 +1,10 @@
-import { Button, TextField, Autocomplete, Pagination } from '@mui/material';
+import { Button, TextField, Autocomplete, Pagination, CircularProgress } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import InboxRow from './InboxRow/InboxRow';
 
 import meetingAPI from '../../../../api/meeting';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import styles from './Inbox.module.scss';
 
@@ -22,7 +22,9 @@ export default function Inbox({
   setFilters,
   filters,
   totalMeetings,
-  setSkip
+  setSkip,
+  setFetchingMeetings,
+  fetchingMeetings
 }) {
   const router = useRouter();
 
@@ -41,8 +43,10 @@ export default function Inbox({
     );
   });
 
+
   const handleNameChange = ( event ) => {
     setFilters( prevState => ({ ...prevState, name: event.target.value }) );
+    setFetchingMeetings(true);
   };
 
   const handleOwnersChange = ( event, value ) => {
@@ -53,11 +57,11 @@ export default function Inbox({
 
   const itemsPerPage = 14;
 
-  if ( lineItems.length || filters.name ) {
+  if ( lineItems.length || filters.name || fetchingMeetings ) {
     return (
       <>
         <div className={styles.table}>
-          <div className={ filter_box_classes } >
+          <div className={ filter_box_classes }>
             <div className={styles.visible}>
               <TextField
                 placeholder='Search'

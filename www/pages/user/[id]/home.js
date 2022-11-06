@@ -17,6 +17,7 @@ const User = ( props ) => {
   const initialFilters = { owners: [], name: '' };
 
   const [ loading, setLoading ] = useState( true );
+  const [ fetchingMeetings, setFetchingMeetings ] = useState(true);
   const [ meetings, setMeetings ] = useState([]);
   const [ filters, setFilters ] = useState( initialFilters );
   const [ meetingCount, setMeetingCount ] = useState( 0 );
@@ -33,6 +34,7 @@ const User = ( props ) => {
       setMeetings( res.data.meetings );
       setMeetingCount( res.data.count );
 
+      setFetchingMeetings( false );
       setLoading( false );
     } catch ( err ) {
       props.store.dispatch(
@@ -61,7 +63,10 @@ const User = ( props ) => {
             setFilters={setFilters}
             filters={filters}
             totalMeetings={meetingCount}
-            setSkip={setSkip}/>
+            setSkip={setSkip}
+            fetchingMeetings={fetchingMeetings}
+            setFetchingMeetings={setFetchingMeetings}
+            />
         </div>
         <CreateFab />
       </div>
