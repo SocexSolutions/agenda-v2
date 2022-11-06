@@ -18,7 +18,7 @@ const User = ( props ) => {
 
   const [ loading, setLoading ] = useState( true );
   const [ meetings, setMeetings ] = useState([]);
-  const [ filters, setFilters ] = useState( filtersConstuctor );
+  const [ filters, setFilters ] = useState( initialFilters );
   const [ meetingCount, setMeetingCount ] = useState( 0 );
   const [ skip, setSkip ] = useState( 0 );
 

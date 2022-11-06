@@ -7,8 +7,6 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import styles from './Inbox.module.scss';
-import classNames from 'classnames';
-
 
 import { height } from '@mui/system';
 
@@ -29,6 +27,8 @@ export default function Inbox({
   const router = useRouter();
 
   const [ filtersOpen, setFiltersOpen ] = useState( false );
+
+  const filter_box_classes = styles.filter_box + " " + ( filtersOpen && styles.filter_box_open )
 
   const lineItems = meetings.map( ( meeting ) => {
     return (
@@ -57,7 +57,7 @@ export default function Inbox({
     return (
       <>
         <div className={styles.table}>
-          <div className={classNames( styles.filter_box, filtersOpen && styles.filter_box_open ) } >
+          <div className={ filter_box_classes } >
             <div className={styles.visible}>
               <TextField
                 placeholder='Search'
