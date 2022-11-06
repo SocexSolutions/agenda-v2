@@ -14,8 +14,10 @@ async function proxyRequest(req) {
     headers.authorization = req.cookies["agenda-auth"];
   }
 
+  const url = req.url.split("/api/proxy")[1];
+
   const args = [
-    hostname + req.url,
+    hostname + "/api" + url,
     ...(["GET", "DELETE"].includes(req.method) ? [] : [req.body]),
     {
       params: req.query,
@@ -40,7 +42,7 @@ export default async (req, res) => {
 
       return res.status(200).json(data);
     } catch (err) {
-      console.error(err);
+      console.error(err.message);
       return res.status(500).send(err);
     }
   }
@@ -48,11 +50,16 @@ export default async (req, res) => {
   try {
     const data = await proxyRequest(req);
 
-    console.log("response:", data);
-
     return res.status(200).json(data);
   } catch (err) {
-    console.error(err);
-    return res.status(err.response.status).json(err.response.data);
+    let status = 500;
+    let message = "Internal Server Error";
+
+    if (err.response) {
+      status = err.response.status;
+      message = err.response.data;
+    }
+
+    return res.status(status).json(message);
   }
 };
