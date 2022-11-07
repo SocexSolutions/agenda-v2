@@ -14,6 +14,14 @@ const utils = {
    */
   async clean(collection_names) {
     const conn = mongoose.connection;
+
+    if (!mongoose.connection.readyState) {
+      throw new Error(
+        "The db can't be cleaned before initial connection." +
+          " Have you called db.connect()?"
+      );
+    }
+
     const coll_names = collection_names || Object.keys(conn.collections);
 
     const promises = [];
