@@ -83,6 +83,11 @@ const Meeting = (props) => {
               }
               itemKey={"email"}
               itemName={"participant"}
+              validate={(key) => {
+                // eslint-disable-next-line
+                return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(key);
+              }}
+              validateMsg={"Invalid email address."}
               create={(item) =>
                 dispatch(
                   participantStore.actions.create({

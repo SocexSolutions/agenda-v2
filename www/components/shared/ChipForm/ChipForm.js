@@ -1,50 +1,86 @@
-import { useStore } from "../../../store";
-import { notify } from "../../../store/features/snackbar";
-
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 import { Chip } from "@mui/material";
 
 import IconTextField from "../IconTextField/IconTextField";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+
+import useDebounce from "../../../hooks/use-debounce";
 
 import styles from "./ChipForm.module.css";
 
 /**
  * Form for editing chip arrays
  *
- * @param {String} itemKey - key unique among chips that will be displayed
- * @param {String} itemName - singular type of items (eg. participant)
+ * @param {string} itemKey - key unique among chips that will be displayed
+ * @param {string} itemName - singular type of items (eg. participant)
+ * @param {Function} selector - store selector for items to display
+ * @param {Function} validate - validation fn to run on itemKeys
+ * @param {string} validateMsg - error message to show when validation fails
  * @param {Function} create - async function to create a new item in the form
  * given a `payload` as a param
  * @param {Function} destroy - async function to delete an item in the form
  * given an `id` as a param
  */
-function ChipForm({ itemName, itemKey, selector, create, destroy }) {
+function ChipForm({
+  itemName,
+  itemKey,
+  selector,
+  validate,
+  validateMsg,
+  create,
+  destroy,
+}) {
   const items = useSelector(selector);
-  const store = useStore();
 
   const [input, setInput] = useState("");
+  const [formError, setFormError] = useState("");
 
-  const createChip = async (key) => {
-    const duplicates = items.filter((item) => {
-      return item[itemKey] === key;
-    });
+  const debouncedInput = useDebounce(input);
 
-    if (duplicates.length) {
-      store.dispatch(
-        notify({
-          message: `${itemName}s with duplicate ${itemKey}s`,
-          type: "danger",
-        })
-      );
+  useEffect(() => {
+    const checkInput = () => {
+      setFormError("");
 
+      if (!input) {
+        return;
+      }
+
+      if (!validate(debouncedInput)) {
+        setFormError(validateMsg);
+        return;
+      }
+
+      const duplicates = items.filter((item) => {
+        return item[itemKey] === debouncedInput;
+      });
+
+      if (duplicates.length) {
+        setFormError(`${itemName}s with duplicate ${itemKey}s`);
+        return;
+      }
+    };
+
+    checkInput();
+  }, [debouncedInput]);
+
+  const createChip = async () => {
+    if (!validate(input)) {
       return;
     }
 
-    create({ [itemKey]: key });
+    const duplicates = items.filter((item) => {
+      return item[itemKey] === input;
+    });
+
+    if (duplicates.length) {
+      return;
+    }
+
+    create({ [itemKey]: input });
+    setInput("");
   };
 
   function destroyChip(index) {
@@ -55,14 +91,7 @@ function ChipForm({ itemName, itemKey, selector, create, destroy }) {
 
   function handleEnter(event) {
     if (event.key === "Enter") {
-      handleSubmit();
-    }
-  }
-
-  function handleSubmit() {
-    if (input) {
-      createChip(input);
-      setInput("");
+      createChip();
     }
   }
 
@@ -95,7 +124,9 @@ function ChipForm({ itemName, itemKey, selector, create, destroy }) {
           onKeyPress={handleEnter}
           size="small"
           Icon={AddCircleIcon}
-          onIconClick={handleSubmit}
+          onIconClick={createChip}
+          error={!!formError}
+          helperText={formError}
         />
       </div>
     </>
