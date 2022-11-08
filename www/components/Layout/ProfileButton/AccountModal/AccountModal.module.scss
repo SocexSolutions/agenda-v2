@@ -1,0 +1,19 @@
+.modal_container {
+  background: #fff;
+  border-radius: 6px;
+  width: 800px;
+  max-width: 90%;
+  position: absolute;
+  top: 300px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1em 2em 2em 2em;
+
+  &:focus {
+    border: none;
+  }
+}
+
+.main_options {
+  
+}
