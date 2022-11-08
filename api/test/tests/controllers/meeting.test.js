@@ -8,6 +8,7 @@ const ObjectID = require("mongoose").Types.ObjectId;
 const Meeting = require("../../../lib/models/meeting");
 const Participant = require("../../../lib/models/participant");
 const Topic = require("../../../lib/models/topic");
+const User = require("../../../lib/models/user")
 const Takeaway = require("../../../lib/models/takeaway");
 const ActionItem = require("../../../lib/models/action-item");
 const fakeTopic = require("../../fakes/topic");
@@ -15,6 +16,7 @@ const fakeParticipant = require("../../fakes/participant");
 const fakeMeeting = require("../../fakes/meeting");
 const fakeTakeaway = require("../../fakes/takeaway");
 const fakeActionItem = require("../../fakes/action-item");
+const fakeUser = require("../../fakes/user")
 
 chai.use(chaiSubset);
 
@@ -245,7 +247,8 @@ describe("lib/controllers/meeting", () => {
         date: new Date("25 December 1995 01:22 UTC"),
       });
 
-      const includedMeeting = fakeMeeting({ name: "participant meeting" });
+      const includedMeetingOwner = await User.create(fakeUser())
+      const includedMeeting = fakeMeeting({owner_id: includedMeetingOwner._id, name: "participant meeting" });
 
       await Meeting.create(ownedMeeting);
       await Meeting.create(ownedMeeting2); //we will limit before getting to this oldest meeting

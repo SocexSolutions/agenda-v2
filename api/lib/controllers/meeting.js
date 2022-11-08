@@ -274,6 +274,33 @@ module.exports = {
 
     const pipelineFilters = [];
 
+    const ownerLookup = [
+      {
+        $lookup: {
+          from: "users",
+          localField: "owner_id",
+          foreignField: "_id",
+          pipeline: [
+            {
+              $project: {
+                email: 1,
+                username: 1,
+              },
+            },
+          ],
+          as: "owner",
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          owner: { $arrayElemAt: ["$owner", 0] },
+          date: 1,
+          status: 1,
+        },
+      },
+    ]
+
     owners.length && pipelineFilters.push({
       $match:  {
         owner_id: {
@@ -287,7 +314,7 @@ module.exports = {
     });
 
     const sliceStart = parseInt( skip );
-    const sliceEnd = parseInt( limit ) + sliceStart - 1;
+    const sliceEnd = parseInt( limit );
 
     try {
       const pipeline = [
@@ -299,7 +326,7 @@ module.exports = {
             from: 'meetings',
             localField: '_id',
             foreignField: 'owner_id',
-            pipeline: pipelineFilters,
+            pipeline: [...pipelineFilters, ...ownerLookup],
             as: 'owned_meetings'
           }
         },
@@ -313,7 +340,7 @@ module.exports = {
                   from: 'meetings',
                   localField: 'meeting_id',
                   foreignField: '_id',
-                  pipeline: pipelineFilters,
+                  pipeline: [ ...pipelineFilters, ...ownerLookup],
                   as: 'meetings'
                 }
               },
@@ -362,7 +389,7 @@ module.exports = {
 
       const [ { meetings, count } ] = await User.aggregate( pipeline );
 
-      return res.status( 200 ).send({ meetings, count }); //idk man 🤮
+      return res.status( 200 ).send({ meetings, count });
     } catch ( err ) {
       return res.status( 500 ).send( err );
 
