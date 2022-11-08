@@ -59,14 +59,20 @@ export default function Inbox({
     setFilters((prevState) => ({ ...prevState, owners: value.owner_id }));
   };
 
-  const users = [
-    ...new Set(
-      meetings.map((item) => ({
-        name: item.owner.email,
-        owner_id: item.owner._id,
-      }))
-    ),
-  ];
+  const users = Object.values(
+    [
+      ...new Set(
+        meetings.map((item) => ({
+          name: item.owner.email,
+          owner_id: item.owner._id,
+        }))
+      ),
+    ].reduce((prev, meeting) => {
+      prev[meeting.owner_id] = meeting;
+
+      return prev;
+    }, {})
+  );
 
   const itemsPerPage = 14;
 
