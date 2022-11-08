@@ -15,5 +15,42 @@
 }
 
 .main_options {
+  display: flex;
+  width: 50%;
+
+  .avatar_current:hover {
+    opacity: 20%;
+    cursor: pointer;
+  }
+
+  .avatar_change{
+    position: absolute;
+    transform: translate(0, -100%);
+    z-index: -1;
+  }
+
+  .info{
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 0 1em;
+    justify-content: center;
+
+
+    h1 {
+      font-weight: 500;
+      margin: 0;
+    }
   
+    span {
+      font-size: small;
+    }
+
+    a {
+      margin-left: 1em;
+      text-decoration: underline;
+      font-size: x-small;
+    }
+  }
+  
+
 }
