@@ -6,7 +6,7 @@
 
 *Authorization* - what permissions does the user have
 
-*O-Auth* - fancier authenticaton system that also adds in the ability to manage permissions with the o-auth provider (like google)
+*O-Auth* - fancier authentication system that also adds in the ability to manage permissions with the o-auth provider (like google)
 
 ### Passport.js
 
