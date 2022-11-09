@@ -95,7 +95,7 @@ const Nav = () => {
     }
   }, [router]);
 
-  if (!user.token) {
+  if (!user._id) {
     return (
       <>
         <nav className={styles.nav}>

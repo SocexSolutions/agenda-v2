@@ -1,9 +1,8 @@
 import client from "../../api/client";
-import { getCookie, setCookie } from "../../utils/cookie";
+import { setCookie } from "../../utils/cookie";
 import router from "next/router";
 
 const initialState = {
-  token: null,
   _id: null,
   username: null,
   email: null,
@@ -46,7 +45,6 @@ export const userRegister = ({ email, username, password }) => {
     dispatch({
       type: "user/register",
       payload: {
-        token: data.token,
         _id: data.user._id,
         username: data.user.username,
         email: data.user.email,
@@ -71,7 +69,6 @@ export const userLogin = ({ username, password }) => {
     dispatch({
       type: "user/login",
       payload: {
-        token: data.token,
         _id: data.user._id,
         username: data.user.username,
         email: data.user.email,
@@ -81,31 +78,24 @@ export const userLogin = ({ username, password }) => {
 };
 
 /**
- * Refresh the user state based on auth token
+ * Refresh the user state based on auth cookie
  * @returns {Promise<undefined>}
  */
 export const userRefresh = () => {
   return async function refreshUser(dispatch) {
-    const token = getCookie("agenda-auth");
+    try {
+      const { data } = await client.get("user/refresh");
 
-    if (token) {
-      try {
-        const { data } = await client.get("user/refresh", {
-          headers: { authorization: token },
-        });
-
-        dispatch({
-          type: "user/refresh",
-          payload: {
-            token,
-            _id: data.user._id,
-            username: data.user.username,
-            email: data.user.email,
-          },
-        });
-      } catch (err) {
-        console.error(err);
-      }
+      dispatch({
+        type: "user/refresh",
+        payload: {
+          _id: data.user._id,
+          username: data.user.username,
+          email: data.user.email,
+        },
+      });
+    } catch (err) {
+      console.error(err);
     }
   };
 };
