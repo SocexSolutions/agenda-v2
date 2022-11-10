@@ -24,7 +24,7 @@ const pagesNeedingAuth = new Set([
   "user",
   "meet",
   "edit",
-  "voting",
+  "vote",
   "home",
 ]);
 
@@ -49,7 +49,9 @@ const App = (props) => {
       }
     }
 
-    refresh();
+    if (!store.getState().user.loggedOut) {
+      refresh();
+    }
   }, [user]);
 
   const Component = props.Component;

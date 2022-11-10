@@ -1,11 +1,11 @@
 import client from "../../api/client";
-import { setCookie } from "../../utils/cookie";
 import router from "next/router";
 
 const initialState = {
   _id: null,
   username: null,
   email: null,
+  loggedOut: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -106,11 +106,11 @@ export const userRefresh = () => {
  */
 export const userLogout = () => {
   return async function logoutUser(dispatch) {
-    setCookie("agenda-auth", "");
+    await client.get("user/logout");
 
     dispatch({
       type: "user/logout",
-      payload: {},
+      payload: { loggedOut: true },
     });
 
     router.push("/");
