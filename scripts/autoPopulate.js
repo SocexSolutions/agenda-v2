@@ -15,7 +15,7 @@ const TEST_EMAIL = 'test@test.com';
 /**
  * Get rand int
  *
- * @param max - max number
+ * @param max - max number 
  *
  * @returns {Number}
  */

@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { userLogout } from "../../../store/features/user";
 import AccountModal from "./AccountModal/AccountModal";
 
-export default function ProfileButton() {
+export default function ProfileButton({user}) {
   const [anchor, setAnchor] = useState(null);
   const [openAccountModal, setOpenAccountModal] = useState(false);
   const dispatch = useDispatch();
@@ -32,7 +32,7 @@ export default function ProfileButton() {
             <ListItemIcon>
               <Settings />
             </ListItemIcon>
-            <ListItemText inset>Account</ListItemText>
+            <ListItemText inset>Account (Beta)</ListItemText>
           </MenuItem>
           <MenuItem onClick={() => dispatch(userLogout())}>
             <ListItemIcon>
@@ -42,7 +42,7 @@ export default function ProfileButton() {
           </MenuItem>
         </MenuList>
       </Menu>
-      <AccountModal open={openAccountModal} setOpen={setOpenAccountModal} />
+      <AccountModal open={openAccountModal} setOpen={setOpenAccountModal} user={user} />
     </>
   );
 }

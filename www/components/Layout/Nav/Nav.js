@@ -167,7 +167,7 @@ const Nav = () => {
             </IconButton>
           </div>
           <div className={styles.end}>
-            <ProfileButton />
+            <ProfileButton user={user}/>
           </div>
         </nav>
       </>
