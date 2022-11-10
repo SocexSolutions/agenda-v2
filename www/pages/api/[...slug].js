@@ -41,7 +41,7 @@ export default async (req, res) => {
         `Set-Cookie`,
         `agenda-auth=${data.token}; path=/; Expires=${new Date(
           Date.now() + oneWeekMS
-        )}; HttpOnly`
+        )}; HttpOnly; SameSite=Strict;`
       );
 
       return res.status(200).json(data);
@@ -54,7 +54,9 @@ export default async (req, res) => {
   if (req.url === "/api/user/logout") {
     res.setHeader(
       `Set-Cookie`,
-      `agenda-auth=''; path=/; Expires=${new Date(0)}; HttpOnly`
+      `agenda-auth=''; path=/; Expires=${new Date(
+        0
+      )}; HttpOnly; SameSite=Strict;`
     );
 
     return res.status(200).send("ok");

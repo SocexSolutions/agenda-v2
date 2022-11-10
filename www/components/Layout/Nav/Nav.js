@@ -101,7 +101,7 @@ const Nav = () => {
         <nav className={styles.nav}>
           <Link href="/">
             <div className={styles.agenda}>
-              <img src="./logo.png" alt="Agenda" className={styles.logo} />
+              <img src="/logo.png" alt="Agenda" className={styles.logo} />
             </div>
           </Link>
           <div className={styles.login}>
