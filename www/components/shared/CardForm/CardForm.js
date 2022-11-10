@@ -85,7 +85,7 @@ const CardForm = ({ item, updateItem, destroyItem }) => {
       <TextField
         className={styles.description}
         multiline
-        rows={3}
+        minRows={3}
         fullWidth
         size="small"
         label="Description"
