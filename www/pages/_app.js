@@ -32,8 +32,6 @@ const App = (props) => {
   const store = useStore();
   const router = useRouter();
 
-  const user = store.getState().user;
-
   useEffect(() => {
     async function refresh() {
       if (!store.getState().user._id) {
@@ -48,9 +46,8 @@ const App = (props) => {
         router.push("/login");
       }
     }
-
     refresh();
-  }, [user]);
+  }, []);
 
   const Component = props.Component;
 

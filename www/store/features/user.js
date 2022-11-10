@@ -1,5 +1,5 @@
 import client from "../../api/client";
-import { setCookie } from "../../utils/cookie";
+import { deleteCookie } from "../../utils/cookie";
 import router from "next/router";
 
 const initialState = {
@@ -106,7 +106,7 @@ export const userRefresh = () => {
  */
 export const userLogout = () => {
   return async function logoutUser(dispatch) {
-    setCookie("agenda-auth", "");
+    deleteCookie("agenda-auth", "");
 
     dispatch({
       type: "user/logout",
