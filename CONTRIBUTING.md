@@ -9,7 +9,7 @@
 
 ## Summary
 
-When contributing to MeetingMinder, if there is not already an issue open, please first discuss the change you wish to make via issue before making a change. 
+When contributing to MeetingMinder, if there is not already an issue open, please first discuss the change you wish to make via an issue before making a change. 
 
 Please note we have a [code of conduct](https://github.com/SocexSolutions/agenda-v2/blob/master/CODE_OF_CONDUCT.md), please follow it in all your interactions with the project.
 
