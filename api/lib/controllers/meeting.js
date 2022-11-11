@@ -268,6 +268,7 @@ module.exports = {
     const { limit = 0, skip = 0, name = "", owners = [] } = req.query;
 
     const pipelineFilters = [];
+    const filtered = !!name || !!owners.length
 
     const ownerLookup = [
       {
@@ -385,7 +386,7 @@ module.exports = {
         },
       ];
 
-      const [{ meetings, count, owners }] = await User.aggregate(pipeline);
+      const [{ meetings, count, owners  }] = await User.aggregate(pipeline);
 
       const reducedOwners = Object.values(owners.reduce((prev, owner) => {
         prev[owner._id] = owner;
@@ -393,7 +394,7 @@ module.exports = {
         return prev;
       }, {}));
 
-      return res.status(200).send({ meetings, count, owners: reducedOwners });
+      return res.status(200).send({ meetings, count, owners: reducedOwners, filtered });
     } catch (err) {
       return res.status(500).send(err);
     }

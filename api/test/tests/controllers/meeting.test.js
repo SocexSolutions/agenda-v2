@@ -272,6 +272,59 @@ describe("lib/controllers/meeting", () => {
     });
   });
 
+  it("should filter meetings by name", async () => {
+    await Meeting.create(this.ownedMeeting);
+    await Meeting.create(this.ownedMeeting2); 
+    await Meeting.create(this.ownedMeeting3); 
+    await Meeting.create(this.ownedMeeting4);
+
+    const filters = { owners: [], name: "meeting 1" };
+
+    const {data} = await client.get(`/meeting/?skip=0&limit=2`, {
+      params: filters,
+    });
+
+    assert.strictEqual( data.meetings.length, 1 );
+    assert.strictEqual( data.meetings[ 0 ].name, 'meeting 1' ); 
+  })
+
+  it("should filter meetings by owner", async () => {
+    const includedMeetingOwner = await User.create(fakeUser())
+    const includedMeeting = fakeMeeting({owner_id: includedMeetingOwner._id, name: "participant meeting" });
+
+    await Meeting.create(this.ownedMeeting);
+    await Meeting.create(this.ownedMeeting2); 
+    const includedRes = await Meeting.create(includedMeeting);
+
+    const participant = fakeParticipant({
+      meeting_id: includedRes._id,
+      email: this.user.email,
+    });
+
+    await Participant.create(participant);
+
+    const filters = { owners: [includedMeetingOwner._id.toString()], name: "" };
+
+    const {data} = await client.get(`/meeting/?skip=0&limit=2`, {
+      params: filters,
+    });
+
+    assert.strictEqual( data.meetings.length, 1 );
+    assert.strictEqual( data.meetings[ 0 ].owner._id, includedMeetingOwner._id.toString() ); 
+  })
+
+  it("should return filtered as true", async () => {
+    await Meeting.create(this.ownedMeeting);
+
+    const filters = { owners: [], name: "meet" };
+
+    const {data} = await client.get(`/meeting/?skip=0&limit=1`, {
+      params: filters,
+    });
+
+    assert.strictEqual( data.filtered, true );
+  })
+
   describe("#aggregateSave", () => {
     it("should create meeting", async () => {
       const meeting = fakeMeeting({
