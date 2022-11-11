@@ -40,7 +40,7 @@ Please note we have a [code of conduct](https://github.com/SocexSolutions/agenda
 - See if you can find the cause of the problem. You might be able to fix the problem and score an easy contribution
 - Check the [issues](https://github.com/SocexSolutions/agenda-v2/issues) page for similar existing bug reports
 
-### Submitting a report:
+### Submitting a Report:
 - Navigate to [issues](https://github.com/SocexSolutions/agenda-v2/issues) and click `New issue`
 - Use a clear and descriptive title describing the bug you are seeing
 - Select the bug issue template and fill out the form
