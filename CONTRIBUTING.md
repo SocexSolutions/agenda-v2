@@ -36,7 +36,7 @@ Please note we have a [code of conduct](https://github.com/SocexSolutions/agenda
 
 ## Bug Reports
 
-### Before reporting
+### Before Reporting
 - See if you can find the cause of the problem. You might be able to fix the problem and score an easy contribution
 - Check the [issues](https://github.com/SocexSolutions/agenda-v2/issues) page for similar existing bug reports
 
