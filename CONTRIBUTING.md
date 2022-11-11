@@ -22,9 +22,10 @@ Please note we have a [code of conduct](https://github.com/SocexSolutions/agenda
 - Think about edge cases.
 
 ### Backend:
-- make sure any additional features or changes to existing features are covered under the tests in `api/test/tests`
-- run `npm run test` in console and confirm all tests are passing
-- ensure changes function as expected on the front end
+
+- Make sure any additional features or changes to existing features are covered under the tests in `api/test/tests`
+- Run `npm run test` in console and confirm all tests are passing
+- Ensure changes function as expected on the front end
 
 ## Pull Request Process
 
