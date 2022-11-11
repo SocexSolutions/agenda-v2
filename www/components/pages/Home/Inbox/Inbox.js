@@ -23,6 +23,7 @@ import { height } from "@mui/system";
  */
 export default function Inbox({
   meetings,
+  owners,
   emptyMessage,
   refresh,
   setFilters,
@@ -59,21 +60,6 @@ export default function Inbox({
     setFilters((prevState) => ({ ...prevState, owners: value.owner_id }));
   };
 
-  const users = Object.values(
-    [
-      ...new Set(
-        meetings.map((item) => ({
-          name: item.owner.email,
-          owner_id: item.owner._id,
-        }))
-      ),
-    ].reduce((prev, meeting) => {
-      prev[meeting.owner_id] = meeting;
-
-      return prev;
-    }, {})
-  );
-
   const itemsPerPage = 14;
 
   if (lineItems.length || filters.name || fetchingMeetings) {
@@ -98,8 +84,8 @@ export default function Inbox({
             <div className={styles.hidden}>
               <Autocomplete
                 multiple
-                options={users}
-                getOptionLabel={(users) => users.name}
+                options={owners}
+                getOptionLabel={(owners) => owners.username}
                 onChange={handleOwnersChange}
                 sx={{ width: 400, height: 100 }}
                 renderInput={(params) => (

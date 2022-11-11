@@ -37,6 +37,27 @@ describe("lib/controllers/meeting", () => {
     this.user = res.data.user;
     this.token = res.data.access_token;
 
+    this.ownedMeeting = fakeMeeting({
+      owner_id: this.user._id,
+      name: "meeting 1",
+      date: new Date("05 October 2011 14:48 UTC"),
+    });
+    this.ownedMeeting2 = fakeMeeting({
+      owner_id: this.user._id,
+      name: "meeting 2",
+      date: new Date("01 January 1990 01:22 UTC"),
+    });
+    this.ownedMeeting3 = fakeMeeting({
+      owner_id: this.user._id,
+      name: "meeting 3",
+      date: new Date("05 October 2500 14:48 UTC"),
+    });
+    this.ownedMeeting4 = fakeMeeting({
+      owner_id: this.user._id,
+      name: "meeting 4",
+      date: new Date("25 December 1995 01:22 UTC"),
+    });
+
     const res2 = await client.post("/user/register", {
       username: "user2",
       password: "pass2",
@@ -226,34 +247,14 @@ describe("lib/controllers/meeting", () => {
 
   describe("#index", () => {
     it("should get a users owned and participating meetings", async () => {
-      const ownedMeeting = fakeMeeting({
-        owner_id: this.user._id,
-        name: "meeting 1",
-        date: new Date("05 October 2011 14:48 UTC"),
-      });
-      const ownedMeeting2 = fakeMeeting({
-        owner_id: this.user._id,
-        name: "meeting 2",
-        date: new Date("01 January 1990 01:22 UTC"),
-      });
-      const ownedMeeting3 = fakeMeeting({
-        owner_id: this.user._id,
-        name: "meeting 3",
-        date: new Date("05 October 2500 14:48 UTC"),
-      });
-      const ownedMeeting4 = fakeMeeting({
-        owner_id: this.user._id,
-        name: "meeting 4",
-        date: new Date("25 December 1995 01:22 UTC"),
-      });
 
       const includedMeetingOwner = await User.create(fakeUser())
       const includedMeeting = fakeMeeting({owner_id: includedMeetingOwner._id, name: "participant meeting" });
 
-      await Meeting.create(ownedMeeting);
-      await Meeting.create(ownedMeeting2); //we will limit before getting to this oldest meeting
-      await Meeting.create(ownedMeeting3); //we will skip this newest meeting for pagenation test
-      await Meeting.create(ownedMeeting4);
+      await Meeting.create(this.ownedMeeting);
+      await Meeting.create(this.ownedMeeting2); //we will limit before getting to this oldest meeting
+      await Meeting.create(this.ownedMeeting3); //we will skip this newest meeting for pagenation test
+      await Meeting.create(this.ownedMeeting4);
       const includedRes = await Meeting.create(includedMeeting);
 
       const participant = fakeParticipant({

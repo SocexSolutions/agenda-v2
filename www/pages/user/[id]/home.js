@@ -12,31 +12,32 @@ import styles from "../../../styles/pages/user/[id]/home.module.css";
 
 import { notify } from "../../../store/features/snackbar";
 
-const User = ( props ) => {
+const User = (props) => {
+  const initialFilters = { owners: [], name: "" };
 
-  const initialFilters = { owners: [], name: '' };
-
-  const [ loading, setLoading ] = useState( true );
-  const [ fetchingMeetings, setFetchingMeetings ] = useState(true);
-  const [ meetings, setMeetings ] = useState([]);
-  const [ filters, setFilters ] = useState( initialFilters );
-  const [ meetingCount, setMeetingCount ] = useState( 0 );
-  const [ skip, setSkip ] = useState( 0 );
+  const [loading, setLoading] = useState(true);
+  const [fetchingMeetings, setFetchingMeetings] = useState(true);
+  const [meetings, setMeetings] = useState([]);
+  const [owners, setOwners] = useState([]);
+  const [filters, setFilters] = useState(initialFilters);
+  const [meetingCount, setMeetingCount] = useState(0);
+  const [skip, setSkip] = useState(0);
 
   const user = useSelector((state) => state.user);
 
   async function load() {
     try {
-      const res = await client.get( `/meeting/?skip=${ skip }&limit=14`, {
-        params: filters
+      const res = await client.get(`/meeting/?skip=${skip}&limit=14`, {
+        params: filters,
       });
 
-      setMeetings( res.data.meetings );
-      setMeetingCount( res.data.count );
+      setMeetings(res.data.meetings);
+      setMeetingCount(res.data.count);
+      setOwners(res.data.owners)
 
-      setFetchingMeetings( false );
-      setLoading( false );
-    } catch ( err ) {
+      setFetchingMeetings(false);
+      setLoading(false);
+    } catch (err) {
       props.store.dispatch(
         notify({
           message: "Failed to fetch meeting: " + err.message,
@@ -50,7 +51,7 @@ const User = ( props ) => {
     if (user._id) {
       load();
     }
-  }, [ user, filters, skip ] );
+  }, [user, filters, skip]);
 
   return (
     <Fade in={!loading}>
@@ -59,6 +60,7 @@ const User = ( props ) => {
           <h2 className={styles.page_title}>My Meetings</h2>
           <Inbox
             meetings={meetings}
+            owners={owners}
             refresh={load}
             setFilters={setFilters}
             filters={filters}
@@ -66,7 +68,7 @@ const User = ( props ) => {
             setSkip={setSkip}
             fetchingMeetings={fetchingMeetings}
             setFetchingMeetings={setFetchingMeetings}
-            />
+          />
         </div>
         <CreateFab />
       </div>
