@@ -34,7 +34,6 @@ export default function Inbox({
   fetchingMeetings,
 }) {
   const router = useRouter();
-
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const filter_box_classes =
@@ -57,7 +56,7 @@ export default function Inbox({
   };
 
   const handleOwnersChange = (event, value) => {
-    setFilters((prevState) => ({ ...prevState, owners: value.owner_id }));
+    setFilters((prevState) => ({ ...prevState, owners: value.map(owner => owner._id) }));
   };
 
   const itemsPerPage = 14;

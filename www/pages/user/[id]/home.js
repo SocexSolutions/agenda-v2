@@ -33,7 +33,7 @@ const User = (props) => {
 
       setMeetings(res.data.meetings);
       setMeetingCount(res.data.count);
-      !res.filtered && setOwners(res.data.owners)
+      !res.data.filtered && setOwners(res.data.owners)
 
       setFetchingMeetings(false);
       setLoading(false);
