@@ -35,9 +35,13 @@ export default async (req, res) => {
     try {
       const data = await proxyRequest(req);
 
+      const oneWeekMS = 1000 * 60 * 60 * 24 * 7;
+
       res.setHeader(
         `Set-Cookie`,
-        `agenda-auth=${data.token}; path=/; HttpOnly`
+        `agenda-auth=${data.token}; path=/; Expires=${new Date(
+          Date.now() + oneWeekMS
+        )}; HttpOnly; SameSite=Strict;`
       );
 
       return res.status(200).json(data);
@@ -45,6 +49,17 @@ export default async (req, res) => {
       console.error(err.message);
       return res.status(500).send(err);
     }
+  }
+
+  if (req.url === "/api/user/logout") {
+    res.setHeader(
+      `Set-Cookie`,
+      `agenda-auth=''; path=/; Expires=${new Date(
+        0
+      )}; HttpOnly; SameSite=Strict;`
+    );
+
+    return res.status(200).send("ok");
   }
 
   try {
