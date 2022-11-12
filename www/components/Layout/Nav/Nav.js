@@ -136,11 +136,19 @@ const Nav = () => {
             <IconButton onClick={() => dispatch(toggleDrawer())}>
               <MenuIcon />
             </IconButton>
-            <IconButton onClick={() => router.push(homeHref)}>
+            <IconButton
+              onClick={() => router.push(homeHref)}
+              disabled={router.asPath === homeHref}
+            >
               <HomeOutlinedIcon />
             </IconButton>
             <IconButton
-              disabled={whereInHistory < 1}
+              disabled={
+                whereInHistory < 1 ||
+                ["/login", "/", "/register"].includes(
+                  history[whereInHistory - 1]
+                )
+              }
               onClick={() => {
                 setBackPressed(true);
                 router.push(history[whereInHistory - 1]);
