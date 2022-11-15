@@ -1,8 +1,8 @@
-const client = require("../utils/client");
+const client = require("./client");
 const fakeMeeting = require("../fakes/meeting");
 const Meeting = require("../../lib/models/meeting");
 
-export default async function setupMeeting() {
+async function setupMeeting() {
   const res = await client.post("/user/register", {
     username: "user",
     password: "pass",
@@ -31,7 +31,7 @@ export default async function setupMeeting() {
   unrelated.token = res3.data.access_token;
 
   const meeting = await Meeting.create({
-    ...fakeMeeting,
+    ...fakeMeeting(),
     owner: user._id,
     participants: ["email2@email.com"],
   });
@@ -43,3 +43,5 @@ export default async function setupMeeting() {
     meeting,
   };
 }
+
+module.exports = setupMeeting;
