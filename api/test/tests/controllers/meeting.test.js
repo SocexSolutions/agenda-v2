@@ -8,7 +8,7 @@ const ObjectID = require("mongoose").Types.ObjectId;
 const Meeting = require("../../../lib/models/meeting");
 const Participant = require("../../../lib/models/participant");
 const Topic = require("../../../lib/models/topic");
-const User = require("../../../lib/models/user")
+const User = require("../../../lib/models/user");
 const Takeaway = require("../../../lib/models/takeaway");
 const ActionItem = require("../../../lib/models/action-item");
 const fakeTopic = require("../../fakes/topic");
@@ -16,7 +16,7 @@ const fakeParticipant = require("../../fakes/participant");
 const fakeMeeting = require("../../fakes/meeting");
 const fakeTakeaway = require("../../fakes/takeaway");
 const fakeActionItem = require("../../fakes/action-item");
-const fakeUser = require("../../fakes/user")
+const fakeUser = require("../../fakes/user");
 
 chai.use(chaiSubset);
 
@@ -247,14 +247,19 @@ describe("lib/controllers/meeting", () => {
 
   describe("#index", () => {
     it("should get a users owned and participating meetings", async () => {
+      const includedMeetingOwner = await User.create(fakeUser());
+      const includedMeeting = fakeMeeting({
+        owner_id: includedMeetingOwner._id,
+        name: "participant meeting",
+      });
 
-      const includedMeetingOwner = await User.create(fakeUser())
-      const includedMeeting = fakeMeeting({owner_id: includedMeetingOwner._id, name: "participant meeting" });
-
-      await Meeting.create(this.ownedMeeting);
-      await Meeting.create(this.ownedMeeting2); //we will limit before getting to this oldest meeting
-      await Meeting.create(this.ownedMeeting3); //we will skip this newest meeting for pagenation test
-      await Meeting.create(this.ownedMeeting4);
+      await Promise.all([
+      await Meeting.create(this.ownedMeeting),
+      await Meeting.create(this.ownedMeeting2), //we will limit before getting to this oldest meeting
+      await Meeting.create(this.ownedMeeting3), //we will skip this newest meeting for pagenation test
+      await Meeting.create(this.ownedMeeting4),
+      ])
+     
       const includedRes = await Meeting.create(includedMeeting);
 
       const participant = fakeParticipant({
@@ -266,64 +271,79 @@ describe("lib/controllers/meeting", () => {
 
       const { data } = await client.get(`/meeting/?skip=1&limit=3`);
 
-      assert.strictEqual( data.meetings.length, 3 );
-      assert.strictEqual( data.meetings[ 0 ].name, 'participant meeting' ); //Second newest meeting first
-      assert.strictEqual( data.meetings[ 2 ].name, 'meeting 4' ); //Second oldest meeting last
+      assert.strictEqual(data.meetings.length, 3);
+      assert.strictEqual(data.meetings[0].name, "participant meeting"); //Second newest meeting first
+      assert.strictEqual(data.meetings[2].name, "meeting 4"); //Second oldest meeting last
+    });
+
+    it("should filter meetings by name", async () => {
+      
+      await Promise.all([
+      Meeting.create(this.ownedMeeting),
+      Meeting.create(this.ownedMeeting2),
+      Meeting.create(this.ownedMeeting3),
+      Meeting.create(this.ownedMeeting4),
+      ]);
+
+      const filters = { owners: [], name: "meeting 1" };
+
+      const { data } = await client.get(`/meeting/?skip=0&limit=2`, {
+        params: filters,
+      });
+
+      assert.strictEqual(data.meetings.length, 1);
+      assert.strictEqual(data.meetings[0].name, "meeting 1");
+    });
+
+    it("should filter meetings by owner", async () => {
+      const includedMeetingOwner = await User.create(fakeUser());
+      const includedMeeting = fakeMeeting({
+        owner_id: includedMeetingOwner._id,
+        name: "participant meeting",
+      });
+
+      await Promise.all([
+      await Meeting.create(this.ownedMeeting),
+      await Meeting.create(this.ownedMeeting2),
+      ])
+
+      const includedRes = await Meeting.create(includedMeeting);
+
+      const participant = fakeParticipant({
+        meeting_id: includedRes._id,
+        email: this.user.email,
+      });
+
+      await Participant.create(participant);
+
+      const filters = {
+        owners: [includedMeetingOwner._id.toString()],
+        name: "",
+      };
+
+      const { data } = await client.get(`/meeting/?skip=0&limit=2`, {
+        params: filters,
+      });
+
+      assert.strictEqual(data.meetings.length, 1);
+      assert.strictEqual(
+        data.meetings[0].owner._id,
+        includedMeetingOwner._id.toString()
+      );
+    });
+
+    it("should return filtered as true", async () => {
+      await Meeting.create(this.ownedMeeting);
+
+      const filters = { owners: [], name: "meet" };
+
+      const { data } = await client.get(`/meeting/?skip=0&limit=1`, {
+        params: filters,
+      });
+
+      assert.strictEqual(data.filtered, true);
     });
   });
-
-  it("should filter meetings by name", async () => {
-    await Meeting.create(this.ownedMeeting);
-    await Meeting.create(this.ownedMeeting2); 
-    await Meeting.create(this.ownedMeeting3); 
-    await Meeting.create(this.ownedMeeting4);
-
-    const filters = { owners: [], name: "meeting 1" };
-
-    const {data} = await client.get(`/meeting/?skip=0&limit=2`, {
-      params: filters,
-    });
-
-    assert.strictEqual( data.meetings.length, 1 );
-    assert.strictEqual( data.meetings[ 0 ].name, 'meeting 1' ); 
-  })
-
-  it("should filter meetings by owner", async () => {
-    const includedMeetingOwner = await User.create(fakeUser())
-    const includedMeeting = fakeMeeting({owner_id: includedMeetingOwner._id, name: "participant meeting" });
-
-    await Meeting.create(this.ownedMeeting);
-    await Meeting.create(this.ownedMeeting2); 
-    const includedRes = await Meeting.create(includedMeeting);
-
-    const participant = fakeParticipant({
-      meeting_id: includedRes._id,
-      email: this.user.email,
-    });
-
-    await Participant.create(participant);
-
-    const filters = { owners: [includedMeetingOwner._id.toString()], name: "" };
-
-    const {data} = await client.get(`/meeting/?skip=0&limit=2`, {
-      params: filters,
-    });
-
-    assert.strictEqual( data.meetings.length, 1 );
-    assert.strictEqual( data.meetings[ 0 ].owner._id, includedMeetingOwner._id.toString() ); 
-  })
-
-  it("should return filtered as true", async () => {
-    await Meeting.create(this.ownedMeeting);
-
-    const filters = { owners: [], name: "meet" };
-
-    const {data} = await client.get(`/meeting/?skip=0&limit=1`, {
-      params: filters,
-    });
-
-    assert.strictEqual( data.filtered, true );
-  })
 
   describe("#aggregateSave", () => {
     it("should create meeting", async () => {

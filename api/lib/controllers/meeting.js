@@ -314,97 +314,93 @@ module.exports = {
     const sliceStart = parseInt(skip);
     const sliceEnd = parseInt(limit);
 
-    try {
-      const pipeline = [
-        {
-          $match: { _id: ObjectID(subject_id) },
+    const pipeline = [
+      {
+        $match: { _id: ObjectID(subject_id) },
+      },
+      {
+        $lookup: {
+          from: "meetings",
+          localField: "_id",
+          foreignField: "owner_id",
+          pipeline: [...pipelineFilters, ...ownerLookup],
+          as: "owned_meetings",
         },
-        {
-          $lookup: {
-            from: "meetings",
-            localField: "_id",
-            foreignField: "owner_id",
-            pipeline: [...pipelineFilters, ...ownerLookup],
-            as: "owned_meetings",
-          },
-        },
-        {
-          $lookup: {
-            from: "participants",
-            pipeline: [
-              { $match: { email: subject_email } },
-              {
-                $lookup: {
-                  from: "meetings",
-                  localField: "meeting_id",
-                  foreignField: "_id",
-                  pipeline: [...pipelineFilters, ...ownerLookup],
-                  as: "meetings",
+      },
+      {
+        $lookup: {
+          from: "participants",
+          pipeline: [
+            { $match: { email: subject_email } },
+            {
+              $lookup: {
+                from: "meetings",
+                localField: "meeting_id",
+                foreignField: "_id",
+                pipeline: [...pipelineFilters, ...ownerLookup],
+                as: "meetings",
+              },
+            },
+            {
+              $project: {
+                meeting: {
+                  $arrayElemAt: ["$meetings", 0],
                 },
               },
-              {
-                $project: {
-                  meeting: {
-                     $arrayElemAt: ["$meetings", 0] 
-                  }
-                }
-              },
-              {$unwind: "$meeting"},
-              {
-                $replaceRoot: {
-                  newRoot: "$meeting",
-                },
-              },
-            ],
-            as: "participating_meetings",
-          },
-        },
-        {
-          $project: {
-            meetings: {
-              $concatArrays: ["$participating_meetings", "$owned_meetings"],
             },
-          },
-        },
-        {
-          $project: {
-            meetings: {
-              $sortArray: {
-                input: "$meetings",
-                sortBy: { date: -1 },
+            { $unwind: "$meeting" },
+            {
+              $replaceRoot: {
+                newRoot: "$meeting",
               },
             },
-            count: { $size: "$meetings" },
-            owners: "$meetings.owner",
+          ],
+          as: "participating_meetings",
+        },
+      },
+      {
+        $project: {
+          meetings: {
+            $concatArrays: ["$participating_meetings", "$owned_meetings"],
           },
         },
-        {
-          $project: {
-            meetings: {
-              $slice: ["$meetings", sliceStart, sliceEnd],
+      },
+      {
+        $project: {
+          meetings: {
+            $sortArray: {
+              input: "$meetings",
+              sortBy: { date: -1 },
             },
-            count: 1,
-            owners: 1,
           },
+          count: { $size: "$meetings" },
+          owners: "$meetings.owner",
         },
-      ];
+      },
+      {
+        $project: {
+          meetings: {
+            $slice: ["$meetings", sliceStart, sliceEnd],
+          },
+          count: 1,
+          owners: 1,
+        },
+      },
+    ];
 
-      const [{ meetings, count, owners }] = await User.aggregate(pipeline);
+    const [{ meetings, count, allOwners = owners }] = await User.aggregate(pipeline);
 
-      const reducedOwners = Object.values(
-        owners.reduce((prev, owner) => {
-          prev[owner._id] = owner;
+    const reducedOwners = Object.values(
+      allOwners.reduce((prev, owner) => {
+        prev[owner._id] = owner;
 
-          return prev;
-        }, {})
-      );
+        return prev;
+      }, {})
+    );
 
-      return res
-        .status(200)
-        .send({ meetings, count, owners: reducedOwners, filtered });
-    } catch (err) {
-      return res.status(500).send(err);
-    }
+    return res
+      .status(200)
+      .send({ meetings, count, owners: reducedOwners, filtered });
   },
 
   /**

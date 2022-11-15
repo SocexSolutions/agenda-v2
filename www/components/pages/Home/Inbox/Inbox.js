@@ -2,19 +2,16 @@ import {
   Button,
   TextField,
   Autocomplete,
-  Pagination,
-  CircularProgress,
+  Pagination
 } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import InboxRow from "./InboxRow/InboxRow";
 
 import meetingAPI from "../../../../api/meeting";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import styles from "./Inbox.module.scss";
-
-import { height } from "@mui/system";
 
 /**
  * Table that displays users meetings
@@ -24,7 +21,6 @@ import { height } from "@mui/system";
 export default function Inbox({
   meetings,
   owners,
-  emptyMessage,
   refresh,
   setFilters,
   filters,
