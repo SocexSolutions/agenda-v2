@@ -79,8 +79,21 @@ module.exports.checkOwner = async (_id, collection_name, credentials) => {
 
     const document = await collection.findOne({ _id: id });
 
-    if (document.owner_id.toString() === subject_id.toString()) {
+    if (
+      document.owner_id &&
+      document.owner_id.toString() === subject_id.toString()
+    ) {
       return document;
+    }
+
+    if (document.owner_ids) {
+      const isOwner = document.owner_ids.some(
+        (owner_id) => owner_id.toString() === subject_id.toString()
+      );
+
+      if (isOwner) {
+        return document;
+      }
     }
 
     throw new AuthErr("not owner");
