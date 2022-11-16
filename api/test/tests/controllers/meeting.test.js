@@ -254,10 +254,10 @@ describe("lib/controllers/meeting", () => {
       });
 
       await Promise.all([
-      await Meeting.create(this.ownedMeeting),
-      await Meeting.create(this.ownedMeeting2), //we will limit before getting to this oldest meeting
-      await Meeting.create(this.ownedMeeting3), //we will skip this newest meeting for pagenation test
-      await Meeting.create(this.ownedMeeting4),
+      Meeting.create(this.ownedMeeting),
+      Meeting.create(this.ownedMeeting2), //we will limit before getting to this oldest meeting
+      Meeting.create(this.ownedMeeting3), //we will skip this newest meeting for pagenation test
+      Meeting.create(this.ownedMeeting4),
       ])
      
       const includedRes = await Meeting.create(includedMeeting);
