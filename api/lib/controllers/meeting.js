@@ -388,7 +388,7 @@ module.exports = {
       },
     ];
 
-    const [{ meetings, count, allOwners = owners }] = await User.aggregate(pipeline);
+    const [{ meetings, count, owners: allOwners }] = await User.aggregate(pipeline);
 
     const reducedOwners = Object.values(
       allOwners.reduce((prev, owner) => {
