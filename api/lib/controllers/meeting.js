@@ -265,68 +265,142 @@ module.exports = {
   async index(req, res) {
     const subject_email = req.credentials.user.email;
     const subject_id = req.credentials.sub;
-    const { limit = 0, skip = 0 } = req.query; // Thanks tom
+    const { limit = 0, skip = 0, name = "", owners = [] } = req.query;
 
-    try {
-      const pipeline = [
-        {
-          $match: { _id: ObjectID(subject_id) },
+    const pipelineFilters = [];
+    const filtered = !!name || !!owners.length;
+
+    const ownerLookup = [
+      {
+        $lookup: {
+          from: "users",
+          localField: "owner_id",
+          foreignField: "_id",
+          pipeline: [
+            {
+              $project: {
+                email: 1,
+                username: 1,
+              },
+            },
+          ],
+          as: "owner",
         },
-        {
-          $lookup: {
-            from: "meetings",
-            localField: "_id",
-            foreignField: "owner_id",
-            as: "owned_meetings",
+      },
+      {
+        $project: {
+          name: 1,
+          owner: { $arrayElemAt: ["$owner", 0] },
+          date: 1,
+          status: 1,
+        },
+      },
+    ];
+
+    owners.length &&
+      pipelineFilters.push({
+        $match: {
+          owner_id: {
+            $in: owners.map((owner) => ObjectID(owner)),
           },
         },
-        {
-          $lookup: {
-            from: "participants",
-            pipeline: [
-              { $match: { email: subject_email } },
-              {
-                $lookup: {
-                  from: "meetings",
-                  localField: "meeting_id",
-                  foreignField: "_id",
-                  as: "meetings",
+      });
+
+    name &&
+      pipelineFilters.push({
+        $match: { name: { $regex: name, $options: "i" } },
+      });
+
+    const sliceStart = parseInt(skip);
+    const sliceEnd = parseInt(limit);
+
+    const pipeline = [
+      {
+        $match: { _id: ObjectID(subject_id) },
+      },
+      {
+        $lookup: {
+          from: "meetings",
+          localField: "_id",
+          foreignField: "owner_id",
+          pipeline: [...pipelineFilters, ...ownerLookup],
+          as: "owned_meetings",
+        },
+      },
+      {
+        $lookup: {
+          from: "participants",
+          pipeline: [
+            { $match: { email: subject_email } },
+            {
+              $lookup: {
+                from: "meetings",
+                localField: "meeting_id",
+                foreignField: "_id",
+                pipeline: [...pipelineFilters, ...ownerLookup],
+                as: "meetings",
+              },
+            },
+            {
+              $project: {
+                meeting: {
+                  $arrayElemAt: ["$meetings", 0],
                 },
               },
-              {
-                $project: {
-                  meeting: { $arrayElemAt: ["$meetings", 0] },
-                },
+            },
+            { $unwind: "$meeting" },
+            {
+              $replaceRoot: {
+                newRoot: "$meeting",
               },
-              {
-                $replaceRoot: {
-                  newRoot: "$meeting",
-                },
-              },
-            ],
-            as: "participating_meetings",
+            },
+          ],
+          as: "participating_meetings",
+        },
+      },
+      {
+        $project: {
+          meetings: {
+            $concatArrays: ["$participating_meetings", "$owned_meetings"],
           },
         },
-        {
-          $project: {
-            meetings: {
-              $concatArrays: ["$participating_meetings", "$owned_meetings"],
+      },
+      {
+        $project: {
+          meetings: {
+            $sortArray: {
+              input: "$meetings",
+              sortBy: { date: -1 },
             },
           },
+          count: { $size: "$meetings" },
+          owners: "$meetings.owner",
         },
-        { $unwind: "$meetings" },
-        { $replaceRoot: { newRoot: "$meetings" } },
-        { $sort: { date: -1 } },
-        { $skip: parseInt(skip) },
-        { $limit: parseInt(limit) },
-      ];
+      },
+      {
+        $project: {
+          meetings: {
+            $slice: ["$meetings", sliceStart, sliceEnd],
+          },
+          count: 1,
+          owners: 1,
+        },
+      },
+    ];
 
-      const meetings = await User.aggregate(pipeline);
+    const [{ meetings, count, owners: allOwners }] = await User.aggregate(pipeline);
 
-      return res.status(200).send(meetings);
-    } catch (err) {
-      return res.status(500).send(err);
-    }
+    const reducedOwners = Object.values(
+      allOwners.reduce((prev, owner) => {
+        prev[owner._id] = owner;
+
+        return prev;
+      }, {})
+    );
+
+    return res
+      .status(200)
+      .send({ meetings, count, owners: reducedOwners, filtered });
   },
 
   /**

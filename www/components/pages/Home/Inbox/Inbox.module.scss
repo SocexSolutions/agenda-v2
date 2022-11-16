@@ -5,19 +5,50 @@
   border: 1px solid colors.$border;
   background: colors.$foreground;
   border-radius: 6px;
-  padding: 1em;
+  margin-bottom: 1em;
+  //padding: 1em;
+}
+
+.filter_box{
+  background-color: colors.$background;
+  height: 3em;
+  transition: height .2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 0 1em;
+  //padding-bottom: 1em;
+  border-bottom: 1px solid colors.$border;
+  overflow: hidden;
+
+  .visible {
+    display: flex;
+    align-items: center;
+    margin-top: .3em;
+    gap: 0.7em;
+  }
+
+  .hidden {
+    margin-top: .7em;
+  }
+}
+
+.filter_box_open {
+  transition: height .2s;
+  height: 10em;
 }
 
 .row {
   padding: .75em .5em;
-  width: 100%;
+  margin: 0 .5em 0 .5em;
+  width: 98%;
   border-top: 1px solid colors.$border;
 
   p {
     margin: 0;
   }
 
-  &:first-child {
+  &:nth-child(2) {
     border-top: none;
   }
 
