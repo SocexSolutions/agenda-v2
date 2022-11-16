@@ -271,9 +271,11 @@ describe("lib/controllers/meeting", () => {
 
       const { data } = await client.get(`/meeting/?skip=1&limit=3`);
 
-      assert.strictEqual(data.meetings.length, 3);
+      assert.strictEqual(data.meetings.length, 3); //only send user 3 because of pagination
+      assert.strictEqual(data.count, 5);           //should still be 5 total (including other pages)
       assert.strictEqual(data.meetings[0].name, "participant meeting"); //Second newest meeting first
       assert.strictEqual(data.meetings[2].name, "meeting 4"); //Second oldest meeting last
+      assert.exists(data.owners);
     });
 
     it("should filter meetings by name", async () => {
