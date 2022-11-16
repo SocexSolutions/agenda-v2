@@ -1,0 +1,156 @@
+const chai = require("chai");
+const dbUtils = require("../../utils/db");
+const db = require("../../../lib/db");
+const api = require("../../utils/api");
+const client = require("../../utils/client");
+const fakeUser = require("../../fakes/user");
+const Group = require("../../../lib/models/group");
+const Invite = require("../../../lib/models/invite");
+
+const assert = chai.assert;
+
+describe("lib/controllers/invite", () => {
+  let user;
+  let user2;
+  let group;
+
+  before(async () => {
+    await api.start();
+    await db.connect();
+    await dbUtils.clean();
+
+    const res = await client.post("/user/register", {
+      username: "user",
+      password: "pass",
+      email: "brian@user.com",
+    });
+    user = res.data.user;
+    user.token = res.data.access_token;
+
+    const res2 = await client.post(
+      "/user/register",
+      fakeUser({
+        username: "user2",
+        password: "pass2",
+        email: "user2@user.com",
+      })
+    );
+    user2 = res2.data.user;
+    user2.token = res2.data.access_token;
+
+    group = await Group.create({
+      name: "group",
+      owner_ids: [user._id],
+    });
+  });
+
+  after(async () => {
+    await api.stop();
+    await dbUtils.clean();
+    await db.disconnect();
+  });
+
+  describe("create", () => {
+    it("should create a new invite", async () => {
+      const res = await client.post(
+        "/invite",
+        {
+          invitee: user2._id,
+          group_id: group._id,
+        },
+        {
+          headers: { Authorization: user.token },
+        }
+      );
+
+      assert.equal(res.status, 201);
+      assert.equal(res.data.invitee, user2._id);
+      assert.equal(res.data.owner_id, user._id);
+    });
+
+    it("should not create an invite if the invitee does not exist", async () => {
+      try {
+        await client.post(
+          "/invite",
+          {
+            invitee: "5f6a5e6c1d6e9b1c8b6e4d4c",
+            group_id: group._id,
+          },
+          {
+            headers: { Authorization: user.token },
+          }
+        );
+
+        assert.fail("Should have thrown an error");
+      } catch (err) {
+        assert.equal(err.response.status, 400);
+        assert.equal(err.response.data.message, "Invitee not found");
+      }
+    });
+
+    it("should not create an invite if the group does not exist", async () => {
+      try {
+        await client.post(
+          "/invite",
+          {
+            invitee: user2._id,
+            group_id: "5f6a5e6c1d6e9b1c8b6e4d4c",
+          },
+          {
+            headers: { Authorization: user.token },
+          }
+        );
+
+        assert.fail("Should have thrown an error");
+      } catch (err) {
+        assert.equal(err.response.status, 403);
+      }
+    });
+
+    it("should not create an invite if the user is not the owner of the group", async () => {
+      try {
+        await client.post(
+          "/invite",
+          {
+            invitee: user2._id,
+            group_id: group._id,
+          },
+          {
+            headers: { Authorization: user2.token },
+          }
+        );
+
+        assert.fail("Should have thrown an error");
+      } catch (err) {
+        assert.equal(err.response.status, 403);
+      }
+    });
+
+    it("should not create an invite if an invite already exists", async () => {
+      await Invite.create({
+        owner_id: user._id,
+        invitee: user2._id,
+        group_id: group._id,
+        status: "open",
+      });
+
+      try {
+        await client.post(
+          "/invite",
+          {
+            invitee: user2._id,
+            group_id: group._id,
+          },
+          {
+            headers: { Authorization: user.token },
+          }
+        );
+
+        assert.fail("Should have thrown an error");
+      } catch (err) {
+        assert.equal(err.response.status, 400);
+        assert.equal(err.response.data.message, "User already invited");
+      }
+    });
+  });
+});
