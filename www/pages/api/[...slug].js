@@ -20,7 +20,6 @@ async function proxyRequest(req) {
     hostname + "/api/v1" + url,
     ...(["GET", "DELETE"].includes(req.method) ? [] : [req.body]),
     {
-      params: req.query,
       headers,
     },
   ];
