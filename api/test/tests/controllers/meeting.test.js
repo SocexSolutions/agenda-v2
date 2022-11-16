@@ -305,8 +305,8 @@ describe("lib/controllers/meeting", () => {
       });
 
       await Promise.all([
-      await Meeting.create(this.ownedMeeting),
-      await Meeting.create(this.ownedMeeting2),
+        Meeting.create(this.ownedMeeting),
+        Meeting.create(this.ownedMeeting2),
       ])
 
       const includedRes = await Meeting.create(includedMeeting);
