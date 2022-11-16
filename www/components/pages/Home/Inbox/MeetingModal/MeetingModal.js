@@ -18,7 +18,7 @@ export default function MeetingModal({ meeting, open, setOpen, refresh }) {
   const router = useRouter();
   const user = useSelector((state) => state.user);
 
-  const isOwner = meeting.owner_id === user._id;
+  const isOwner = meeting.owner._id === user._id;
 
   const displayDate = new Date(meeting.date).toLocaleDateString();
 
