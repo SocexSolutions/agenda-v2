@@ -15,6 +15,7 @@ function reqLog(req, res, next) {
 
       return res.send(data);
     };
+    // eslint-disable-next-line no-empty
   } catch (error) {}
 
   next();

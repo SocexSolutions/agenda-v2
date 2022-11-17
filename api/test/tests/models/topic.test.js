@@ -74,6 +74,7 @@ describe("lib/models/topic", () => {
         ],
       });
 
+      /* eslint-disable-next-line no-unused-vars */
       const [foo, bar, updatedTopic] = await Topic.find({
         meeting_id: this.meeting_id,
       });
@@ -93,6 +94,7 @@ describe("lib/models/topic", () => {
         savedTopics: [...this.insertedTopics, newTopic],
       });
 
+      /* eslint-disable-next-line no-unused-vars */
       const [foo, bar, baz, resultingTopic] = await Topic.find({
         meeting_id: this.meeting_id,
       });

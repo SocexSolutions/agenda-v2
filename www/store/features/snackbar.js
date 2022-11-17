@@ -31,7 +31,7 @@ export const notify = ({
   type = "success",
   ms = 4000,
 }) => {
-  return async function notify(dispatch, getState) {
+  return async function notify(dispatch) {
     dispatch({
       type: "snackbar/notify",
       payload: { message, type, open: true },
