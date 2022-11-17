@@ -3,7 +3,7 @@ const dbUtils = require("../../utils/db");
 const db = require("../../../lib/db");
 const api = require("../../utils/api");
 const client = require("../../utils/client");
-const fakeUser = require("../../fakes/user");
+const fakeRegister = require("../../fakes/register");
 const Group = require("../../../lib/models/group");
 const User = require("../../../lib/models/user");
 const Invite = require("../../../lib/models/invite");
@@ -23,22 +23,11 @@ describe("lib/controllers/invite", () => {
   beforeEach(async () => {
     await dbUtils.clean();
 
-    const res = await client.post("/user/register", {
-      username: "user",
-      password: "pass",
-      email: "brian@user.com",
-    });
+    const res = await client.post("/user/register", fakeRegister());
     user = res.data.user;
     user.token = res.data.access_token;
 
-    const res2 = await client.post(
-      "/user/register",
-      fakeUser({
-        username: "user2",
-        password: "pass2",
-        email: "user2@user.com",
-      })
-    );
+    const res2 = await client.post("/user/register", fakeRegister());
     user2 = res2.data.user;
     user2.token = res2.data.access_token;
 
