@@ -1,5 +1,6 @@
 const Participant = require("../models/participant");
 const Meeting = require("../models/meeting");
+const Group = require("../models/group");
 const mongoose = require("mongoose");
 const ObjectId = require("mongoose").Types.ObjectId;
 const AuthErr = require("../classes/auth-err");
@@ -117,5 +118,44 @@ module.exports.checkUser = async (credentials) => {
 
   if (!credentials?.usr) {
     throw new AuthErr("not user");
+  }
+};
+
+/**
+ * Check if a subject is a member of a group, throws if not
+ *
+ * @param {ObjectId} group_id
+ * @param {Object} credentials
+ *
+ * @returns {Promise<Group>}
+ */
+module.exports.checkGroupMember = async (group_id, credentials) => {
+  try {
+    jobi.debug("checkGroupMember creds:", credentials);
+
+    const { user } = credentials;
+
+    const isMember = user.groups.some((g) => {
+      return g.toString() === group_id.toString();
+    });
+
+    const group = await Group.findOne({ _id: group_id });
+
+    const isOwner = group.owner_ids.some((owner_id) => {
+      return owner_id.toString() === user._id.toString();
+    });
+
+    if (!isMember && !isOwner) {
+      throw new AuthErr("not group member");
+    }
+
+    return group;
+  } catch (err) {
+    if (err instanceof AuthErr) {
+      throw err;
+    }
+
+    /* istanbul ignore next */
+    throw new AuthErr(err.message);
   }
 };
