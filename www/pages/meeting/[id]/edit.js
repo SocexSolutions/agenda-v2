@@ -122,7 +122,7 @@ const Meeting = (props) => {
               update={(item) => dispatch(topicStore.actions.update(item))}
               destroy={(item) => dispatch(topicStore.actions.delete(item))}
               Card={CardForm}
-              itemName={"Action Item"}
+              itemName={"Topic"}
             />
           </section>
         </div>
