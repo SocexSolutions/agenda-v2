@@ -22,6 +22,11 @@ const meetingSchema = new Schema(
       enum: ["draft", "sent", "live", "completed"],
       default: "draft",
     },
+    tags: {
+      type: [Schema.Types.ObjectId],
+      ref: "Tag",
+      default: [],
+    },
   },
   {
     timestamps: true,

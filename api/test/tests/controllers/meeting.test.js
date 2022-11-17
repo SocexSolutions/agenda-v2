@@ -11,7 +11,9 @@ const Topic = require("../../../lib/models/topic");
 const User = require("../../../lib/models/user");
 const Takeaway = require("../../../lib/models/takeaway");
 const ActionItem = require("../../../lib/models/action-item");
+const Tag = require("../../../lib/models/tag");
 const fakeTopic = require("../../fakes/topic");
+const fakeTag = require("../../fakes/tag");
 const fakeParticipant = require("../../fakes/participant");
 const fakeMeeting = require("../../fakes/meeting");
 const fakeTakeaway = require("../../fakes/takeaway");
@@ -37,27 +39,6 @@ describe("lib/controllers/meeting", () => {
     this.user = res.data.user;
     this.token = res.data.access_token;
 
-    this.ownedMeeting = fakeMeeting({
-      owner_id: this.user._id,
-      name: "meeting 1",
-      date: new Date("05 October 2011 14:48 UTC"),
-    });
-    this.ownedMeeting2 = fakeMeeting({
-      owner_id: this.user._id,
-      name: "meeting 2",
-      date: new Date("01 January 1990 01:22 UTC"),
-    });
-    this.ownedMeeting3 = fakeMeeting({
-      owner_id: this.user._id,
-      name: "meeting 3",
-      date: new Date("05 October 2500 14:48 UTC"),
-    });
-    this.ownedMeeting4 = fakeMeeting({
-      owner_id: this.user._id,
-      name: "meeting 4",
-      date: new Date("25 December 1995 01:22 UTC"),
-    });
-
     const res2 = await client.post("/user/register", {
       username: "user2",
       password: "pass2",
@@ -77,6 +58,7 @@ describe("lib/controllers/meeting", () => {
       "meetings",
       "takeaways",
       "actionitems",
+      "tags",
     ]);
   });
 
@@ -246,6 +228,29 @@ describe("lib/controllers/meeting", () => {
   });
 
   describe("#index", () => {
+    before(async () => {
+      this.ownedMeeting = fakeMeeting({
+        owner_id: this.user._id,
+        name: "meeting 1",
+        date: new Date("05 October 2011 14:48 UTC"),
+      });
+      this.ownedMeeting2 = fakeMeeting({
+        owner_id: this.user._id,
+        name: "meeting 2",
+        date: new Date("01 January 1990 01:22 UTC"),
+      });
+      this.ownedMeeting3 = fakeMeeting({
+        owner_id: this.user._id,
+        name: "meeting 3",
+        date: new Date("05 October 2500 14:48 UTC"),
+      });
+      this.ownedMeeting4 = fakeMeeting({
+        owner_id: this.user._id,
+        name: "meeting 4",
+        date: new Date("25 December 1995 01:22 UTC"),
+      });
+    });
+
     it("should get a users owned and participating meetings", async () => {
       const includedMeetingOwner = await User.create(fakeUser());
       const includedMeeting = fakeMeeting({
@@ -254,12 +259,12 @@ describe("lib/controllers/meeting", () => {
       });
 
       await Promise.all([
-      Meeting.create(this.ownedMeeting),
-      Meeting.create(this.ownedMeeting2), //we will limit before getting to this oldest meeting
-      Meeting.create(this.ownedMeeting3), //we will skip this newest meeting for pagenation test
-      Meeting.create(this.ownedMeeting4),
-      ])
-     
+        Meeting.create(this.ownedMeeting),
+        Meeting.create(this.ownedMeeting2), //we will limit before getting to this oldest meeting
+        Meeting.create(this.ownedMeeting3), //we will skip this newest meeting for pagenation test
+        Meeting.create(this.ownedMeeting4),
+      ]);
+
       const includedRes = await Meeting.create(includedMeeting);
 
       const participant = fakeParticipant({
@@ -272,19 +277,18 @@ describe("lib/controllers/meeting", () => {
       const { data } = await client.get(`/meeting/?skip=1&limit=3`);
 
       assert.strictEqual(data.meetings.length, 3); //only send user 3 because of pagination
-      assert.strictEqual(data.count, 5);           //should still be 5 total (including other pages)
+      assert.strictEqual(data.count, 5); //should still be 5 total (including other pages)
       assert.strictEqual(data.meetings[0].name, "participant meeting"); //Second newest meeting first
       assert.strictEqual(data.meetings[2].name, "meeting 4"); //Second oldest meeting last
       assert.exists(data.owners);
     });
 
     it("should filter meetings by name", async () => {
-      
       await Promise.all([
-      Meeting.create(this.ownedMeeting),
-      Meeting.create(this.ownedMeeting2),
-      Meeting.create(this.ownedMeeting3),
-      Meeting.create(this.ownedMeeting4),
+        Meeting.create(this.ownedMeeting),
+        Meeting.create(this.ownedMeeting2),
+        Meeting.create(this.ownedMeeting3),
+        Meeting.create(this.ownedMeeting4),
       ]);
 
       const filters = { owners: [], name: "meeting 1" };
@@ -307,7 +311,7 @@ describe("lib/controllers/meeting", () => {
       await Promise.all([
         Meeting.create(this.ownedMeeting),
         Meeting.create(this.ownedMeeting2),
-      ])
+      ]);
 
       const includedRes = await Meeting.create(includedMeeting);
 
@@ -834,6 +838,73 @@ describe("lib/controllers/meeting", () => {
         client.delete(`/meeting/${meeting._id}`),
         "Request failed with status code 403"
       );
+    });
+  });
+
+  describe("addTag", () => {
+    beforeEach(async () => {
+      this.meeting = await Meeting.create(
+        fakeMeeting({ owner_id: this.user._id })
+      );
+      this.tag = await Tag.create(fakeTag());
+    });
+
+    it("should add a tag to a meeting if the user is the meeting owner", async () => {
+      const res = await client.post(
+        `/meeting/${this.meeting._id}/tag/${this.tag._id}`
+      );
+
+      assert.equal(res.status, 200);
+      assert.equal(res.data.tags.length, 1);
+      assert.equal(res.data.tags[0], this.tag._id.toString());
+
+      const found = await Meeting.findById(this.meeting._id);
+
+      assert.equal(found.tags[0]._id.toString(), this.tag._id.toString());
+    });
+
+    it("should not add a tag to a meeting if the user is not the meeting owner", async () => {
+      client.defaults.headers.common["Authorization"] = this.token2;
+
+      await assert.isRejected(
+        client.post(`/meeting/${this.meeting._id}/tag/${this.tag._id}`),
+        "Request failed with status code 403"
+      );
+    });
+  });
+
+  describe("removeTag", () => {
+    beforeEach(async () => {
+      this.tag = await Tag.create(fakeTag());
+      this.meeting = await Meeting.create(
+        fakeMeeting({ owner_id: this.user._id, tags: [this.tag._id] })
+      );
+    });
+
+    it("should remove a tag from a meeting if the user is the meeting owner", async () => {
+      const res = await client.delete(
+        `/meeting/${this.meeting._id}/tag/${this.tag._id}`
+      );
+
+      assert.equal(res.status, 200);
+      assert.equal(res.data.tags.length, 0);
+
+      const found = await Meeting.findById(this.meeting._id);
+
+      assert.equal(found.tags.length, 0);
+    });
+
+    it("should not remove a tag from a meeting if the user is not the meeting owner", async () => {
+      client.defaults.headers.common["Authorization"] = this.token2;
+
+      await assert.isRejected(
+        client.delete(`/meeting/${this.meeting._id}/tag/${this.tag._id}`),
+        "Request failed with status code 403"
+      );
+
+      const found = await Meeting.findById(this.meeting._id);
+
+      assert.equal(found.tags.length, 1);
     });
   });
 });
