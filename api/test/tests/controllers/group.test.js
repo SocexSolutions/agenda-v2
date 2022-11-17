@@ -37,6 +37,10 @@ describe("lib/controllers/group", () => {
     user2.token = res2.data.access_token;
   });
 
+  beforeEach(async () => {
+    await dbUtils.clean(["groups"]);
+  });
+
   after(async () => {
     await api.stop();
     await dbUtils.clean();
