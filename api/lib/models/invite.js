@@ -14,7 +14,7 @@ const invite = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["open", "accepted", "rejected", "canceled"],
+    enum: ["open", "accepted", "rejected", "cancelled"],
     required: true,
     default: "open",
   },

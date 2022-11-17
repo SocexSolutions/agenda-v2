@@ -32,4 +32,38 @@ module.exports = {
 
     res.status(201).send(group);
   },
+
+  cancel: async (req, res) => {
+    const { _id } = req.params;
+
+    const invite = await Invite.findOne({ _id });
+
+    if (!invite) {
+      return res.status(404).send({ message: "Invite not found" });
+    }
+
+    if (invite.owner_id.toString() !== req.credentials.user._id.toString()) {
+      return res.status(403).send({ message: "Unauthorized" });
+    }
+
+    if (invite.status !== "open") {
+      if (invite.status === "cancelled") {
+        return res
+          .status(400)
+          .send({ message: "Invite was already cancelled" });
+      }
+
+      return res
+        .status(400)
+        .send({ message: "Invite was already responded to" });
+    }
+
+    const updated = await Invite.findOneAndUpdate(
+      { _id },
+      { status: "cancelled" },
+      { new: true }
+    );
+
+    res.status(200).send(updated);
+  },
 };

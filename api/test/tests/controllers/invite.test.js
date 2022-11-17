@@ -153,4 +153,120 @@ describe("lib/controllers/invite", () => {
       }
     });
   });
+
+  describe("cancel", () => {
+    it("should cancel an invite", async () => {
+      const invite = await Invite.create({
+        owner_id: user._id,
+        invitee: user2._id,
+        group_id: group._id,
+        status: "open",
+      });
+
+      const res = await client.patch(
+        `/invite/${invite._id}/cancel`,
+        {},
+        {
+          headers: { Authorization: user.token },
+        }
+      );
+
+      assert.equal(res.status, 200);
+      assert.equal(res.data.status, "cancelled");
+
+      const updatedInvite = await Invite.findById(invite._id);
+
+      assert.equal(updatedInvite.status, "cancelled");
+    });
+
+    it("should not cancel an invite if the invite does not exist", async () => {
+      try {
+        await client.patch(
+          `/invite/5f6a5e6c1d6e9b1c8b6e4d4c/cancel`,
+          {},
+          {
+            headers: { Authorization: user.token },
+          }
+        );
+
+        assert.fail("Should have thrown an error");
+      } catch (err) {
+        assert.equal(err.response.status, 404);
+      }
+    });
+
+    it("should not cancel an invite if the user is not the owner of the invite", async () => {
+      const invite = await Invite.create({
+        owner_id: user._id,
+        invitee: user2._id,
+        group_id: group._id,
+        status: "open",
+      });
+
+      try {
+        await client.patch(
+          `/invite/${invite._id}/cancel`,
+          {},
+          {
+            headers: { Authorization: user2.token },
+          }
+        );
+
+        assert.fail("Should have thrown an error");
+      } catch (err) {
+        assert.equal(err.response.status, 403);
+      }
+    });
+
+    it("should not cancel an invite if the invite is already cancelled", async () => {
+      const invite = await Invite.create({
+        owner_id: user._id,
+        invitee: user2._id,
+        group_id: group._id,
+        status: "cancelled",
+      });
+
+      try {
+        await client.patch(
+          `/invite/${invite._id}/cancel`,
+          {},
+          {
+            headers: { Authorization: user.token },
+          }
+        );
+
+        assert.fail("Should have thrown an error");
+      } catch (err) {
+        assert.equal(err.response.status, 400);
+        assert.equal(err.response.data.message, "Invite was already cancelled");
+      }
+    });
+
+    it("should not cancel an invite if the invite has been responded to", async () => {
+      const invite = await Invite.create({
+        owner_id: user._id,
+        invitee: user2._id,
+        group_id: group._id,
+        status: "accepted",
+      });
+
+      try {
+        await client.patch(
+          `/invite/${invite._id}/cancel`,
+          {},
+          {
+            headers: { Authorization: user.token },
+          }
+        );
+
+        assert.fail("Should have thrown an error");
+      } catch (err) {
+        assert.equal(err.response.status, 400);
+        assert.equal(
+          err.response.data.message,
+          "Invite was already responded to"
+        );
+      }
+    });
+  });
 });
