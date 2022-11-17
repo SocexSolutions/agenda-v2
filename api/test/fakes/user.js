@@ -4,6 +4,7 @@ module.exports = (overrides) => {
     username: "brian",
     hash: "hash",
     salt: "salt",
+    groups: [],
     ...overrides,
   };
 };
