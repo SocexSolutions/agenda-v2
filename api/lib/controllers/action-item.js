@@ -50,4 +50,39 @@ module.exports = {
 
     res.status(204).send(deleted);
   },
+
+  assign: async (req, res) => {
+    const { _id, assignee_email } = req.params;
+
+    const { meeting_id } = await ActionItem.findById(_id);
+
+    await authUtils.checkParticipant(meeting_id, req.credentials);
+
+    // Choosing not to validate that the assignee_email is a participant in the
+    // meeting because the frontend will only suggest emails that are
+    // participants.
+    const updatedActionItem = await ActionItem.findOneAndUpdate(
+      { _id },
+      { $addToSet: { assigned_to: assignee_email } },
+      { new: true }
+    );
+
+    res.status(200).send(updatedActionItem);
+  },
+
+  unassign: async (req, res) => {
+    const { _id, assignee_email } = req.params;
+
+    const { meeting_id } = await ActionItem.findById(_id);
+
+    await authUtils.checkParticipant(meeting_id, req.credentials);
+
+    const updatedActionItem = await ActionItem.findOneAndUpdate(
+      { _id },
+      { $pull: { assigned_to: assignee_email } },
+      { new: true }
+    );
+
+    res.status(200).send(updatedActionItem);
+  },
 };

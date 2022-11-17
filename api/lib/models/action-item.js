@@ -29,8 +29,8 @@ const actionItemSchema = new Schema({
     default: false,
   },
   assigned_to: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
+    type: [String],
+    default: [],
   },
 });
 

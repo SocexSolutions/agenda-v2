@@ -212,4 +212,109 @@ describe("lib/controllers/action-item", () => {
       assert.equal(res.status, 204);
     });
   });
+
+  describe("#assign", () => {
+    beforeEach(async () => {
+      this.actionItem = await ActionItem.create(
+        fakeActionItem({
+          meeting_id: this.meeting._id,
+          topic_id: this.topic._id,
+        })
+      );
+    });
+
+    it("should assign an action item if the assignor is the meeting owner", async () => {
+      const res = await this.client.post(
+        `/action-item/${this.actionItem._id}/assign/${this.participant.email}`
+      );
+
+      assert.equal(res.status, 200);
+      assert.equal(res.data.assigned_to[0], this.participant.email);
+
+      const updated = await ActionItem.findById(this.actionItem._id);
+
+      assert.equal(updated.assigned_to[0], this.participant.email);
+    });
+
+    it("should assign action item if assignor is meeting participant", async () => {
+      this.client.defaults.headers.common["Authorization"] =
+        this.participantToken;
+
+      const res = await this.client.post(
+        `/action-item/${this.actionItem._id}/assign/${this.participant.email}`
+      );
+
+      assert.equal(res.status, 200);
+    });
+
+    it("should 403 if assignor is not participant", async () => {
+      this.client.defaults.headers.common["Authorization"] = this.token2;
+
+      await assert.isRejected(
+        this.client.post(
+          `/action-item/${this.actionItem._id}/assign/${this.user.email}`
+        ),
+        "Request failed with status code 403"
+      );
+
+      const updated = await ActionItem.findById(this.actionItem._id);
+
+      assert.equal(updated.assigned_to.length, 0);
+    });
+  });
+
+  describe("#unassign", () => {
+    beforeEach(async () => {
+      this.actionItem = await ActionItem.create(
+        fakeActionItem({
+          meeting_id: this.meeting._id,
+          topic_id: this.topic._id,
+          assigned_to: [this.participant.email],
+        })
+      );
+    });
+
+    it("should unassign an action item if the assignor is the meeting owner", async () => {
+      const res = await this.client.delete(
+        `/action-item/${this.actionItem._id}/unassign/${this.participant.email}`
+      );
+
+      assert.equal(res.status, 200);
+      assert.equal(res.data.assigned_to.length, 0);
+
+      const updated = await ActionItem.findById(this.actionItem._id);
+
+      assert.equal(updated.assigned_to.length, 0);
+    });
+
+    it("should unassign an action item if the assignor is a meeting participant", async () => {
+      this.client.defaults.headers.common["Authorization"] =
+        this.participantToken;
+
+      const res = await this.client.delete(
+        `/action-item/${this.actionItem._id}/unassign/${this.participant.email}`
+      );
+
+      assert.equal(res.status, 200);
+
+      const updated = await ActionItem.findById(this.actionItem._id);
+
+      assert.equal(updated.assigned_to.length, 0);
+    });
+
+    it("should 403 if assignor is not a meeting participant", async () => {
+      this.client.defaults.headers.common["Authorization"] = this.token2;
+
+      await assert.isRejected(
+        this.client.delete(
+          `/action-item/${this.actionItem._id}/unassign/${this.user.email}`
+        ),
+        "Request failed with status code 403"
+      );
+
+      const updated = await ActionItem.findById(this.actionItem._id);
+
+      assert.equal(updated.assigned_to.length, 1);
+    });
+  });
 });
