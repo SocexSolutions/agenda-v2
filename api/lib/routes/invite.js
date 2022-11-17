@@ -6,5 +6,6 @@ const wrapped = wrapController(inviteController);
 
 router.post("/", wrapped.create);
 router.patch("/:_id/cancel", wrapped.cancel);
+router.patch("/:_id/respond/", wrapped.respond);
 
 module.exports = router;

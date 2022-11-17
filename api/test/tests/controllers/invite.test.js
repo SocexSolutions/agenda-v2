@@ -5,6 +5,7 @@ const api = require("../../utils/api");
 const client = require("../../utils/client");
 const fakeUser = require("../../fakes/user");
 const Group = require("../../../lib/models/group");
+const User = require("../../../lib/models/user");
 const Invite = require("../../../lib/models/invite");
 
 const assert = chai.assert;
@@ -17,6 +18,9 @@ describe("lib/controllers/invite", () => {
   before(async () => {
     await api.start();
     await db.connect();
+  });
+
+  beforeEach(async () => {
     await dbUtils.clean();
 
     const res = await client.post("/user/register", {
@@ -267,6 +271,178 @@ describe("lib/controllers/invite", () => {
           "Invite was already responded to"
         );
       }
+    });
+  });
+
+  describe("respond", () => {
+    it("should accept an an invite", async () => {
+      const invite = await Invite.create({
+        owner_id: user._id,
+        invitee: user2._id,
+        group_id: group._id,
+        status: "open",
+      });
+
+      const res = await client.patch(
+        `/invite/${invite._id}/respond`,
+        {
+          status: "accepted",
+        },
+        {
+          headers: { Authorization: user2.token },
+        }
+      );
+
+      assert.equal(res.status, 200);
+      assert.equal(res.data.status, "accepted");
+
+      const updatedInvite = await Invite.findById(invite._id);
+
+      assert.equal(updatedInvite.status, "accepted");
+
+      const updatedUser = await User.findById(user2._id);
+
+      assert.ok(updatedUser.groups.includes(group._id));
+    });
+
+    it("should reject an invite", async () => {
+      const invite = await Invite.create({
+        owner_id: user._id,
+        invitee: user2._id,
+        group_id: group._id,
+        status: "open",
+      });
+
+      const res = await client.patch(
+        `/invite/${invite._id}/respond`,
+        {
+          status: "rejected",
+        },
+        {
+          headers: { Authorization: user2.token },
+        }
+      );
+
+      assert.equal(res.status, 200);
+      assert.equal(res.data.status, "rejected");
+
+      const updatedInvite = await Invite.findById(invite._id);
+
+      assert.equal(updatedInvite.status, "rejected");
+
+      const updatedUser = await User.findById(user2._id);
+
+      assert.equal(updatedUser.groups.length, 0);
+    });
+
+    it("should not respond to an invite if the invite does not exist", async () => {
+      try {
+        await client.patch(
+          `/invite/5f6a5e6c1d6e9b1c8b6e4d4c/respond`,
+          {
+            status: "accepted",
+          },
+          {
+            headers: { Authorization: user2.token },
+          }
+        );
+
+        assert.fail("Should have thrown an error");
+      } catch (err) {
+        assert.equal(err.response.status, 404);
+      }
+    });
+
+    it("should not respond to an invite if the user is not the invitee of the invite", async () => {
+      const invite = await Invite.create({
+        owner_id: user._id,
+        invitee: user2._id,
+        group_id: group._id,
+        status: "open",
+      });
+
+      try {
+        await client.patch(
+          `/invite/${invite._id}/respond`,
+          {
+            status: "accepted",
+          },
+          {
+            headers: { Authorization: user.token },
+          }
+        );
+
+        assert.fail("Should have thrown an error");
+      } catch (err) {
+        assert.equal(err.response.status, 401);
+      }
+
+      const updatedUser = await User.findById(user2._id);
+
+      assert.equal(updatedUser.groups.length, 0);
+    });
+
+    it("should not respond to an invite if the status is accepted or rejected", async () => {
+      const invite = await Invite.create({
+        owner_id: user._id,
+        invitee: user2._id,
+        group_id: group._id,
+        status: "rejected",
+      });
+
+      try {
+        await client.patch(
+          `/invite/${invite._id}/respond`,
+          {
+            status: "accepted",
+          },
+          {
+            headers: { Authorization: user2.token },
+          }
+        );
+
+        assert.fail("Should have thrown an error");
+      } catch (err) {
+        assert.equal(err.response.status, 400);
+        assert.equal(
+          err.response.data.message,
+          "Invite was already responded to"
+        );
+      }
+
+      const updatedUser = await User.findById(user2._id);
+
+      assert.equal(updatedUser.groups.length, 0);
+    });
+
+    it("should not respond to an invite if the status is cancelled", async () => {
+      const invite = await Invite.create({
+        owner_id: user._id,
+        invitee: user2._id,
+        group_id: group._id,
+        status: "cancelled",
+      });
+
+      try {
+        await client.patch(
+          `/invite/${invite._id}/respond`,
+          {
+            status: "accepted",
+          },
+          {
+            headers: { Authorization: user2.token },
+          }
+        );
+
+        assert.fail("Should have thrown an error");
+      } catch (err) {
+        assert.equal(err.response.status, 400);
+        assert.equal(err.response.data.message, "Invite was cancelled");
+      }
+
+      const updatedUser = await User.findById(user2._id);
+
+      assert.equal(updatedUser.groups.length, 0);
     });
   });
 });

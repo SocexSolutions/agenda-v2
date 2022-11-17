@@ -66,4 +66,46 @@ module.exports = {
 
     res.status(200).send(updated);
   },
+
+  respond: async (req, res) => {
+    const { _id } = req.params;
+    const { status } = req.body;
+
+    const invite = await Invite.findOne({ _id });
+
+    if (!invite) {
+      return res.status(404).send({ message: "Invite not found" });
+    }
+
+    if (invite.invitee.toString() !== req.credentials.user._id.toString()) {
+      return res.status(401).send({ message: "Unauthorized" });
+    }
+
+    if (invite.status !== "open") {
+      if (invite.status === "cancelled") {
+        return res.status(400).send({ message: "Invite was cancelled" });
+      }
+
+      // Don't allow users to later accept stale invites in order to gain access
+      // to a group
+      return res
+        .status(400)
+        .send({ message: "Invite was already responded to" });
+    }
+
+    const updated = await Invite.findOneAndUpdate(
+      { _id },
+      { status },
+      { new: true }
+    );
+
+    if (status === "accepted") {
+      await User.findOneAndUpdate(
+        { _id: req.credentials.user._id },
+        { $push: { groups: invite.group_id } }
+      );
+    }
+
+    res.status(200).send(updated);
+  },
 };
