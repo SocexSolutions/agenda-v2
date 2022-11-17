@@ -48,6 +48,7 @@ const theme = createTheme({
     },
     white: {
       main: "#fff",
+      contrastText: "#3a3c45",
     },
   },
 });
