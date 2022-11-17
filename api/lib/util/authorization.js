@@ -26,7 +26,9 @@ module.exports.checkParticipant = async (meeting_id, credentials) => {
         return meeting;
       }
 
-      throw new AuthErr("participant not participant");
+      throw new AuthErr(
+        "You must be a participant or owner of the meeting to do that"
+      );
     }
 
     const [participant_res, meeting_res] = await Promise.allSettled([
@@ -45,7 +47,9 @@ module.exports.checkParticipant = async (meeting_id, credentials) => {
       return meeting_res.value;
     }
 
-    throw new AuthErr("user not participant");
+    throw new AuthErr(
+      "You must be a participant or owner of the meeting to do that"
+    );
   } catch (err) {
     if (err instanceof AuthErr) {
       throw err;
@@ -97,7 +101,7 @@ module.exports.checkOwner = async (_id, collection_name, credentials) => {
       }
     }
 
-    throw new AuthErr("not owner");
+    throw new AuthErr("You need to own the document to do that");
   } catch (err) {
     if (err instanceof AuthErr) {
       throw err;
@@ -117,7 +121,7 @@ module.exports.checkUser = async (credentials) => {
   jobi.debug("checkUser creds:", credentials);
 
   if (!credentials?.usr) {
-    throw new AuthErr("not user");
+    throw new AuthErr("You must be a user to do that");
   }
 };
 
@@ -135,6 +139,12 @@ module.exports.checkGroupMember = async (group_id, credentials) => {
 
     const { user } = credentials;
 
+    if (!user) {
+      throw new AuthErr(
+        "You must be a user and group member or owner to do that"
+      );
+    }
+
     const isMember = user.groups.some((g) => {
       return g.toString() === group_id.toString();
     });
@@ -146,7 +156,7 @@ module.exports.checkGroupMember = async (group_id, credentials) => {
     });
 
     if (!isMember && !isOwner) {
-      throw new AuthErr("not group member");
+      throw new AuthErr("You must be a group member or owner to do that");
     }
 
     return group;

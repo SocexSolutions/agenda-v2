@@ -153,7 +153,8 @@ describe(modulePath, () => {
 
     it("should reject if user is not member", async () => {
       return assert.isRejected(
-        this.module.checkGroupMember(group._id, { user: nonMember })
+        this.module.checkGroupMember(group._id, { user: nonMember }),
+        "You must be a group member or owner to do that"
       );
     });
 
@@ -162,6 +163,19 @@ describe(modulePath, () => {
         user: groupOwner,
       });
       assert.equal(g.name, group.name);
+    });
+
+    it("should reject if the user does not have an account", async () => {
+      return assert.isRejected(
+        this.module.checkGroupMember(group._id, {}),
+        "You must be a user and group member or owner to do that"
+      );
+    });
+
+    it("should throw non auth errors", async () => {
+      return assert.isRejected(
+        this.module.checkGroupMember(group._id, undefined)
+      );
     });
   });
 });
