@@ -156,6 +156,6 @@ module.exports.checkGroupMember = async (group_id, credentials) => {
     }
 
     /* istanbul ignore next */
-    throw new AuthErr(err.message);
+    throw new Error(err.message);
   }
 };
