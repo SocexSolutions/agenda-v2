@@ -23,14 +23,17 @@ module.exports = class SendGrid {
         ...templates.buildWelcomeEmail(username),
       });
     } catch (err) {
-      jobi.error("Error sending welcome email", err);
+      /* istanbul ignore next */
+      if (process.env.NODE_ENV !== "test") {
+        jobi.error("Error sending welcome email", err);
+      }
     }
   }
 
   /**
    * Send an email letting a user know they can vote on a meeting
    * @param {string} email recipient email
-   * @param {string} usrename recipient username
+   * @param {string} username recipient username
    * @param {object} meeting meeting object
    */
   async sendVoteEmail(email, username, meeting) {
@@ -41,7 +44,10 @@ module.exports = class SendGrid {
         ...templates.buildVoteEmail(username, meeting),
       });
     } catch (err) {
-      jobi.error("Error sending meeting vote email", err);
+      /* istanbul ignore next */
+      if (process.env.NODE_ENV !== "test") {
+        jobi.error("Error sending meeting vote email", err);
+      }
     }
   }
 
@@ -59,7 +65,10 @@ module.exports = class SendGrid {
         ...templates.buildReminderEmail(username, meeting),
       });
     } catch (err) {
-      jobi.error("Error sending meeting reminder email", err);
+      /* istanbul ignore next */
+      if (process.env.NODE_ENV !== "test") {
+        jobi.error("Error sending meeting reminder email", err);
+      }
     }
   }
 };
