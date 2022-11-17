@@ -50,6 +50,7 @@ describe("lib/controllers/user.js", () => {
 
       assert.strictEqual(res.data.user.email, "email");
       assert.strictEqual(res.data.user.username, "thudson");
+      assert.deepEqual(res.data.user.groups, []);
     });
 
     it("should not register a user with an existing username", async () => {
@@ -168,6 +169,7 @@ describe("lib/controllers/user.js", () => {
           _id: user_id,
           email: "email",
           username: "thudson",
+          groups: [],
         },
       });
     });
