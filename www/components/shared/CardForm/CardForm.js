@@ -71,7 +71,6 @@ const CardForm = ({ item, updateItem, destroyItem }) => {
   return (
     <div
       className={shared.card + " " + styles.container + " " + styles.editing}
-      elevation={1}
     >
       <TextField
         autoFocus

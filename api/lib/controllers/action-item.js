@@ -7,13 +7,15 @@ module.exports = {
 
     await authUtils.checkParticipant(meeting_id, req.credentials);
 
+    const assignedTo = new Set(assigned_to);
+
     const actionItem = await ActionItem.create({
       name,
       description,
       topic_id,
       meeting_id,
       owner_id: req.credentials.sub,
-      ...{ assigned_to },
+      assigned_to: [...assignedTo],
     });
 
     res.status(201).send(actionItem);
@@ -21,16 +23,24 @@ module.exports = {
 
   update: async (req, res) => {
     const { id } = req.params;
-    const { name, description, completed } = req.body;
+    const { name, description, completed, assigned_to } = req.body;
     const subject_id = req.credentials.sub;
 
     const { meeting_id } = await ActionItem.findById(id);
 
     await authUtils.checkParticipant(meeting_id, req.credentials);
 
+    const assignedTo = new Set(assigned_to);
+
     const updatedActionItem = await ActionItem.findOneAndUpdate(
       { _id: id },
-      { name, owner_id: subject_id, description, completed },
+      {
+        name,
+        owner_id: subject_id,
+        description,
+        completed,
+        assigned_to: [...assignedTo],
+      },
       { new: true }
     );
 
@@ -49,40 +59,5 @@ module.exports = {
     });
 
     res.status(204).send(deleted);
-  },
-
-  assign: async (req, res) => {
-    const { _id, assignee_email } = req.params;
-
-    const { meeting_id } = await ActionItem.findById(_id);
-
-    await authUtils.checkParticipant(meeting_id, req.credentials);
-
-    // Choosing not to validate that the assignee_email is a participant in the
-    // meeting because the frontend will only suggest emails that are
-    // participants.
-    const updatedActionItem = await ActionItem.findOneAndUpdate(
-      { _id },
-      { $addToSet: { assigned_to: assignee_email } },
-      { new: true }
-    );
-
-    res.status(200).send(updatedActionItem);
-  },
-
-  unassign: async (req, res) => {
-    const { _id, assignee_email } = req.params;
-
-    const { meeting_id } = await ActionItem.findById(_id);
-
-    await authUtils.checkParticipant(meeting_id, req.credentials);
-
-    const updatedActionItem = await ActionItem.findOneAndUpdate(
-      { _id },
-      { $pull: { assigned_to: assignee_email } },
-      { new: true }
-    );
-
-    res.status(200).send(updatedActionItem);
   },
 };

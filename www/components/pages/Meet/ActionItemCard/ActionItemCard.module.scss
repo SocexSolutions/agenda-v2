@@ -1,0 +1,39 @@
+.card {
+  display: flex;
+}
+
+.icon_container {
+  display: flex;
+  justify-content: center;
+  padding-left: .5em;
+  width: 2.5em;
+}
+
+.content_container {
+  width: 100%;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.name {
+  margin-bottom: 1em;
+}
+
+.description {
+  margin-bottom: 1em;
+}
+
+.input {
+  margin: 0.5em 0;
+}
+
+.button_container {
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    margin-left: 0.5em;
+  }
+}
