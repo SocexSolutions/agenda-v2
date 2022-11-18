@@ -46,6 +46,7 @@ module.exports = {
         _id: user._id,
         email: user.email,
         username: user.username,
+        groups: user.groups,
       },
       access_token: token,
       expires_in: expiresIn,
@@ -75,6 +76,7 @@ module.exports = {
           _id: user._id,
           email: user.email,
           username: user.username,
+          groups: user.groups,
         },
         access_token: token,
         expiresIn,
@@ -96,6 +98,7 @@ module.exports = {
         _id: user._id,
         email: user.email,
         username: user.username,
+        groups: user.groups,
       },
     });
   },

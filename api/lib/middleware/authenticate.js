@@ -12,11 +12,16 @@ const authenticate = async (req, res, next) => {
     const decoded = JWTUtils.verifyJWT(auth);
 
     if (decoded.usr) {
-      const { email, username, _id } = await User.findOne({ _id: decoded.sub });
-      req.credentials = { ...decoded, user: { email, username, _id } };
+      const { email, username, _id, groups } = await User.findOne({
+        _id: decoded.sub,
+      });
+      req.credentials = { ...decoded, user: { email, username, _id, groups } };
     } else {
-      const participant = await Participant.findOne({ _id: decoded.sub });
-      req.credentials = { ...decoded, participant };
+      const { _id, email } = await Participant.findOne({ _id: decoded.sub });
+      req.credentials = {
+        ...decoded,
+        participant: { _id, email },
+      };
     }
 
     next();

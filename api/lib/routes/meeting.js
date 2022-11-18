@@ -15,5 +15,7 @@ router.get("/:_id/topics", wrapped.getTopics);
 router.get("/:_id/participants", wrapped.getParticipants);
 router.get("/:_id/actionitems", wrapped.getActionItems);
 router.patch("/:_id/status", wrapped.updateStatus);
+router.post("/:_id/tag/:tag_id", wrapped.addTag);
+router.delete("/:_id/tag/:tag_id", wrapped.removeTag);
 
 module.exports = router;

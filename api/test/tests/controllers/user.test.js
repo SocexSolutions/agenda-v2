@@ -51,6 +51,7 @@ describe("lib/controllers/user.js", () => {
 
       assert.strictEqual(res.data.user.email, "email");
       assert.strictEqual(res.data.user.username, "thudson");
+      assert.deepEqual(res.data.user.groups, []);
     });
 
     it("should return an access_token", async () => {
@@ -188,6 +189,7 @@ describe("lib/controllers/user.js", () => {
           _id: user_id,
           email: "email",
           username: "thudson",
+          groups: [],
         },
       });
     });

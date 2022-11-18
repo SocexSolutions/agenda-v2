@@ -4,7 +4,6 @@ const db = require("../../../lib/db");
 const api = require("../../utils/api");
 const client = require("../../utils/client");
 const Group = require("../../../lib/models/group");
-const fakeUser = require("../../fakes/user");
 
 const assert = chai.assert;
 
@@ -25,14 +24,11 @@ describe("lib/controllers/group", () => {
     user = res.data.user;
     user.token = res.data.access_token;
 
-    const res2 = await client.post(
-      "/user/register",
-      fakeUser({
-        username: "user2",
-        password: "pass2",
-        email: "user2@user.com",
-      })
-    );
+    const res2 = await client.post("/user/register", {
+      username: "user2",
+      password: "pass2",
+      email: "user2@user.com",
+    });
     user2 = res2.data.user;
     user2.token = res2.data.access_token;
   });

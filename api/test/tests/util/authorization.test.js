@@ -1,8 +1,11 @@
 const Meeting = require("../../../lib/models/meeting");
 const Participant = require("../../../lib/models/participant");
+const User = require("../../../lib/models/user");
+const Group = require("../../../lib/models/group");
 const fakeMeeting = require("../../fakes/meeting");
 const fakeParticipant = require("../../fakes/participant");
 const fakeUser = require("../../fakes/user");
+const fakeGroup = require("../../fakes/group");
 const { clean } = require("../../utils/db");
 const db = require("../../../lib/db");
 const { assert } = require("chai");
@@ -124,6 +127,55 @@ describe(modulePath, () => {
 
     it("should return unauthorized if not user", async () => {
       await assert.isRejected(this.module.checkUser());
+    });
+  });
+
+  describe("checkGroupMember", () => {
+    let groupOwner;
+    let groupMember;
+    let nonMember;
+    let group;
+
+    beforeEach(async () => {
+      groupOwner = await User.create(fakeUser());
+      group = await Group.create(fakeGroup({ owner_ids: [groupOwner._id] }));
+
+      groupMember = await User.create(fakeUser({ groups: [group._id] }));
+      nonMember = await User.create(fakeUser({}));
+    });
+
+    it("should return group if user is member", async () => {
+      const g = await this.module.checkGroupMember(group._id, {
+        user: groupMember,
+      });
+      assert.equal(g.name, group.name);
+    });
+
+    it("should reject if user is not member", async () => {
+      return assert.isRejected(
+        this.module.checkGroupMember(group._id, { user: nonMember }),
+        "You must be a group member or owner to do that"
+      );
+    });
+
+    it("should return group if user is owner", async () => {
+      const g = await this.module.checkGroupMember(group._id, {
+        user: groupOwner,
+      });
+      assert.equal(g.name, group.name);
+    });
+
+    it("should reject if the user does not have an account", async () => {
+      return assert.isRejected(
+        this.module.checkGroupMember(group._id, {}),
+        "You must be a user and group member or owner to do that"
+      );
+    });
+
+    it("should throw non auth errors", async () => {
+      return assert.isRejected(
+        this.module.checkGroupMember(group._id, undefined)
+      );
     });
   });
 });

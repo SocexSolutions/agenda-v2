@@ -1,5 +1,6 @@
 const Participant = require("../models/participant");
 const Meeting = require("../models/meeting");
+const Group = require("../models/group");
 const mongoose = require("mongoose");
 const ObjectId = require("mongoose").Types.ObjectId;
 const AuthErr = require("../classes/auth-err");
@@ -25,7 +26,9 @@ module.exports.checkParticipant = async (meeting_id, credentials) => {
         return meeting;
       }
 
-      throw new AuthErr("participant not participant");
+      throw new AuthErr(
+        "You must be a participant or owner of the meeting to do that"
+      );
     }
 
     const [participant_res, meeting_res] = await Promise.allSettled([
@@ -44,7 +47,9 @@ module.exports.checkParticipant = async (meeting_id, credentials) => {
       return meeting_res.value;
     }
 
-    throw new AuthErr("user not participant");
+    throw new AuthErr(
+      "You must be a participant or owner of the meeting to do that"
+    );
   } catch (err) {
     if (err instanceof AuthErr) {
       throw err;
@@ -96,7 +101,7 @@ module.exports.checkOwner = async (_id, collection_name, credentials) => {
       }
     }
 
-    throw new AuthErr("not owner");
+    throw new AuthErr("You need to own the document to do that");
   } catch (err) {
     if (err instanceof AuthErr) {
       throw err;
@@ -116,6 +121,51 @@ module.exports.checkUser = async (credentials) => {
   jobi.debug("checkUser creds:", credentials);
 
   if (!credentials?.usr) {
-    throw new AuthErr("not user");
+    throw new AuthErr("You must be a user to do that");
+  }
+};
+
+/**
+ * Check if a subject is a member of a group, throws if not
+ *
+ * @param {ObjectId} group_id
+ * @param {Object} credentials
+ *
+ * @returns {Promise<Group>}
+ */
+module.exports.checkGroupMember = async (group_id, credentials) => {
+  try {
+    jobi.debug("checkGroupMember creds:", credentials);
+
+    const { user } = credentials;
+
+    if (!user) {
+      throw new AuthErr(
+        "You must be a user and group member or owner to do that"
+      );
+    }
+
+    const isMember = user.groups.some((g) => {
+      return g.toString() === group_id.toString();
+    });
+
+    const group = await Group.findOne({ _id: group_id });
+
+    const isOwner = group.owner_ids.some((owner_id) => {
+      return owner_id.toString() === user._id.toString();
+    });
+
+    if (!isMember && !isOwner) {
+      throw new AuthErr("You must be a group member or owner to do that");
+    }
+
+    return group;
+  } catch (err) {
+    if (err instanceof AuthErr) {
+      throw err;
+    }
+
+    /* istanbul ignore next */
+    throw new Error(err.message);
   }
 };

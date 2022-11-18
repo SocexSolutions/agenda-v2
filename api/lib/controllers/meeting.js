@@ -388,7 +388,9 @@ module.exports = {
       },
     ];
 
-    const [{ meetings, count, owners: allOwners }] = await User.aggregate(pipeline);
+    const [{ meetings, count, owners: allOwners }] = await User.aggregate(
+      pipeline
+    );
 
     const reducedOwners = Object.values(
       allOwners.reduce((prev, owner) => {
@@ -435,5 +437,33 @@ module.exports = {
     } finally {
       session.endSession();
     }
+  },
+
+  async addTag(req, res) {
+    const { _id, tag_id } = req.params;
+
+    await authUtils.checkOwner(_id, "meetings", req.credentials);
+
+    const meeting = await Meeting.findOneAndUpdate(
+      { _id },
+      { $addToSet: { tags: tag_id } },
+      { new: true }
+    );
+
+    return res.status(200).send(meeting);
+  },
+
+  async removeTag(req, res) {
+    const { _id, tag_id } = req.params;
+
+    await authUtils.checkOwner(_id, "meetings", req.credentials);
+
+    const meeting = await Meeting.findOneAndUpdate(
+      { _id },
+      { $pull: { tags: tag_id } },
+      { new: true }
+    );
+
+    return res.status(200).send(meeting);
   },
 };

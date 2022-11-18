@@ -7,6 +7,7 @@ const meeting = require("./meeting");
 const topic = require("./topic");
 const group = require("./group");
 const invite = require("./invite");
+const tag = require("./tag");
 const ui = require("./ui");
 const participant = require("./participant");
 const takeaway = require("./takeaway");
@@ -23,6 +24,7 @@ router.use("/participant", reqLogger, authMdw, participant);
 router.use("/ui", reqLogger, authMdw, ui);
 router.use("/group", reqLogger, authMdw, group);
 router.use("/invite", reqLogger, authMdw, invite);
+router.use("/tag", reqLogger, authMdw, tag);
 router.use("/pubkey", reqLogger, pubkey);
 
 module.exports = router;
