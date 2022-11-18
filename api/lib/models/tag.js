@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const tag = new mongoose.Schema({
   group_id: {
     type: Schema.Types.ObjectId,
-    ref: "User",
+    ref: "Group",
     required: true,
   },
   name: {

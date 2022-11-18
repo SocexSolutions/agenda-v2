@@ -39,7 +39,7 @@ describe(modulePath, () => {
     this.module = libRewire(modulePath);
   });
 
-  it("should accept valid user token", async () => {
+  it("should accept a valid user token", async () => {
     const payload = {
       sub: this.user._id,
       iat: Date.now(),
