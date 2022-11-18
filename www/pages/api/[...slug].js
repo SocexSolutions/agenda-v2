@@ -38,7 +38,7 @@ export default async (req, res) => {
 
       res.setHeader(
         `Set-Cookie`,
-        `agenda-auth=${data.token}; path=/; Expires=${new Date(
+        `agenda-auth=${data.access_token}; path=/; Expires=${new Date(
           Date.now() + oneWeekMS
         )}; HttpOnly; SameSite=Strict;`
       );

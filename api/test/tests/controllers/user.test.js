@@ -33,6 +33,7 @@ describe("lib/controllers/user.js", () => {
   });
 
   after(async () => {
+    await dbUtils.clean();
     await api.stop();
     await db.disconnect();
   });
@@ -50,6 +51,14 @@ describe("lib/controllers/user.js", () => {
 
       assert.strictEqual(res.data.user.email, "email");
       assert.strictEqual(res.data.user.username, "thudson");
+    });
+
+    it("should return an access_token", async () => {
+      const res = await client.post(path, user);
+
+      assert.exists(res.data.access_token);
+      assert.equal(res.data.access_token.length, 815);
+      assert.equal(res.data.access_token.split(".").length, 3);
     });
 
     it("should not register a user with an existing username", async () => {
@@ -123,6 +132,17 @@ describe("lib/controllers/user.js", () => {
       const res = await client.post(path, loginCreds);
 
       assert(res.status === 200);
+
+      assert.equal(res.data.user.username, user.username);
+      assert.equal(res.data.user.email, user.email);
+    });
+
+    it("should return an access_token", async () => {
+      const res = await client.post(path, user);
+
+      assert.exists(res.data.access_token);
+      assert.equal(res.data.access_token.length, 815);
+      assert.equal(res.data.access_token.split(".").length, 3);
     });
 
     it("should not login user with invalid password", async () => {
