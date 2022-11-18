@@ -16,7 +16,7 @@ export default (state = initialState, action) => {
  * Open or close the drawer
  */
 export const toggleDrawer = () => {
-  return function toggleDrawer(dispatch, getState) {
+  return function toggleDrawer(dispatch) {
     dispatch({ type: "ui/toggleDrawer", payload: {} });
   };
 };

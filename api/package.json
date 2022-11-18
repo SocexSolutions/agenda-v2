@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SocexSolutions/agenda-api.git"
+    "url": "git+https://github.com/SocexSolutions/agenda-v2.git"
   },
   "keywords": [
     "keywords"
@@ -23,9 +23,9 @@
   "author": "anonymous",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/SocexSolutions/agenda-api/issues"
+    "url": "https://github.com/SocexSolutions/agenda-v2/issues"
   },
-  "homepage": "https://github.com/SocexSolutions/agenda-api#readme",
+  "homepage": "https://github.com/SocexSolutions/agenda-v2/api/#readme",
   "dependencies": {
     "@sendgrid/mail": "^7.5.0",
     "@starryinternet/jobi": "^1.1.0",
@@ -34,5 +34,19 @@
     "express": "4.18.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "6.7.2"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-as-promised": "^7.1.1",
+    "chai-subset": "^1.6.0",
+    "eslint": "^8.3.0",
+    "eslint-plugin-node": "^11.1.0",
+    "faker": "^5.5.3",
+    "mocha": "^10.0.0",
+    "nodemon": "2.0.20",
+    "nyc": "^15.1.0",
+    "prettier": "^2.7.1",
+    "rewire": "^6.0.0",
+    "sinon": "^14.0.0"
   }
 }

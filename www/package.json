@@ -15,7 +15,7 @@
     "@reduxjs/toolkit": "^1.8.6",
     "axios": "^0.27.2",
     "dayjs": "^1.11.6",
-    "eslint": "^8.26.0",
+    "eslint": "^8.3.0",
     "eslint-plugin-react": "^7.25.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "next": "^12.2.2",
@@ -25,5 +25,8 @@
     "redux": "^4.1.1",
     "redux-thunk": "^2.3.0",
     "sass": "^1.55.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.5.1"
   }
 }

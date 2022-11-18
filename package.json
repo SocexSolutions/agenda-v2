@@ -22,22 +22,6 @@
     "url": "https://github.com/SocexSolutions/agenda-v2/issues"
   },
   "homepage": "https://github.com/SocexSolutions/agenda-v2#readme",
-  "devDependencies": {
-    "chai": "^4.3.4",
-    "chai-as-promised": "^7.1.1",
-    "chai-subset": "^1.6.0",
-    "eslint": "^8.3.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-react": "^7.25.1",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "faker": "^5.5.3",
-    "mocha": "^10.0.0",
-    "nodemon": "2.0.20",
-    "nyc": "^15.1.0",
-    "prettier": "^2.7.1",
-    "rewire": "^6.0.0",
-    "sinon": "^14.0.0"
-  },
   "workspaces": [
     "api",
     "www"
