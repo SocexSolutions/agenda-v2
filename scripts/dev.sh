@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Create db container if not found
 if [ ! "$( docker ps -q -f name=mongo )" ]; then

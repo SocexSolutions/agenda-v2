@@ -1,6 +1,7 @@
 const Lock = require("../models/lock");
 const jobi = require("@starryinternet/jobi");
 
+// istanbul ignore next
 async function wait(ms) {
   return new Promise((r) => setTimeout(() => r(), ms));
 }

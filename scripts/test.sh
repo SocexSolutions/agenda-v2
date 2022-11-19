@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 printf "Running api tests...\n";
 
 if [ ! "$( docker ps -q -f name=mongo )" ]; then

@@ -72,7 +72,7 @@ async function saveMeetingTopics({ meeting_id, savedTopics, subject_id }) {
       description: topic.description,
       owner_id: topic.owner_id || subject_id,
       meeting_id,
-      likes: topic.likes || [],
+      likes: topic.likes,
     };
   });
 
@@ -93,6 +93,7 @@ async function saveMeetingTopics({ meeting_id, savedTopics, subject_id }) {
 
   await this.bulkWrite(writeOperations);
 
+  /* istanbul ignore next */
   return await this.find({ meeting_id });
 }
 

@@ -6,7 +6,6 @@ const ActionItem = require("../models/action-item");
 const Takeaway = require("../models/takeaway");
 const User = require("../models/user");
 const ObjectID = require("mongoose").Types.ObjectId;
-const jobi = require("@starryinternet/jobi");
 const authUtils = require("../util/authorization");
 
 module.exports = {
@@ -193,10 +192,6 @@ module.exports = {
         topics,
         participants,
       });
-    } catch (error) {
-      jobi.error(error.message);
-
-      res.status(500).send(error.message);
     } finally {
       session.endSession();
     }
@@ -265,7 +260,7 @@ module.exports = {
   async index(req, res) {
     const subject_email = req.credentials.user.email;
     const subject_id = req.credentials.sub;
-    const { limit = 0, skip = 0, name = "", owners = [] } = req.query;
+    const { limit = 10, skip = 0, name = "", owners = [] } = req.query;
 
     const pipelineFilters = [];
     const filtered = !!name || !!owners.length;
@@ -430,10 +425,6 @@ module.exports = {
       });
 
       res.status(204).send();
-    } catch (err) {
-      jobi.error(err.message);
-
-      res.status(500).send("Failed to delete meeting.");
     } finally {
       session.endSession();
     }
