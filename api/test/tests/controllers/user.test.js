@@ -6,6 +6,8 @@ const chaiAsPromised = require("chai-as-promised");
 const client = require("../../utils/client");
 const libRewire = require("../../utils/lib-rewire");
 const sinon = require("sinon");
+const User = require("../../../lib/models/user");
+const Group = require("../../../lib/models/group");
 
 chai.use(chaiAsPromised);
 
@@ -198,6 +200,113 @@ describe("lib/controllers/user.js", () => {
       const options = { headers: { authorization: "token" } };
 
       return assert.isRejected(client.get(path, options));
+    });
+  });
+
+  describe("groups", () => {
+    let user1;
+    let user2;
+    let path;
+
+    beforeEach(async () => {
+      const res = await client.post("/user/register", {
+        username: "user",
+        password: "pass",
+        email: "brian@user.com",
+        groups: [],
+      });
+      user1 = res.data.user;
+      user1.token = res.data.access_token;
+
+      path = `/user/${user1._id}/groups`;
+
+      const res2 = await client.post("/user/register", {
+        username: "user2",
+        password: "pass2",
+        email: "user2@user.com",
+      });
+      user2 = res2.data.user;
+      user2.token = res2.data.access_token;
+    });
+
+    it("should return groups that a user owns", async () => {
+      await Promise.all([
+        Group.create({ name: "1", owner_ids: [user1._id] }),
+        Group.create({ name: "2", owner_ids: [user1._id] }),
+      ]);
+
+      const { data } = await client.get(path, {
+        headers: { Authorization: user1.token },
+      });
+
+      assert.equal(data.length, 2);
+
+      const names = data.map((g) => g.name);
+
+      assert.include(names, "1");
+      assert.include(names, "2");
+    });
+
+    it("should not include groups that a user does not own", async () => {
+      await Promise.all([
+        Group.create({ name: "1", owner_ids: [user1._id] }),
+        Group.create({ name: "2", owner_ids: [user2._id] }),
+      ]);
+
+      const { data } = await client.get(path, {
+        headers: { Authorization: user1.token },
+      });
+
+      assert.equal(data.length, 1);
+
+      const names = data.map((g) => g.name);
+
+      assert.include(names, "1");
+    });
+
+    it("should include groups that a user is a member of", async () => {
+      const [group1, group2] = await Promise.all([
+        Group.create({ name: "1", owner_ids: [user2._id] }),
+        Group.create({ name: "2", owner_ids: [user2._id] }),
+      ]);
+
+      await User.findOneAndUpdate(
+        { _id: user1._id },
+        { $addToSet: { groups: [group1._id, group2._id] } }
+      );
+
+      const { data } = await client.get(path, {
+        headers: { Authorization: user1.token },
+      });
+
+      assert.equal(data.length, 2);
+
+      const names = data.map((g) => g.name);
+
+      assert.include(names, "1");
+      assert.include(names, "2");
+    });
+
+    it("should not include groups that a user is not a member of", async () => {
+      const [group1] = await Promise.all([
+        Group.create({ name: "1", owner_ids: [user2._id] }),
+        Group.create({ name: "2", owner_ids: [user2._id] }),
+      ]);
+
+      await User.findOneAndUpdate(
+        { _id: user1._id },
+        { $addToSet: { groups: [group1._id] } }
+      );
+
+      const { data } = await client.get(path, {
+        headers: { Authorization: user1.token },
+      });
+
+      assert.equal(data.length, 1);
+
+      const names = data.map((g) => g.name);
+
+      assert.include(names, "1");
     });
   });
 });

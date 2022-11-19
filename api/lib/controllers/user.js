@@ -1,8 +1,7 @@
 const User = require("../models/user");
-const Meeting = require("../models/meeting");
+const ObjectID = require("mongoose").Types.ObjectId;
 const passUtils = require("../util/password");
 const jwtUtils = require("../util/jwt");
-const authUtils = require("../util/authorization");
 const sendGrid = require("../sendgrid");
 
 module.exports = {
@@ -103,16 +102,6 @@ module.exports = {
     });
   },
 
-  async getOwnedMeetings(req, res) {
-    await authUtils.checkUser(req.credentials);
-
-    const { sub } = req.credentials;
-
-    const meetings = await Meeting.find({ owner_id: sub });
-
-    return res.status(200).json(meetings);
-  },
-
   async checkExistingUsername(req, res) {
     const { username } = req.body;
 
@@ -135,5 +124,39 @@ module.exports = {
     } else {
       return res.status(200).send();
     }
+  },
+
+  groups: async (req, res) => {
+    const userId = req.credentials.user._id;
+
+    const grps = await User.aggregate([
+      {
+        $match: { _id: ObjectID(userId) },
+      },
+      {
+        $lookup: {
+          from: "groups",
+          let: { user_groups: "$groups" },
+          pipeline: [
+            {
+              $match: {
+                $or: [
+                  { $expr: { $in: [userId, "$owner_ids"] } },
+                  { $expr: { $in: ["$_id", "$$user_groups"] } },
+                ],
+              },
+            },
+          ],
+          as: "groups",
+        },
+      },
+      {
+        $project: {
+          groups: 1,
+        },
+      },
+    ]);
+
+    res.status(200).send(grps[0].groups);
   },
 };

@@ -10,6 +10,6 @@ router.post("/login", wrapped.login);
 router.post("/checkexistingusername", wrapped.checkExistingUsername);
 router.post("/checkexistingemail", wrapped.checkExistingEmail);
 router.get("/refresh", authMdw, wrapped.refresh);
-router.get("/meetings/:_id", authMdw, wrapped.getOwnedMeetings);
+router.get("/:_id/groups", authMdw, wrapped.groups);
 
 module.exports = router;
