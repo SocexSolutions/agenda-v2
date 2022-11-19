@@ -1,3 +1,5 @@
+#!/bin/bash
+set -e
 
 VERSION=$1
 

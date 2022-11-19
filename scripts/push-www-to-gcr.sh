@@ -1,3 +1,6 @@
+#!/bin/bash
+set -e
+
 VERSION=$1
 
 docker buildx build --platform linux/x86_64 -t agenda/agenda-www:$VERSION ./www
