@@ -291,7 +291,7 @@ describe("lib/controllers/meeting", () => {
         Meeting.create(this.ownedMeeting4),
       ]);
 
-      const filters = { owners: [], name: "meeting 1" };
+      const filters = { name: "meeting 1" };
 
       const { data } = await client.get(`/meeting/?skip=0&limit=2`, {
         params: filters,
@@ -324,10 +324,9 @@ describe("lib/controllers/meeting", () => {
 
       const filters = {
         owners: [includedMeetingOwner._id.toString()],
-        name: "",
       };
 
-      const { data } = await client.get(`/meeting/?skip=0&limit=2`, {
+      const { data } = await client.get(`/meeting`, {
         params: filters,
       });
 

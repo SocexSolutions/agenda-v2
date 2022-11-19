@@ -203,6 +203,60 @@ describe("lib/controllers/user.js", () => {
     });
   });
 
+  describe("#checkExistingUsername", () => {
+    const path = "/user/checkexistingusername";
+
+    it("should 409 if username already exists", async () => {
+      const user = await User.create({
+        username: "thudson",
+        email: "thudson",
+        hash: "hash",
+        salt: "salt",
+      });
+
+      try {
+        await client.post(path, { username: user.username });
+
+        assert.fail("should have thrown");
+      } catch (err) {
+        assert.strictEqual(err.response.status, 409);
+      }
+    });
+
+    it("should 200 if username does not exist", async () => {
+      const res = await client.post(path, { username: "thudson" });
+
+      assert.strictEqual(res.status, 200);
+    });
+  });
+
+  describe("#checkExistingEmail", () => {
+    const path = "/user/checkexistingemail";
+
+    it("should 409 if username already exists", async () => {
+      const user = await User.create({
+        username: "thudson",
+        email: "thudson",
+        hash: "hash",
+        salt: "salt",
+      });
+
+      try {
+        await client.post(path, { email: user.email });
+
+        assert.fail("should have thrown");
+      } catch (err) {
+        assert.strictEqual(err.response.status, 409);
+      }
+    });
+
+    it("should 200 if username does not exist", async () => {
+      const res = await client.post(path, { username: "thudson" });
+
+      assert.strictEqual(res.status, 200);
+    });
+  });
+
   describe("groups", () => {
     let user1;
     let user2;
