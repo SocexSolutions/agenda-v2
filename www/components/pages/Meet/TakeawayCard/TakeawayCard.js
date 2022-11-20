@@ -58,7 +58,7 @@ export default function TakeawayCard({ takeaway, deleteUnsaved, className }) {
   };
 
   const maybeHandleShortcut = (e) => {
-    if (e.key === "Enter" && e.metaKey) {
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
       onSave();
     }
   };

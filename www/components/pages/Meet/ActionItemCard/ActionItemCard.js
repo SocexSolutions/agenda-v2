@@ -68,7 +68,7 @@ export default function ActionItemCard({
   };
 
   const maybeHandleShortcut = (e) => {
-    if (e.key === "Enter" && e.metaKey) {
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
       onSave();
     }
   };
