@@ -10,8 +10,12 @@
 
 .topic {
   width: 100%;
+
+  p {
+    margin: 0.5em 0 1em 0;
+  }
 }
 
 .topic_name {
-  margin-top: 0;
+  margin: 0;
 }

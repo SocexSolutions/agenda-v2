@@ -1,12 +1,9 @@
 import TopicSelectBar from "../../../components/pages/Meet/TopicSelectBar/TopicSelectBar";
 import ActionItemBar from "../../../components/pages/Meet/ActionItemBar/ActionItemBar";
 import TopicDisplay from "../../../components/pages/Meet/TopicDisplay/TopicDisplay";
-import TakeawayBoard from "../../../components/pages/Meet/TakeawayBoard/TakeawayBoard";
-import ActionItemBoard from "../../../components/pages/Meet/ActionItemBoard/ActionItemBoard";
+import Board from "../../../components/pages/Meet/Board/Board";
 import LoadingIcon from "../../../components/shared/LoadingIcon/LoadingIcon";
 
-import { ToggleButtonGroup } from "@mui/material";
-import { ToggleButton } from "@mui/material";
 import { Button } from "@mui/material";
 import { Fade } from "@mui/material";
 
@@ -35,15 +32,6 @@ export default function MeetRevamp() {
   );
 
   const [initialized, setInitialized] = useState(false);
-  const [tab, setTab] = useState("Takeaways");
-
-  const changeTab = (t) => {
-    if (!t) {
-      return;
-    }
-
-    setTab(t);
-  };
 
   useEffect(() => {
     if (!initialized && meeting_id) {
@@ -116,31 +104,7 @@ export default function MeetRevamp() {
             <div>
               {topicDisplay}
               {liveTopic && (
-                <div className={styles.tabs_container}>
-                  <ToggleButtonGroup
-                    className={styles.button_group}
-                    size="small"
-                    color="primary"
-                    value={tab}
-                    exclusive
-                    onChange={(_, ta) => changeTab(ta)}
-                  >
-                    <ToggleButton value="Takeaways">Takeaways</ToggleButton>
-                    <ToggleButton value="Action Items">
-                      Action Items
-                    </ToggleButton>
-                  </ToggleButtonGroup>
-                  <TakeawayBoard
-                    hidden={tab !== "Takeaways"}
-                    liveTopic={liveTopic}
-                    meetingId={meeting_id}
-                  />
-                  <ActionItemBoard
-                    hidden={tab !== "Action Items"}
-                    liveTopic={liveTopic}
-                    meetingId={meeting_id}
-                  />
-                </div>
+                <Board liveTopic={liveTopic} meetingId={meeting_id} />
               )}
             </div>
             <div>

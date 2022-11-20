@@ -51,7 +51,7 @@ const CardForm = ({ item, updateItem, destroyItem }) => {
    * Handles keyboard shortcuts for quickly saving or exiting from a card.
    */
   const maybeHandleShortcut = (e) => {
-    if (e.key === "Enter" && e.metaKey) {
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
       onUpdate();
     }
   };
@@ -71,7 +71,6 @@ const CardForm = ({ item, updateItem, destroyItem }) => {
   return (
     <div
       className={shared.card + " " + styles.container + " " + styles.editing}
-      elevation={1}
     >
       <TextField
         autoFocus

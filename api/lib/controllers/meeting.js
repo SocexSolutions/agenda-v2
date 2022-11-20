@@ -212,7 +212,40 @@ module.exports = {
 
     await authUtils.checkParticipant(_id, req.credentials);
 
-    const participants = await Participant.find({ meeting_id: _id });
+    const [{ participants }] = await Meeting.aggregate([
+      { $match: { _id: new ObjectID(_id) } },
+      {
+        $lookup: {
+          from: "participants",
+          localField: "_id",
+          foreignField: "meeting_id",
+          as: "participants",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "owner_id",
+          foreignField: "_id",
+          pipeline: [
+            {
+              $project: {
+                _id: 1,
+                email: 1,
+                username: 1,
+                meeting_id: new ObjectID(_id),
+              },
+            },
+          ],
+          as: "owner",
+        },
+      },
+      {
+        $project: {
+          participants: { $concatArrays: ["$participants", "$owner"] },
+        },
+      },
+    ]);
 
     return res.status(200).send(participants);
   },

@@ -593,7 +593,7 @@ describe("lib/controllers/meeting", () => {
       this.meeting = await Meeting.create(meeting);
     });
 
-    it("should get a meetings participants", async () => {
+    it("should get a meetings participants with owner", async () => {
       const participants = Array.from({ length: 3 }).map(() => {
         return fakeParticipant({ meeting_id: this.meeting._id });
       });
@@ -603,7 +603,29 @@ describe("lib/controllers/meeting", () => {
       const res = await client.get(`/meeting/${this.meeting._id}/participants`);
 
       assert.equal(res.status, 200);
-      assert.equal(res.data.length, 3);
+      assert.equal(res.data.length, 4);
+    });
+
+    it("should return docs with _ids, meeting_ids, and emails but not hash or salt", async () => {
+      const participants = Array.from({ length: 3 }).map(() => {
+        return fakeParticipant({ meeting_id: this.meeting._id });
+      });
+
+      await Participant.insertMany(participants);
+
+      const res = await client.get(`/meeting/${this.meeting._id}/participants`);
+
+      assert.equal(res.status, 200);
+      assert.equal(res.data.length, 4);
+
+      res.data.forEach((doc) => {
+        assert.ok(doc._id);
+        assert.ok(doc.email);
+        assert.equal(doc.meeting_id, this.meeting._id.toString());
+
+        assert.notOk(doc.hash);
+        assert.notOk(doc.salt);
+      });
     });
 
     it("should 403 if not meeting owner or participant", async () => {

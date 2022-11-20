@@ -90,6 +90,7 @@ describe("lib/controllers/action-item", () => {
       assert.equal(created.topic_id, actionItem.topic_id.toString());
       assert.equal(created.meeting_id, actionItem.meeting_id.toString());
       assert.equal(created.owner_id, this.user._id.toString());
+      assert.deepEqual(created.assigned_to, actionItem.assigned_to);
       assert.equal(created.completed, false);
     });
 
@@ -119,6 +120,25 @@ describe("lib/controllers/action-item", () => {
       const res = await this.client.post(path, actionItem);
 
       assert.equal(res.status, 201);
+    });
+
+    it("should not allow duplicate assignments", async () => {
+      const actionItem = fakeActionItem({
+        meeting_id: this.meeting._id,
+        topic_id: this.topic._id,
+        assigned_to: [this.participant.email, this.participant.email],
+      });
+
+      const res = await this.client.post(path, actionItem);
+
+      assert.equal(res.status, 201);
+      assert.equal(res.data.assigned_to.length, 1);
+      assert.equal(res.data.assigned_to[0], this.participant.email);
+
+      const created = await ActionItem.findById(res.data._id);
+
+      assert.equal(created.assigned_to.length, 1);
+      assert.equal(created.assigned_to[0], this.participant.email);
     });
   });
 
@@ -167,6 +187,25 @@ describe("lib/controllers/action-item", () => {
       );
 
       assert.equal(res.status, 200);
+    });
+
+    it("should not allow duplicate assignments", async () => {
+      this.client.defaults.headers.common["Authorization"] =
+        this.participantToken;
+
+      const res = await this.client.patch(
+        `/action-item/${this.actionItem._id}`,
+        { assigned_to: [this.participant.email, this.participant.email] }
+      );
+
+      assert.equal(res.status, 200);
+      assert.equal(res.data.assigned_to.length, 1);
+      assert.equal(res.data.assigned_to[0], this.participant.email);
+
+      const updated = await ActionItem.findById(this.actionItem._id);
+
+      assert.equal(updated.assigned_to.length, 1);
+      assert.equal(updated.assigned_to[0], this.participant.email);
     });
   });
 

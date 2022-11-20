@@ -20,6 +20,7 @@ export default function TopicDisplay({ topic }) {
             <Button
               variant="contained"
               disableElevation
+              size="small"
               onClick={() => {
                 dispatch(topicStore.actions.close(topic));
               }}

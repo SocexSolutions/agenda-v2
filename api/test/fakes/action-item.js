@@ -12,6 +12,7 @@ const actionItem = (opts) => {
     owner_id: owner_id.toString(),
     meeting_id: meeting_id.toString(),
     completed: false,
+    assigned_to: [],
     ...opts,
   };
 };
