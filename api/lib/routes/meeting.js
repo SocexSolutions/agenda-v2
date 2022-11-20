@@ -14,6 +14,7 @@ router.post("/aggregate", wrapped.aggregateSave);
 router.get("/:_id/topics", wrapped.getTopics);
 router.get("/:_id/participants", wrapped.getParticipants);
 router.get("/:_id/actionitems", wrapped.getActionItems);
+router.get("/:_id/takeaways", wrapped.getTakeaways);
 router.patch("/:_id/status", wrapped.updateStatus);
 router.post("/:_id/tag/:tag_id", wrapped.addTag);
 router.delete("/:_id/tag/:tag_id", wrapped.removeTag);

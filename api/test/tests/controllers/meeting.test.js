@@ -670,6 +670,38 @@ describe("lib/controllers/meeting", () => {
     });
   });
 
+  describe("#getTakeaways", () => {
+    beforeEach(async () => {
+      const meeting = fakeMeeting({
+        owner_id: this.user._id,
+      });
+
+      this.meeting = await Meeting.create(meeting);
+    });
+
+    it("should return a meetings takeaways", async () => {
+      const takeaways = Array.from({ length: 3 }).map(() => {
+        return fakeTakeaway({ meeting_id: this.meeting._id });
+      });
+
+      await Takeaway.insertMany(takeaways);
+
+      const res = await client.get(`/meeting/${this.meeting._id}/takeaways`);
+
+      assert.equal(res.status, 200);
+      assert.equal(res.data.length, 3);
+    });
+
+    it("should 403 if not owner or participant", async () => {
+      client.defaults.headers.common["Authorization"] = this.token2;
+
+      await assert.isRejected(
+        client.get(`/meeting/${this.meeting._id}/takeaways`),
+        "Request failed with status code 403"
+      );
+    });
+  });
+
   describe("#updateStatus", () => {
     beforeEach(async () => {
       const meeting = fakeMeeting({
