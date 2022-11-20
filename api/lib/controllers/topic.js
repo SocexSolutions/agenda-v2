@@ -77,6 +77,10 @@ module.exports = {
 
     await authUtils.checkParticipant(topic.meeting_id, req.credentials);
 
+    if (topic.status === "closed") {
+      return res.status(400).send("Topic is already closed");
+    }
+
     const updated = await Topic.findOneAndUpdate(
       { _id },
       { status: "closed" },
@@ -86,29 +90,24 @@ module.exports = {
     return res.status(200).send(updated);
   },
 
-  switch: async (req, res) => {
+  reOpen: async (req, res) => {
     const { _id } = req.params;
 
     const topic = await Topic.findOne({ _id });
 
     await authUtils.checkParticipant(topic.meeting_id, req.credentials);
 
-    // Making two queries isn't ideal but this does avoid the potential for
-    // multiple topics to be live at once; a state that would be difficult to
-    // recover from.
-    const switchedFrom = await Topic.findOneAndUpdate(
-      { meeting_id: topic.meeting_id, status: "live" },
+    if (topic.status === "open") {
+      return res.status(400).send("Topic is already open");
+    }
+
+    const updated = await Topic.findOneAndUpdate(
+      { _id },
       { status: "open" },
       { new: true }
     );
 
-    const switchedTo = await Topic.findOneAndUpdate(
-      { _id },
-      { status: "live" },
-      { new: true }
-    );
-
-    return res.status(200).send({ switchedFrom, switchedTo });
+    return res.status(200).send(updated);
   },
 
   getTakeaways: async (req, res) => {
