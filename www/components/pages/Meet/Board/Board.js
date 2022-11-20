@@ -1,4 +1,5 @@
 import { Button } from "@mui/material";
+import { Fade } from "@mui/material";
 import LightbulbIcon from "@mui/icons-material/Lightbulb";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 
@@ -12,32 +13,49 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styles from "./Board.module.scss";
 
-export default function ActionItemBoard({ liveTopic, meetingId, hidden }) {
+export default function Board({ selectedTopic, meetingId }) {
   const dispatch = useDispatch();
 
   const [unsavedItems, setUnsavedItems] = useState([]);
 
+  const fetchData = () => {
+    dispatch(topicStore.actions.getActionItems(selectedTopic._id));
+    dispatch(topicStore.actions.getTakeaways(selectedTopic._id));
+  };
+
   useEffect(() => {
-    if (liveTopic) {
-      dispatch(topicStore.actions.getActionItems(liveTopic._id));
+    let interval;
+
+    if (selectedTopic) {
+      fetchData();
+
+      interval = setInterval(() => {
+        fetchData();
+      }, 1000 + Math.random() * 1000);
     }
-  }, [dispatch]);
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [selectedTopic._id]);
 
   const actionItems = useSelector((state) =>
-    topicStore.selectors.actionItems(state, liveTopic._id)
+    topicStore.selectors.actionItems(state, selectedTopic._id)
   );
 
   const takeaways = useSelector((state) =>
-    topicStore.selectors.takeaways(state, liveTopic._id)
+    topicStore.selectors.takeaways(state, selectedTopic._id)
   );
 
   const sorted = actionItems.concat(takeaways, unsavedItems).sort((a, b) => {
-    if (!a.created_at) {
+    if (!a.createdAt) {
       return 1;
-    } else if (!b.created_at) {
+    } else if (!b.createdAt) {
       return -1;
     } else {
-      return new Date(a.created_at) - new Date(b.created_at);
+      return new Date(a.createdAt) - new Date(b.createdAt);
     }
   });
 
@@ -68,44 +86,46 @@ export default function ActionItemBoard({ liveTopic, meetingId, hidden }) {
   });
 
   return (
-    <div hidden={hidden} className={styles.container}>
-      {cards}
-      <Button
-        startIcon={<AddTaskIcon color="blue" />}
-        className={`${styles.add_button}`}
-        size="large"
-        onClick={() => {
-          const newActionItem = {
-            _id: `temp-${Math.random()}`,
-            meeting_id: meetingId,
-            topic_id: liveTopic._id,
-            name: "",
-            description: "",
-            assigned_to: [],
-            completed: false,
-          };
-          setUnsavedItems([...unsavedItems, newActionItem]);
-        }}
-      >
-        Add Action Item
-      </Button>
-      <Button
-        startIcon={<LightbulbIcon color="yellow" />}
-        className={`${styles.add_button}`}
-        size="large"
-        onClick={() => {
-          const newTakeaway = {
-            _id: `temp-${Math.random()}`,
-            meeting_id: meetingId,
-            topic_id: liveTopic._id,
-            name: "",
-            description: "",
-          };
-          setUnsavedItems([...unsavedItems, newTakeaway]);
-        }}
-      >
-        Add Takeaway
-      </Button>
-    </div>
+    <Fade in={selectedTopic !== null}>
+      <div className={styles.container}>
+        {cards}
+        <Button
+          startIcon={<AddTaskIcon color="blue" />}
+          className={`${styles.add_button}`}
+          size="large"
+          onClick={() => {
+            const newActionItem = {
+              _id: `temp-${Math.random()}`,
+              meeting_id: meetingId,
+              topic_id: selectedTopic._id,
+              name: "",
+              description: "",
+              assigned_to: [],
+              completed: false,
+            };
+            setUnsavedItems([...unsavedItems, newActionItem]);
+          }}
+        >
+          Add Action Item
+        </Button>
+        <Button
+          startIcon={<LightbulbIcon color="yellow" />}
+          className={`${styles.add_button}`}
+          size="large"
+          onClick={() => {
+            const newTakeaway = {
+              _id: `temp-${Math.random()}`,
+              meeting_id: meetingId,
+              topic_id: selectedTopic._id,
+              name: "",
+              description: "",
+            };
+            setUnsavedItems([...unsavedItems, newTakeaway]);
+          }}
+        >
+          Add Takeaway
+        </Button>
+      </div>
+    </Fade>
   );
 }

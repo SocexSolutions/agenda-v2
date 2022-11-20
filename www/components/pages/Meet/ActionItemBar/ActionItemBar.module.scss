@@ -5,6 +5,10 @@
   border: 1px solid colors.$border;
   background: colors.$foreground;
   padding: 0.5em;
+
+  h3 {
+    margin-left: 0.5em;
+  }
 }
 
 .action_item {

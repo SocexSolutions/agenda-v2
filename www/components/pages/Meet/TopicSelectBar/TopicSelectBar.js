@@ -4,7 +4,12 @@ import { Fade } from "@mui/material";
 
 import styles from "./TopicSelectBar.module.scss";
 
-export default function SideBar({ topics, meetingName, switchToTopic }) {
+export default function TopicSelectBar({
+  topics,
+  selectedTopic,
+  meetingName,
+  switchToTopic,
+}) {
   const totalLikes = topics.reduce((total, t) => {
     total += t.likes.length;
 
@@ -26,6 +31,7 @@ export default function SideBar({ topics, meetingName, switchToTopic }) {
             return (
               <TopicSelectBarButton
                 topic={topic}
+                selectedTopic={selectedTopic}
                 priority={priority}
                 onClick={() => switchToTopic(topic)}
                 key={topic.name}
