@@ -12,8 +12,6 @@ const fakeActionItem = require("../../fakes/action-item");
 const fakeMeeting = require("../../fakes/meeting");
 const rewire = require("rewire");
 
-const clone = (obj) => JSON.parse(JSON.stringify(obj));
-
 describe("lib/controllers/topic", () => {
   before(async () => {
     this.client = rewire("../../utils/client");
@@ -225,7 +223,6 @@ describe("lib/controllers/topic", () => {
         assert.fail("should have thrown");
       } catch (err) {
         assert.strictEqual(err.response.status, 400);
-        console.log(err.response.data);
         assert.equal(err.response.data, "Topic is already closed");
       }
     });

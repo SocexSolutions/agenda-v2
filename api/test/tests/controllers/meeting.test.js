@@ -233,21 +233,25 @@ describe("lib/controllers/meeting", () => {
         owner_id: this.user._id,
         name: "meeting 1",
         date: new Date("05 October 2011 14:48 UTC"),
+        status: "sent",
       });
       this.ownedMeeting2 = fakeMeeting({
         owner_id: this.user._id,
         name: "meeting 2",
         date: new Date("01 January 1990 01:22 UTC"),
+        status: "sent",
       });
       this.ownedMeeting3 = fakeMeeting({
         owner_id: this.user._id,
         name: "meeting 3",
         date: new Date("05 October 2500 14:48 UTC"),
+        status: "sent",
       });
       this.ownedMeeting4 = fakeMeeting({
         owner_id: this.user._id,
         name: "meeting 4",
         date: new Date("25 December 1995 01:22 UTC"),
+        status: "sent",
       });
     });
 
@@ -256,6 +260,7 @@ describe("lib/controllers/meeting", () => {
       const includedMeeting = fakeMeeting({
         owner_id: includedMeetingOwner._id,
         name: "participant meeting",
+        status: "live",
       });
 
       await Promise.all([
@@ -306,6 +311,7 @@ describe("lib/controllers/meeting", () => {
       const includedMeeting = fakeMeeting({
         owner_id: includedMeetingOwner._id,
         name: "participant meeting",
+        status: "live",
       });
 
       await Promise.all([
@@ -347,6 +353,30 @@ describe("lib/controllers/meeting", () => {
       });
 
       assert.strictEqual(data.filtered, true);
+    });
+
+    it("should not show participant meetings that are drafts", async () => {
+      await Promise.all([
+        Meeting.create(this.ownedMeeting),
+        Meeting.create(
+          fakeMeeting({ owner_id: this.user2._id, status: "draft" })
+        ),
+      ]);
+
+      const { data } = await client.get(`/meeting`);
+
+      assert.strictEqual(data.meetings.length, 1);
+    });
+
+    it("should return filtered as false when there are now filters", async () => {
+      await Promise.all([
+        Meeting.create(this.ownedMeeting),
+        Meeting.create(this.ownedMeeting2),
+      ]);
+
+      const { data } = await client.get(`/meeting`);
+
+      assert.strictEqual(data.filtered, false);
     });
   });
 

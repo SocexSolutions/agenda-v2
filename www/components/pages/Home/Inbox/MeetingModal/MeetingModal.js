@@ -14,7 +14,7 @@ import styles from "./MeetingModal.module.scss";
 
 /**
  * A modal the provides a brief overview of a meeting
- * @param {Object} meeting - a meeting
+ * @param {Object} meetingId - a meeting
  * @param {boolean} open - whether the meeting modal is open
  * @param {Function} setOpen - set function for `open`
  * @param {Function} refresh - tell the home page to refresh meetings
@@ -85,7 +85,6 @@ export default function MeetingModal({ meeting, open, setOpen, refresh }) {
               <Button
                 color="blue"
                 variant="contained"
-                disableElevation
                 onClick={() => {
                   dispatch(
                     meetingStore.actions.updateStatus(meeting._id, "live")
@@ -100,10 +99,18 @@ export default function MeetingModal({ meeting, open, setOpen, refresh }) {
             <Button
               color="primary"
               variant="contained"
-              disableElevation
               onClick={() => router.push(`/meeting/${meeting._id}/meet`)}
             >
               View Results
+            </Button>
+          )}
+          {meeting.status === "live" && (
+            <Button
+              color="blue"
+              variant="contained"
+              onClick={() => router.push(`/meeting/${meeting._id}/meet`)}
+            >
+              Join
             </Button>
           )}
           {isOwner && meeting.status !== "draft" && (
@@ -127,15 +134,6 @@ export default function MeetingModal({ meeting, open, setOpen, refresh }) {
               onClick={() => router.push(`/meeting/${meeting._id}/vote`)}
             >
               Vote
-            </Button>
-          )}
-          {meeting.status === "live" && (
-            <Button
-              color="blue"
-              variant="contained"
-              onClick={() => router.push(`/meeting/${meeting._id}/meet`)}
-            >
-              Join
             </Button>
           )}
         </div>

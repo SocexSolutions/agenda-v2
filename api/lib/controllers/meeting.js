@@ -380,7 +380,13 @@ module.exports = {
                 from: "meetings",
                 localField: "meeting_id",
                 foreignField: "_id",
-                pipeline: [...pipelineFilters, ...ownerLookup],
+                pipeline: [
+                  ...pipelineFilters,
+                  ...ownerLookup,
+                  {
+                    $match: { status: { $ne: "draft" } },
+                  },
+                ],
                 as: "meetings",
               },
             },
