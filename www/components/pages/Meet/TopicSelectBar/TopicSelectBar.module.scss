@@ -3,13 +3,13 @@
 
 .side_bar {
   width: 100%;
-  padding: 0.5em;
+  padding: 1em;
   border: 1px solid colors.$border;
   background: colors.$foreground;
   border-radius: 6px;
 
-  h3 {
-    margin-left: 0.25em;
+  h4 {
+    width: 100%;
   }
 }
 

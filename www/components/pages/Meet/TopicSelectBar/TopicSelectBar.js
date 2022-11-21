@@ -25,6 +25,7 @@ export default function TopicSelectBar({
       <div className={styles.side_bar}>
         <h3>Meeting Topics</h3>
         <div className={styles.button_container}>
+          {sorted.length === 0 && <h4>No Topics</h4>}
           {sorted.map((topic) => {
             const priority = topic.likes.length / avg;
 

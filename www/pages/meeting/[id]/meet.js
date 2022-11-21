@@ -76,12 +76,10 @@ export default function Meet() {
   const allDone = topics.every((topic) => topic.status === "closed");
 
   let topicDisplay = (
-    <h4 className={styles.no_topic}>
-      No topic selected. Select a topic on the left to begin.
-    </h4>
+    <h3 className={styles.no_topic}>Select a topic on the left.</h3>
   );
 
-  if (allDone && !selectedTopic) {
+  if (allDone && !selectedTopic && !meeting.status === "completed") {
     topicDisplay = (
       <div className={styles.all_done}>
         <h3>

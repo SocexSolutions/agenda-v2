@@ -25,35 +25,31 @@ export default function ActionItemBar({ meetingId }) {
     }
   }, [meetingId]);
 
-  const actionItemsMarkup =
-    actionItems.length > 0 ? (
-      actionItems.map((actionItem) => {
-        return (
-          <div className={styles.action_item} key={actionItem._id}>
-            <Checkbox
-              className={styles.checkbox}
-              onClick={(e) =>
-                dispatch(
-                  actionItemStore.actions.update({
-                    ...actionItem,
-                    completed: e.target.checked,
-                  })
-                )
-              }
-              checked={actionItem.completed}
-            />
-            <p>{actionItem.name}</p>
-          </div>
-        );
-      })
-    ) : (
-      <p>No action items.</p>
+  const actionItemsMarkup = actionItems.map((actionItem) => {
+    return (
+      <div className={styles.action_item} key={actionItem._id}>
+        <Checkbox
+          className={styles.checkbox}
+          onClick={(e) =>
+            dispatch(
+              actionItemStore.actions.update({
+                ...actionItem,
+                completed: e.target.checked,
+              })
+            )
+          }
+          checked={actionItem.completed}
+        />
+        <p>{actionItem.name}</p>
+      </div>
     );
+  });
 
   return (
     <div className={styles.action_item_bar}>
       <h3>Meeting Action Items</h3>
-      {actionItemsMarkup}
+      {actionItems.length === 0 && <h4>No Action Items</h4>}
+      {actionItems && actionItemsMarkup}
     </div>
   );
 }
