@@ -41,7 +41,7 @@ export default function Meet() {
 
     const interval = setInterval(() => {
       dispatch(meetingStore.actions.getActionItems(meeting_id));
-    }, 500 + Math.random() * 500);
+    }, 1000 + Math.random() * 500);
 
     return () => {
       if (interval) {
@@ -79,7 +79,7 @@ export default function Meet() {
     <h3 className={styles.no_topic}>Select a topic on the left.</h3>
   );
 
-  if (allDone && !selectedTopic && !meeting.status === "completed") {
+  if (allDone && !selectedTopic && meeting.status !== "completed") {
     topicDisplay = (
       <div className={styles.all_done}>
         <h3>

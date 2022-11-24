@@ -92,7 +92,7 @@ export default function MeetingModal({ meeting, open, setOpen, refresh }) {
                   router.push(`/meeting/${meeting._id}/meet`);
                 }}
               >
-                Start
+                Meet
               </Button>
             )}
           {meeting.status === "completed" && (
