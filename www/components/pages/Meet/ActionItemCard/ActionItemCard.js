@@ -85,7 +85,15 @@ export default function ActionItemCard({
           {assignedTo.length > 0 && (
             <div className={styles.assigned_to}>
               {assignedTo.map((email) => (
-                <Chip label={email} key={email} />
+                <Chip
+                  label={email}
+                  key={email}
+                  size="small"
+                  sx={{
+                    marginRight: "0.5em",
+                    marginBottom: "0.5em",
+                  }}
+                />
               ))}
             </div>
           )}

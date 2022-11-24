@@ -5,6 +5,7 @@
   justify-content: space-between;
   align-items: center;
   border: none;
+  border-radius: 6px;
   width: 100%;
   text-align: left;
   margin: 0.25em 0;
@@ -16,12 +17,10 @@
 
   &:hover {
     cursor: pointer;
-    border-left: 1px solid colors.$black;
     background: colors.$foregroundHighlight;
   }
 
-  &.live {
-    border-left: 1px solid colors.$black;
+  &.selected {
     background: colors.$foregroundHighlight;
   }
 

@@ -69,15 +69,39 @@ class MeetingAPI extends RestAPI {
   }
 
   /**
-   * @description Get a meeting's participants
+   * @description Get a meeting's action items
    *
    * @param {String} id - meeting._id to search with
    *
-   * @returns {Promise<Participant[]} - meeting's participants
+   * @returns {Promise<ActionItem[]} - meeting's action items
    */
   async getActionItems(id) {
     try {
       const res = await client.get(`/meeting/${id}/actionitems`);
+
+      return res.data;
+    } catch (err) {
+      store().dispatch(
+        notify({
+          message: `Failed to fetch action items for meeting (${err.message})`,
+          type: "danger",
+        })
+      );
+
+      return null;
+    }
+  }
+
+  /**
+   * @description Get a meeting's takeaways
+   *
+   * @param {String} id - meeting._id to search with
+   *
+   * @returns {Promise<Takeaway[]} - meeting's takeaways
+   */
+  async getTakeaways(id) {
+    try {
+      const res = await client.get(`/meeting/${id}/takeaways`);
 
       return res.data;
     } catch (err) {

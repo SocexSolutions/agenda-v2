@@ -4,8 +4,8 @@ import TopicDisplay from "../../../components/pages/Meet/TopicDisplay/TopicDispl
 import Board from "../../../components/pages/Meet/Board/Board";
 import LoadingIcon from "../../../components/shared/LoadingIcon/LoadingIcon";
 
-import { Button } from "@mui/material";
 import { Fade } from "@mui/material";
+import { Button } from "@mui/material";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -17,10 +17,10 @@ import topicStore from "../../../store/features/topic";
 import styles from "../../../styles/pages/meeting/[id]/meet.module.scss";
 import shared from "../../../styles/Shared.module.css";
 
-export default function MeetRevamp() {
+export default function Meet() {
   const router = useRouter();
-  const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
   const meeting_id = router.query.id;
 
@@ -31,18 +31,39 @@ export default function MeetRevamp() {
     meetingStore.selectors.topics(state, meeting_id)
   );
 
-  const [initialized, setInitialized] = useState(false);
-
   useEffect(() => {
-    if (!initialized && meeting_id) {
+    if (meeting_id) {
       dispatch(meetingStore.actions.get(meeting_id));
+      dispatch(meetingStore.actions.getParticipants(meeting_id));
       dispatch(meetingStore.actions.getTopics(meeting_id));
-      setInitialized(true);
+      dispatch(meetingStore.actions.getActionItems(meeting_id));
     }
-  }, [user, meeting_id, initialized, dispatch]);
 
-  const liveTopic = topics.find((topic) => topic.status === "live");
-  const allDone = topics.every((t) => t.status === "closed");
+    const interval = setInterval(() => {
+      dispatch(meetingStore.actions.getActionItems(meeting_id));
+    }, 1000 + Math.random() * 500);
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [meeting_id]);
+
+  const [selectedTopic, setSelectedTopic] = useState();
+
+  const closeTopic = async (topic) => {
+    dispatch(topicStore.actions.close(topic));
+
+    setSelectedTopic(null);
+  };
+
+  const reOpenTopic = async (topic) => {
+    dispatch(topicStore.actions.reOpen(topic));
+
+    setSelectedTopic(null);
+    setSelectedTopic({ ...topic, status: "open" });
+  };
 
   if (!meeting || !topics) {
     return (
@@ -52,11 +73,13 @@ export default function MeetRevamp() {
     );
   }
 
+  const allDone = topics.every((topic) => topic.status === "closed");
+
   let topicDisplay = (
-    <p>No topic selected. Select a topic on the left to begin.</p>
+    <h3 className={styles.no_topic}>Select a topic on the left.</h3>
   );
 
-  if (allDone) {
+  if (allDone && !selectedTopic && meeting.status !== "completed") {
     topicDisplay = (
       <div className={styles.all_done}>
         <h3>
@@ -77,11 +100,13 @@ export default function MeetRevamp() {
         </Button>
       </div>
     );
-  } else if (liveTopic) {
+  } else if (selectedTopic) {
     topicDisplay = (
       <TopicDisplay
-        topic={liveTopic}
-        closeTopic={(t) => dispatch(topicStore.actions.close(t))}
+        topic={selectedTopic}
+        closeTopic={(t) => closeTopic(t)}
+        reOpenTopic={(t) => reOpenTopic(t)}
+        hideTopic={() => setSelectedTopic(null)}
       />
     );
   }
@@ -97,14 +122,15 @@ export default function MeetRevamp() {
             <div>
               <TopicSelectBar
                 meetingName={meeting.name}
+                selectedTopic={selectedTopic}
                 topics={topics}
-                switchToTopic={(t) => dispatch(topicStore.actions.switch(t))}
+                switchToTopic={(t) => setSelectedTopic(t)}
               />
             </div>
             <div>
               {topicDisplay}
-              {liveTopic && (
-                <Board liveTopic={liveTopic} meetingId={meeting_id} />
+              {selectedTopic && (
+                <Board selectedTopic={selectedTopic} meetingId={meeting_id} />
               )}
             </div>
             <div>

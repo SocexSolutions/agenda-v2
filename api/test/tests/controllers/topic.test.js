@@ -12,8 +12,6 @@ const fakeActionItem = require("../../fakes/action-item");
 const fakeMeeting = require("../../fakes/meeting");
 const rewire = require("rewire");
 
-const clone = (obj) => JSON.parse(JSON.stringify(obj));
-
 describe("lib/controllers/topic", () => {
   before(async () => {
     this.client = rewire("../../utils/client");
@@ -196,62 +194,10 @@ describe("lib/controllers/topic", () => {
     });
   });
 
-  describe("#switch", () => {
-    beforeEach(async () => {
-      this.topic = await Topic.create(
-        fakeTopic({ meeting_id: this.meeting._id, status: "open" })
-      );
-
-      this.topic2 = await Topic.create(
-        fakeTopic({ meeting_id: this.meeting._id, status: "live" })
-      );
-    });
-
-    it("should set the selected topic to live", async () => {
-      const res = await this.client.patch(
-        "/topic/" + this.topic._id + "/switch"
-      );
-
-      assert.strictEqual(res.status, 200);
-
-      const [topic] = await Topic.find({ _id: this.topic._id });
-
-      assert.strictEqual(topic.status, "live");
-      assert.strictEqual(topic.name, this.topic.name);
-    });
-
-    it("should update any live topics to open", async () => {
-      await this.client.patch("/topic/" + this.topic._id + "/switch");
-
-      const [topic2] = await Topic.find({ _id: this.topic2._id });
-
-      assert.strictEqual(topic2.status, "open");
-    });
-
-    it("should return topic switchedTo and switchedFrom", async () => {
-      const res = await this.client.patch(
-        "/topic/" + this.topic._id + "/switch"
-      );
-
-      assert.strictEqual(res.status, 200);
-      assert.strictEqual(res.data.switchedTo._id, clone(this.topic._id));
-      assert.strictEqual(res.data.switchedFrom._id, clone(this.topic2._id));
-    });
-
-    it("should 403 if not owner or participant", async () => {
-      this.client.defaults.headers.common["Authorization"] = this.token2;
-
-      await assert.isRejected(
-        this.client.patch("/topic/" + this.topic._id + "/switch"),
-        "Request failed with status code 403"
-      );
-    });
-  });
-
   describe("#close", () => {
     beforeEach(async () => {
       this.topic = await Topic.create(
-        fakeTopic({ meeting_id: this.meeting._id, status: "live" })
+        fakeTopic({ meeting_id: this.meeting._id, status: "open" })
       );
     });
 
@@ -267,11 +213,68 @@ describe("lib/controllers/topic", () => {
       assert.strictEqual(topic.status, "closed");
     });
 
+    it("should 400 if topic is already closed", async () => {
+      this.topic = await Topic.create(
+        fakeTopic({ meeting_id: this.meeting._id, status: "closed" })
+      );
+
+      try {
+        await this.client.patch("/topic/" + this.topic._id + "/close");
+        assert.fail("should have thrown");
+      } catch (err) {
+        assert.strictEqual(err.response.status, 400);
+        assert.equal(err.response.data, "Topic is already closed");
+      }
+    });
+
     it("should 403 if not owner or participant", async () => {
       this.client.defaults.headers.common["Authorization"] = this.token2;
 
       await assert.isRejected(
         this.client.patch("/topic/" + this.topic._id + "/close"),
+        "Request failed with status code 403"
+      );
+    });
+  });
+
+  describe("#reOpen", () => {
+    beforeEach(async () => {
+      this.topic = await Topic.create(
+        fakeTopic({ meeting_id: this.meeting._id, status: "closed" })
+      );
+    });
+
+    it("should set the selected topic to open", async () => {
+      const res = await this.client.patch(
+        "/topic/" + this.topic._id + "/reopen"
+      );
+
+      assert.strictEqual(res.status, 200);
+
+      const [topic] = await Topic.find({ _id: this.topic._id });
+
+      assert.strictEqual(topic.status, "open");
+    });
+
+    it("should 400 if topic is already open", async () => {
+      this.topic = await Topic.create(
+        fakeTopic({ meeting_id: this.meeting._id, status: "open" })
+      );
+
+      try {
+        await this.client.patch("/topic/" + this.topic._id + "/reopen");
+        assert.fail("should have thrown");
+      } catch (err) {
+        assert.strictEqual(err.response.status, 400);
+        assert.equal(err.response.data, "Topic is already open");
+      }
+    });
+
+    it("should 403 if not owner or participant", async () => {
+      this.client.defaults.headers.common["Authorization"] = this.token2;
+
+      await assert.isRejected(
+        this.client.patch("/topic/" + this.topic._id + "/reopen"),
         "Request failed with status code 403"
       );
     });

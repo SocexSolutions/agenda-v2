@@ -7,16 +7,7 @@ if [ ! "$( docker ps -q -f name=mongo )" ]; then
   printf "\nmongodb container required for tests not found\n";
   printf "\nattempting to start mongodb container\n";
 
-  docker container start mongo
-  P3=$!
-
-  if [ ! "$P3" ]; then
-
-    printf "\n creating new mongo container \n";
-
-    docker container run -d -p 27017:27017 --name=mongo mongo:6.0
-
-  fi
+  docker container start mongo || docker run -d --name mongo -p 27017:27017 mongo:6.0
 
 fi
 

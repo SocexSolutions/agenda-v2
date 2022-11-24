@@ -48,6 +48,10 @@ const Meeting = (props) => {
   const updateMeetingStatus = ({ status }) => {
     dispatch(meetingStore.actions.updateStatus(meeting_id, status));
     setStatus(status);
+
+    if (status === "live") {
+      router.push(`/meeting/${meeting_id}/meet`);
+    }
   };
 
   const loading = !meeting || !meeting_id;

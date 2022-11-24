@@ -2,14 +2,19 @@ import { Modal, IconButton, Button } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
+
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
 import meetingAPI from "../../../../../api/meeting";
+import meetingStore from "../../../../../store/features/meeting";
+import { useStore } from "../../../../../store";
+
 import styles from "./MeetingModal.module.scss";
 
 /**
  * A modal the provides a brief overview of a meeting
- * @param {Object} meeting - a meeting
+ * @param {Object} meetingId - a meeting
  * @param {boolean} open - whether the meeting modal is open
  * @param {Function} setOpen - set function for `open`
  * @param {Function} refresh - tell the home page to refresh meetings
@@ -17,6 +22,8 @@ import styles from "./MeetingModal.module.scss";
 export default function MeetingModal({ meeting, open, setOpen, refresh }) {
   const router = useRouter();
   const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const store = useStore();
 
   const isOwner = meeting.owner._id === user._id;
 
@@ -38,6 +45,14 @@ export default function MeetingModal({ meeting, open, setOpen, refresh }) {
     }
   };
 
+  const onSend = async () => {
+    await store.dispatch(
+      meetingStore.actions.updateStatus(meeting._id, "sent")
+    );
+
+    await refresh();
+  };
+
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
       <div className={styles.modal_container}>
@@ -55,7 +70,7 @@ export default function MeetingModal({ meeting, open, setOpen, refresh }) {
               </IconButton>
             )}
             {isOwner && (
-              <IconButton onClick={() => onDelete()}>
+              <IconButton onClick={onDelete}>
                 <DeleteIcon />
               </IconButton>
             )}
@@ -65,21 +80,62 @@ export default function MeetingModal({ meeting, open, setOpen, refresh }) {
           </div>
         </div>
         <div className={styles.footer}>
-          <Button
-            color="blue"
-            variant="contained"
-            disableElevation
-            onClick={() => router.push(`/meeting/${meeting._id}/meet`)}
-          >
-            Start
-          </Button>
-          <Button
-            color="primary"
-            variant="text"
-            onClick={() => router.push(`/meeting/${meeting._id}/vote`)}
-          >
-            Check Voting
-          </Button>
+          {isOwner &&
+            (meeting.status === "sent" || meeting.status === "draft") && (
+              <Button
+                color="blue"
+                variant="contained"
+                onClick={() => {
+                  dispatch(
+                    meetingStore.actions.updateStatus(meeting._id, "live")
+                  );
+                  router.push(`/meeting/${meeting._id}/meet`);
+                }}
+              >
+                Meet
+              </Button>
+            )}
+          {meeting.status === "completed" && (
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => router.push(`/meeting/${meeting._id}/meet`)}
+            >
+              View Results
+            </Button>
+          )}
+          {meeting.status === "live" && (
+            <Button
+              color="blue"
+              variant="contained"
+              onClick={() => router.push(`/meeting/${meeting._id}/meet`)}
+            >
+              Join
+            </Button>
+          )}
+          {isOwner && meeting.status !== "draft" && (
+            <Button
+              color="primary"
+              variant="text"
+              onClick={() => router.push(`/meeting/${meeting._id}/vote`)}
+            >
+              View Voting
+            </Button>
+          )}
+          {isOwner && meeting.status === "draft" && (
+            <Button color="green" variant="contained" onClick={onSend}>
+              Send
+            </Button>
+          )}
+          {!isOwner && meeting.status === "sent" && (
+            <Button
+              color="green"
+              variant="contained"
+              onClick={() => router.push(`/meeting/${meeting._id}/vote`)}
+            >
+              Vote
+            </Button>
+          )}
         </div>
       </div>
     </Modal>

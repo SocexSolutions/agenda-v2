@@ -81,6 +81,25 @@ actions.close = (topic) => {
   };
 };
 
+/**
+ * Close a topic
+ * @param {Topic} topic
+ */
+actions.reOpen = (topic) => {
+  return async function reOpenTopic(dispatch) {
+    const updated = await topicApi.reOpen(topic._id);
+
+    if (!updated) {
+      return;
+    }
+
+    dispatch({
+      type: "topic/update",
+      payload: updated,
+    });
+  };
+};
+
 export const { reducer } = createSlice({
   name: topicSchema.name,
   initialState: {},

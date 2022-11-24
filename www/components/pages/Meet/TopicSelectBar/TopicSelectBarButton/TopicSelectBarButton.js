@@ -7,6 +7,7 @@ import styles from "./TopicSelectBarButton.module.scss";
 
 export default function TopicSelectBarButton({
   topic,
+  selectedTopic,
   name,
   priority,
   ...buttonProps
@@ -18,8 +19,8 @@ export default function TopicSelectBarButton({
     classes.push(styles.closed);
   }
 
-  if (topic.status === "live") {
-    classes.push(styles.live);
+  if (selectedTopic && selectedTopic._id === topic._id) {
+    classes.push(styles.selected);
   }
 
   if (priority > 1.5) {

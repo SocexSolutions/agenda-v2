@@ -10,6 +10,7 @@ const meetingSchema = {
     topics: "topic",
     participants: "participant",
     actionItems: "actionItem",
+    takeaways: "takeaway",
   },
 };
 

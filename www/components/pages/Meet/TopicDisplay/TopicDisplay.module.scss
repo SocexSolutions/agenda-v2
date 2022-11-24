@@ -6,6 +6,11 @@
   border: 1px solid colors.$border;
   border-radius: 6px;
   padding: 1em;
+
+  button {
+    margin-top: 1em;
+    margin-right: 0.5em;
+  }
 }
 
 .topic {
