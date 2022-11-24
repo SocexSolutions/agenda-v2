@@ -64,7 +64,7 @@ export default function Board({ selectedTopic, meetingId }) {
       return (
         <ActionItemCard
           className={styles.card}
-          key={item._id}
+          key={JSON.stringify(item)}
           actionItem={item}
           deleteUnsaved={() => {
             setUnsavedItems(unsavedItems.filter((i) => i._id !== item._id));
@@ -75,7 +75,7 @@ export default function Board({ selectedTopic, meetingId }) {
       return (
         <TakeawayCard
           className={styles.card}
-          key={item._id}
+          key={JSON.stringify(item)}
           takeaway={item}
           deleteUnsaved={() => {
             setUnsavedItems(unsavedItems.filter((i) => i._id !== item._id));
