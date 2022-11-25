@@ -8,6 +8,8 @@ const libRewire = require("../../utils/lib-rewire");
 const sinon = require("sinon");
 const User = require("../../../lib/models/user");
 const Group = require("../../../lib/models/group");
+const ActionItem = require("../../../lib/models/action-item");
+const fakeActionItem = require("../../fakes/action-item");
 
 chai.use(chaiAsPromised);
 
@@ -361,6 +363,208 @@ describe("lib/controllers/user.js", () => {
       const names = data.map((g) => g.name);
 
       assert.include(names, "1");
+    });
+  });
+
+  describe("actionItems", () => {
+    let user1;
+    let user2;
+    let path;
+
+    beforeEach(async () => {
+      const res = await client.post("/user/register", {
+        username: "user",
+        password: "pass",
+        email: "email",
+      });
+
+      user1 = res.data.user;
+      user1.token = res.data.access_token;
+
+      path = `/user/${user1._id}/actionItems`;
+
+      const res2 = await client.post("/user/register", {
+        username: "user2",
+        password: "pass2",
+        email: "email2",
+      });
+
+      user2 = res2.data.user;
+      user2.token = res2.data.access_token;
+    });
+
+    it("should return action items that a user is assigned to", async () => {
+      const [actionItem1, actionItem2] = await Promise.all([
+        ActionItem.create(
+          fakeActionItem({ assigned_to: [user1.email], name: "a1" })
+        ),
+        ActionItem.create(
+          fakeActionItem({ assigned_to: [user1.email], name: "a2" })
+        ),
+      ]);
+
+      const { data } = await client.get(path, {
+        headers: { Authorization: user1.token },
+      });
+
+      assert.equal(data.action_items.length, 2);
+
+      const names = data.action_items.map((a) => a.name);
+
+      assert.include(names, actionItem1.name);
+      assert.include(names, actionItem2.name);
+    });
+
+    it("should not return action items that a user is not assigned to", async () => {
+      const [actionItem1] = await Promise.all([
+        ActionItem.create(
+          fakeActionItem({ assigned_to: [user1.email], name: "a1" })
+        ),
+        ActionItem.create(
+          fakeActionItem({ assigned_to: [user2.email], name: "a2" })
+        ),
+      ]);
+
+      const { data } = await client.get(path, {
+        headers: { Authorization: user1.token },
+      });
+
+      assert.equal(data.action_items.length, 1);
+
+      const names = data.action_items.map((ai) => ai.name);
+
+      assert.include(names, actionItem1.name);
+    });
+
+    it("should return completed action items when complete param is true", async () => {
+      const [actionItem1] = await Promise.all([
+        ActionItem.create(
+          fakeActionItem({
+            assigned_to: [user1.email],
+            name: "a1",
+            completed: true,
+          })
+        ),
+        ActionItem.create(
+          fakeActionItem({
+            assigned_to: [user1.email],
+            name: "a2",
+            completed: false,
+          })
+        ),
+      ]);
+
+      const { data } = await client.get(`${path}`, {
+        params: { completed: true },
+        headers: { Authorization: user1.token },
+      });
+
+      assert.equal(data.action_items.length, 1);
+
+      const names = data.action_items.map((ai) => ai.name);
+
+      assert.include(names, actionItem1.name);
+    });
+
+    it("should return incomplete action items when complete param is false", async () => {
+      const [actionItem1] = await Promise.all([
+        ActionItem.create(
+          fakeActionItem({
+            assigned_to: [user1.email],
+            name: "a1",
+            completed: false,
+          })
+        ),
+        ActionItem.create(
+          fakeActionItem({
+            assigned_to: [user1.email],
+            name: "a2",
+            completed: true,
+          })
+        ),
+      ]);
+
+      const { data } = await client.get(`${path}`, {
+        params: { completed: false },
+        headers: { Authorization: user1.token },
+      });
+
+      assert.equal(data.action_items.length, 1);
+      assert.equal(data.action_items[0].name, actionItem1.name);
+    });
+
+    it("should skip the number of action items specified in the param", async () => {
+      const actionItems = Array.from({ length: 20 }).map((_, i) => {
+        return fakeActionItem({
+          assigned_to: [user1.email],
+          name: `${i}`,
+        });
+      });
+
+      await ActionItem.insertMany(actionItems);
+
+      const { data } = await client.get(`${path}`, {
+        params: { skip: 10 },
+        headers: { Authorization: user1.token },
+      });
+
+      assert.equal(data.action_items.length, 10);
+
+      const names = data.action_items.map((ai) => ai.name);
+
+      for (let i = 10; i < 20; i++) {
+        assert.include(names, `${i}`);
+      }
+    });
+
+    it("should limit the number of action items returned", async () => {
+      const actionItems = Array.from({ length: 20 }).map((_, i) => {
+        return fakeActionItem({
+          assigned_to: [user1.email],
+          name: `${i}`,
+        });
+      });
+
+      await ActionItem.insertMany(actionItems);
+
+      const { data } = await client.get(`${path}`, {
+        params: { skip: 10, limit: 5 },
+        headers: { Authorization: user1.token },
+      });
+
+      assert.equal(data.action_items.length, 5);
+
+      const names = data.action_items.map((ai) => ai.name);
+
+      for (let i = 10; i < 15; i++) {
+        assert.include(names, `${i}`);
+      }
+    });
+
+    it("should return the total count of filtered action items", async () => {
+      const actionItems = Array.from({ length: 20 }).map((_, i) => {
+        if (i < 10) {
+          return fakeActionItem({
+            assigned_to: [user1.email],
+            name: `${i}`,
+          });
+        } else {
+          return fakeActionItem({
+            assigned_to: [user2.email],
+            name: `${i}`,
+            completed: true,
+          });
+        }
+      });
+
+      await ActionItem.insertMany(actionItems);
+
+      const { data } = await client.get(`${path}`, {
+        params: { skip: 10, limit: 5 },
+        headers: { Authorization: user1.token },
+      });
+
+      assert.equal(data.count, 10);
     });
   });
 });

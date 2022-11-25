@@ -3,6 +3,7 @@ const ObjectID = require("mongoose").Types.ObjectId;
 const passUtils = require("../util/password");
 const jwtUtils = require("../util/jwt");
 const sendGrid = require("../sendgrid");
+const jobi = require("@starryinternet/jobi");
 
 module.exports = {
   async register(req, res) {
@@ -158,5 +159,59 @@ module.exports = {
     ]);
 
     res.status(200).send(grps[0].groups);
+  },
+
+  async actionItems(req, res) {
+    const userId = req.credentials.user._id;
+    let { completed, skip, limit } = req.query;
+
+    const filters = [];
+
+    if (completed) {
+      filters.push({ $match: { completed: JSON.parse(completed) } });
+    }
+
+    if (!skip) {
+      skip = 0;
+    } else {
+      skip = parseInt(skip);
+    }
+
+    if (!limit) {
+      limit = 10;
+    } else {
+      limit = parseInt(limit);
+    }
+
+    jobi.debug(
+      "action item params",
+      JSON.stringify({ completed, skip, limit })
+    );
+
+    const actionItems = await User.aggregate([
+      { $match: { _id: ObjectID(userId) } },
+      {
+        $lookup: {
+          from: "actionitems",
+          let: { user_email: "$email" },
+          pipeline: [
+            { $match: { $expr: { $in: ["$$user_email", "$assigned_to"] } } },
+            ...filters,
+            { $sort: { created_at: -1 } },
+          ],
+          as: "action_items",
+        },
+      },
+      {
+        $project: {
+          action_items: {
+            $slice: ["$action_items", skip, limit],
+          },
+          count: { $size: "$action_items" },
+        },
+      },
+    ]);
+
+    res.status(200).send(actionItems[0]);
   },
 };

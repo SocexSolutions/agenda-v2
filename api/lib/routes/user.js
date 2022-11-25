@@ -11,5 +11,6 @@ router.post("/checkexistingusername", wrapped.checkExistingUsername);
 router.post("/checkexistingemail", wrapped.checkExistingEmail);
 router.get("/refresh", authMdw, wrapped.refresh);
 router.get("/:_id/groups", authMdw, wrapped.groups);
+router.get("/:_id/actionitems", authMdw, wrapped.actionItems);
 
 module.exports = router;
