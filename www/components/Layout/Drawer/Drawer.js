@@ -3,8 +3,7 @@ import { useSelector } from "react-redux";
 import Button from "@mui/material/Button";
 
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import EventAvailableIcon from "@mui/icons-material/EventAvailable";
-import DescriptionIcon from "@mui/icons-material/Description";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
 
 import { useRouter } from "next/router";
 
@@ -25,26 +24,19 @@ const Drawer = () => {
           startIcon={<CalendarMonthIcon />}
           variant="text"
           size="large"
-          className={styles.icon_button + " " + styles.blue}
+          className={styles.icon_button + " " + styles.green}
           onClick={() => router.push(`/user/${user._id}/home`)}
         >
-          Upcoming
+          Meetings
         </Button>
         <Button
-          startIcon={<EventAvailableIcon />}
+          startIcon={<TaskAltIcon />}
           variant="text"
           size="large"
-          className={styles.icon_button + " " + styles.green}
+          className={styles.icon_button + " " + styles.blue}
+          onClick={() => router.push(`/user/${user._id}/tasks`)}
         >
-          Completed
-        </Button>
-        <Button
-          startIcon={<DescriptionIcon />}
-          variant="text"
-          size="large"
-          className={styles.icon_button + " " + styles.purple}
-        >
-          Drafts
+          Action items
         </Button>
       </div>
     </div>
