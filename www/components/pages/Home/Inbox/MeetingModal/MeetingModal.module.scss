@@ -1,4 +1,4 @@
-@use '../../../../../styles/colors.scss';
+@use "../../../../../styles/colors.scss";
 
 .modal_container {
   background: #fff;
@@ -11,8 +11,8 @@
   transform: translate(-50%, -50%);
   padding: 1em 2em 2em 2em;
 
-  &:focus {
-    border: none;
+  &:focus-visible {
+    outline: none;
   }
 }
 
@@ -21,7 +21,7 @@
   grid-template-columns: 4fr 1fr;
 
   h2 {
-    margin-bottom: .25em;
+    margin-bottom: 0.25em;
   }
 }
 
@@ -39,7 +39,7 @@
   align-items: flex-start;
 
   :last-child {
-    margin-left: .5em;
+    margin-left: 0.5em;
   }
 }
 
