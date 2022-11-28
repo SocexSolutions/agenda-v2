@@ -1,9 +1,11 @@
 const User = require("../models/user");
+const ResetRequest = require("../models/reset-request");
 const ObjectID = require("mongoose").Types.ObjectId;
 const passUtils = require("../util/password");
 const jwtUtils = require("../util/jwt");
 const sendGrid = require("../sendgrid");
 const jobi = require("@starryinternet/jobi");
+const crypto = require("crypto");
 
 module.exports = {
   async register(req, res) {
@@ -125,6 +127,60 @@ module.exports = {
     } else {
       return res.status(200).send();
     }
+  },
+
+  async resetRequest(req, res) {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).send(new Error("Email is required"));
+    }
+
+    const code = crypto.randomBytes(20).toString("hex");
+
+    const user = await User.findOne({ email });
+
+    // Make sure not to let users know if an email is registered or not
+    if (!user) {
+      return res.status(200).send();
+    }
+
+    await sendGrid.sendPasswordResetEmail({
+      email,
+      userId: user._id.toString(),
+      username: user.username,
+      resetCode: code,
+    });
+
+    await ResetRequest.create({
+      user_id: user._id,
+      code,
+      expires: new Date(Date.now() + 1000 * 60 * 10),
+    });
+
+    return res.status(200).send();
+  },
+
+  async resetPassword(req, res) {
+    const { resetCode, password, userId } = req.body;
+
+    const resetRequest = await ResetRequest.findOne({
+      user_id: userId,
+      code: resetCode,
+      expires: { $gt: Date.now() },
+    });
+
+    if (!resetRequest) {
+      return res.status(401).send(new Error("Invalid reset code"));
+    }
+
+    const { hash, salt } = passUtils.genPassword(password);
+
+    await User.updateOne({ _id: userId }, { hash, salt });
+
+    await ResetRequest.deleteOne({ _id: resetRequest._id });
+
+    return res.status(200).send();
   },
 
   groups: async (req, res) => {

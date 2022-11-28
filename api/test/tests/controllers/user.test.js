@@ -9,6 +9,7 @@ const sinon = require("sinon");
 const User = require("../../../lib/models/user");
 const Group = require("../../../lib/models/group");
 const ActionItem = require("../../../lib/models/action-item");
+const ResetRequest = require("../../../lib/models/reset-request");
 const fakeActionItem = require("../../fakes/action-item");
 
 chai.use(chaiAsPromised);
@@ -256,6 +257,141 @@ describe("lib/controllers/user.js", () => {
       const res = await client.post(path, { username: "thudson" });
 
       assert.strictEqual(res.status, 200);
+    });
+  });
+
+  describe("resetRequest", () => {
+    const path = "/user/reset-request";
+
+    let user;
+
+    beforeEach(async () => {
+      const res = await client.post("/user/register", {
+        username: "user",
+        password: "pass",
+        email: "brian@user.com",
+        groups: [],
+      });
+      user = res.data.user;
+      user.token = res.data.access_token;
+    });
+
+    it("should create a reset request", async () => {
+      await client.post(path, { email: user.email });
+
+      const request = await ResetRequest.findOne({ user_id: user._id });
+
+      assert.exists(request);
+
+      assert.equal(request.user_id, user._id);
+    });
+
+    it("should send a reset email", async () => {
+      const sendResetStub = sinon.stub().resolves();
+
+      mod.__set__("sendGrid.sendPasswordResetEmail", sendResetStub);
+
+      await client.post(path, { email: user.email });
+
+      const request = await ResetRequest.findOne({ user_id: user._id });
+
+      sinon.assert.calledOnceWithExactly(sendResetStub, {
+        username: user.username,
+        email: user.email,
+        resetCode: request.code,
+        userId: user._id,
+      });
+    });
+
+    it("should not create a reset request but 200 if user does not exist", async () => {
+      await client.post(path, { email: "brian@brian.com" });
+
+      const all = await ResetRequest.find({});
+
+      assert.equal(all.length, 0);
+    });
+
+    it("should reject without an email", async () => {
+      return assert.isRejected(client.post(path, {}));
+    });
+  });
+
+  describe("resetPassword", () => {
+    const path = "/user/reset-password";
+
+    let user;
+
+    beforeEach(async () => {
+      const res = await client.post("/user/register", {
+        username: "user",
+        password: "pass",
+        email: "user@user.com",
+        groups: [],
+      });
+      user = res.data.user;
+      user.token = res.data.access_token;
+    });
+
+    it("should reset a password", async () => {
+      const request = await ResetRequest.create({
+        user_id: user._id,
+        code: "code",
+        expires: new Date(Date.now() + 1000 *  60 * 10),
+      });
+
+      const res = await client.post(path, {
+        userId: user._id,
+        resetCode: request.code,
+        password: "newpass",
+      });
+
+      assert.equal(res.status, 200);
+
+      const updatedUser = await User.findById(user._id);
+
+      assert.ok(updatedUser.hash !== user.hash);
+      assert.ok(updatedUser.salt !== user.salt);
+
+      const loginRes = await client.post("/user/login", {
+        username: user.username,
+        password: "newpass",
+      });
+
+      assert.equal(loginRes.status, 200);
+    });
+
+    it("should not accept expired reset codes", async () => {
+      const request = await ResetRequest.create({
+        user_id: user._id,
+        code: "code",
+        expires: new Date(Date.now() - 1000 * 60 * 11),
+      });
+
+      return assert.isRejected(
+        client.post(path, {
+          userId: user._id,
+          resetCode: request.code,
+          password: "newpass",
+        })
+      );
+    });
+
+    it("should delete the reset request after use", async () => {
+      const request = await ResetRequest.create({
+        user_id: user._id,
+        code: "code",
+        expires: new Date(Date.now() + 1000 *  60 * 10),
+      });
+
+      await client.post(path, {
+        userId: user._id,
+        resetCode: request.code,
+        password: "newpass",
+      });
+
+      const found = await ResetRequest.find({});
+
+      assert.equal(found.length, 0);
     });
   });
 
