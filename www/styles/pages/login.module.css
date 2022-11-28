@@ -41,14 +41,15 @@
   background-color: var(--primary-hover);
 }
 
-.new_to_agenda {
+.links {
   margin-bottom: 0;
   width: 100%;
   text-align: center;
   font-size: 12px;
 }
 
-.new_to_agenda a {
+.links a {
   margin-left: 6px;
+  margin-right: 6px;
   color: var(--blue);
 }
