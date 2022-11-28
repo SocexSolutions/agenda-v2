@@ -39,13 +39,25 @@ log level using the `NODE_DEBUG` environment variable. See
 
 # Testing
 
-To run the tests use:
+Meeting Minder's API has 100% test coverage. This coverage is checked on each build. 
+PR's that do not have full coverage will not pass automated testing.
+
+To run the unit tests use.
 
 ```
 npm run test
 ```
 
+Check full test coverage using nyc with the command:
+
+```
+npm run coverage
+```
+
 # Deployment
+
+Meeting Minder is continuously deployed using GCP on each merge to `master`. 
+However, builds can be pushed to GCR with the following scripts.
 
 The www container image can be pushed to GCR using the `push-www-to-gcr` script
 with a specified semver version:
