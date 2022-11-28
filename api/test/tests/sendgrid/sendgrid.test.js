@@ -126,4 +126,39 @@ describe(modPath, () => {
       await inst.sendWelcomeEmail("email", "username");
     });
   });
+
+  describe("sendResetPasswordEmail", () => {
+    it("should call sendgrid.send with correct args", async () => {
+      const sendStub = sinon.stub().resolves();
+      mod.__set__("sgMail.send", sendStub);
+
+      const inst = new mod({ apiKey: "key" });
+
+      await inst.sendPasswordResetEmail({
+        email: "email",
+        resetCode: "code",
+        username: "username",
+        userId: "123",
+      });
+
+      sinon.assert.calledOnceWithExactly(sendStub, {
+        to: "email",
+        from: authorizedEmail,
+        ...templates.buildPasswordResetEmail({
+          userId: "123",
+          resetCode: "code",
+          username: "username",
+        }),
+      });
+    });
+
+    it("should handle sendgrid errors", async () => {
+      const sendStub = sinon.stub().rejects();
+      mod.__set__("sgMail.send", sendStub);
+
+      const inst = new mod({ apiKey: "key" });
+
+      await inst.sendWelcomeEmail("email", "username");
+    });
+  });
 });

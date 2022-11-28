@@ -54,7 +54,7 @@ module.exports = class SendGrid {
   /**
    * Send an email letting a user know they have a meeting has started
    * @param {string} email recipient email
-   * @param {string} usrename recipient username
+   * @param {string} username recipient username
    * @param {object} meeting meeting object
    */
   async sendReminderEmail(email, username, meeting) {
@@ -68,6 +68,30 @@ module.exports = class SendGrid {
       /* istanbul ignore next */
       if (process.env.NODE_ENV !== "test") {
         jobi.error("Error sending meeting reminder email", err);
+      }
+    }
+  }
+
+  /**
+   * Send an password reset email to a user
+   * @param {string} email recipient email
+   * @param {string} userId user id
+   * @param {string} username recipient username
+   * @param {string} resetCode reset code
+   *
+   * @returns {Promise} resolves when email is sent
+   */
+  async sendPasswordResetEmail({ email, userId, username, resetCode }) {
+    try {
+      await this.sendGrid.send({
+        to: email,
+        from: this.defaultEmail,
+        ...templates.buildPasswordResetEmail({ username, userId, resetCode }),
+      });
+    } catch (err) {
+      /* istanbul ignore next */
+      if (process.env.NODE_ENV !== "test") {
+        jobi.error("Error sending password reset email", err);
       }
     }
   }
