@@ -3,7 +3,12 @@ import axios from "axios";
 // eslint-disable-next-line
 const hostname = process.env.NEXT_PUBLIC_API_HOSTNAME;
 
-const publicRoutes = ["/api/user/login", "/api/user/register"];
+const publicRoutes = [
+  "/api/user/login",
+  "/api/user/register",
+  "/api/user/reset-request",
+  "/api/user/reset-password",
+];
 
 async function proxyRequest(req) {
   delete req.query.slug;

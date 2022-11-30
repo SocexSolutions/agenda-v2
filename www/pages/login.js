@@ -97,11 +97,11 @@ const Login = (props) => {
             Login
           </Button>
         </div>
-        <p className={styles.new_to_agenda}>
-          New to agenda?
-          <Link href={"/register"} className={styles.register_link}>
-            Sign up
-          </Link>
+        <p className={styles.links}>
+          Need to
+          <Link href={"/register"}>sign up?</Link>
+          or
+          <Link href={"/forgot-password"}>forgot password?</Link>
         </p>
       </form>
     </div>
