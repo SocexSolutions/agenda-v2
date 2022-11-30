@@ -12,7 +12,7 @@ import styles from "../../../styles/pages/user/[id]/home.module.css";
 
 import { notify } from "../../../store/features/snackbar";
 
-const User = (props) => {
+export default function Home({ store }) {
   const initialFilters = { owners: [], name: "" };
 
   const [loading, setLoading] = useState(true);
@@ -33,12 +33,12 @@ const User = (props) => {
 
       setMeetings(res.data.meetings);
       setMeetingCount(res.data.count);
-      !res.data.filtered && setOwners(res.data.owners)
+      !res.data.filtered && setOwners(res.data.owners);
 
       setFetchingMeetings(false);
       setLoading(false);
     } catch (err) {
-      props.store.dispatch(
+      store.dispatch(
         notify({
           message: "Failed to fetch meeting: " + err.message,
           type: "danger",
@@ -74,6 +74,4 @@ const User = (props) => {
       </div>
     </Fade>
   );
-};
-
-export default User;
+}

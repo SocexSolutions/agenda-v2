@@ -81,6 +81,7 @@ describe("lib/controllers/meeting", () => {
       assert.strictEqual(res.name, created.name);
       assert.strictEqual(res._id, created._id.toString());
       assert.strictEqual(res.date, created.date.toISOString());
+      assert.strictEqual(res.purpose, created.purpose);
     });
 
     it("should 403 if not meeting owner or participant", async () => {
@@ -108,6 +109,7 @@ describe("lib/controllers/meeting", () => {
       assert.strictEqual(res.name, meeting.name);
       assert.strictEqual(res.owner_id, this.user._id.toString());
       assert.strictEqual(res.date, meeting.date.toISOString());
+      assert.strictEqual(res.purpose, meeting.purpose);
 
       const found = await Meeting.findOne({ _id: res._id });
 
@@ -115,6 +117,7 @@ describe("lib/controllers/meeting", () => {
       assert.strictEqual(res.owner_id, this.user._id.toString());
       assert.strictEqual(found._id.toString(), res._id);
       assert.strictEqual(found.date.toISOString(), meeting.date.toISOString());
+      assert.strictEqual(found.purpose, meeting.purpose);
     });
   });
 
@@ -135,6 +138,7 @@ describe("lib/controllers/meeting", () => {
       assert.strictEqual(res.name, "new name");
       assert.strictEqual(res.owner_id, this.user._id.toString());
       assert.strictEqual(res.date, newDate);
+      assert.strictEqual(res.purpose, meeting.purpose);
 
       const found = await Meeting.findOne({ _id: res._id });
 
@@ -142,6 +146,7 @@ describe("lib/controllers/meeting", () => {
       assert.strictEqual(res.owner_id, this.user._id.toString());
       assert.strictEqual(found._id.toString(), res._id);
       assert.strictEqual(found.date.toISOString(), newDate);
+      assert.strictEqual(res.purpose, meeting.purpose);
     });
 
     it("should 403 if not meeting owner", async () => {
@@ -286,6 +291,21 @@ describe("lib/controllers/meeting", () => {
       assert.strictEqual(data.meetings[0].name, "participant meeting"); //Second newest meeting first
       assert.strictEqual(data.meetings[2].name, "meeting 4"); //Second oldest meeting last
       assert.exists(data.owners);
+    });
+
+    it("should return a meetings with name, status, purpose, date, and owner", async () => {
+      await Meeting.create(this.ownedMeeting);
+
+      const { data } = await client.get(`/meeting/?skip=0&limit=1`);
+
+      assert.strictEqual(data.meetings[0].name, this.ownedMeeting.name);
+      assert.strictEqual(data.meetings[0].status, this.ownedMeeting.status);
+      assert.strictEqual(data.meetings[0].purpose, this.ownedMeeting.purpose);
+      assert.strictEqual(
+        data.meetings[0].date,
+        this.ownedMeeting.date.toISOString()
+      );
+      assert.strictEqual(data.meetings[0].owner._id, this.user._id.toString());
     });
 
     it("should filter meetings by name", async () => {

@@ -17,6 +17,9 @@ const meetingSchema = new Schema(
       required: true,
       index: -1,
     },
+    purpose: {
+      type: String,
+    },
     status: {
       type: String,
       enum: ["draft", "sent", "live", "completed"],

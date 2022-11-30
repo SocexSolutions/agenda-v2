@@ -28,10 +28,12 @@ const actionItemSchema = new Schema(
     completed: {
       type: Boolean,
       default: false,
+      required: true,
     },
     assigned_to: {
       type: [String],
       default: [],
+      required: true,
     },
   },
   {

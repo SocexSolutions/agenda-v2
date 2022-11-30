@@ -5,6 +5,7 @@ const meeting = (opts) => {
     name: "meeting about something",
     owner_id: new ObjectId(),
     date: new Date(),
+    purpose: "to discuss something",
     status: "draft",
     ...opts,
   };

@@ -23,17 +23,19 @@ module.exports = {
 
   /**
    * Create a new meeting
-   * @param {String} req.body.name - meeting name
+   * @param {string} req.body.name - meeting name
    * @param {Date}   req.body.date - meeting date
+   * @param {string} req.body.purpose - meeting purpose
    */
   create: async (req, res) => {
-    const { name, date } = req.body;
+    const { name, date, purpose } = req.body;
 
     await authUtils.checkUser(req.credentials);
 
     const meeting = await Meeting.create({
       name,
       date,
+      purpose,
       owner_id: req.credentials.sub,
     });
 
@@ -42,19 +44,20 @@ module.exports = {
 
   /**
    * Update an existing meeting
-   * @param {String} req.body.name  - meeting name
-   * @param {Date}   req.body.date  - meeting date
-   * @param {String} req.params._id - meeting id
+   * @param {string} req.body.name - meeting name
+   * @param {Date}   req.body.date - meeting date
+   * @param {string} req.body.purpose - meeting purpose
+   * @param {string} req.params._id - meeting id
    */
   update: async (req, res) => {
-    const { name, date } = req.body;
+    const { name, date, purpose } = req.body;
     const _id = req.params._id;
 
     await authUtils.checkOwner(_id, "meetings", req.credentials);
 
     const updated = await Meeting.findOneAndUpdate(
       { _id },
-      { name, date },
+      { name, date, purpose },
       { new: true }
     );
 
@@ -335,6 +338,7 @@ module.exports = {
           name: 1,
           owner: { $arrayElemAt: ["$owner", 0] },
           date: 1,
+          purpose: 1,
           status: 1,
         },
       },
