@@ -160,6 +160,7 @@ describe("lib/controllers/topic", () => {
 
     it("should add a topic like", async () => {
       const res = await this.client.patch("/topic/" + this.topic._id + "/like");
+      await Topic.create(fakeTopic({ meeting_id: this.meeting._id }));
 
       assert.strictEqual(res.status, 200);
       assert.isTrue(res.data.likes.includes(this.user.email));
@@ -182,6 +183,23 @@ describe("lib/controllers/topic", () => {
       const [topic] = await Topic.find({});
 
       assert.isFalse(topic.likes.includes(this.user.email));
+    });
+
+    it("should 400 if like count exceeds half of topics", async () => {
+      await Topic.create(
+        fakeTopic({ meeting_id: this.meeting._id, likes: [this.user.email] })
+      );
+      await Topic.create(
+        fakeTopic({ meeting_id: this.meeting._id, likes: [this.user.email] })
+      );
+
+      try {
+        await this.client.patch("/topic/" + this.topic._id + "/like");
+        assert.fail("should have thrown error");
+      } catch (err) {
+        assert.equal(err.response.status, 400);
+        assert.equal(err.response.data, "Too many likes");
+      }
     });
 
     it("should 403 if not owner or participant", async () => {
