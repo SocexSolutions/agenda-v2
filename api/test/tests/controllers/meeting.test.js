@@ -108,6 +108,7 @@ describe("lib/controllers/meeting", () => {
       assert.strictEqual(res.name, meeting.name);
       assert.strictEqual(res.owner_id, this.user._id.toString());
       assert.strictEqual(res.date, meeting.date.toISOString());
+      assert.strictEqual(res.purpose, meeting.purpose);
 
       const found = await Meeting.findOne({ _id: res._id });
 
@@ -115,6 +116,7 @@ describe("lib/controllers/meeting", () => {
       assert.strictEqual(res.owner_id, this.user._id.toString());
       assert.strictEqual(found._id.toString(), res._id);
       assert.strictEqual(found.date.toISOString(), meeting.date.toISOString());
+      assert.strictEqual(found.purpose, meeting.purpose);
     });
   });
 
@@ -135,6 +137,7 @@ describe("lib/controllers/meeting", () => {
       assert.strictEqual(res.name, "new name");
       assert.strictEqual(res.owner_id, this.user._id.toString());
       assert.strictEqual(res.date, newDate);
+      assert.strictEqual(res.purpose, meeting.purpose);
 
       const found = await Meeting.findOne({ _id: res._id });
 
@@ -142,6 +145,7 @@ describe("lib/controllers/meeting", () => {
       assert.strictEqual(res.owner_id, this.user._id.toString());
       assert.strictEqual(found._id.toString(), res._id);
       assert.strictEqual(found.date.toISOString(), newDate);
+      assert.strictEqual(res.purpose, meeting.purpose);
     });
 
     it("should 403 if not meeting owner", async () => {

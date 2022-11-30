@@ -1,5 +1,6 @@
 import { TextField } from "@mui/material";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { Box } from "@mui/material";
 
 import useDebounce from "../../../../hooks/use-debounce";
 
@@ -19,16 +20,20 @@ function HeaderForm({ meetingId }) {
 
   const [name, setName] = useState("");
   const [date, setDate] = useState("");
+  const [purpose, setPurpose] = useState("");
+
   const [initialized, setInitialized] = useState(false);
   const [updateReady, setUpdateReady] = useState(false);
 
   const debouncedName = useDebounce(name, 250);
   const debouncedDate = useDebounce(date, 250);
+  const debouncedPurpose = useDebounce(purpose, 250);
 
   useEffect(() => {
     if (!initialized && meeting) {
       setName(meeting.name);
       setDate(meeting.date);
+      setPurpose(meeting.purpose);
       setInitialized(true);
     }
   }, [meeting]);
@@ -40,9 +45,9 @@ function HeaderForm({ meetingId }) {
       }
 
       // Avoid sending patch after setName and setDate are called during
-      // initalization.
+      // initialization.
       if (updateReady) {
-        const updates = { name };
+        const updates = { name, purpose };
 
         // Don't send an update to the backend with a bad date
         if (debouncedDate && debouncedDate.toString() !== "Invalid Date") {
@@ -57,13 +62,24 @@ function HeaderForm({ meetingId }) {
         );
       }
     }
-  }, [debouncedName, debouncedDate, dispatch]);
+  }, [debouncedName, debouncedDate, debouncedPurpose, dispatch]);
 
   return (
     <div className={styles.meetingBar}>
-      <form className={styles.form}>
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "space-between",
+          gap: "1em",
+          marginBottom: "1em",
+        }}
+      >
         <TextField
-          className={styles.name_field}
+          sx={{
+            width: "100%",
+            maxWidth: "400px",
+          }}
           label="Meeting Name"
           size="small"
           value={name}
@@ -71,7 +87,6 @@ function HeaderForm({ meetingId }) {
           onChange={(e) => setName(e.target.value)}
         />
         <DesktopDatePicker
-          className={styles.date_picker}
           label="Meeting Date"
           inputFormat="MM/DD/YYYY"
           value={date}
@@ -84,7 +99,15 @@ function HeaderForm({ meetingId }) {
             return <TextField {...params} size="small" />;
           }}
         />
-      </form>
+      </Box>
+      <TextField
+        fullWidth
+        multiline
+        label="Purpose"
+        size="small"
+        value={purpose}
+        onChange={(e) => setPurpose(e.target.value)}
+      />
     </div>
   );
 }
