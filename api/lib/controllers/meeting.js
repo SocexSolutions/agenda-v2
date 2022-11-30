@@ -338,6 +338,7 @@ module.exports = {
           name: 1,
           owner: { $arrayElemAt: ["$owner", 0] },
           date: 1,
+          purpose: 1,
           status: 1,
         },
       },

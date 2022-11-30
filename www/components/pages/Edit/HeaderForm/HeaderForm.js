@@ -9,8 +9,6 @@ import meetingStore from "../../../../store/features/meeting";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 
-import styles from "./HeaderForm.module.css";
-
 function HeaderForm({ meetingId }) {
   const dispatch = useDispatch();
 
@@ -65,7 +63,7 @@ function HeaderForm({ meetingId }) {
   }, [debouncedName, debouncedDate, debouncedPurpose, dispatch]);
 
   return (
-    <div className={styles.meetingBar}>
+    <>
       <Box
         sx={{
           display: "flex",
@@ -108,7 +106,7 @@ function HeaderForm({ meetingId }) {
         value={purpose}
         onChange={(e) => setPurpose(e.target.value)}
       />
-    </div>
+    </>
   );
 }
 

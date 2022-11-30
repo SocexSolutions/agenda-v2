@@ -60,6 +60,7 @@ export default function MeetingModal({ meeting, open, setOpen, refresh }) {
           <div>
             <h2>{meeting.name}</h2>
             <p className={styles.display_date}>{displayDate}</p>
+            {meeting.purpose && <p>{meeting.purpose}</p>}
           </div>
           <div className={styles.actions_container}>
             {isOwner && (
@@ -79,6 +80,7 @@ export default function MeetingModal({ meeting, open, setOpen, refresh }) {
             </IconButton>
           </div>
         </div>
+
         <div className={styles.footer}>
           {isOwner &&
             (meeting.status === "sent" || meeting.status === "draft") && (
