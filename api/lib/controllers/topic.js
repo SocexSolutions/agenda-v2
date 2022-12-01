@@ -63,7 +63,7 @@ module.exports = {
       );
 
       if (likedTopics.length > Math.floor(meetingTopics.length / 2)) {
-        return res.status(400).send("Too many likes.");
+        return res.status(400).send("Too many likes");
       }
 
       topic.likes.push(email);

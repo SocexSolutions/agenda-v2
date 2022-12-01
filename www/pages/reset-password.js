@@ -1,11 +1,13 @@
 import { Button } from "@mui/material";
 import { TextField } from "@mui/material";
-import { Snackbar } from "@mui/material";
-import { Alert } from "@mui/material";
 
 import styles from "../styles/pages/forgot-password.module.scss";
 
 import useDebounce from "../hooks/use-debounce";
+
+import { notify } from "../store/features/snackbar";
+
+import { useDispatch } from "react-redux";
 
 import client from "../api/client";
 
@@ -14,6 +16,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 export default function ForgotPassword() {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const [resetLoading, setResetLoading] = useState(false);
 
@@ -22,10 +25,6 @@ export default function ForgotPassword() {
 
   const [passwordTouched, setPasswordTouched] = useState(false);
   const [passwordConfirmTouched, setPasswordConfirmTouched] = useState(false);
-
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
-  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const [error, setError] = useState(false);
 
@@ -42,18 +41,22 @@ export default function ForgotPassword() {
         password,
       });
 
-      setSnackbarOpen(true);
-      setSnackbarSeverity("success");
-      setSnackbarMessage("Your password has been reset successfully!");
+      dispatch(
+        notify({
+          type: "success",
+          message: "Your password has been reset successfully!",
+        })
+      );
 
       setResetLoading(false);
     } catch (err) {
-      setSnackbarSeverity("error");
-      setSnackbarMessage(
-        err.response.data.message || "Oops, something went wrong."
+      dispatch(
+        notify({
+          type: "danger",
+          message: "Oops, something went wrong.",
+        })
       );
 
-      setSnackbarOpen(true);
       setResetLoading(false);
     }
   };
@@ -111,19 +114,6 @@ export default function ForgotPassword() {
           Reset Password
         </Button>
       </form>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={() => setSnackbarOpen(false)}
-      >
-        <Alert
-          onClose={() => setSnackbarOpen(false)}
-          severity={snackbarSeverity}
-          sx={{ width: "100%" }}
-        >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
     </div>
   );
 }
