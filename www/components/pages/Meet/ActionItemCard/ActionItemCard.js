@@ -110,7 +110,7 @@ export default function ActionItemCard({
       <div className={styles.content_container}>
         <TextField
           autoFocus
-          className={`${styles.name_input} ${styles.input}`}
+          className={`${styles.input}`}
           fullWidth
           size="small"
           label="Name"
@@ -119,7 +119,7 @@ export default function ActionItemCard({
           value={name}
         />
         <TextField
-          className={`${styles.description} ${styles.input}`}
+          className={`${styles.input}`}
           multiline
           minRows={3}
           fullWidth

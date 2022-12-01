@@ -85,7 +85,7 @@ export default function TakeawayCard({ takeaway, deleteUnsaved, className }) {
       <div className={styles.content_container}>
         <TextField
           autoFocus
-          className={`${styles.name_input} ${styles.input}`}
+          className={`${styles.input}`}
           fullWidth
           size="small"
           label="Name"
@@ -94,7 +94,7 @@ export default function TakeawayCard({ takeaway, deleteUnsaved, className }) {
           value={name}
         />
         <TextField
-          className={`${styles.description} ${styles.input}`}
+          className={`${styles.input}`}
           multiline
           minRows={3}
           fullWidth
