@@ -29,7 +29,7 @@ Please note we have a [code of conduct](https://github.com/SocexSolutions/agenda
 
 ## Pull Request Process
 
-1. Write your pull request description according to the [pull request template](https://github.com/SocexSolutions/agenda-v2/blob/master/pull_request_template.md)
+1. Write your pull request description according to the [pull request template](https://github.com/SocexSolutions/agenda-v2/blob/master/.github/pull_request_template.md)
 2. Assign your pull request to a SocexSolutions developer under the github assign tab. This developer will handle assigning reviewers
 3. Reply to discussions. There may be cases where a developer requests a change before the Pull Request can be merged.
 4. You may merge the Pull Request in once you have the sign-off of one other SocexSolutions developer, or if you do not have permission to do that, you may request the reviewer to merge it for you.
