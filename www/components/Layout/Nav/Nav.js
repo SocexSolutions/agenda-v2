@@ -13,7 +13,7 @@ import styles from "./Nav.module.scss";
 
 const selectUser = (state) => state.user;
 
-const Nav = () => {
+const Nav = (props) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
@@ -167,7 +167,7 @@ const Nav = () => {
             </IconButton>
           </div>
           <div className={styles.end}>
-            <ProfileButton user={user}/>
+            <ProfileButton user={user} />
           </div>
         </nav>
       </>

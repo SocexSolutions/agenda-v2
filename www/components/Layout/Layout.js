@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { refreshTheme } from "../../store/features/theme";
+import { refreshAvatar, createAvatar } from "../../store/features/avatar";
 
 import styles from "./Layout.module.css";
 
@@ -12,6 +13,7 @@ const pagesWithoutDrawer = new Set(["", "login", "register"]);
 
 const Layout = (props) => {
   const user = useSelector((s) => s.user);
+  const avatar = useSelector((s) => s.avatar);
   const drawerOpen = useSelector((s) => s.drawer);
 
   const router = useRouter();
@@ -24,7 +26,16 @@ const Layout = (props) => {
       props.store.dispatch(refreshTheme());
     }
 
+    async function avatarRefresh() {
+      if (!avatar) {
+        props.store.dispatch(createAvatar());
+        return;
+      }
+      props.store.dispatch(refreshAvatar());
+    }
+
     themeRefresh();
+    avatarRefresh();
   }, [user]);
 
   return (
