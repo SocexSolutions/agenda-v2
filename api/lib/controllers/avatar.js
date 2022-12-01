@@ -30,35 +30,5 @@ module.exports = {
     });
 
     res.status(200).send(avatar);
-  },
-
-  changePicture: async (req, res) => {
-    console.log("test");
-    const subject_id = req.credentials.sub;
-    const subject_username = req.credentials.user.username;
-    
-    const image = JSON.stringify(req.body);
-    //console.log(req.body.formData)
-
-    const initials = subject_username
-    .match(/(\b\S)?/g)
-    .join("")
-    .match(/(^\S|\S$)?/g)
-    .join("")
-    .toUpperCase();
-
-
-    const avatar = await Avatar.findOneAndUpdate(
-      { user_id: subject_id },
-      { image, initials, color: "#6b6e6c", user_id: subject_id },
-      {
-        upsert: true,
-        new: true,
-      }
-    );
-
-    console.log(avatar);
-
-    res.status(201).send(avatar);
-  },
+  }
 };

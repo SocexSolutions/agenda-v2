@@ -4,6 +4,6 @@ const { wrapController } = require("../util/error-wrapper");
 
 const wrapped = wrapController(avatarController);
 
-router.post("/", wrapped.changePicture);
+router.post("/", wrapped.create);
 
 module.exports = router;
