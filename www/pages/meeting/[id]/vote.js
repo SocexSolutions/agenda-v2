@@ -3,13 +3,14 @@ import Button from "../../../components/shared/Button/Button";
 
 import ThumbsUpIcon from "@mui/icons-material/ThumbUp";
 
-import styles from "../../../styles/pages/meeting/[id]/voting.module.css";
+import styles from "../../../styles/pages/meeting/[id]/vote.module.scss";
 import shared from "../../../styles/Shared.module.css";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+import { notify } from "../../../store/features/snackbar";
 import { selectUser } from "../../../store/features/user";
 import meetingStore from "../../../store/features/meeting";
 import topicStore from "../../../store/features/topic";
@@ -32,7 +33,27 @@ const Vote = () => {
 
   const loading = !meeting || !topics || !user;
 
+  const userLikes = topics.reduce((acc, t) => {
+    if (t.likes.includes(user.email)) {
+      acc++;
+    }
+
+    return acc;
+  }, 0);
+
+  const maxLikes = Math.floor(topics.length / 2);
+
   const onLike = (topic) => {
+    if (userLikes > maxLikes && !topic.likes.includes(user.email)) {
+      dispatch(
+        notify({
+          type: "danger",
+          message: "You have already liked too many topics",
+        })
+      );
+      return;
+    }
+
     dispatch(topicStore.actions.like(topic));
   };
 
@@ -79,7 +100,20 @@ const Vote = () => {
     <div className={shared.page}>
       <div className={shared.container}>
         <h2>Voting For: {meeting.name}</h2>
-        {topicCards}
+        <div className={styles.topic_grid}>
+          <div>{topicCards}</div>
+
+          <div
+            className={`${styles.vote_count} ${shared.card} ${
+              userLikes > maxLikes && styles.max_votes
+            }`}
+          >
+            <h2>
+              {userLikes} of {Math.floor(topics.length / 2) + 1}
+            </h2>
+            <p>Votes used</p>
+          </div>
+        </div>
       </div>
     </div>
   );

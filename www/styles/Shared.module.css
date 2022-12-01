@@ -10,13 +10,6 @@
   white-space: pre-wrap;
 }
 
-.bxCard {
-  color: var(--darkText);
-  border-radius: 0.5em;
-  padding: 1em;
-  box-shadow: var(--boxShadow);
-}
-
 @media only screen and (max-width: 600px) {
   .card {
     min-width: 90px;
@@ -25,22 +18,12 @@
 
 .page {
   height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 0em 1.5em 5em 1.5em;
   max-height: 95vh;
-  resize: none;
-}
-
-.page_stretch {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0em 0em 5em 0em;
-  max-height: 95vh;
-  overflow-y: scroll;
-  overflow-x: hidden;
   resize: none;
 }
 

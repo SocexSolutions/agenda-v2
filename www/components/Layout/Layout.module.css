@@ -1,17 +1,13 @@
-.container {
+.drawer_container {
   display: flex;
   flex-direction: row;
   height: calc(100vh - 4em);
-  background: var(--background);
 }
 
-.container main {
+.content {
   width: 100%;
   display: flex;
   justify-content: center;
-  overflow-y: auto;
-}
-
-.container .content {
-  width: 100%;
+  overflow: auto;
+  background: var(--background);
 }

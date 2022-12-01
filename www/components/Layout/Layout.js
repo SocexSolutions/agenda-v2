@@ -30,11 +30,9 @@ const Layout = (props) => {
   return (
     <>
       <Nav drawerOpen={drawerOpen} />
-      <div className={styles.container}>
+      <div className={styles.drawer_container}>
         {showDrawer && <Drawer drawerOpen={drawerOpen} />}
-        <main>
-          <div className={styles.content}>{props.children}</div>
-        </main>
+        <main className={styles.content}>{props.children}</main>
       </div>
     </>
   );
