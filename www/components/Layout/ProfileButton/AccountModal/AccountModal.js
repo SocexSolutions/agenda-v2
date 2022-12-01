@@ -3,7 +3,6 @@ import { CameraAlt, Edit } from "@mui/icons-material";
 import styles from "./AccountModal.module.scss";
 import Link from "next/link";
 
-import { useState } from "react";
 import { useSelector } from "react-redux";
 
 export default function AccountModal({ open, setOpen, user }) {
