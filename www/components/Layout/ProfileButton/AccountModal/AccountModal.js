@@ -1,5 +1,5 @@
-import { Modal, Button, Avatar } from "@mui/material";
-import { CameraAlt, Edit } from "@mui/icons-material";
+import { Modal, Avatar } from "@mui/material";
+import { CameraAlt } from "@mui/icons-material";
 import styles from "./AccountModal.module.scss";
 import Link from "next/link";
 

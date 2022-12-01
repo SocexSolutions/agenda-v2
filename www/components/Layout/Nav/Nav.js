@@ -13,7 +13,7 @@ import styles from "./Nav.module.scss";
 
 const selectUser = (state) => state.user;
 
-const Nav = (props) => {
+const Nav = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
