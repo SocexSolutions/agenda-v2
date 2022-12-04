@@ -54,6 +54,18 @@ module.exports = {
     const email = req.credentials.user.email;
 
     if (!topic.likes.includes(email)) {
+      const meetingTopics = await Topic.find({
+        meeting_id: topic.meeting_id,
+      });
+
+      const likedTopics = meetingTopics.filter((topic) =>
+        topic.likes.includes(email)
+      );
+
+      if (likedTopics.length > Math.floor(meetingTopics.length / 2)) {
+        return res.status(400).send("Too many likes");
+      }
+
       topic.likes.push(email);
     } else {
       topic.likes = topic.likes.filter((e) => {
