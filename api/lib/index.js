@@ -14,7 +14,7 @@ const start = async () => {
 
     // body parser is deprecated so in Express 4.16+ ( we have 4.17.1) we use
     // these two lines for body parsing
-    app.use(express.json());
+    app.use(express.json()); //max size mongodb data
     app.use(express.urlencoded({ extended: true }));
 
     // cors

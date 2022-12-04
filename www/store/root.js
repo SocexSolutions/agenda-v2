@@ -9,6 +9,7 @@ import meeting from "./features/meeting";
 import actionItem from "./features/action-item";
 import takeaway from "./features/takeaway";
 import participant from "./features/participant";
+import avatarReducer from "./features/avatar";
 
 const rootReducer = combineReducers({
   user: userReducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   participant: participant.reducer,
   takeaway: takeaway.reducer,
   actionItem: actionItem.reducer,
+  avatar: avatarReducer
 });
 
 export default rootReducer;

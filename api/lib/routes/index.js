@@ -13,6 +13,7 @@ const participant = require("./participant");
 const takeaway = require("./takeaway");
 const actionItem = require("./action-item");
 const pubkey = require("./pubkey");
+const avatar = require("./avatar")
 
 router.use("/health", health);
 router.use("/user", reqLogger, user);
@@ -26,5 +27,6 @@ router.use("/group", reqLogger, authMdw, group);
 router.use("/invite", reqLogger, authMdw, invite);
 router.use("/tag", reqLogger, authMdw, tag);
 router.use("/pubkey", reqLogger, pubkey);
+router.use("/avatar", reqLogger, authMdw, avatar)
 
 module.exports = router;
