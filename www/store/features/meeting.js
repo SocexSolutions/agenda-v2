@@ -20,7 +20,7 @@ actions.updateStatus = (meeting_id, status) => {
     }
 
     dispatch({
-      type: "meeting/update",
+      type: "normalized/meeting/update",
       payload: { _id: meeting_id, status },
     });
   };

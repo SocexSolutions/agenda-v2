@@ -40,6 +40,7 @@ export default function Meet() {
     }
 
     const interval = setInterval(() => {
+      dispatch(meetingStore.actions.getTopics(meeting_id));
       dispatch(meetingStore.actions.getActionItems(meeting_id));
     }, 1000 + Math.random() * 500);
 

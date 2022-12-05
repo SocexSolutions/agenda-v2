@@ -81,7 +81,6 @@ export const normalizedReducer = (state, action, schemas) => {
     let refs = {};
 
     if (schemas[collection].references) {
-      console.log("create", collection, state[collection]);
       refs = schemas[collection].references.reduce((acc, r) => {
         acc[r] = [];
 
@@ -100,8 +99,6 @@ export const normalizedReducer = (state, action, schemas) => {
       schemas,
       doc: action.payload,
     });
-
-    console.log(state[collection]);
   } else if (operation === "update") {
     let refs = {};
 
@@ -112,8 +109,6 @@ export const normalizedReducer = (state, action, schemas) => {
         return acc;
       }, {});
     }
-
-    console.log("update", collection, state[collection]);
 
     state[collection][action.payload._id] = {
       ...refs,
@@ -127,11 +122,7 @@ export const normalizedReducer = (state, action, schemas) => {
       schemas,
       doc: action.payload,
     });
-
-    console.log(state[collection]);
   } else if (operation === "delete") {
-    console.log("delete", collection, state[collection]);
-
     removeReferences({
       state,
       collection,
@@ -140,11 +131,9 @@ export const normalizedReducer = (state, action, schemas) => {
     });
 
     delete state[collection][action.payload._id];
-
-    console.log(state[collection]);
   }
 
-  return state;
+  return { ...state };
 };
 
 // TODO add references to schemas at some point
