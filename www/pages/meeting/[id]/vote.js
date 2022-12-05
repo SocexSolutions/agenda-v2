@@ -48,7 +48,7 @@ const Vote = () => {
       dispatch(
         notify({
           type: "danger",
-          message: "You have already liked too many topics",
+          message: "You are out of votes.",
         })
       );
       return;

@@ -1,19 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { generateSlice } from "../utils/slice-generator";
+import { generateActions } from "../utils/slice-generator";
+import { generateSelectors } from "../utils/slice-generator";
 import topicApi from "../../api/topic";
 
-const topicSchema = {
+export const schema = {
   name: "topic",
-  references: {
-    actionItems: "actionItem",
-    takeaways: "takeaway",
-  },
-  dependencies: {
+  references: ["actionItem", "takeaway"],
+  foreignKeys: {
     meeting: "meeting_id",
   },
 };
 
-const { reducers, actions, selectors } = generateSlice(topicSchema);
+export const actions = generateActions(schema);
+
+export const selectors = generateSelectors(schema);
 
 /**
  * Like a topic
@@ -100,14 +99,8 @@ actions.reOpen = (topic) => {
   };
 };
 
-export const { reducer } = createSlice({
-  name: topicSchema.name,
-  initialState: {},
-  reducers,
-});
-
 export default {
+  schema,
   actions,
-  reducer,
   selectors,
 };

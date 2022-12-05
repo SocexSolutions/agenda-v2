@@ -1,22 +1,19 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { generateSlice } from "../utils/slice-generator";
 import { generateActions } from "../utils/slice-generator";
 import { generateSelectors } from "../utils/slice-generator";
 
-const actionItemSchema = {
+export const schema = {
   name: "actionItem",
-  dependencies: {
+  foreignKeys: {
     topic: "topic_id",
     meeting: "meeting_id",
   },
 };
 
-export const { reducer } = createSlice(generateSlice(actionItemSchema));
-export const actions = generateActions(actionItemSchema);
-export const selectors = generateSelectors(actionItemSchema);
+export const actions = generateActions(schema);
+export const selectors = generateSelectors(schema);
 
 export default {
   actions,
-  reducer,
+  schema,
   selectors,
 };

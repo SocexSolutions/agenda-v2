@@ -2,81 +2,154 @@ import api from "../../api";
 
 const capitalize = (s) => s[0].toUpperCase() + s.slice(1);
 
-export function generateReducers(schema) {
-  const reducers = {};
+const addReferences = ({ state, collection, schemas, doc }) => {
+  const schema = schemas[collection];
 
-  const refs = Object.keys(schema.references).reduce((acc, k) => {
-    acc[k] = [];
+  if (!schema.foreignKeys) {
+    return;
+  }
 
-    return acc;
-  }, {});
+  for (const [foreignCollection, nativeKey] of Object.entries(
+    schema.foreignKeys
+  )) {
+    if (!state[foreignCollection]) {
+      throw new Error(
+        "Normalized state does not contain collection",
+        foreignCollection
+      );
+    }
 
-  reducers.create = (state, action) => {
-    // Add references on init so that modifications to reference array don't
-    // blow up.
-    state[action.payload._id] = {
+    if (!doc[nativeKey]) {
+      throw new Error(
+        `Document in collection ${collection} does not have key ${nativeKey}, Document:`,
+        doc
+      );
+    }
+
+    const newReferences = new Set([
+      ...state[foreignCollection][doc[nativeKey]][collection],
+      doc._id,
+    ]);
+
+    state[foreignCollection][doc[nativeKey]][collection] =
+      Array.from(newReferences);
+  }
+};
+
+const removeReferences = ({ state, collection, schemas, doc }) => {
+  const schema = schemas[collection];
+
+  if (!schema.foreignKeys) {
+    return;
+  }
+
+  for (const [foreignCollection, nativeKey] of Object.entries(
+    schema.foreignKeys
+  )) {
+    if (!state[foreignCollection]) {
+      throw new Error(
+        "Normalized state does not contain collection:",
+        foreignCollection
+      );
+    }
+
+    if (!doc[nativeKey]) {
+      throw new Error(
+        `Document in collection ${collection} does not have key ${nativeKey}, Document:`,
+        doc
+      );
+    }
+
+    const newReferences = state[foreignCollection][doc[nativeKey]][
+      collection
+    ].filter((refId) => {
+      return refId !== doc._id;
+    });
+
+    state[foreignCollection][doc[nativeKey]][collection] = newReferences;
+  }
+};
+
+export const normalizedReducer = (state, action, schemas) => {
+  const [prefix, collection, operation] = action.type.split("/");
+
+  if (prefix !== "normalized") {
+    return state;
+  }
+
+  if (operation === "create") {
+    let refs = {};
+
+    if (schemas[collection].references) {
+      console.log("create", collection, state[collection]);
+      refs = schemas[collection].references.reduce((acc, r) => {
+        acc[r] = [];
+
+        return acc;
+      }, {});
+    }
+
+    state[collection][action.payload._id] = {
       ...refs,
       ...action.payload,
     };
-  };
 
-  reducers.update = (state, action) => {
-    const { _id } = action.payload;
-
-    // References still necessary here since `get` actions use update.
-    state[_id] = { ...refs, ...state[_id], ...action.payload };
-  };
-
-  reducers.delete = (state, action) => {
-    delete state[action.payload._id];
-  };
-
-  reducers.updateMany = (state, action) => {
-    action.payload.forEach((item) => {
-      const { _id } = item;
-
-      // Update many can be called instead of create, so add references here as
-      // well.
-      state[_id] = { ...refs, ...state[_id], ...item };
+    addReferences({
+      state,
+      collection,
+      schemas,
+      doc: action.payload,
     });
-  };
 
-  Object.entries(schema.references).forEach(([k, v]) => {
-    const dispName = capitalize(v);
+    console.log(state[collection]);
+  } else if (operation === "update") {
+    let refs = {};
 
-    reducers[`set${capitalize(k)}`] = (state, action) => {
-      const { _id, [`${v}Ids`]: refIds } = action.payload;
+    if (schemas[collection].references) {
+      refs = schemas[collection].references.reduce((acc, r) => {
+        acc[r] = [];
 
-      state[_id] = { ...state[_id], [k]: refIds };
+        return acc;
+      }, {});
+    }
+
+    console.log("update", collection, state[collection]);
+
+    state[collection][action.payload._id] = {
+      ...refs,
+      ...state[collection][action.payload._id],
+      ...action.payload,
     };
 
-    reducers[`create${dispName}`] = (state, action) => {
-      const { _id, [`${v}Id`]: refId } = action.payload;
+    addReferences({
+      state,
+      collection,
+      schemas,
+      doc: action.payload,
+    });
 
-      if (Array.isArray(state[_id]?.[k])) {
-        state[_id][k].push(refId);
-      } else {
-        state[_id][k] = [refId];
-      }
-    };
+    console.log(state[collection]);
+  } else if (operation === "delete") {
+    console.log("delete", collection, state[collection]);
 
-    reducers[`delete${dispName}`] = (state, action) => {
-      const { _id, [`${v}Id`]: refId } = action.payload;
+    removeReferences({
+      state,
+      collection,
+      schemas,
+      doc: action.payload,
+    });
 
-      if (Array.isArray(state[_id]?.[k])) {
-        state[_id][k] = state[_id][k].filter((id) => id !== refId);
-      } else {
-        state[_id][k] = [];
-      }
-    };
-  });
+    delete state[collection][action.payload._id];
 
-  return reducers;
-}
+    console.log(state[collection]);
+  }
 
-export function generateActions(schema) {
+  return state;
+};
+
+// TODO add references to schemas at some point
+export const generateActions = (schema) => {
   const actions = {};
-  const itemName = capitalize(schema.name);
 
   actions.get = (id) => {
     return async function getItem(dispatch) {
@@ -87,7 +160,7 @@ export function generateActions(schema) {
       }
 
       dispatch({
-        type: `${schema.name}/update`,
+        type: `normalized/${schema.name}/update`,
         payload: item,
       });
     };
@@ -101,21 +174,9 @@ export function generateActions(schema) {
         return;
       }
 
-      // We must create item before adding it to reference arrays of ther items
-      // or it may be referenced before it exists.
       dispatch({
-        type: `${schema.name}/create`,
+        type: `normalized/${schema.name}/create`,
         payload: created,
-      });
-
-      Object.entries(schema.dependencies).forEach(([k, v]) => {
-        dispatch({
-          type: `${k}/create${itemName}`,
-          payload: {
-            _id: created[v],
-            [`${schema.name}Id`]: created._id,
-          },
-        });
       });
     };
   };
@@ -127,20 +188,9 @@ export function generateActions(schema) {
       if (!deleted) {
         return;
       }
-      // Remove references to the item before deleting it to avoid race
-      // condition
-      Object.entries(schema.dependencies).forEach(([k, v]) => {
-        dispatch({
-          type: `${k}/delete${itemName}`,
-          payload: {
-            _id: item[v],
-            [`${schema.name}Id`]: item._id,
-          },
-        });
-      });
 
       dispatch({
-        type: `${schema.name}/delete`,
+        type: `normalized/${schema.name}/delete`,
         payload: item,
       });
     };
@@ -155,85 +205,82 @@ export function generateActions(schema) {
       }
 
       dispatch({
-        type: `${schema.name}/update`,
+        type: `normalized/${schema.name}/update`,
         payload: updated,
       });
     };
   };
 
-  Object.entries(schema.references).forEach(([k, v]) => {
-    const functionName = `get${capitalize(k)}`;
+  if (schema.references) {
+    schema.references.forEach((coll) => {
+      const functionName = `get${capitalize(coll)}s`;
 
-    actions[functionName] = (id) => {
-      return async function getReferences(dispatch) {
-        if (!id) {
-          return;
-        }
+      actions[functionName] = (id) => {
+        return async function getReferences(dispatch) {
+          if (!id) {
+            return;
+          }
 
-        const references = await api[schema.name][functionName](id);
+          const references = await api[schema.name][functionName](id);
 
-        if (!references) {
-          return;
-        }
+          if (!references) {
+            return;
+          }
 
-        dispatch({
-          type: `${v}/updateMany`,
-          payload: references,
-        });
-
-        dispatch({
-          type: `${schema.name}/set${capitalize(k)}`,
-          payload: {
-            _id: id,
-            [`${v}Ids`]: references.map((r) => r._id),
-          },
-        });
+          references.forEach((ref) => {
+            dispatch({
+              type: `normalized/${coll}/update`,
+              payload: ref,
+            });
+          });
+        };
       };
-    };
-  });
+    });
+  }
 
   return actions;
-}
+};
 
-export function generateSelectors(schema) {
+export const generateSelectors = (schema) => {
   const selectors = {};
 
   selectors.get = (state, id) => {
-    if (!id || !state[schema.name][id]) {
+    if (!id || !state.normalized?.[schema.name]?.[id]) {
       return null;
     }
 
-    return state[schema.name][id];
+    return state.normalized[schema.name][id];
   };
 
-  selectors.getAll = (state) => {
-    return Object.values(state[schema.name]);
-  };
+  if (schema.references) {
+    schema.references.forEach((coll) => {
+      const selectorName = `${coll}s`;
 
-  Object.entries(schema.references).forEach(([k, v]) => {
-    selectors[k] = (state, id) => {
-      if (!id || !state[schema.name]?.[id]?.[k]) {
-        return [];
-      }
+      selectors[selectorName] = (state, id) => {
+        if (!id || !state.normalized[schema.name]?.[id]?.[coll]) {
+          return [];
+        }
 
-      const ids = state[schema.name][id][k];
+        const ids = state.normalized[schema.name][id][coll];
 
-      return ids.map((id) => state[v][id]).filter(Boolean);
-    };
-  });
+        return ids.map((id) => state.normalized[coll][id]).filter(Boolean);
+      };
+    });
+  }
 
   return selectors;
-}
+};
 
-export function generateSlice(schema) {
-  schema.references = schema.references || {};
-  schema.dependencies = schema.dependencies || {};
+export const createNormalizedReducer = (schemas) => {
+  return (state = {}, action) => {
+    if (Object.keys(state).length === 0) {
+      state = Object.keys(schemas).reduce((acc, s) => {
+        acc[s] = {};
 
-  return {
-    name: schema.name,
-    initialState: {},
-    reducers: generateReducers(schema),
-    actions: generateActions(schema),
-    selectors: generateSelectors(schema),
+        return acc;
+      }, {});
+    }
+
+    return normalizedReducer(state, action, schemas);
   };
-}
+};
