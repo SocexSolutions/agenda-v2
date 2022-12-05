@@ -42,7 +42,7 @@ export default function Meet() {
     const interval = setInterval(() => {
       dispatch(meetingStore.actions.getTopics(meeting_id));
       dispatch(meetingStore.actions.getActionItems(meeting_id));
-    }, 1000 + Math.random() * 500);
+    }, 2000 + Math.random() * 1000);
 
     return () => {
       if (interval) {

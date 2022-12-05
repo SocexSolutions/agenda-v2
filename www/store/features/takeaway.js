@@ -1,5 +1,5 @@
-import { generateActions } from "../utils/slice-generator";
-import { generateSelectors } from "../utils/slice-generator";
+import { generateActions } from "../normalized-store/normalized-store";
+import { generateSelectors } from "../normalized-store/normalized-store";
 
 const schema = {
   name: "takeaway",
