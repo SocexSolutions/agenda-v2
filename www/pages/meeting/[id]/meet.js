@@ -40,8 +40,9 @@ export default function Meet() {
     }
 
     const interval = setInterval(() => {
+      dispatch(meetingStore.actions.getTopics(meeting_id));
       dispatch(meetingStore.actions.getActionItems(meeting_id));
-    }, 1000 + Math.random() * 500);
+    }, 2000 + Math.random() * 1000);
 
     return () => {
       if (interval) {
@@ -50,19 +51,16 @@ export default function Meet() {
     };
   }, [meeting_id]);
 
-  const [selectedTopic, setSelectedTopic] = useState();
+  const [selectedId, setSelectedId] = useState();
 
   const closeTopic = async (topic) => {
     dispatch(topicStore.actions.close(topic));
 
-    setSelectedTopic(null);
+    setSelectedId(null);
   };
 
   const reOpenTopic = async (topic) => {
     dispatch(topicStore.actions.reOpen(topic));
-
-    setSelectedTopic(null);
-    setSelectedTopic({ ...topic, status: "open" });
   };
 
   if (!meeting || !topics) {
@@ -78,6 +76,8 @@ export default function Meet() {
   let topicDisplay = (
     <h3 className={styles.no_topic}>Select a topic on the left.</h3>
   );
+
+  const selectedTopic = topics.find((t) => t._id === selectedId);
 
   if (allDone && !selectedTopic && meeting.status !== "completed") {
     topicDisplay = (
@@ -106,7 +106,7 @@ export default function Meet() {
         topic={selectedTopic}
         closeTopic={(t) => closeTopic(t)}
         reOpenTopic={(t) => reOpenTopic(t)}
-        hideTopic={() => setSelectedTopic(null)}
+        hideTopic={() => setSelectedId(null)}
       />
     );
   }
@@ -124,7 +124,7 @@ export default function Meet() {
                 meetingName={meeting.name}
                 selectedTopic={selectedTopic}
                 topics={topics}
-                switchToTopic={(t) => setSelectedTopic(t)}
+                switchToTopic={(t) => setSelectedId(t._id)}
               />
             </div>
             <div>

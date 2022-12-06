@@ -1,19 +1,18 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { generateSlice } from "../utils/slice-generator";
+import { generateActions } from "../normalized-store/normalized-store";
+import { generateSelectors } from "../normalized-store/normalized-store";
 import topicApi from "../../api/topic";
 
-const topicSchema = {
+export const schema = {
   name: "topic",
-  references: {
-    actionItems: "actionItem",
-    takeaways: "takeaway",
-  },
-  dependencies: {
+  references: ["actionItem", "takeaway"],
+  foreignKeys: {
     meeting: "meeting_id",
   },
 };
 
-const { reducers, actions, selectors } = generateSlice(topicSchema);
+export const actions = generateActions(schema);
+
+export const selectors = generateSelectors(schema);
 
 /**
  * Like a topic
@@ -28,7 +27,7 @@ actions.like = (topic) => {
     }
 
     dispatch({
-      type: "topic/update",
+      type: "normalized/topic/update",
       payload: updatedTopic,
     });
   };
@@ -48,14 +47,14 @@ actions.switch = (topic) => {
 
     if (res.switchedTo) {
       dispatch({
-        type: "topic/update",
+        type: "normalized/topic/update",
         payload: res.switchedTo,
       });
     }
 
     if (res.switchedFrom) {
       dispatch({
-        type: "topic/update",
+        type: "normalized/topic/update",
         payload: res.switchedFrom,
       });
     }
@@ -75,7 +74,7 @@ actions.close = (topic) => {
     }
 
     dispatch({
-      type: "topic/update",
+      type: "normalized/topic/update",
       payload: updated,
     });
   };
@@ -94,20 +93,14 @@ actions.reOpen = (topic) => {
     }
 
     dispatch({
-      type: "topic/update",
+      type: "normalized/topic/update",
       payload: updated,
     });
   };
 };
 
-export const { reducer } = createSlice({
-  name: topicSchema.name,
-  initialState: {},
-  reducers,
-});
-
 export default {
+  schema,
   actions,
-  reducer,
   selectors,
 };

@@ -18,20 +18,15 @@ export default function Board({ selectedTopic, meetingId }) {
 
   const [unsavedItems, setUnsavedItems] = useState([]);
 
-  const fetchData = () => {
-    dispatch(topicStore.actions.getActionItems(selectedTopic._id));
-    dispatch(topicStore.actions.getTakeaways(selectedTopic._id));
-  };
-
   useEffect(() => {
     let interval;
 
     if (selectedTopic) {
-      fetchData();
+      dispatch(topicStore.actions.getTakeaways(selectedTopic._id));
 
       interval = setInterval(() => {
-        fetchData();
-      }, 1000 + Math.random() * 1000);
+        dispatch(topicStore.actions.getTakeaways(selectedTopic._id));
+      }, 2000 + Math.random() * 1000);
     }
 
     return () => {

@@ -1,21 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { generateSlice } from "../utils/slice-generator";
-import { generateActions } from "../utils/slice-generator";
-import { generateSelectors } from "../utils/slice-generator";
 import meetingAPI from "../../api/meeting";
+import { generateActions } from "../normalized-store/normalized-store";
+import { generateSelectors } from "../normalized-store/normalized-store";
 
-const meetingSchema = {
+export const schema = {
   name: "meeting",
-  references: {
-    topics: "topic",
-    participants: "participant",
-    actionItems: "actionItem",
-    takeaways: "takeaway",
-  },
+  references: ["topic", "participant", "actionItem", "takeaway"],
 };
 
-export const { reducer } = createSlice(generateSlice(meetingSchema));
-export const actions = generateActions(meetingSchema);
+export const actions = generateActions(schema);
+
+export const selectors = generateSelectors(schema);
 
 actions.updateStatus = (meeting_id, status) => {
   return async (dispatch) => {
@@ -26,16 +20,14 @@ actions.updateStatus = (meeting_id, status) => {
     }
 
     dispatch({
-      type: "meeting/update",
+      type: "normalized/meeting/update",
       payload: { _id: meeting_id, status },
     });
   };
 };
 
-export const selectors = generateSelectors(meetingSchema);
-
 export default {
-  reducer,
+  schema,
   actions,
   selectors,
 };
