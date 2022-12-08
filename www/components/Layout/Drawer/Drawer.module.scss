@@ -7,20 +7,22 @@
 
   .drawer {
     width: 15em;
-    transition: width 200ms ease;
+    transition: all 200ms ease;
     overflow: hidden;
     background: colors.$foreground;
     border-right: 1px solid colors.$border;
   }
 
   .closed {
-    width: 0em;
+    width: 0;
+    transform: translate(-15em, 0);
   }
 
   .icon_button {
     font-size: 20px;
     text-transform: capitalize;
     width: 100%;
+    min-width: 200px;
     padding: 0.5em 0em 0.5em 2em;
     justify-content: flex-start;
     color: colors.$midText;
