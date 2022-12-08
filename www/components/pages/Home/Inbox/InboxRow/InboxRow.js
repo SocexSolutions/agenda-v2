@@ -10,9 +10,12 @@ import { useState } from "react";
 export default function InboxRow({ meeting, refresh, classes }) {
   const [open, setOpen] = useState(false);
 
+  // Name must exist in order for meeting to be clickable.
+  const name = meeting.name || "Draft";
+
   return (
     <div className={classes}>
-      <p onClick={() => setOpen(true)}>{meeting.name}</p>
+      <p onClick={() => setOpen(true)}>{name}</p>
       <MeetingModal
         meeting={meeting}
         open={open}

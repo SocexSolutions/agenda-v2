@@ -1,4 +1,4 @@
-@use '../../../../styles/colors.scss';
+@use "../../../../styles/colors.scss";
 
 .table {
   width: 100%;
@@ -9,10 +9,10 @@
   //padding: 1em;
 }
 
-.filter_box{
+.filter_box {
   background-color: colors.$background;
   height: 3em;
-  transition: height .2s;
+  transition: height 0.2s;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -24,27 +24,26 @@
   .visible {
     display: flex;
     align-items: center;
-    margin-top: .3em;
+    margin-top: 0.3em;
     gap: 0.7em;
   }
 
   .hidden {
-    margin-top: .7em;
+    margin-top: 0.7em;
   }
 }
 
 .filter_box_open {
-  transition: height .2s;
+  transition: height 0.2s;
   height: 10em;
 }
 
 .row {
-  padding: .75em .5em;
-  margin: 0 .5em 0 .5em;
-  width: 98%;
   border-top: 1px solid colors.$border;
 
+  // Padding must be added to p in order for it to be clickable.
   p {
+    padding: 0.75em;
     margin: 0;
   }
 
