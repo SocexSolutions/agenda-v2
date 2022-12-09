@@ -34,6 +34,7 @@ export default function ActionItems() {
 
   const user = useSelector((state) => state.user);
 
+  const [loading, setLoading] = useState(true);
   const [statusAnchor, setStatusAnchor] = useState(null);
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(0);
@@ -52,11 +53,14 @@ export default function ActionItems() {
 
       setActionItems(res.data.action_items);
       setCount(res.data.count);
+      setLoading(false);
     } catch (err) {
       notify({
         message: "Failed to fetch action items: " + err.message,
         type: "danger",
       });
+
+      setLoading(false);
     }
   };
 
@@ -83,7 +87,7 @@ export default function ActionItems() {
   }, [filters, page]);
 
   return (
-    <Fade in={true}>
+    <Fade in={!loading}>
       <div className={shared.page}>
         <div className={shared.container}>
           <h2 className={shared.page_title}>My Action Items</h2>
@@ -99,9 +103,6 @@ export default function ActionItems() {
               anchorEl={statusAnchor}
               open={Boolean(statusAnchor)}
               onClose={() => setStatusAnchor(null)}
-              onChange={(e) =>
-                setFilters({ ...filters, completed: e.target.value })
-              }
             >
               <MenuItem
                 onClick={() => {
@@ -146,14 +147,10 @@ export default function ActionItems() {
             <TableContainer>
               <Table>
                 <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: "bold" }}>Completed</TableCell>
-                    <TableCell sx={{ fontWeight: "bold" }}>
-                      Action Item
-                    </TableCell>
-                    <TableCell sx={{ fontWeight: "bold" }}>
-                      Assigned To
-                    </TableCell>
+                  <TableRow className={styles.table_header}>
+                    <TableCell>Completed</TableCell>
+                    <TableCell>Action Item</TableCell>
+                    <TableCell>Assigned To</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -163,7 +160,7 @@ export default function ActionItems() {
                       onClick={() => {
                         setActionItemId(actionItem._id);
                       }}
-                      sx={{ cursor: "pointer" }}
+                      className={styles.table_row}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
@@ -205,10 +202,10 @@ export default function ActionItems() {
         </div>
         <ActionItemModal
           open={!!actionItemId}
+          onClose={() => setActionItemId(null)}
           actionItem={actionItems.find((a) => {
             return a._id === actionItemId;
           })}
-          closeModal={() => setActionItemId(null)}
           toggleActionItemCompletion={toggleActionItemCompletion}
         />
       </div>
