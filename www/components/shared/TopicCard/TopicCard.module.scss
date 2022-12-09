@@ -1,0 +1,55 @@
+.card {
+  display: flex;
+  color: var(--darkText);
+  border: 1px solid var(--border);
+  background: var(--foreground);
+  border-radius: 6px;
+  padding: 1em;
+
+  p {
+    white-space: pre-wrap;
+  }
+
+  @media only screen and (max-width: 600px) {
+    min-width: 90px;
+  }
+
+  &.clickable {
+    cursor: pointer;
+
+    &:hover {
+      background: var(--foregroundHighlight);
+    }
+  }
+}
+
+.icon_container {
+  display: flex;
+  justify-content: center;
+  padding-left: 0.5em;
+  width: 2.5em;
+}
+
+.content_container {
+  width: 100%;
+}
+
+.name_input {
+  margin-bottom: 1em;
+  width: 30%;
+  min-width: 200px;
+}
+
+.description_input {
+  margin-bottom: 1em;
+  width: 100%;
+}
+
+.button_container {
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    margin-left: 0.5em;
+  }
+}
