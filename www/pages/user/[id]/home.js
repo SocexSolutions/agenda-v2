@@ -16,26 +16,33 @@ export default function Home({ store }) {
   const initialFilters = { owners: [], name: "" };
 
   const [loading, setLoading] = useState(true);
-  const [fetchingMeetings, setFetchingMeetings] = useState(true);
   const [meetings, setMeetings] = useState([]);
   const [owners, setOwners] = useState([]);
   const [filters, setFilters] = useState(initialFilters);
   const [meetingCount, setMeetingCount] = useState(0);
-  const [skip, setSkip] = useState(0);
+  const [page, setPage] = useState(0);
 
   const user = useSelector((state) => state.user);
 
   async function load() {
+    setLoading(true);
+
+    const limit = 8;
+    const skip = limit * page;
+
     try {
+      const owner_ids = filters.owners.map((owner) => owner._id);
       const res = await client.get(`/meeting/?skip=${skip}&limit=14`, {
-        params: filters,
+        params: {
+          ...filters,
+          owners: owner_ids,
+        },
       });
 
       setMeetings(res.data.meetings);
       setMeetingCount(res.data.count);
       !res.data.filtered && setOwners(res.data.owners);
 
-      setFetchingMeetings(false);
       setLoading(false);
     } catch (err) {
       store.dispatch(
@@ -44,6 +51,8 @@ export default function Home({ store }) {
           type: "danger",
         })
       );
+
+      setLoading(false);
     }
   }
 
@@ -51,7 +60,7 @@ export default function Home({ store }) {
     if (user._id) {
       load();
     }
-  }, [user, filters, skip]);
+  }, [user, filters, page]);
 
   return (
     <Fade in={!loading}>
@@ -65,11 +74,12 @@ export default function Home({ store }) {
             setFilters={setFilters}
             filters={filters}
             totalMeetings={meetingCount}
-            setSkip={setSkip}
-            fetchingMeetings={fetchingMeetings}
-            setFetchingMeetings={setFetchingMeetings}
+            page={page}
+            setPage={setPage}
+            loading={loading}
           />
         </div>
+
         <CreateFab />
       </div>
     </Fade>

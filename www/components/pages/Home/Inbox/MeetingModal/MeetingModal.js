@@ -16,14 +16,16 @@ import styles from "./MeetingModal.module.scss";
  * A modal the provides a brief overview of a meeting
  * @param {Object} meetingId - a meeting
  * @param {boolean} open - whether the meeting modal is open
- * @param {Function} setOpen - set function for `open`
+ * @param {Function} onClose - set function for `open`
  * @param {Function} refresh - tell the home page to refresh meetings
  */
-export default function MeetingModal({ meeting, open, setOpen, refresh }) {
+export default function MeetingModal({ meeting, open, onClose, refresh }) {
   const router = useRouter();
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const store = useStore();
+
+  if (!meeting) return null;
 
   const isOwner = meeting.owner._id === user._id;
 
@@ -41,7 +43,7 @@ export default function MeetingModal({ meeting, open, setOpen, refresh }) {
 
       refresh();
 
-      setOpen(false);
+      onClose();
     }
   };
 
@@ -54,7 +56,7 @@ export default function MeetingModal({ meeting, open, setOpen, refresh }) {
   };
 
   return (
-    <Modal open={open} onClose={() => setOpen(false)}>
+    <Modal open={open} onClose={onClose}>
       <div className={styles.modal_container}>
         <div className={styles.header}>
           <div>
@@ -75,7 +77,7 @@ export default function MeetingModal({ meeting, open, setOpen, refresh }) {
                 <DeleteIcon />
               </IconButton>
             )}
-            <IconButton onClick={() => setOpen(false)}>
+            <IconButton onClick={onClose}>
               <CloseIcon />
             </IconButton>
           </div>

@@ -1,0 +1,29 @@
+.filters_container {
+  margin-bottom: 1em;
+}
+
+.filters_inputs {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  margin-bottom: 1em;
+}
+
+.owner_input {
+  width: 20%;
+}
+
+.name_input {
+  width: 20%;
+}
+
+.status_button {
+  // Necessary to match heights of inputs
+  height: 2.8em;
+}
+
+.filter_chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
