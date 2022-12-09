@@ -5,6 +5,8 @@ import Fade from "@mui/material/Fade";
 import Inbox from "../../../components/pages/Home/Inbox/Inbox";
 import CreateFab from "../../../components/shared/CreateFab/CreateFab";
 
+import useDebounce from "../../../hooks/use-debounce";
+
 import client from "../../../api/client";
 
 import shared from "../../../styles/Shared.module.css";
@@ -21,21 +23,26 @@ export default function Home({ store }) {
   const [filters, setFilters] = useState(initialFilters);
   const [meetingCount, setMeetingCount] = useState(0);
   const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(8);
+
+  const debouncedFilters = useDebounce(filters, 250);
 
   const user = useSelector((state) => state.user);
 
   async function load() {
     setLoading(true);
 
-    const limit = 8;
+    const limit = rowsPerPage;
     const skip = limit * page;
 
     try {
       const owner_ids = filters.owners.map((owner) => owner._id);
-      const res = await client.get(`/meeting/?skip=${skip}&limit=14`, {
+      const res = await client.get(`/meeting`, {
         params: {
           ...filters,
           owners: owner_ids,
+          skip,
+          limit,
         },
       });
 
@@ -60,7 +67,7 @@ export default function Home({ store }) {
     if (user._id) {
       load();
     }
-  }, [user, filters, page]);
+  }, [user, debouncedFilters, page]);
 
   return (
     <Fade in={!loading}>
@@ -70,7 +77,9 @@ export default function Home({ store }) {
           <Inbox
             meetings={meetings}
             owners={owners}
-            refresh={load}
+            refresh={() => load()}
+            rowsPerPage={rowsPerPage}
+            setRowsPerPage={setRowsPerPage}
             setFilters={setFilters}
             filters={filters}
             totalMeetings={meetingCount}

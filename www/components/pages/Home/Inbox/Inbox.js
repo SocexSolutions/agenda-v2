@@ -18,7 +18,9 @@ import meetingAPI from "../../../../api/meeting";
 
 import { useRouter } from "next/router";
 
-import { useState } from "react";
+import useDebounce from "../../../../hooks/use-debounce";
+
+import { useState, useEffect } from "react";
 
 import styles from "./Inbox.module.scss";
 
@@ -37,9 +39,14 @@ export default function Inbox({
   totalMeetings,
   page,
   setPage,
+  rowsPerPage,
+  setRowsPerPage,
 }) {
   const router = useRouter();
+
   const [meetingId, setMeetingId] = useState(null);
+
+  const debouncedRowsPerPage = useDebounce(rowsPerPage, 250);
 
   const createMeeting = async () => {
     // create a draft meeting before redirect so that created participants
@@ -48,6 +55,22 @@ export default function Inbox({
 
     router.push(`/meeting/${res._id}/edit`);
   };
+
+  useEffect(() => {
+    const updateWindowDimensions = () => {
+      const newHeight = window.innerHeight - 200;
+
+      setRowsPerPage(Math.floor(newHeight / 90));
+    };
+
+    window.addEventListener("resize", updateWindowDimensions);
+
+    return () => window.removeEventListener("resize", updateWindowDimensions);
+  }, []);
+
+  useEffect(() => {
+    refresh();
+  }, [debouncedRowsPerPage]);
 
   if (!meetings && !loading) {
     return (
@@ -100,10 +123,10 @@ export default function Inbox({
           </TableBody>
         </Table>
         <TablePagination
-          rowsPerPageOptions={[8]}
+          rowsPerPageOptions={[rowsPerPage]}
           component="div"
           count={totalMeetings}
-          rowsPerPage={8}
+          rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={(e, page) => setPage(page)}
         />

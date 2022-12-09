@@ -16,9 +16,10 @@ import Chip from "@mui/material/Chip";
 import ActionItemModal from "../../../components/pages/Tasks/ActionItemModal/ActionItemModal";
 
 import actionItemStore from "../../../store/features/action-item";
+import { notify } from "../../../store/features/snackbar";
 import { useStore } from "../../../store";
 
-import { notify } from "../../../store/features/snackbar";
+import useDebounce from "../../../hooks/use-debounce";
 
 import shared from "../../../styles/Shared.module.css";
 import styles from "../../../styles/pages/user/[id]/tasks.module.scss";
@@ -34,6 +35,7 @@ export default function ActionItems() {
 
   const user = useSelector((state) => state.user);
 
+  const [rowsPerPage, setRowsPerPage] = useState(8);
   const [loading, setLoading] = useState(true);
   const [statusAnchor, setStatusAnchor] = useState(null);
   const [page, setPage] = useState(0);
@@ -42,8 +44,10 @@ export default function ActionItems() {
   const [actionItemId, setActionItemId] = useState(null);
   const [filters, setFilters] = useState({ completed: false });
 
+  const debouncedFilters = useDebounce(filters, 250);
+
   const load = async () => {
-    const limit = 8;
+    const limit = rowsPerPage;
     const skip = limit * page;
 
     try {
@@ -84,7 +88,19 @@ export default function ActionItems() {
 
   useEffect(() => {
     load();
-  }, [filters, page]);
+  }, [debouncedFilters, page, rowsPerPage]);
+
+  useEffect(() => {
+    const updateWindowDimensions = () => {
+      const newHeight = window.innerHeight - 100;
+
+      setRowsPerPage(Math.floor(newHeight / 90));
+    };
+
+    window.addEventListener("resize", updateWindowDimensions);
+
+    return () => window.removeEventListener("resize", updateWindowDimensions);
+  }, []);
 
   return (
     <Fade in={!loading}>
@@ -144,7 +160,7 @@ export default function ActionItems() {
             })}
           </Box>
           <div className={styles.table_container}>
-            <TableContainer>
+            <TableContainer key={rowsPerPage}>
               <Table>
                 <TableHead>
                   <TableRow className={styles.table_header}>
@@ -191,10 +207,10 @@ export default function ActionItems() {
               </Table>
             </TableContainer>
             <TablePagination
-              rowsPerPageOptions={[8]}
+              rowsPerPageOptions={[rowsPerPage]}
               component="div"
               count={count}
-              rowsPerPage={8}
+              rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
             />
