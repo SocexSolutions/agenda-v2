@@ -311,7 +311,13 @@ module.exports = {
   async index(req, res) {
     const subject_email = req.credentials.user.email;
     const subject_id = req.credentials.sub;
-    const { limit = 10, skip = 0, name = "", owners = [] } = req.query;
+    const {
+      limit = 10,
+      skip = 0,
+      name = "",
+      owners = [],
+      status = "",
+    } = req.query;
 
     const pipelineFilters = [];
     const filtered = !!name || !!owners.length;
@@ -356,6 +362,11 @@ module.exports = {
     name &&
       pipelineFilters.push({
         $match: { name: { $regex: name, $options: "i" } },
+      });
+
+    status &&
+      pipelineFilters.push({
+        $match: { status },
       });
 
     const sliceStart = parseInt(skip);
