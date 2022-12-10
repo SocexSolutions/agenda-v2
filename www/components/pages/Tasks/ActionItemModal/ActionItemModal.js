@@ -8,13 +8,13 @@ import styles from "./ActionItemModal.module.scss";
 export default function ActionItemModal({
   actionItem,
   open,
-  closeModal,
+  onClose,
   toggleActionItemCompletion,
 }) {
   if (!actionItem) return null;
 
   return (
-    <Modal open={open} onClose={closeModal}>
+    <Modal open={open} onClose={onClose}>
       <div className={styles.modal_container}>
         <Box
           sx={{

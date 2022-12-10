@@ -16,9 +16,10 @@ import Chip from "@mui/material/Chip";
 import ActionItemModal from "../../../components/pages/Tasks/ActionItemModal/ActionItemModal";
 
 import actionItemStore from "../../../store/features/action-item";
+import { notify } from "../../../store/features/snackbar";
 import { useStore } from "../../../store";
 
-import { notify } from "../../../store/features/snackbar";
+import useDebounce from "../../../hooks/use-debounce";
 
 import shared from "../../../styles/Shared.module.css";
 import styles from "../../../styles/pages/user/[id]/tasks.module.scss";
@@ -34,6 +35,8 @@ export default function ActionItems() {
 
   const user = useSelector((state) => state.user);
 
+  const [rowsPerPage, setRowsPerPage] = useState(8);
+  const [loading, setLoading] = useState(true);
   const [statusAnchor, setStatusAnchor] = useState(null);
   const [page, setPage] = useState(0);
   const [count, setCount] = useState(0);
@@ -41,8 +44,10 @@ export default function ActionItems() {
   const [actionItemId, setActionItemId] = useState(null);
   const [filters, setFilters] = useState({ completed: false });
 
+  const debouncedFilters = useDebounce(filters, 250);
+
   const load = async () => {
-    const limit = 8;
+    const limit = rowsPerPage;
     const skip = limit * page;
 
     try {
@@ -52,11 +57,14 @@ export default function ActionItems() {
 
       setActionItems(res.data.action_items);
       setCount(res.data.count);
+      setLoading(false);
     } catch (err) {
       notify({
         message: "Failed to fetch action items: " + err.message,
         type: "danger",
       });
+
+      setLoading(false);
     }
   };
 
@@ -80,10 +88,22 @@ export default function ActionItems() {
 
   useEffect(() => {
     load();
-  }, [filters, page]);
+  }, [debouncedFilters, page, rowsPerPage]);
+
+  useEffect(() => {
+    const updateWindowDimensions = () => {
+      const newHeight = window.innerHeight - 100;
+
+      setRowsPerPage(Math.floor(newHeight / 90));
+    };
+
+    window.addEventListener("resize", updateWindowDimensions);
+
+    return () => window.removeEventListener("resize", updateWindowDimensions);
+  }, []);
 
   return (
-    <Fade in={true}>
+    <Fade in={!loading}>
       <div className={shared.page}>
         <div className={shared.container}>
           <h2 className={shared.page_title}>My Action Items</h2>
@@ -99,9 +119,6 @@ export default function ActionItems() {
               anchorEl={statusAnchor}
               open={Boolean(statusAnchor)}
               onClose={() => setStatusAnchor(null)}
-              onChange={(e) =>
-                setFilters({ ...filters, completed: e.target.value })
-              }
             >
               <MenuItem
                 onClick={() => {
@@ -143,17 +160,13 @@ export default function ActionItems() {
             })}
           </Box>
           <div className={styles.table_container}>
-            <TableContainer>
+            <TableContainer key={rowsPerPage}>
               <Table>
                 <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: "bold" }}>Completed</TableCell>
-                    <TableCell sx={{ fontWeight: "bold" }}>
-                      Action Item
-                    </TableCell>
-                    <TableCell sx={{ fontWeight: "bold" }}>
-                      Assigned To
-                    </TableCell>
+                  <TableRow className={styles.table_header}>
+                    <TableCell>Completed</TableCell>
+                    <TableCell>Action Item</TableCell>
+                    <TableCell>Assigned To</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -163,7 +176,7 @@ export default function ActionItems() {
                       onClick={() => {
                         setActionItemId(actionItem._id);
                       }}
-                      sx={{ cursor: "pointer" }}
+                      className={styles.table_row}
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
@@ -194,10 +207,10 @@ export default function ActionItems() {
               </Table>
             </TableContainer>
             <TablePagination
-              rowsPerPageOptions={[8]}
+              rowsPerPageOptions={[rowsPerPage]}
               component="div"
               count={count}
-              rowsPerPage={8}
+              rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
             />
@@ -205,10 +218,10 @@ export default function ActionItems() {
         </div>
         <ActionItemModal
           open={!!actionItemId}
+          onClose={() => setActionItemId(null)}
           actionItem={actionItems.find((a) => {
             return a._id === actionItemId;
           })}
-          closeModal={() => setActionItemId(null)}
           toggleActionItemCompletion={toggleActionItemCompletion}
         />
       </div>

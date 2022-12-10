@@ -244,13 +244,13 @@ describe("lib/controllers/meeting", () => {
         owner_id: this.user._id,
         name: "meeting 2",
         date: new Date("01 January 1990 01:22 UTC"),
-        status: "sent",
+        status: "draft",
       });
       this.ownedMeeting3 = fakeMeeting({
         owner_id: this.user._id,
         name: "meeting 3",
         date: new Date("05 October 2500 14:48 UTC"),
-        status: "sent",
+        status: "live",
       });
       this.ownedMeeting4 = fakeMeeting({
         owner_id: this.user._id,
@@ -397,6 +397,22 @@ describe("lib/controllers/meeting", () => {
       const { data } = await client.get(`/meeting`);
 
       assert.strictEqual(data.filtered, false);
+    });
+
+    it("should filter meeting by status", async () => {
+      await Promise.all([
+        Meeting.create(this.ownedMeeting),
+        Meeting.create(this.ownedMeeting2),
+      ]);
+
+      const filters = { status: "draft" };
+
+      const { data } = await client.get(`/meeting`, {
+        params: filters,
+      });
+
+      assert.strictEqual(data.meetings.length, 1);
+      assert.strictEqual(data.meetings[0].status, "draft");
     });
   });
 

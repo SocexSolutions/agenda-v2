@@ -1,4 +1,4 @@
-const statusActions = {
+export const statusInfo = {
   draft: {
     color: "purple",
     actions: [
@@ -36,6 +36,10 @@ const statusActions = {
   },
 };
 
+export const getStatusNames = () => {
+  return Object.keys(statusInfo);
+};
+
 export const getStatusInfo = ({ status }) => {
-  return statusActions[status];
+  return statusInfo[status];
 };

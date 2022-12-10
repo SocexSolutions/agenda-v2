@@ -1,59 +1,22 @@
 @use "../../../../styles/colors.scss";
 
-.table {
+.table_container {
   width: 100%;
   border: 1px solid colors.$border;
   background: colors.$foreground;
   border-radius: 6px;
   margin-bottom: 1em;
-  //padding: 1em;
 }
 
-.filter_box {
-  background-color: colors.$background;
-  height: 3em;
-  transition: height 0.2s;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  padding: 0 1em;
-  //padding-bottom: 1em;
-  border-bottom: 1px solid colors.$border;
-  overflow: hidden;
-
-  .visible {
-    display: flex;
-    align-items: center;
-    margin-top: 0.3em;
-    gap: 0.7em;
-  }
-
-  .hidden {
-    margin-top: 0.7em;
-  }
+.table_header {
+  font-weight: bold;
 }
 
-.filter_box_open {
-  transition: height 0.2s;
-  height: 10em;
-}
-
-.row {
-  border-top: 1px solid colors.$border;
-
-  // Padding must be added to p in order for it to be clickable.
-  p {
-    padding: 0.75em;
-    margin: 0;
-  }
-
-  &:nth-child(2) {
-    border-top: none;
-  }
+.table_row {
+  cursor: pointer;
 
   &:hover {
-    cursor: pointer;
-    background: colors.$background;
+    background: colors.$foregroundHighlight;
   }
 }
 

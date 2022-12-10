@@ -5,3 +5,15 @@
   background: colors.$foreground;
   border-radius: 6px;
 }
+
+.table_header {
+  font-weight: bold;
+}
+
+.table_row {
+  cursor: pointer;
+
+  &:hover {
+    background: colors.$foregroundHighlight;
+  }
+}
