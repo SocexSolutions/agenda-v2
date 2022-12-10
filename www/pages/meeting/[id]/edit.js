@@ -1,14 +1,12 @@
 import HeaderForm from "../../../components/pages/Edit/HeaderForm/HeaderForm";
 import StatusButton from "../../../components/pages/Edit/StatusButton/StatusButton";
-import CardBoard from "../../../components/shared/CardBoard/CardBoard";
 import ChipForm from "../../../components/shared/ChipForm/ChipForm";
-import CardForm from "../../../components/shared/CardForm/CardForm";
 import LoadingIcon from "../../../components/shared/LoadingIcon/LoadingIcon";
+import TopicBoard from "../../../components/pages/Edit/TopicBoard/TopicBoard";
 
 import { Fade } from "@mui/material";
 
 import meetingStore from "../../../store/features/meeting";
-import topicStore from "../../../store/features/topic";
 import participantStore from "../../../store/features/participant";
 
 import { useRouter } from "next/router";
@@ -111,23 +109,7 @@ const Meeting = (props) => {
             }
           >
             <h3>Topics</h3>
-            <CardBoard
-              selector={(state) =>
-                meetingStore.selectors.topics(state, meeting_id)
-              }
-              create={(payload) =>
-                dispatch(
-                  topicStore.actions.create({
-                    meeting_id,
-                    ...payload,
-                  })
-                )
-              }
-              update={(item) => dispatch(topicStore.actions.update(item))}
-              destroy={(item) => dispatch(topicStore.actions.delete(item))}
-              Card={CardForm}
-              itemName={"Topic"}
-            />
+            <TopicBoard meetingId={meeting_id} />
           </section>
         </div>
       </div>
