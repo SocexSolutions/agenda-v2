@@ -3,14 +3,19 @@ import { Button, Fade } from "@mui/material";
 import TopicCard from "../../../shared/TopicCard/TopicCard";
 
 import meetingStore from "../../../../store/features/meeting";
+import { selectUser } from "../../../../store/features/user";
+
+import { calcUserLikes, calcMaxLikes } from "../../../../utils/topic-likes";
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import styles from "./TopicBoard.module.scss";
 
-export default function TopicBoard({ meetingId }) {
+export default function TopicBoard({ meetingId, showLike, className }) {
   const dispatch = useDispatch();
+
+  const user = useSelector(selectUser);
 
   const [unsavedTopics, setUnsavedTopics] = useState([]);
 
@@ -32,11 +37,16 @@ export default function TopicBoard({ meetingId }) {
     }
   });
 
+  const userLikes = calcUserLikes(topics, user);
+
   const cards = sorted.map((topic) => {
     return (
       <TopicCard
         key={JSON.stringify(topic)}
         topic={topic}
+        showLike={showLike}
+        userLikes={userLikes}
+        maxLikes={calcMaxLikes(topics)}
         deleteUnsaved={(id) => {
           setUnsavedTopics(unsavedTopics.filter((t) => t._id !== id));
         }}
@@ -46,7 +56,7 @@ export default function TopicBoard({ meetingId }) {
   });
 
   return (
-    <div className={styles.topic_board}>
+    <div className={styles.topic_board + " " + className}>
       <Fade in={cards.length !== 0}>
         <div className={styles.cards_container}>{cards}</div>
       </Fade>
@@ -60,6 +70,7 @@ export default function TopicBoard({ meetingId }) {
             meeting_id: meetingId,
             name: "",
             description: "",
+            likes: [],
           };
           setUnsavedTopics([...unsavedTopics, newTopic]);
         }}

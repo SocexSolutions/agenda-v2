@@ -5,6 +5,7 @@
   background: var(--foreground);
   border-radius: 6px;
   padding: 1em;
+  position: relative;
 
   p {
     white-space: pre-wrap;
@@ -24,10 +25,14 @@
 }
 
 .icon_container {
-  display: flex;
-  justify-content: center;
-  padding-left: 0.5em;
-  width: 2.5em;
+  position: absolute;
+  top: 1em;
+  right: 1em;
+}
+
+.like_button {
+  width: 8em;
+  margin-top: 4em;
 }
 
 .content_container {
