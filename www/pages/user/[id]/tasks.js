@@ -86,17 +86,21 @@ export default function ActionItems() {
     setActionItemId(null);
   };
 
+  const updateWindowDimensions = () => {
+    const newHeight = window.innerHeight - 410;
+
+    setRowsPerPage(Math.floor(newHeight / 64));
+  };
+
+  useEffect(() => {
+    updateWindowDimensions();
+  }, []);
+
   useEffect(() => {
     load();
   }, [debouncedFilters, page, rowsPerPage]);
 
   useEffect(() => {
-    const updateWindowDimensions = () => {
-      const newHeight = window.innerHeight - 100;
-
-      setRowsPerPage(Math.floor(newHeight / 90));
-    };
-
     window.addEventListener("resize", updateWindowDimensions);
 
     return () => window.removeEventListener("resize", updateWindowDimensions);

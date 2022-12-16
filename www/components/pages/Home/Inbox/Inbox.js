@@ -40,13 +40,12 @@ export default function Inbox({
   page,
   setPage,
   rowsPerPage,
-  setRowsPerPage,
 }) {
   const router = useRouter();
 
   const [meetingId, setMeetingId] = useState(null);
 
-  const debouncedRowsPerPage = useDebounce(rowsPerPage, 250);
+  const debouncedRowsPerPage = useDebounce(rowsPerPage, 200);
 
   const createMeeting = async () => {
     // create a draft meeting before redirect so that created participants
@@ -55,18 +54,6 @@ export default function Inbox({
 
     router.push(`/meeting/${res._id}/edit`);
   };
-
-  useEffect(() => {
-    const updateWindowDimensions = () => {
-      const newHeight = window.innerHeight - 200;
-
-      setRowsPerPage(Math.floor(newHeight / 90));
-    };
-
-    window.addEventListener("resize", updateWindowDimensions);
-
-    return () => window.removeEventListener("resize", updateWindowDimensions);
-  }, []);
 
   useEffect(() => {
     refresh();

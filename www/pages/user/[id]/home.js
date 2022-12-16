@@ -25,7 +25,7 @@ export default function Home({ store }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(8);
 
-  const debouncedFilters = useDebounce(filters, 250);
+  const debouncedFilters = useDebounce(filters, 200);
 
   const user = useSelector((state) => state.user);
 
@@ -62,6 +62,22 @@ export default function Home({ store }) {
       setLoading(false);
     }
   }
+
+  const updateWindowDimensions = () => {
+    const newHeight = window.innerHeight - 410;
+
+    setRowsPerPage(Math.floor(newHeight / 64));
+  };
+
+  useEffect(() => {
+    updateWindowDimensions();
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("resize", updateWindowDimensions);
+
+    return () => window.removeEventListener("resize", updateWindowDimensions);
+  }, []);
 
   useEffect(() => {
     if (user._id) {
