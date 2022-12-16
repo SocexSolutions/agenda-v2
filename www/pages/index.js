@@ -2,12 +2,23 @@ import { Button } from "@mui/material";
 
 import { useRouter } from "next/router";
 
+import { useSelector } from "react-redux";
+
+import { selectUser } from "../store/features/user";
+
 import Link from "next/link";
 
 import styles from "../styles/pages/index.module.scss";
 
 const Home = () => {
   const router = useRouter();
+
+  const user = useSelector(selectUser);
+
+  // If user is already logged in, redirect to their home page
+  if (user && user._id) {
+    router.replace(`/user/${user._id}/home`);
+  }
 
   return (
     <>
