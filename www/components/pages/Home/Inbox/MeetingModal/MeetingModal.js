@@ -89,6 +89,7 @@ export default function MeetingModal({ meeting, open, onClose, refresh }) {
               <Button
                 color="blue"
                 variant="contained"
+                disableElevation
                 onClick={() => {
                   dispatch(
                     meetingStore.actions.updateStatus(meeting._id, "live")
@@ -103,6 +104,7 @@ export default function MeetingModal({ meeting, open, onClose, refresh }) {
             <Button
               color="primary"
               variant="contained"
+              disableElevation
               onClick={() => router.push(`/meeting/${meeting._id}/meet`)}
             >
               View Results
@@ -112,32 +114,40 @@ export default function MeetingModal({ meeting, open, onClose, refresh }) {
             <Button
               color="blue"
               variant="contained"
+              disableElevation
               onClick={() => router.push(`/meeting/${meeting._id}/meet`)}
             >
               Join
             </Button>
           )}
-          {isOwner && meeting.status !== "draft" && (
-            <Button
-              color="primary"
-              variant="text"
-              onClick={() => router.push(`/meeting/${meeting._id}/vote`)}
-            >
-              View Voting
-            </Button>
-          )}
           {isOwner && meeting.status === "draft" && (
-            <Button color="green" variant="contained" onClick={onSend}>
-              Send
-            </Button>
-          )}
-          {!isOwner && meeting.status === "sent" && (
             <Button
               color="green"
               variant="contained"
+              disableElevation
+              onClick={onSend}
+            >
+              Send
+            </Button>
+          )}
+          {meeting.status === "sent" && (
+            <Button
+              color="green"
+              variant="contained"
+              disableElevation
               onClick={() => router.push(`/meeting/${meeting._id}/vote`)}
             >
               Vote
+            </Button>
+          )}
+          {meeting.status !== "draft" && meeting.status !== "sent" && (
+            <Button
+              color="primary"
+              variant="text"
+              disableElevation
+              onClick={() => router.push(`/meeting/${meeting._id}/vote`)}
+            >
+              View Voting
             </Button>
           )}
         </div>
