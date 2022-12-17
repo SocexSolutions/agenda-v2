@@ -2,7 +2,6 @@ import { toggleDrawer } from "../../../store/features/drawer";
 import ProfileButton from "../ProfileButton/ProfileButton";
 import { IconButton, Button } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useEffect, useState } from "react";
@@ -19,11 +18,9 @@ const Nav = () => {
   const user = useSelector(selectUser);
 
   const [history, setHistory] = useState([]);
-  const [whereInHistory, setWhereInHistory] = useState(-1);
+  const [whereInHistory, setWhereInHistory] = useState(0);
   const [backPressed, setBackPressed] = useState(false);
   const [forwardPressed, setForwardPressed] = useState(false);
-
-  const homeHref = user && user._id ? `/user/${user._id}/home` : `/login`;
 
   // Set the history state making sure that there are now duplicates. If there
   // are duplicates, the history position will be adjusted to reflect the
@@ -78,6 +75,10 @@ const Nav = () => {
     // so we cannot use it
     if (!router.isReady) {
       return;
+    }
+
+    if (router.isReady && history.length === 0) {
+      safeSetHistory([router.asPath]);
     }
 
     if (!backPressed && !forwardPressed) {
@@ -135,12 +136,6 @@ const Nav = () => {
           <div className={styles.start}>
             <IconButton onClick={() => dispatch(toggleDrawer())}>
               <MenuIcon />
-            </IconButton>
-            <IconButton
-              onClick={() => router.push(homeHref)}
-              disabled={router.asPath === homeHref}
-            >
-              <HomeOutlinedIcon />
             </IconButton>
             <IconButton
               disabled={
