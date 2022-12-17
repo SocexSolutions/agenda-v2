@@ -1,18 +1,33 @@
-import React from "react";
-import Button from "@mui/material/Button";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+
+import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import Tag from "../../../shared/Tag/Tag";
-import { getStatusInfo } from "../../../../utils/meeting-status";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+
+import Tag from "../Tag/Tag";
+
+import meetingStore from "../../../store/features/meeting";
+
+import { useDispatch } from "react-redux";
+
+import { useState, useRef } from "react";
+
+import { getStatusInfo } from "../../../utils/meeting-status";
+
 import styles from "./StatusButton.module.scss";
 
-export default function StatusButton({ status, setMeetingStatus }) {
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
+export default function StatusButton({ meeting, editable }) {
+  const dispatch = useDispatch();
+  const anchorRef = useRef(null);
+
+  const [open, setOpen] = useState(false);
 
   const handleToggle = () => {
+    if (!editable) {
+      return;
+    }
+
     setOpen((prevOpen) => !prevOpen);
   };
 
@@ -24,24 +39,37 @@ export default function StatusButton({ status, setMeetingStatus }) {
     setOpen(false);
   };
 
-  const statusInfo = getStatusInfo({ status });
+  const setMeetingStatus = (status) => {
+    dispatch(meetingStore.actions.updateStatus(meeting._id, status));
+  };
+
+  const statusInfo = getStatusInfo(meeting);
 
   if (!statusInfo) {
     return;
+  }
+
+  const statusButtonClasses = [styles.status_button];
+
+  if (editable) {
+    statusButtonClasses.push(styles.editable);
   }
 
   return (
     <>
       <Button
         variant="contained"
+        className={statusButtonClasses.join(" ")}
         ref={anchorRef}
         color={statusInfo.color}
         disableElevation
-        endIcon={statusInfo.actions?.length ? <ArrowDropDownIcon /> : ""}
+        endIcon={
+          statusInfo.actions?.length && editable ? <ArrowDropDownIcon /> : ""
+        }
         onClick={handleToggle}
         disabled={!statusInfo.actions?.length}
       >
-        {status}
+        {meeting.status}
       </Button>
       <Menu anchorEl={anchorRef.current} open={open} onClose={handleClose}>
         {statusInfo.actions.map((a) => {
@@ -62,7 +90,7 @@ export default function StatusButton({ status, setMeetingStatus }) {
                   size="small"
                   className={styles.first_tag}
                 >
-                  {status}
+                  {meeting.status}
                 </Tag>
                 <ArrowForwardIcon className={styles.arrow} />
                 <Tag

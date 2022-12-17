@@ -3,6 +3,7 @@ import ActionItemBar from "../../../components/pages/Meet/ActionItemBar/ActionIt
 import TopicDisplay from "../../../components/pages/Meet/TopicDisplay/TopicDisplay";
 import Board from "../../../components/pages/Meet/Board/Board";
 import LoadingIcon from "../../../components/shared/LoadingIcon/LoadingIcon";
+import MeetingHeader from "../../../components/shared/MeetingHeader/MeetingHeader";
 
 import { Fade } from "@mui/material";
 import { Button } from "@mui/material";
@@ -115,9 +116,9 @@ export default function Meet() {
     <Fade in={true}>
       <div className={shared.page}>
         <div className={styles.container}>
-          <div className={styles.header}>
+          <MeetingHeader meeting={meeting}>
             <h2>Meet: {meeting.name}</h2>
-          </div>
+          </MeetingHeader>
           <div className={styles.main_grid}>
             <div>
               <TopicSelectBar

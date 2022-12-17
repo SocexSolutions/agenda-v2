@@ -1,5 +1,6 @@
 import LoadingIcon from "../../../components/shared/LoadingIcon/LoadingIcon";
 import TopicBoard from "../../../components/pages/Edit/TopicBoard/TopicBoard";
+import MeetingHeader from "../../../components/shared/MeetingHeader/MeetingHeader";
 
 import styles from "../../../styles/pages/meeting/[id]/vote.module.scss";
 import shared from "../../../styles/Shared.module.css";
@@ -53,10 +54,11 @@ const Vote = () => {
   return (
     <div className={shared.page}>
       <div className={shared.container}>
-        <h2>Voting For: {meeting.name}</h2>
+        <MeetingHeader meeting={meeting}>
+          <h2>Vote: {meeting.name}</h2>
+        </MeetingHeader>
         <div className={styles.topic_grid}>
           <TopicBoard meetingId={meeting._id} showLike={true} />
-
           <div
             className={`${styles.vote_count} ${shared.card} ${
               userLikes > maxLikes && styles.max_votes

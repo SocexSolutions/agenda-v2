@@ -1,5 +1,5 @@
 import HeaderForm from "../../../components/pages/Edit/HeaderForm/HeaderForm";
-import StatusButton from "../../../components/pages/Edit/StatusButton/StatusButton";
+import MeetingHeader from "../../../components/shared/MeetingHeader/MeetingHeader";
 import ChipForm from "../../../components/shared/ChipForm/ChipForm";
 import LoadingIcon from "../../../components/shared/LoadingIcon/LoadingIcon";
 import TopicBoard from "../../../components/pages/Edit/TopicBoard/TopicBoard";
@@ -27,7 +27,6 @@ const Meeting = (props) => {
   );
 
   const [initialized, setInitialized] = useState(false);
-  const [status, setStatus] = useState("");
 
   useEffect(() => {
     if (!initialized && meeting_id) {
@@ -37,20 +36,7 @@ const Meeting = (props) => {
 
       setInitialized(true);
     }
-
-    if (meeting) {
-      setStatus(meeting.status);
-    }
   }, [meeting, props.store, router.query.id]);
-
-  const updateMeetingStatus = ({ status }) => {
-    dispatch(meetingStore.actions.updateStatus(meeting_id, status));
-    setStatus(status);
-
-    if (status === "live") {
-      router.push(`/meeting/${meeting_id}/meet`);
-    }
-  };
 
   const loading = !meeting || !meeting_id;
 
@@ -66,13 +52,9 @@ const Meeting = (props) => {
     <Fade in={initialized}>
       <div className={shared.page}>
         <div className={styles.container}>
-          <section className={styles.header}>
-            <h2 className={shared.page_title}>Edit Meeting: {meeting.name}</h2>
-            <StatusButton
-              status={status}
-              setMeetingStatus={(status) => updateMeetingStatus({ status })}
-            />
-          </section>
+          <MeetingHeader meeting={meeting}>
+            <h2 className={shared.page_title}>Edit: {meeting.name}</h2>
+          </MeetingHeader>
           <section className={shared.card + " " + styles.section}>
             <h3 className={styles.card_title}>Meeting Details</h3>
             <HeaderForm meetingId={meeting_id} />
