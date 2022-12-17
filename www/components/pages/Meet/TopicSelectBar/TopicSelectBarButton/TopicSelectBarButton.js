@@ -13,7 +13,7 @@ export default function TopicSelectBarButton({
   ...buttonProps
 }) {
   const classes = [styles.side_bar_button];
-  const iconCls = [styles.icon];
+  const iconCls = [styles.icon, styles.overlap];
 
   if (topic.status === "closed") {
     classes.push(styles.closed);
@@ -41,7 +41,16 @@ export default function TopicSelectBarButton({
   if (topic.status === "closed") {
     icon = <CheckCircleIcon className={iconCls.join(" ")} />;
   } else {
-    icon = <CircleIcon className={iconCls.join(" ")} />;
+    icon = (
+      <div className={styles.icon_container}>
+        <p className={[styles.overlap, styles.icon_text].join(" ")}>
+          {topic.likes.length}
+        </p>
+        <CircleIcon className={iconCls.join(" ")}>
+          {topic.likes.length}
+        </CircleIcon>
+      </div>
+    );
   }
 
   const button = (
