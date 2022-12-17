@@ -7,7 +7,7 @@ import Chip from "@mui/material/Chip";
 
 import styles from "./Filters.module.scss";
 
-import { getStatusNames } from "../../../../../utils/status";
+import { getStatusNames } from "../../../../../utils/meeting-status";
 import { capitalize } from "../../../../../utils/capitalize";
 
 import { useState } from "react";

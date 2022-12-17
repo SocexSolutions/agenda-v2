@@ -2,15 +2,28 @@ import { TextField, Button } from "@mui/material";
 
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 
+import LikeButton from "./LikeButton/LikeButton";
+
 import topicStore from "../../../store/features/topic";
+import { selectUser } from "../../../store/features/user";
+import { notify } from "../../../store/features/snackbar";
 
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import styles from "./TopicCard.module.scss";
 
-export default function TopicCard({ topic, deleteUnsaved, className }) {
+export default function TopicCard({
+  topic,
+  deleteUnsaved,
+  showLike,
+  userLikes,
+  maxLikes,
+  className,
+}) {
   const dispatch = useDispatch();
+
+  const user = useSelector(selectUser);
 
   const [editing, setEditing] = useState(topic._id.includes("temp"));
   const [name, setName] = useState(topic.name);
@@ -55,18 +68,37 @@ export default function TopicCard({ topic, deleteUnsaved, className }) {
     }
   };
 
+  const onLike = () => {
+    if (userLikes > maxLikes && !topic.likes.includes(user.email)) {
+      dispatch(
+        notify({
+          type: "danger",
+          message: "You are out of votes.",
+        })
+      );
+      return;
+    }
+
+    dispatch(topicStore.actions.like(topic));
+  };
+
   const maybeHandleShortcut = (e) => {
     if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
       onSave();
     }
   };
 
+  const liked = topic.likes.includes(user.email);
+
   if (!editing) {
+    let cardClass = `${styles.card} ${className}`;
+
+    if (topic.owner_id === user._id) {
+      cardClass += ` ${styles.clickable}`;
+    }
+
     return (
-      <div
-        className={`${styles.card} ${styles.clickable} ${className}`}
-        onClick={() => setEditing(true)}
-      >
+      <div className={cardClass} onClick={() => setEditing(true)}>
         <div className={styles.content_container}>
           <h4 className={styles.name}>{name}</h4>
           {description && <p className={styles.description}>{description}</p>}
@@ -74,6 +106,16 @@ export default function TopicCard({ topic, deleteUnsaved, className }) {
         <div className={styles.icon_container}>
           <QuestionAnswerIcon color="primary" className={styles.icon} />
         </div>
+        {showLike && (
+          <LikeButton
+            liked={liked}
+            onClick={(e) => {
+              e.stopPropagation();
+              onLike();
+            }}
+            className={styles.like_button}
+          />
+        )}
       </div>
     );
   }

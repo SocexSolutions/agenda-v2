@@ -4,7 +4,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Tag from "../../../shared/Tag/Tag";
-import { getStatusInfo } from "../../../../utils/status";
+import { getStatusInfo } from "../../../../utils/meeting-status";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import styles from "./StatusButton.module.scss";
 

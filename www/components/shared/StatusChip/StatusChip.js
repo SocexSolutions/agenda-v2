@@ -1,5 +1,5 @@
 import Chip from "@mui/material/Chip";
-import { getStatusInfo } from "../../../utils/status";
+import { getStatusInfo } from "../../../utils/meeting-status";
 import { capitalize } from "../../../utils/capitalize";
 
 export default function StatusChip({ status, ...props }) {

@@ -109,7 +109,10 @@ const Meeting = (props) => {
             }
           >
             <h3>Topics</h3>
-            <TopicBoard meetingId={meeting_id} />
+            <TopicBoard
+              meetingId={meeting_id}
+              className={styles.topic_board_container}
+            />
           </section>
         </div>
       </div>
