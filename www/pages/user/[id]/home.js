@@ -23,13 +23,15 @@ export default function Home({ store }) {
   const [filters, setFilters] = useState(initialFilters);
   const [meetingCount, setMeetingCount] = useState(0);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(8);
+  const [rowsPerPage, setRowsPerPage] = useState(null);
 
   const debouncedFilters = useDebounce(filters, 200);
 
-  const user = useSelector((state) => state.user);
-
   async function load() {
+    if (!rowsPerPage) {
+      return;
+    }
+
     setLoading(true);
 
     const limit = rowsPerPage;
@@ -70,20 +72,20 @@ export default function Home({ store }) {
   };
 
   useEffect(() => {
-    updateWindowDimensions();
-  }, []);
-
-  useEffect(() => {
     window.addEventListener("resize", updateWindowDimensions);
 
     return () => window.removeEventListener("resize", updateWindowDimensions);
   }, []);
 
   useEffect(() => {
-    if (user._id) {
+    updateWindowDimensions();
+  }, []);
+
+  useEffect(() => {
+    if (rowsPerPage) {
       load();
     }
-  }, [user, debouncedFilters, page]);
+  }, [debouncedFilters, page]);
 
   return (
     <Fade in={!loading}>

@@ -35,7 +35,7 @@ export default function ActionItems() {
 
   const user = useSelector((state) => state.user);
 
-  const [rowsPerPage, setRowsPerPage] = useState(8);
+  const [rowsPerPage, setRowsPerPage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [statusAnchor, setStatusAnchor] = useState(null);
   const [page, setPage] = useState(0);
@@ -97,14 +97,16 @@ export default function ActionItems() {
   }, []);
 
   useEffect(() => {
-    load();
-  }, [debouncedFilters, page, rowsPerPage]);
-
-  useEffect(() => {
     window.addEventListener("resize", updateWindowDimensions);
 
     return () => window.removeEventListener("resize", updateWindowDimensions);
   }, []);
+
+  useEffect(() => {
+    if (rowsPerPage) {
+      load();
+    }
+  }, [debouncedFilters, page, rowsPerPage]);
 
   return (
     <Fade in={!loading}>
