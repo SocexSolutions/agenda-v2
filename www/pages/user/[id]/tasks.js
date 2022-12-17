@@ -35,7 +35,7 @@ export default function ActionItems() {
 
   const user = useSelector((state) => state.user);
 
-  const [rowsPerPage, setRowsPerPage] = useState(null);
+  const [rowsPerPage, setRowsPerPage] = useState(0);
   const [loading, setLoading] = useState(true);
   const [statusAnchor, setStatusAnchor] = useState(null);
   const [page, setPage] = useState(0);
@@ -47,6 +47,12 @@ export default function ActionItems() {
   const debouncedFilters = useDebounce(filters, 250);
 
   const load = async () => {
+    const hasDeterminedPageSize = rowsPerPage > 0;
+
+    if (!hasDeterminedPageSize) {
+      return;
+    }
+
     const limit = rowsPerPage;
     const skip = limit * page;
 
