@@ -27,7 +27,7 @@ Headers are sent with every http request and give information about a given requ
 
 *Request Headers* - instructions for the server that the client is requesting data from like what type of data we accept (html, xml...), what route we are going to, what browser is being used also known as the `user-agent`,  
 
-*Response Headers* - instructions for the client as to how to interact with the server, gives what kind of data was sent back, has the `set-cookie` header
+*Response Headers* - instructions for the client as on how to interact with the server, gives what kind of data was sent back, has the `set-cookie` header
 
 For more info on headers see [https://developer.mozilla.org/en-US/docs/Web/HTTP/Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers)s 
 
