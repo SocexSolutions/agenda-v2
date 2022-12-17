@@ -98,7 +98,14 @@ export default function TopicCard({
     }
 
     return (
-      <div className={cardClass} onClick={() => setEditing(true)}>
+      <div
+        className={cardClass}
+        onClick={() => {
+          if (topic.owner_id === user._id) {
+            setEditing(true);
+          }
+        }}
+      >
         <div className={styles.content_container}>
           <h4 className={styles.name}>{name}</h4>
           {description && <p className={styles.description}>{description}</p>}
