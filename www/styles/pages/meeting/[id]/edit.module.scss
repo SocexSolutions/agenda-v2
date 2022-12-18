@@ -11,19 +11,8 @@
   max-width: 1200px;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: -1em; // undo margin from shared card
-}
-
-.meetingButton {
-  margin-left: auto;
-}
-
 .section {
-  margin: 1.5em 0 1.5em 0;
+  margin-bottom: 1em;
 }
 
 .card_title {

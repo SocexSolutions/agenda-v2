@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import Fade from "@mui/material/Fade";
 
 import Inbox from "../../../components/pages/Home/Inbox/Inbox";
@@ -23,13 +22,17 @@ export default function Home({ store }) {
   const [filters, setFilters] = useState(initialFilters);
   const [meetingCount, setMeetingCount] = useState(0);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(8);
+  const [rowsPerPage, setRowsPerPage] = useState(0);
 
   const debouncedFilters = useDebounce(filters, 200);
 
-  const user = useSelector((state) => state.user);
-
   async function load() {
+    const hasDeterminedPageSize = rowsPerPage > 0;
+
+    if (!hasDeterminedPageSize) {
+      return;
+    }
+
     setLoading(true);
 
     const limit = rowsPerPage;
@@ -70,20 +73,20 @@ export default function Home({ store }) {
   };
 
   useEffect(() => {
-    updateWindowDimensions();
-  }, []);
-
-  useEffect(() => {
     window.addEventListener("resize", updateWindowDimensions);
 
     return () => window.removeEventListener("resize", updateWindowDimensions);
   }, []);
 
   useEffect(() => {
-    if (user._id) {
+    updateWindowDimensions();
+  }, []);
+
+  useEffect(() => {
+    if (rowsPerPage) {
       load();
     }
-  }, [user, debouncedFilters, page]);
+  }, [debouncedFilters, page]);
 
   return (
     <Fade in={!loading}>

@@ -14,6 +14,7 @@
   // Use border to offset left increase due to hover border.
   border: 1px solid colors.$foreground;
   padding: 0.5em;
+  transition: background 0.2s ease-in-out;
 
   &:hover {
     cursor: pointer;
@@ -34,8 +35,30 @@
   margin: 0;
 }
 
+.icon_container {
+  display: grid;
+  place-items: center;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+
+  p {
+    margin: 0;
+  }
+}
+
+.overlap {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.icon_text {
+  color: colors.$lightText;
+  z-index: 5;
+  font-size: 1.1em;
+}
+
 .icon {
-  font-size: 1.5em;
+  font-size: 1.8em;
 
   &_high {
     color: colors.$danger;

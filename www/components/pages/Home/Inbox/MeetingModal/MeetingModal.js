@@ -4,7 +4,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { useRouter } from "next/router";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import meetingAPI from "../../../../../api/meeting";
 import meetingStore from "../../../../../store/features/meeting";
@@ -22,7 +22,6 @@ import styles from "./MeetingModal.module.scss";
 export default function MeetingModal({ meeting, open, onClose, refresh }) {
   const router = useRouter();
   const user = useSelector((state) => state.user);
-  const dispatch = useDispatch();
   const store = useStore();
 
   if (!meeting) return null;
@@ -84,22 +83,18 @@ export default function MeetingModal({ meeting, open, onClose, refresh }) {
         </div>
 
         <div className={styles.footer}>
-          {isOwner &&
-            (meeting.status === "sent" || meeting.status === "draft") && (
-              <Button
-                color="blue"
-                variant="contained"
-                disableElevation
-                onClick={() => {
-                  dispatch(
-                    meetingStore.actions.updateStatus(meeting._id, "live")
-                  );
-                  router.push(`/meeting/${meeting._id}/meet`);
-                }}
-              >
-                Meet
-              </Button>
-            )}
+          {meeting.status !== "draft" && meeting.status !== "completed" && (
+            <Button
+              color="blue"
+              variant="contained"
+              disableElevation
+              onClick={() => {
+                router.push(`/meeting/${meeting._id}/meet`);
+              }}
+            >
+              Meet
+            </Button>
+          )}
           {meeting.status === "completed" && (
             <Button
               color="primary"
@@ -108,16 +103,6 @@ export default function MeetingModal({ meeting, open, onClose, refresh }) {
               onClick={() => router.push(`/meeting/${meeting._id}/meet`)}
             >
               View Results
-            </Button>
-          )}
-          {meeting.status === "live" && (
-            <Button
-              color="blue"
-              variant="contained"
-              disableElevation
-              onClick={() => router.push(`/meeting/${meeting._id}/meet`)}
-            >
-              Join
             </Button>
           )}
           {isOwner && meeting.status === "draft" && (
@@ -130,7 +115,7 @@ export default function MeetingModal({ meeting, open, onClose, refresh }) {
               Send
             </Button>
           )}
-          {meeting.status === "sent" && (
+          {meeting.status !== "draft" && (
             <Button
               color="green"
               variant="contained"
@@ -138,16 +123,6 @@ export default function MeetingModal({ meeting, open, onClose, refresh }) {
               onClick={() => router.push(`/meeting/${meeting._id}/vote`)}
             >
               Vote
-            </Button>
-          )}
-          {meeting.status !== "draft" && meeting.status !== "sent" && (
-            <Button
-              color="primary"
-              variant="text"
-              disableElevation
-              onClick={() => router.push(`/meeting/${meeting._id}/vote`)}
-            >
-              View Voting
             </Button>
           )}
         </div>

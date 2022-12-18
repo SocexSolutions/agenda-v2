@@ -1,4 +1,12 @@
-@use "../../../../styles/colors.scss";
+@use "../../../styles/colors.scss";
+
+.status_button {
+  cursor: default;
+
+  &.editable {
+    cursor: pointer;
+  }
+}
 
 .action_button {
   display: flex;
