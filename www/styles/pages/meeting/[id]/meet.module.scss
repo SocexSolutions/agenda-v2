@@ -25,6 +25,14 @@
   align-items: center;
 }
 
+.start_meeting {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .complete_button {
   margin-top: 30px;
   width: 200px;

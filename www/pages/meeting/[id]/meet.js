@@ -72,15 +72,41 @@ export default function Meet() {
     );
   }
 
-  const allDone = topics.every((topic) => topic.status === "closed");
+  const allTopicsDiscussed = topics.every((topic) => topic.status === "closed");
 
   let topicDisplay = (
     <h3 className={styles.no_topic}>Select a topic on the left.</h3>
   );
 
   const selectedTopic = topics.find((t) => t._id === selectedId);
+  const sortedTopics = topics.sort((a, b) => b.likes.length - a.likes.length);
+  const meetingStarted =
+    meeting.status === "live" || meeting.status === "completed";
 
-  if (allDone && !selectedTopic && meeting.status !== "completed") {
+  if (!selectedTopic && !meetingStarted) {
+    topicDisplay = (
+      <div className={styles.start_meeting}>
+        <Button
+          variant="contained"
+          className={styles.start_button}
+          color="green"
+          onClick={() => {
+            dispatch(meetingStore.actions.updateStatus(meeting._id, "live"));
+            if (sortedTopics.length > 0) {
+              setSelectedId(sortedTopics[0]._id);
+            }
+          }}
+        >
+          Start meeting
+        </Button>
+      </div>
+    );
+  } else if (
+    allTopicsDiscussed &&
+    !selectedTopic &&
+    meetingStarted &&
+    meeting.status !== "completed"
+  ) {
     topicDisplay = (
       <div className={styles.all_done}>
         <h3>
