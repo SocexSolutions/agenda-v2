@@ -10,10 +10,6 @@ const avatarSchema = new mongoose.Schema(
       validator: [colorValidator, 'Invalid color'],
       required: true,
     },
-    initials: {
-      type: String,
-      required: true
-    },
     image: {
       type: String
     },

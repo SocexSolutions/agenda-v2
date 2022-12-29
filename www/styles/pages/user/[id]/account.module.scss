@@ -1,0 +1,100 @@
+@use "../../../colors.scss";
+
+.container {
+  background: colors.$foreground;
+  border: colors.$border 1px solid;
+  border-radius: 6px;
+  margin-top: 2em;
+  width: 50%;
+  height: 25%;
+  min-height: 166px;
+  max-height: 167px;
+  min-width: 600px;
+  max-width: 768px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2em 2em 2em 2em;
+
+  &:focus {
+    border: none;
+  }
+}
+
+.main_options {
+  display: flex;
+
+  .avatar_current {
+    z-index: 2;
+  }
+
+  .avatar_current:hover {
+    opacity: 50%;
+    cursor: pointer;
+  }
+
+  .avatar_change{
+    position: absolute;
+    transform: translate(0, -100%);
+    z-index: 1;
+  }
+
+  .file_upload {
+    opacity: 0.0;
+ 
+    /* IE 8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+ 
+    /* IE 5-7 */
+    filter: alpha(opacity=0);
+  
+    /* Netscape or and older firefox browsers */
+    -moz-opacity: 0.0;
+ 
+    /* older Safari browsers */
+    -khtml-opacity: 0.0;
+ 
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height:100%;
+    cursor: pointer;
+ }
+
+  .info{
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 0 1em;
+    justify-content: center;
+
+
+    h1 {
+      font-weight: 500;
+      margin: 0;
+    }
+  
+    span {
+      font-size: small;
+    }
+  }
+}
+
+.account_options {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: .3em;
+  min-width: 125px;
+  margin-left: 25%;
+
+    
+  a {
+    font-size: x-small;
+  }
+
+  a:hover {
+    opacity: 60%;
+  }
+}

@@ -20,17 +20,10 @@ module.exports = {
         '100%,50%)'
       );
     };
-    const initials = subject_username
-      .match(/(\b\S)?/g)
-      .join("")
-      .match(/(^\S|\S$)?/g)
-      .join("")
-      .toUpperCase();
 
     const avatar = await Avatar.create({
       color: getColor(),
-      initials,
-      user_id: subject_id,
+      user_id: subject_id
     });
 
     res.status(200).send(avatar);
