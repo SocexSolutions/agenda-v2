@@ -131,6 +131,7 @@ export default function TopicCard({
     <div className={`${styles.card} ${className}`}>
       <div className={styles.content_container}>
         <TextField
+          autoFocus
           label="Name"
           variant="outlined"
           size="small"

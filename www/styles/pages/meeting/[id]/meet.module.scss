@@ -17,12 +17,28 @@
   text-align: center;
 }
 
-.all_done {
+.instructions {
   width: 100%;
+  padding: 0em 1.5em;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  h3 {
+    text-align: center;
+  }
+}
+
+.instructions_button {
+  margin-top: 1em;
+}
+
+.instructions_button_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
 }
 
 .complete_button {
