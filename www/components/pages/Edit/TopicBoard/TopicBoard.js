@@ -57,6 +57,9 @@ export default function TopicBoard({ meetingId, showLike, className }) {
 
   return (
     <div className={styles.topic_board + " " + className}>
+      {cards.length === 0 && (
+        <h3 className={styles.no_topics_message}>No topics yet.</h3>
+      )}
       <Fade in={cards.length !== 0}>
         <div className={styles.cards_container}>{cards}</div>
       </Fade>
