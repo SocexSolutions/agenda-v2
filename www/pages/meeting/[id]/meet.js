@@ -74,56 +74,30 @@ export default function Meet() {
 
   const allTopicsDiscussed = topics.every((topic) => topic.status === "closed");
 
-  let topicDisplay = (
-    <h3 className={styles.no_topic}>Select a topic on the left.</h3>
-  );
-
   const selectedTopic = topics.find((t) => t._id === selectedId);
   const sortedTopics = topics.sort((a, b) => b.likes.length - a.likes.length);
   const meetingStarted =
     meeting.status === "live" || meeting.status === "completed";
 
-  if (!selectedTopic && !meetingStarted) {
+  const noLikedTopics = sortedTopics[0] && sortedTopics[0].likes.length === 0;
+
+  let topicDisplay = (
+    <div className={styles.instructions}>
+      <h3>Select a topic on the left to discuss.</h3>
+    </div>
+  );
+
+  if (!topics.length) {
     topicDisplay = (
-      <div className={styles.start_meeting}>
+      <div className={styles.instructions}>
+        <h3>Looks like there are no topics for this meeting.</h3>
         <Button
           variant="contained"
-          className={styles.start_button}
+          className={styles.instructions_button}
           color="green"
-          onClick={() => {
-            dispatch(meetingStore.actions.updateStatus(meeting._id, "live"));
-            if (sortedTopics.length > 0) {
-              setSelectedId(sortedTopics[0]._id);
-            }
-          }}
+          onClick={() => router.push(`/meeting/${meeting._id}/vote`)}
         >
-          Start meeting
-        </Button>
-      </div>
-    );
-  } else if (
-    allTopicsDiscussed &&
-    !selectedTopic &&
-    meetingStarted &&
-    meeting.status !== "completed"
-  ) {
-    topicDisplay = (
-      <div className={styles.all_done}>
-        <h3>
-          Looks like you have discussed all topics, ready to complete the
-          meeting?
-        </h3>
-        <Button
-          variant="contained"
-          className={styles.complete_button}
-          onClick={() => {
-            dispatch(
-              meetingStore.actions.updateStatus(meeting._id, "completed")
-            );
-            router.push(`/user/${user._id}/home`);
-          }}
-        >
-          Complete Meeting
+          Add Topics
         </Button>
       </div>
     );
@@ -135,6 +109,77 @@ export default function Meet() {
         reOpenTopic={(t) => reOpenTopic(t)}
         hideTopic={() => setSelectedId(null)}
       />
+    );
+  } else if (!meetingStarted && noLikedTopics) {
+    topicDisplay = (
+      <div className={styles.instructions}>
+        <h3>
+          Looks like no votes have been cast. Do you still want to meet?
+        </h3>
+        <div className={styles.instructions_button_container}>
+          <Button
+            variant="contained"
+            className={styles.instructions_button}
+            color="green"
+            onClick={() => router.push(`/meeting/${meeting._id}/vote`)}
+          >
+            Vote
+          </Button>
+          <Button
+            variant="contained"
+            className={styles.instructions_button}
+            color="blue"
+            onClick={() => {
+              dispatch(meetingStore.actions.updateStatus(meeting._id, "live"));
+              if (sortedTopics.length > 0) {
+                setSelectedId(sortedTopics[0]._id);
+              }
+            }}
+          >
+            Meet
+          </Button>
+        </div>
+      </div>
+    );
+  } else if (!meetingStarted) {
+    topicDisplay = (
+      <div className={styles.instructions}>
+        <h3>Ready to meet?</h3>
+        <Button
+          variant="contained"
+          className={styles.instructions_button}
+          color="blue"
+          onClick={() => {
+            dispatch(meetingStore.actions.updateStatus(meeting._id, "live"));
+            if (sortedTopics.length > 0) {
+              setSelectedId(sortedTopics[0]._id);
+            }
+          }}
+        >
+          Meet
+        </Button>
+      </div>
+    );
+  } else if (allTopicsDiscussed && meeting.status !== "completed") {
+    topicDisplay = (
+      <div className={styles.instructions}>
+        <h3>
+          Looks like you have discussed all topics, ready to complete the
+          meeting?
+        </h3>
+        <Button
+          variant="contained"
+          className={styles.instructions_button}
+          onClick={() => {
+            dispatch(
+              meetingStore.actions.updateStatus(meeting._id, "completed")
+            );
+            router.push(`/user/${user._id}/home`);
+          }}
+        >
+          Complete Meeting
+        </Button>
+      </div>
     );
   }
 
