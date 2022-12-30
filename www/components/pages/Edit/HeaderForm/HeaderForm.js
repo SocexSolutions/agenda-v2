@@ -74,7 +74,7 @@ function HeaderForm({ meetingId }) {
         }}
       >
         <TextField
-          autofocus
+          autoFocus
           sx={{
             width: "100%",
             maxWidth: "400px",
