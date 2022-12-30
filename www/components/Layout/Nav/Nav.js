@@ -18,7 +18,7 @@ const Nav = () => {
   const user = useSelector(selectUser);
 
   const [history, setHistory] = useState([]);
-  const [whereInHistory, setWhereInHistory] = useState(0);
+  const [whereInHistory, setWhereInHistory] = useState(-1);
   const [backPressed, setBackPressed] = useState(false);
   const [forwardPressed, setForwardPressed] = useState(false);
 
@@ -56,7 +56,7 @@ const Nav = () => {
     );
 
     safeSetHistory(tempArr);
-    setWhereInHistory(tempArr.length - 1);
+    setWhereInHistory(tempArr.length - 2);
   };
 
   const handleHistoryWhenButtonsNotPressed = () => {
