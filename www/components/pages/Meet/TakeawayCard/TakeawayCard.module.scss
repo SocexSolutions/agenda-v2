@@ -1,12 +1,12 @@
 .card {
   display: flex;
+  position: relative;
 }
 
 .icon_container {
-  display: flex;
-  justify-content: center;
-  padding-left: 0.5em;
-  width: 2.5em;
+  position: absolute;
+  right: 1em;
+  top: 1em;
 }
 
 .content_container {
@@ -17,7 +17,7 @@
   cursor: pointer;
 }
 
-.name {
+.name_input {
   margin-bottom: 1em;
 }
 

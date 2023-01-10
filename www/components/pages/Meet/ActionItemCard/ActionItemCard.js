@@ -111,7 +111,6 @@ export default function ActionItemCard({
         <TextField
           autoFocus
           className={`${styles.name_input} ${styles.input}`}
-          fullWidth
           size="small"
           label="Name"
           onChange={(e) => setName(e.target.value)}
