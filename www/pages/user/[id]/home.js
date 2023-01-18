@@ -89,27 +89,29 @@ export default function Home({ store }) {
   }, [debouncedFilters, page]);
 
   return (
-    <Fade in={!loading}>
-      <div className={shared.page}>
-        <div className={shared.container}>
-          <h2 className={styles.page_title}>My Meetings</h2>
-          <Inbox
-            meetings={meetings}
-            owners={owners}
-            refresh={() => load()}
-            rowsPerPage={rowsPerPage}
-            setRowsPerPage={setRowsPerPage}
-            setFilters={setFilters}
-            filters={filters}
-            totalMeetings={meetingCount}
-            page={page}
-            setPage={setPage}
-            loading={loading}
-          />
-        </div>
-
-        <CreateFab />
+    <div className={shared.page}>
+      <div className={shared.container}>
+        <h2 className={styles.page_title}>My Meetings</h2>
+        <Fade in={!loading}>
+          <div>
+            <Inbox
+              meetings={meetings}
+              owners={owners}
+              refresh={() => load()}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              setFilters={setFilters}
+              filters={filters}
+              totalMeetings={meetingCount}
+              page={page}
+              setPage={setPage}
+              loading={loading}
+            />
+          </div>
+        </Fade>
       </div>
-    </Fade>
+
+      <CreateFab />
+    </div>
   );
 }
