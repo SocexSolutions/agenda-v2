@@ -20,6 +20,12 @@ const start = async () => {
     // cors
     if (process.env.NODE_ENV === "dev") {
       app.use(cors({ origin: "http://localhost:3000" }));
+    } else {
+      app.use(
+        cors({
+          origin: "www.meetingminder.dev",
+        })
+      );
     }
 
     app.use("/api/v1", router);
