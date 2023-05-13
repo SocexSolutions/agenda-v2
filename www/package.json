@@ -11,7 +11,7 @@
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.6.1",
-    "@mui/x-date-pickers": "^5.0.2",
+    "@mui/x-date-pickers": "^6.4.0",
     "@reduxjs/toolkit": "^1.8.6",
     "axios": "^1.2.0",
     "dayjs": "^1.11.6",
