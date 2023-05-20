@@ -979,7 +979,7 @@ describe("lib/controllers/meeting", () => {
 
       const found = await Meeting.findById(this.meeting._id);
 
-      assert.equal(found.tags[0]._id.toString(), this.tag._id.toString());
+      assert.equal(found.tags[0].toString(), this.tag._id.toString());
     });
 
     it("should not add a tag to a meeting if the user is not the meeting owner", async () => {

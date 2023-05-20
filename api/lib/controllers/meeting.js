@@ -5,7 +5,7 @@ const Participant = require("../models/participant");
 const ActionItem = require("../models/action-item");
 const Takeaway = require("../models/takeaway");
 const User = require("../models/user");
-const ObjectID = require("mongoose").Types.ObjectId;
+const { ObjectId } = require("mongodb");
 const authUtils = require("../util/authorization");
 
 module.exports = {
@@ -76,7 +76,7 @@ module.exports = {
     const [queryResult] = await Meeting.aggregate([
       {
         $match: {
-          _id: new ObjectID(_id),
+          _id: new ObjectId(_id),
         },
       },
       {
@@ -138,7 +138,7 @@ module.exports = {
     try {
       const { name, date, owner_id } = req.body.meeting;
 
-      const meeting_id = req.body.meeting?._id || new ObjectID();
+      const meeting_id = req.body.meeting?._id || new ObjectId();
       const subject_id = req.credentials.sub;
 
       let topics = req.body.topics || null;
@@ -216,7 +216,7 @@ module.exports = {
     await authUtils.checkParticipant(_id, req.credentials);
 
     const [{ participants }] = await Meeting.aggregate([
-      { $match: { _id: new ObjectID(_id) } },
+      { $match: { _id: new ObjectId(_id) } },
       {
         $lookup: {
           from: "participants",
@@ -236,7 +236,7 @@ module.exports = {
                 _id: 1,
                 email: 1,
                 username: 1,
-                meeting_id: new ObjectID(_id),
+                meeting_id: new ObjectId(_id),
               },
             },
           ],
@@ -354,7 +354,7 @@ module.exports = {
       pipelineFilters.push({
         $match: {
           owner_id: {
-            $in: owners.map((owner) => ObjectID(owner)),
+            $in: owners.map((owner) => new ObjectId(owner)),
           },
         },
       });
@@ -374,7 +374,7 @@ module.exports = {
 
     const pipeline = [
       {
-        $match: { _id: ObjectID(subject_id) },
+        $match: { _id: new ObjectId(subject_id) },
       },
       {
         $lookup: {
