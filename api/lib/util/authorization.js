@@ -2,7 +2,7 @@ const Participant = require("../models/participant");
 const Meeting = require("../models/meeting");
 const Group = require("../models/group");
 const mongoose = require("mongoose");
-const ObjectId = require("mongoose").Types.ObjectId;
+const { ObjectId } = require("mongodb");
 const AuthErr = require("../classes/auth-err");
 const jobi = require("@starryinternet/jobi");
 

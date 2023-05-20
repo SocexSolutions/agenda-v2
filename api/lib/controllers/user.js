@@ -1,6 +1,6 @@
 const User = require("../models/user");
 const ResetRequest = require("../models/reset-request");
-const ObjectID = require("mongoose").Types.ObjectId;
+const { ObjectId } = require("mongodb");
 const passUtils = require("../util/password");
 const jwtUtils = require("../util/jwt");
 const sendGrid = require("../sendgrid");
@@ -188,7 +188,7 @@ module.exports = {
 
     const grps = await User.aggregate([
       {
-        $match: { _id: ObjectID(userId) },
+        $match: { _id: new ObjectId(userId) },
       },
       {
         $lookup: {
@@ -245,7 +245,7 @@ module.exports = {
     );
 
     const actionItems = await User.aggregate([
-      { $match: { _id: ObjectID(userId) } },
+      { $match: { _id: new ObjectId(userId) } },
       {
         $lookup: {
           from: "actionitems",

@@ -78,7 +78,10 @@ describe("lib/controllers/topic", () => {
       assert.equal(created.length, 1);
       assert.equal(created[0].name, topic.name);
       assert.equal(created[0].likes[0], topic.likes[0]);
-      assert.deepEqual(created[0].meeting_id, topic.meeting_id);
+      assert.equal(
+        created[0].meeting_id.toString(),
+        topic.meeting_id.toString()
+      );
     });
 
     it("should 403 if not owner or participant", async () => {
