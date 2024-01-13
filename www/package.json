@@ -21,7 +21,7 @@
     "next": "^12.2.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-redux": "^8.0.1",
+    "react-redux": "^9.1.0",
     "redux": "^4.1.1",
     "redux-thunk": "^2.3.0",
     "sass": "^1.55.0"
