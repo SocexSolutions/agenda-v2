@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/SocexSolutions/agenda-v2/api/#readme",
   "dependencies": {
-    "@sendgrid/mail": "^7.5.0",
+    "@sendgrid/mail": "^8.1.1",
     "@starryinternet/jobi": "^1.1.0",
     "axios": "^1.2.0",
     "cors": "^2.8.5",
